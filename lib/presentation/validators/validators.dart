@@ -1,21 +1,25 @@
-class Validators {
+import 'package:mafia_game/utils/app_strings.dart';
+
+class Validator {
   static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email address';
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.emailIsRequired;
     }
-
-    // You can add a more sophisticated email validation logic if needed
-
+    final RegExp emailRegex =
+    RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    if (!emailRegex.hasMatch(value)) {
+      return AppStrings.enterValidEmailAddress;
+    }
     return null;
   }
 
   static String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your password';
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.passwordIsRequired;
     }
-
-    // You can add additional password validation logic, e.g., minimum length, special characters, etc.
-
+    if (value.length < 6) {
+      return AppStrings.passwordLengthRequirement;
+    }
     return null;
   }
 }

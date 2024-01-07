@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mafia_game/presentation/pages/auth/login_page.dart';
+import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
 import 'package:mafia_game/presentation/pages/auth/signup_page.dart';
 
 class AppNavigator {

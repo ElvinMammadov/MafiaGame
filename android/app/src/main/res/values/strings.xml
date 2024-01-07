@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">359203056833295</string>
+    <string name="fb_login_protocol_scheme">fb359203056833295</string>
+    <string name="facebook_client_token">de5dbb10be4cb696baf1878cd66dd89e</string>
+    <string name="app_name">Mafia</string>
+</resources>
