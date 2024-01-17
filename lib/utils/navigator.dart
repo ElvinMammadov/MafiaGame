@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
 import 'package:mafia_game/presentation/pages/auth/signup_page.dart';
+import 'package:mafia_game/presentation/pages/home_screen.dart';
 
 class AppNavigator {
   static const String loginPage = '/login';
   static const String signupPage = '/signup';
+  static const String homeScreen = '/home';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -18,7 +20,11 @@ class AppNavigator {
           builder: (_) => const SignupPage(),
           settings: const RouteSettings(name: signupPage),
         );
-      // Add more routes as needed
+      case homeScreen:
+        return MaterialPageRoute(
+          builder: (_) => const HomeScreen(),
+          settings: const RouteSettings(name: homeScreen),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
@@ -37,5 +43,10 @@ class AppNavigator {
 
   static void navigateToSignupPage(BuildContext context) {
     Navigator.pushNamed(context, signupPage);
+  }
+
+  static void navigateToHomeScreen(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, homeScreen, (Route route) => false);
   }
 }

@@ -21,4 +21,5 @@ class AppStrings {
   static const String passwordIsRequired = 'Password is required';
   static const String passwordLengthRequirement =
       'Password must be at least 6 characters long';
+  static const String or = 'Or';
 }

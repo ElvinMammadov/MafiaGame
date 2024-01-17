@@ -114,15 +114,10 @@ class _LoginFormState extends State<LoginForm> {
       );
 
   Future<void> _loginButtonPressed() async {
-    // Set the loading state to true
     setState(() {
       _isLoading = true;
     });
-
-    // Perform the login
     await widget._onSignIn();
-
-    // Set the loading state to false after login
     setState(() {
       _isLoading = false;
     });

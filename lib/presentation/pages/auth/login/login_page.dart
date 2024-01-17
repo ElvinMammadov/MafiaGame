@@ -42,13 +42,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
 
-          // You can navigate to the next screen or perform any other actions here
-          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NextScreen()));
+          // Navigate to the HomeScreen upon successful login
+          AppNavigator.navigateToHomeScreen(context);
           print('User signed in: ${user.uid}');
         } else {
           print('User does not exist');
         }
       } on FirebaseAuthException catch (e) {
+        // Handle login errors
         print("Error during login: $e");
 
         if (e.code == 'user-not-found') {
@@ -83,12 +84,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // // Add this function for Facebook sign-in
-  // Future<void> _signInWithFacebook() async {
-  //   // Implement your Facebook sign-in logic here
-  //   // You might want to use a package like 'flutter_facebook_auth' for this
-  // }
-
   Future<Resource?> _signInWithFacebook() async {
     try {
       final LoginResult result = await FacebookAuth.instance.login();
@@ -111,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
   void _togglePasswordVisibility() {
     setState(() {
       _isPasswordVisible = !_isPasswordVisible;
@@ -124,44 +118,46 @@ class _LoginPageState extends State<LoginPage> {
       title: AppStrings.title,
       showBackButton: false,
     ),
-    body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              LoginForm(
-                formKey: _formKey,
-                emailController: _emailController,
-                passwordController: _passwordController,
-                isPasswordVisible: _isPasswordVisible,
-                onSignIn: _signInWithEmailAndPassword,
-                onTogglePasswordVisibility: _togglePasswordVisibility,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Or',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 16),
-              // Add the Facebook sign-in button here
-              // Assuming you have a FacebookSignInButton implementation
-              FacebookSignInButton(onSignIn: _signInWithFacebook),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  // Navigate to the signup page
-                  AppNavigator.navigateToSignupPage(context);
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.blue,
+    body: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 450.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                LoginForm(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                  isPasswordVisible: _isPasswordVisible,
+                  onSignIn: _signInWithEmailAndPassword,
+                  onTogglePasswordVisibility: _togglePasswordVisibility,
                 ),
-                child: const Text(
-                  AppStrings.noAccount,
+                const SizedBox(height: 16),
+                const Text(
+                  AppStrings.or,
+                  style: TextStyle(fontSize: 18),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                FacebookSignInButton(onSignIn: _signInWithFacebook),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    AppNavigator.navigateToSignupPage(context);
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.blue,
+                  ),
+                  child: const Text(
+                    AppStrings.noAccount,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
