@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mafia_game/presentation/validators/validators.dart';
 import 'package:mafia_game/utils/app_strings.dart';
+import 'package:mafia_game/utils/theme/theme.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({
-    Key? key,
+  LoginForm({
+    super.key,
     required GlobalKey<FormState> formKey,
     required TextEditingController emailController,
     required TextEditingController passwordController,
@@ -15,10 +16,11 @@ class LoginForm extends StatefulWidget {
         _formKey = formKey,
         _emailController = emailController,
         _passwordController = passwordController,
-        _isPasswordVisible = isPasswordVisible,
-        super(key: key);
+        _isPasswordVisible = isPasswordVisible;
 
   final GlobalKey<FormState> _formKey;
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
   final bool _isPasswordVisible;
@@ -34,6 +36,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) => Card(
+        color: Colors.transparent,
         elevation: 8.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
@@ -47,36 +50,59 @@ class _LoginFormState extends State<LoginForm> {
               children: <Widget>[
                 TextFormField(
                   controller: widget._emailController,
-                  decoration: const InputDecoration(
+                  style: MafiaTheme.themeData.textTheme.displaySmall,
+                  decoration: InputDecoration(
                     labelText: AppStrings.email,
-                    icon: Icon(Icons.email, color: Colors.blue),
+                    labelStyle: MafiaTheme.themeData.textTheme.displaySmall,
+                    icon: Icon(
+                      Icons.email,
+                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
                     ),
                   ),
+                  onFieldSubmitted: (_) {
+                    FocusScope.of(context)
+                        .requestFocus(widget._passwordFocusNode);
+                  },
                   validator: Validator.validateEmail,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: widget._passwordController,
+                  style: MafiaTheme.themeData.textTheme.displaySmall,
+                  focusNode: widget._passwordFocusNode,
                   decoration: InputDecoration(
                     labelText: AppStrings.password,
-                    icon: const Icon(Icons.lock, color: Colors.blue),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
+                    labelStyle: MafiaTheme.themeData.textTheme.displaySmall,
+                    icon: Icon(
+                      Icons.lock,
+                      color: MafiaTheme.themeData.colorScheme.secondary,
                     ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         widget._isPasswordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        color: Colors.blue,
+                        color: MafiaTheme.themeData.colorScheme.secondary,
                       ),
                       onPressed: widget.onTogglePasswordVisibility,
                     ),
@@ -91,18 +117,20 @@ class _LoginFormState extends State<LoginForm> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _loginButtonPressed,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor:
+                          MafiaTheme.themeData.colorScheme.secondary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
                     child: _isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
+                        ? CircularProgressIndicator(
+                            color: MafiaTheme.themeData.colorScheme.surface,
                           )
-                        : const Text(
+                        : Text(
                             AppStrings.loginButton,
-                            style: TextStyle(fontSize: 18),
+                            style:
+                                MafiaTheme.themeData.textTheme.headlineMedium,
                           ),
                   ),
                 ),

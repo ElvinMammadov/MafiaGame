@@ -5,10 +5,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
 
   const DefaultAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.showBackButton = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => AppBar(

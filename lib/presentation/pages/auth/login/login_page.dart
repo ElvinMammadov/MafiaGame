@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:mafia_game/presentation/widgets/app_bar.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_form.dart';
-import 'package:mafia_game/presentation/pages/auth/login/facebook_sign_in_button.dart';
-import 'package:mafia_game/utils/navigator.dart';
-import 'package:mafia_game/utils/app_strings.dart';
+import 'package:mafia_game/presentation/widgets/app_bar.dart';
 import 'package:mafia_game/presentation/widgets/resource.dart';
+import 'package:mafia_game/utils/app_strings.dart';
+import 'package:mafia_game/utils/navigator.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -22,11 +22,71 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: () {
+      FocusScope.of(context).unfocus();
+    },
+    child: Scaffold(
+          appBar: const DefaultAppBar(
+            title: AppStrings.title,
+          ),
+          body: DecoratedBox(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 450.0,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    LoginForm(
+                      formKey: _formKey,
+                      emailController: _emailController,
+                      passwordController: _passwordController,
+                      isPasswordVisible: _isPasswordVisible,
+                      onSignIn: _signInWithEmailAndPassword,
+                      onTogglePasswordVisibility: _togglePasswordVisibility,
+                    ),
+                    const SizedBox(height: 16),
+                    buildTextButton(context),
+                  ],
+                ),
+              ).padding(bottom: 400),
+            ),
+          ),
+        ),
+  );
+
+  TextButton buildTextButton(BuildContext context) => TextButton(
+        onPressed: () {
+          AppNavigator.navigateToSignupPage(context);
+        },
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.blue,
+        ),
+        child: const Text(
+          AppStrings.noAccount,
+        ),
+      );
+
   Future<void> _signInWithEmailAndPassword() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
         final UserCredential userCredential =
-        await _auth.signInWithEmailAndPassword(
+            await _auth.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -42,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
 
-          // Navigate to the HomeScreen upon successful login
           AppNavigator.navigateToHomeScreen(context);
           print('User signed in: ${user.uid}');
         } else {
@@ -90,9 +149,9 @@ class _LoginPageState extends State<LoginPage> {
       switch (result.status) {
         case LoginStatus.success:
           final AuthCredential facebookCredential =
-          FacebookAuthProvider.credential(result.accessToken!.token);
+              FacebookAuthProvider.credential(result.accessToken!.token);
           final UserCredential userCredential =
-          await _auth.signInWithCredential(facebookCredential);
+              await _auth.signInWithCredential(facebookCredential);
           return Resource(status: Status.Success);
         case LoginStatus.cancelled:
           return Resource(status: Status.Cancelled);
@@ -102,65 +161,7 @@ class _LoginPageState extends State<LoginPage> {
           return null;
       }
     } on FirebaseAuthException catch (e) {
-      throw e;
+      rethrow;
     }
   }
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: const DefaultAppBar(
-      title: AppStrings.title,
-      showBackButton: false,
-    ),
-    body: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 450.0,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                LoginForm(
-                  formKey: _formKey,
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                  isPasswordVisible: _isPasswordVisible,
-                  onSignIn: _signInWithEmailAndPassword,
-                  onTogglePasswordVisibility: _togglePasswordVisibility,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  AppStrings.or,
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 16),
-                FacebookSignInButton(onSignIn: _signInWithFacebook),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    AppNavigator.navigateToSignupPage(context);
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.blue,
-                  ),
-                  child: const Text(
-                    AppStrings.noAccount,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
 }
