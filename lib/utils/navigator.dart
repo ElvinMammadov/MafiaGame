@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
 import 'package:mafia_game/presentation/pages/auth/signup_page.dart';
-import 'package:mafia_game/presentation/pages/home_screen.dart';
+import 'package:mafia_game/presentation/pages/home/home_screen.dart';
 
 class AppNavigator {
   static const String loginPage = '/login';

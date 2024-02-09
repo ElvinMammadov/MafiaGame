@@ -6,6 +6,7 @@ import 'package:mafia_game/presentation/widgets/app_bar.dart';
 import 'package:mafia_game/presentation/widgets/resource.dart';
 import 'package:mafia_game/utils/app_strings.dart';
 import 'package:mafia_game/utils/navigator.dart';
+import 'package:mafia_game/utils/theme/theme.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class LoginPage extends StatefulWidget {
@@ -70,12 +71,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
   );
 
+  //Create a TextButton widget
+
   TextButton buildTextButton(BuildContext context) => TextButton(
         onPressed: () {
           AppNavigator.navigateToSignupPage(context);
         },
         style: TextButton.styleFrom(
-          foregroundColor: Colors.blue,
+          foregroundColor: MafiaTheme.themeData.colorScheme.secondary,
         ),
         child: const Text(
           AppStrings.noAccount,

@@ -1,9 +1,18 @@
 class AppStrings {
   static const String title = 'M Legends';
   static const String login = 'Вход';
+  static const String start = 'Старт';
+  static const String nameOfGame = 'Название игры';
   static const String signUp = 'Регистрация';
+  static const String typeOfController = 'Выбор режима';
+  static const String typeOfGame = 'Тип игры';
   static const String email = 'Эл. почта';
   static const String password = 'Пароль';
+  static const String controller = 'Ведущая';
+  static const String application = 'Приложение';
+  static const String open = 'Открытая';
+  static const String close = 'Закрытая';
+  static const String numberOfGamers = 'Количество игроков';
   static const String loginButton = 'Войти';
   static const String signUpButton = 'Зарегистрироваться';
   static const String noAccount = 'Нет аккаунта? Зарегистрируйтесь здесь.';

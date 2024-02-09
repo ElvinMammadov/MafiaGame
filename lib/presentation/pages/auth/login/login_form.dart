@@ -19,7 +19,6 @@ class LoginForm extends StatefulWidget {
         _isPasswordVisible = isPasswordVisible;
 
   final GlobalKey<FormState> _formKey;
-  final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
