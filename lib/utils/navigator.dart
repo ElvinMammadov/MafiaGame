@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mafia_game/features/auth/auth.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
-import 'package:mafia_game/presentation/pages/auth/signup_page.dart';
-import 'package:mafia_game/presentation/pages/home/home_screen.dart';
+import 'package:mafia_game/presentation/pages/auth/signup/signup_page.dart';
+import 'package:mafia_game/presentation/pages/home/home.dart';
 
 class AppNavigator {
   static const String loginPage = '/login';
@@ -27,11 +28,8 @@ class AppNavigator {
         );
       default:
         return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(
-              child: Text('No route defined for ${settings.name}'),
-            ),
-          ),
+          builder: (_) => const LoginPage(),
+          settings: const RouteSettings(name: loginPage),
         );
     }
   }
@@ -48,5 +46,14 @@ class AppNavigator {
   static void navigateToHomeScreen(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
         context, homeScreen, (Route route) => false);
+  }
+
+  static void navigateBasedOnAuthenticationState(
+      BuildContext context, AuthenticationState state) {
+    if (state is AuthenticatedState) {
+      navigateToHomeScreen(context);
+    } else {
+      navigateToLoginPage(context);
+    }
   }
 }

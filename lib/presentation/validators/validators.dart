@@ -13,6 +13,13 @@ class Validator {
     return null;
   }
 
+  static  String? validateText(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.emailIsRequired;
+    }
+    return null;
+  }
+
   static String? validatePassword(String? value) {
     if (value == null || value.trim().isEmpty) {
       return AppStrings.passwordIsRequired;

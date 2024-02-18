@@ -1,19 +1,22 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
-import 'package:mafia_game/presentation/validators/validators.dart';
-import 'package:mafia_game/utils/app_strings.dart';
-import 'package:mafia_game/utils/theme/theme.dart';
-import 'package:styled_widget/styled_widget.dart';
+part of home;
 
 class HomeScreenForm extends StatefulWidget {
+  final void Function({
+    String typeOfGame,
+    String typeOfController,
+    int numberOfGamers,
+    String gameName,
+  })? onChange;
+
   HomeScreenForm({
+    this.onChange,
     super.key,
   });
 
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _gameNameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _gameNameFocusNode = FocusNode();
 
   @override
   _HomeScreenFormState createState() => _HomeScreenFormState();
@@ -28,7 +31,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
     AppStrings.controller,
     AppStrings.application,
   ];
-  final List<int> numberOfGamers = List<int>.generate(23, (int index) => index + 1);
+  final List<int> numberOfGamers =
+      List<int>.generate(23, (int index) => index + 1);
 
   String selectedValue = 'Option 1';
 
@@ -45,7 +49,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
-                controller: widget._emailController,
+                controller: widget._gameNameController,
                 style: MafiaTheme.themeData.textTheme.titleMedium,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
@@ -68,15 +72,25 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                 ),
                 onFieldSubmitted: (_) {
                   FocusScope.of(context)
-                      .requestFocus(widget._passwordFocusNode);
+                      .requestFocus(widget._gameNameFocusNode);
                 },
-                validator: Validator.validateEmail,
+                onChanged: (String value) {
+                  widget.onChange!(
+                    gameName: value,
+                  );
+                },
+                onSaved: (String? value) {
+                  selectedValue = value!;
+                },
+                validator: Validator.validateText,
               ).padding(top: 16.0),
               DropdownButtonFormField2<String>(
                 isExpanded: true,
                 decoration: InputDecoration(
                   // labelText: 'Choose',
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: Dimensions.padding8,
+                  ),
                   labelStyle: MafiaTheme.themeData.textTheme.displaySmall,
                   icon: Icon(
                     Icons.videogame_asset,
@@ -115,7 +129,9 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   return null;
                 },
                 onChanged: (String? value) {
-                  //Do something when selected item is changed.
+                  widget.onChange!(
+                    typeOfGame: value!,
+                  );
                 },
                 onSaved: (String? value) {
                   selectedValue = value.toString();
@@ -144,7 +160,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                 // menuItemStyleData: const MenuItemStyleData(
                 //   padding: EdgeInsets.symmetric(horizontal: 16),
                 // ),
-              ).padding(top: 16.0),
+              ).padding(top: Dimensions.padding16),
               DropdownButtonFormField2<String>(
                 isExpanded: true,
                 decoration: InputDecoration(
@@ -188,7 +204,9 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   return null;
                 },
                 onChanged: (String? value) {
-                  //Do something when selected item is changed.
+                  widget.onChange!(
+                    typeOfController: value!,
+                  );
                 },
                 onSaved: (String? value) {
                   selectedValue = value.toString();
@@ -217,7 +235,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                 // menuItemStyleData: const MenuItemStyleData(
                 //   padding: EdgeInsets.symmetric(horizontal: 16),
                 // ),
-              ).padding(top: 16.0),
+              ).padding(top: Dimensions.padding16),
               DropdownButtonFormField2<int>(
                 isExpanded: true,
                 decoration: InputDecoration(
@@ -246,13 +264,13 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                 items: numberOfGamers
                     .map<DropdownMenuItem<int>>(
                       (int item) => DropdownMenuItem<int>(
-                    value: item,
-                    child: Text(
-                      item.toString(), // Convert int to String
-                      style: MafiaTheme.themeData.textTheme.titleMedium,
-                    ),
-                  ),
-                )
+                        value: item,
+                        child: Text(
+                          item.toString(), // Convert int to String
+                          style: MafiaTheme.themeData.textTheme.titleMedium,
+                        ),
+                      ),
+                    )
                     .toList(),
                 validator: (int? value) {
                   if (value == null) {
@@ -261,7 +279,9 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   return null;
                 },
                 onChanged: (int? value) {
-                  //Do something when selected item is changed.
+                  widget.onChange!(
+                    numberOfGamers: value!,
+                  );
                 },
                 onSaved: (int? value) {
                   selectedValue = value.toString();
@@ -291,9 +311,9 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                 // menuItemStyleData: const MenuItemStyleData(
                 //   padding: EdgeInsets.symmetric(horizontal: 16),
                 // ),
-              ).padding(top: 16.0),
+              ).padding(top: Dimensions.padding16),
             ],
           ),
-        ).padding(all: 16.0),
+        ).padding(all: Dimensions.padding16),
       );
 }

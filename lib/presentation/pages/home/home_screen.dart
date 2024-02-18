@@ -1,17 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:mafia_game/presentation/pages/home/home_screen_form.dart';
-import 'package:mafia_game/presentation/widgets/app_bar.dart';
-import 'package:mafia_game/utils/app_strings.dart';
-import 'package:mafia_game/utils/theme/theme.dart';
-import 'package:styled_widget/styled_widget.dart';
+part of home;
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final bool _isLoading = false;
+  final String typeOfGame = '';
+  final String typeOfController = '';
+  final int numberOfGamers = 0;
+  final String gameName = '';
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
+    builder: (BuildContext context, AppState state) {
+      print('state is $state');
+      return Scaffold(
         appBar: const DefaultAppBar(
           title: AppStrings.title,
         ),
@@ -22,52 +29,71 @@ class HomeScreen extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 450.0,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  HomeScreenForm(),
-                  SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _loginButtonPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            MafiaTheme.themeData.colorScheme.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                HomeScreenForm(
+                  onChange: _onChange,
+                ),
+                SizedBox(
+                  width: 200,
+                  height: Dimensions.itemHeight50,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _startButtonPressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          MafiaTheme.themeData.colorScheme.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
-                      child: _isLoading
-                          ? CircularProgressIndicator(
-                              color: MafiaTheme.themeData.colorScheme.surface,
-                            )
-                          : Text(
-                              AppStrings.start,
-                              style:
-                                  MafiaTheme.themeData.textTheme.headlineMedium,
-                            ),
-                    ).padding(top: 16.0),
-                  ),
-                ],
-              ),
+                    ),
+                    child: _isLoading
+                        ? CircularProgressIndicator(
+                            color:
+                                MafiaTheme.themeData.colorScheme.surface,
+                          )
+                        : Text(
+                            AppStrings.start,
+                            style: MafiaTheme
+                                .themeData.textTheme.headlineMedium,
+                          ),
+                  ).padding(top: Dimensions.padding16),
+                ),
+              ],
             ),
+          ).padding(
+            top: Dimensions.padding16,
+            bottom: 200.0,
           ),
         ),
       );
+    },
+  );
 
-  Future<void> _loginButtonPressed() async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
-    // await widget._onSignIn();
-    // setState(() {
-    //   _isLoading = false;
-    // });
+  void _onChange({
+    String? typeOfGame,
+    String? typeOfController,
+    int? numberOfGamers,
+    String? gameName,
+  }) {
+    setState(() {
+      typeOfGame = typeOfGame ?? this.typeOfGame;
+      typeOfController = typeOfController ?? this.typeOfController;
+      numberOfGamers = numberOfGamers ?? this.numberOfGamers;
+      gameName = gameName ?? this.gameName;
+    });
+  }
+
+  Future<void> _startButtonPressed() async {
+    BlocProvider.of<GameBloc>(context).add(
+      UpdateGameDetails(
+        gameName: gameName,
+        typeOfGame: typeOfGame,
+        typeOfController: typeOfController,
+        numberOfGamers: numberOfGamers,
+      ),
+    );
   }
 }
