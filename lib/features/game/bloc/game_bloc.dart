@@ -1,9 +1,7 @@
 part of game;
 
 class GameBloc extends Bloc<GameEvent, AppState> {
-  final GameRepository _repository;
-
-  GameBloc(this._repository) : super(const AppState.empty()) {
+  GameBloc() : super(const AppState.empty()) {
     on<UpdateGameDetails>((UpdateGameDetails event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(

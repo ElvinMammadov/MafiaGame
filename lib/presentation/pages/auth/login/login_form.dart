@@ -20,6 +20,7 @@ class LoginForm extends StatefulWidget {
 
   final GlobalKey<FormState> _formKey;
   final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
   final bool _isPasswordVisible;
@@ -50,6 +51,9 @@ class _LoginFormState extends State<LoginForm> {
                 TextFormField(
                   controller: widget._emailController,
                   style: MafiaTheme.themeData.textTheme.displaySmall,
+                  keyboardType: TextInputType.emailAddress,
+                  focusNode: widget._emailFocusNode,
+                  autofocus: true,
                   decoration: InputDecoration(
                     labelText: AppStrings.email,
                     labelStyle: MafiaTheme.themeData.textTheme.displaySmall,
@@ -79,6 +83,7 @@ class _LoginFormState extends State<LoginForm> {
                   controller: widget._passwordController,
                   style: MafiaTheme.themeData.textTheme.displaySmall,
                   focusNode: widget._passwordFocusNode,
+                  autofocus: true,
                   decoration: InputDecoration(
                     labelText: AppStrings.password,
                     labelStyle: MafiaTheme.themeData.textTheme.displaySmall,

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mafia_game/features/auth/auth.dart';
+import 'package:mafia_game/features/bloc/multibloc_provider.dart';
 import 'package:mafia_game/firebase_options.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
 import 'package:mafia_game/presentation/pages/home/home.dart';
@@ -23,27 +24,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late AuthenticationBloc _authenticationBloc;
-  final UserRepository userRepository = UserRepository();
-
   @override
-  void initState() {
-    super.initState();
-    _authenticationBloc = AuthenticationBloc(userRepository);
-    _authenticationBloc.add(AppStarted());
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      BlocProvider<AuthenticationBloc>(
-        create: (BuildContext context) => _authenticationBloc,
-        child: const MafiaTheme(
+  Widget build(BuildContext context) => const MafiaTheme(
+        child: MultiBlocProviderWidget(
           child: MaterialApp(
             title: 'M Legends',
             onGenerateRoute: AppNavigator.generateRoute,

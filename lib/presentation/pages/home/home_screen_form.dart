@@ -34,7 +34,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   final List<int> numberOfGamers =
       List<int>.generate(23, (int index) => index + 1);
 
-  String selectedValue = 'Option 1';
+   String? selectedValue;
+   String? selectedValue2;
 
   @override
   Widget build(BuildContext context) => Card(
@@ -80,7 +81,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   );
                 },
                 onSaved: (String? value) {
-                  selectedValue = value!;
+                  selectedValue = value;
                 },
                 validator: Validator.validateText,
               ).padding(top: 16.0),
@@ -111,6 +112,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   AppStrings.typeOfGame,
                   style: MafiaTheme.themeData.textTheme.displaySmall,
                 ),
+                value: selectedValue2,
                 items: typeOfGames
                     .map(
                       (String item) => DropdownMenuItem<String>(
@@ -132,9 +134,10 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   widget.onChange!(
                     typeOfGame: value!,
                   );
+                  selectedValue2 = value;
                 },
                 onSaved: (String? value) {
-                  selectedValue = value.toString();
+                  selectedValue2 = value.toString();
                 },
                 // buttonStyleData: const ButtonStyleData(
                 //   padding: EdgeInsets.only(right: 5),
