@@ -13,16 +13,15 @@ class HomeScreenForm extends StatefulWidget {
     super.key,
   });
 
-  final TextEditingController _gameNameController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final FocusNode _gameNameFocusNode = FocusNode();
-
   @override
   _HomeScreenFormState createState() => _HomeScreenFormState();
 }
 
 class _HomeScreenFormState extends State<HomeScreenForm> {
+  final TextEditingController _gameNameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final FocusNode _gameNameFocusNode = FocusNode();
   final List<String> typeOfGames = <String>[
     AppStrings.open,
     AppStrings.close,
@@ -34,8 +33,10 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   final List<int> numberOfGamers =
       List<int>.generate(23, (int index) => index + 1);
 
-   String? selectedValue;
-   String? selectedValue2;
+  String? selectedValue;
+  String? selectedValue2;
+  String? selectedValue3;
+  int? selectedValue4;
 
   @override
   Widget build(BuildContext context) => Card(
@@ -45,13 +46,16 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Form(
-          key: widget._formKey,
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
-                controller: widget._gameNameController,
+                controller: _gameNameController,
                 style: MafiaTheme.themeData.textTheme.titleMedium,
+                keyboardType: TextInputType.emailAddress,
+                autofocus: true,
+                focusNode: _gameNameFocusNode,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   labelText: AppStrings.nameOfGame,
@@ -72,16 +76,19 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   ),
                 ),
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context)
-                      .requestFocus(widget._gameNameFocusNode);
+                  FocusScope.of(context).requestFocus(_gameNameFocusNode);
                 },
                 onChanged: (String value) {
                   widget.onChange!(
                     gameName: value,
                   );
+                  _updateControllerText(
+                    value,
+                    _gameNameController,
+                  );
                 },
                 onSaved: (String? value) {
-                  selectedValue = value;
+                  _gameNameController.text = value!;
                 },
                 validator: Validator.validateText,
               ).padding(top: 16.0),
@@ -189,6 +196,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   AppStrings.typeOfController,
                   style: MafiaTheme.themeData.textTheme.displaySmall,
                 ),
+                value: selectedValue3,
                 items: typeOfController
                     .map(
                       (String item) => DropdownMenuItem<String>(
@@ -210,9 +218,10 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   widget.onChange!(
                     typeOfController: value!,
                   );
+                  selectedValue3 = value;
                 },
                 onSaved: (String? value) {
-                  selectedValue = value.toString();
+                  selectedValue3 = value.toString();
                 },
                 // buttonStyleData: const ButtonStyleData(
                 //   padding: EdgeInsets.only(right: 5),
@@ -281,13 +290,15 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   }
                   return null;
                 },
+                value: selectedValue4,
                 onChanged: (int? value) {
                   widget.onChange!(
                     numberOfGamers: value!,
                   );
+                  selectedValue4 = value;
                 },
                 onSaved: (int? value) {
-                  selectedValue = value.toString();
+                  selectedValue4 = value;
                 },
                 // buttonStyleData: const ButtonStyleData(
                 //   padding: EdgeInsets.only(right: 5),
@@ -314,9 +325,19 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                 // menuItemStyleData: const MenuItemStyleData(
                 //   padding: EdgeInsets.symmetric(horizontal: 16),
                 // ),
-              ).padding(top: Dimensions.padding16),
+              ).padding(
+                top: Dimensions.padding16,
+              ),
             ],
           ),
-        ).padding(all: Dimensions.padding16),
+        ).padding(
+          all: Dimensions.padding16,
+        ),
       );
+}
+
+void _updateControllerText(String? value, TextEditingController controller) {
+  final TextSelection cursorPosition = controller.selection;
+  controller.text = value ?? "";
+  controller.selection = cursorPosition;
 }

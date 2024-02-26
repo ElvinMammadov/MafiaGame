@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mafia_game/features/auth/auth.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
 import 'package:mafia_game/presentation/pages/auth/signup/signup_page.dart';
+import 'package:mafia_game/presentation/pages/game/game_table.dart';
 import 'package:mafia_game/presentation/pages/home/home.dart';
 
 class AppNavigator {
   static const String loginPage = '/login';
   static const String signupPage = '/signup';
   static const String homeScreen = '/home';
+  static const String tableScreen = '/table';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -26,6 +28,12 @@ class AppNavigator {
           builder: (_) => const HomeScreen(),
           settings: const RouteSettings(name: homeScreen),
         );
+
+      case tableScreen:
+        return MaterialPageRoute(
+          builder: (_) =>  GameTableScreen(),
+          settings: const RouteSettings(name: tableScreen),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
@@ -37,6 +45,11 @@ class AppNavigator {
   static void navigateToLoginPage(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
         context, loginPage, (Route route) => false);
+  }
+
+  static void navigateToTablePage(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, tableScreen, (Route route) => false);
   }
 
   static void navigateToSignupPage(BuildContext context) {

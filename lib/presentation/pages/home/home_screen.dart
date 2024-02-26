@@ -9,68 +9,69 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final bool _isLoading = false;
-  final String typeOfGame = '';
-  final String typeOfController = '';
-  final int numberOfGamers = 0;
-  final String gameName = '';
+  String? typeOfGame;
+
+  String? typeOfController;
+  int? numberOfGamers = 0;
+  String? gameName = '';
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-    builder: (BuildContext context, AppState state) {
-      print('state is $state');
-      return Scaffold(
-        appBar: const DefaultAppBar(
-          title: AppStrings.title,
-        ),
-        body: DecoratedBox(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/background.png'),
-              fit: BoxFit.fill,
+        builder: (BuildContext context, AppState state) {
+          print('state is $state');
+          return Scaffold(
+            appBar: const DefaultAppBar(
+              title: AppStrings.title,
             ),
-          ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                HomeScreenForm(
-                  onChange: _onChange,
+            body: DecoratedBox(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background.png'),
+                  fit: BoxFit.fill,
                 ),
-                SizedBox(
-                  width: 200,
-                  height: Dimensions.itemHeight50,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _startButtonPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          MafiaTheme.themeData.colorScheme.secondary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    HomeScreenForm(
+                      onChange: _onChange,
                     ),
-                    child: _isLoading
-                        ? CircularProgressIndicator(
-                            color:
-                                MafiaTheme.themeData.colorScheme.surface,
-                          )
-                        : Text(
-                            AppStrings.start,
-                            style: MafiaTheme
-                                .themeData.textTheme.headlineMedium,
+                    SizedBox(
+                      width: 200,
+                      height: Dimensions.itemHeight50,
+                      child: ElevatedButton(
+                        onPressed:()
+                             {_startButtonPressed(context);},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              MafiaTheme.themeData.colorScheme.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
-                  ).padding(top: Dimensions.padding16),
+                        ),
+                        child: _isLoading
+                            ? CircularProgressIndicator(
+                                color: MafiaTheme.themeData.colorScheme.surface,
+                              )
+                            : Text(
+                                AppStrings.start,
+                                style: MafiaTheme
+                                    .themeData.textTheme.headlineMedium,
+                              ),
+                      ).padding(top: Dimensions.padding16),
+                    ),
+                  ],
                 ),
-              ],
+              ).padding(
+                top: Dimensions.padding16,
+                bottom: 200.0,
+              ),
             ),
-          ).padding(
-            top: Dimensions.padding16,
-            bottom: 200.0,
-          ),
-        ),
+          );
+        },
       );
-    },
-  );
 
   void _onChange({
     String? typeOfGame,
@@ -79,20 +80,25 @@ class _HomeScreenState extends State<HomeScreen> {
     String? gameName,
   }) {
     setState(() {
-      typeOfGame = typeOfGame ?? this.typeOfGame;
-      typeOfController = typeOfController ?? this.typeOfController;
-      numberOfGamers = numberOfGamers ?? this.numberOfGamers;
-      gameName = gameName ?? this.gameName;
+      this.typeOfGame = typeOfGame ?? this.typeOfGame;
+      this.typeOfController = typeOfController ?? this.typeOfController;
+      this.numberOfGamers = numberOfGamers ?? this.numberOfGamers;
+      this.gameName = gameName ?? this.gameName;
     });
+    print('gameName $gameName, typeOfGame $typeOfGame, typeOfController'
+        ' $typeOfController, numberOfGamers $numberOfGamers');
   }
 
-  Future<void> _startButtonPressed() async {
+  void _startButtonPressed(BuildContext context)  {
+    AppNavigator.navigateToTablePage(context);
+    print('gameName $gameName, typeOfGame $typeOfGame, typeOfController'
+        ' $typeOfController, numberOfGamers $numberOfGamers');
     BlocProvider.of<GameBloc>(context).add(
       UpdateGameDetails(
-        gameName: gameName,
-        typeOfGame: typeOfGame,
-        typeOfController: typeOfController,
-        numberOfGamers: numberOfGamers,
+        gameName: gameName ?? '',
+        typeOfGame: typeOfGame ?? '',
+        typeOfController: typeOfController ?? '',
+        numberOfGamers: numberOfGamers ?? 0,
       ),
     );
   }
