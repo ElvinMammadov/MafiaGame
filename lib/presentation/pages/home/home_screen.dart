@@ -85,14 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
       this.numberOfGamers = numberOfGamers ?? this.numberOfGamers;
       this.gameName = gameName ?? this.gameName;
     });
-    print('gameName $gameName, typeOfGame $typeOfGame, typeOfController'
-        ' $typeOfController, numberOfGamers $numberOfGamers');
   }
 
   void _startButtonPressed(BuildContext context)  {
-    AppNavigator.navigateToTablePage(context);
-    print('gameName $gameName, typeOfGame $typeOfGame, typeOfController'
-        ' $typeOfController, numberOfGamers $numberOfGamers');
     BlocProvider.of<GameBloc>(context).add(
       UpdateGameDetails(
         gameName: gameName ?? '',
@@ -101,5 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
         numberOfGamers: numberOfGamers ?? 0,
       ),
     );
+    AppNavigator.navigateToTablePage(context);
   }
 }

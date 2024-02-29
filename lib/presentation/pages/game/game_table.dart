@@ -10,6 +10,7 @@ class GameTableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
+          print('state 2 is $state');
           final int numberOfGamers = state.game.numberOfGamers;
           return Scaffold(
             appBar: const DefaultAppBar(

@@ -21,3 +21,14 @@ class UpdateGameDetails extends GameEvent {
   List<Object?> get props =>
       <Object?>[gameName, typeOfGame, typeOfController, numberOfGamers];
 }
+
+class AddGamer extends GameEvent {
+  final Gamer gamer;
+
+  const AddGamer({required this.gamer});
+
+  @override
+  List<Object?> get props => <Object?>[gamer];
+}
+
+

@@ -1,6 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mafia_game/features/app/app.dart';
+import 'package:mafia_game/features/game/game.dart';
+import 'package:mafia_game/features/game/models/gamer.dart';
+import 'package:mafia_game/presentation/pages/game/add_user.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CircleAvatarWidget extends StatefulWidget {
   final int numberOfGamers;
@@ -21,15 +27,17 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Stack(
-      children: _positionedAvatars,
-    );
+  Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
+        builder: (BuildContext context, AppState state) => Stack(
+          children: _positionedAvatars,
+        ),
+      );
 
   List<Widget> _buildCircleAvatars(int count) {
     final List<Widget> positionedAvatars = <Widget>[];
     const double ovalWidth = 450.0;
     const double ovalRadius = ovalWidth / 1.8;
-    const double radius = 35.0;
+    const double radius = 40.0;
     final double angleStep = (2 * pi) / count;
     const double centerX = 390;
     const double centerY = 560;
@@ -46,11 +54,35 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
           child: Column(
             children: <Widget>[
               CircleAvatar(
-                backgroundColor: Colors.red, // Change as needed
+                backgroundColor: Colors.red,
                 radius: radius,
                 child: GestureDetector(
                   onTap: () {
-                    // Handle onTap action
+                    setState(() {
+                      BlocProvider.of<GameBloc>(context).add(
+                        AddGamer(
+                          gamer: Gamer(
+                            name: 'User ${i + 1}',
+                            role: 'Role ${i + 1}',
+                          ),
+                        ),
+                      );
+                      WoltModalSheet.show<void>(
+                        context: context,
+                        pageListBuilder: (BuildContext modalSheetContext) => [
+                          AddUser.build(
+                            onClosed: () {
+                              Navigator.of(context).pop();
+                            },
+                            context: context,
+                          ),
+                        ],
+                        modalTypeBuilder: (BuildContext context) =>
+                            WoltModalType.dialog,
+                        maxDialogWidth: 560,
+                        minDialogWidth: 400,
+                      );
+                    });
                   },
                   child: const Icon(
                     Icons.add,
@@ -61,7 +93,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
               ),
               Text(
                 'User ${i + 1}',
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
