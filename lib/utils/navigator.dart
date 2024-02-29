@@ -31,7 +31,7 @@ class AppNavigator {
 
       case tableScreen:
         return MaterialPageRoute(
-          builder: (_) =>  GameTableScreen(),
+          builder: (_) => GameTableScreen(),
           settings: const RouteSettings(name: tableScreen),
         );
       default:
@@ -48,8 +48,10 @@ class AppNavigator {
   }
 
   static void navigateToTablePage(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, tableScreen, (Route route) => false);
+    Navigator.pushNamed(
+      context,
+      tableScreen,
+    );
   }
 
   static void navigateToSignupPage(BuildContext context) {
