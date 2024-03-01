@@ -31,4 +31,5 @@ class AppStrings {
   static const String passwordLengthRequirement =
       'Пароль должен быть длиной не менее 6 символов';
   static const String or = 'Или';
+  static const String gamer = 'Игрок';
 }

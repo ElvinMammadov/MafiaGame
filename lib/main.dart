@@ -25,13 +25,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  Widget build(BuildContext context) => const MafiaTheme(
-        child: MultiBlocProviderWidget(
-          child: MaterialApp(
-            title: 'M Legends',
-            onGenerateRoute: AppNavigator.generateRoute,
-            home: AuthenticationChecker(),
-          ),
+  Widget build(BuildContext context) => MultiBlocProviderWidget(
+        child: MaterialApp(
+          title: 'M Legends',
+          theme: MafiaTheme.themeData,
+          onGenerateRoute: AppNavigator.generateRoute,
+          home: const AuthenticationChecker(),
         ),
       );
 }

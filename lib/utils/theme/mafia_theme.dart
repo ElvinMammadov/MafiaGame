@@ -1,7 +1,7 @@
 part of theme;
 
-class MafiaTheme extends InheritedWidget {
-  const MafiaTheme({required super.child, super.key});
+class MafiaTheme {
+  const MafiaTheme();
 
   static ThemeData get themeData => ThemeData(
         colorScheme: const ColorScheme(
@@ -17,11 +17,10 @@ class MafiaTheme extends InheritedWidget {
           surface: Colors.white,
           onSurface: Colors.white,
         ),
+        textTheme:  MafiaTextTheme(),
+        hintColor: Colors.white,
+        primaryColor: const Color(0xFFA9001B),
+        secondaryHeaderColor: const Color(0xFFEAD08A),
       );
 
-  static MafiaTheme? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<MafiaTheme>();
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => false;
 }

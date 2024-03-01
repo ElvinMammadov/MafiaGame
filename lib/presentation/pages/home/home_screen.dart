@@ -30,8 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fit: BoxFit.fill,
                 ),
               ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(),
+              child: SizedBox.expand(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -39,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onChange: _onChange,
                     ),
                     SizedBox(
-                      width: 200,
-                      height: Dimensions.itemHeight50,
+                      width: 250,
+                      height: 70,
                       child: ElevatedButton(
                         onPressed:()
                              {_startButtonPressed(context);},
@@ -64,9 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-              ).padding(
-                top: Dimensions.padding16,
-                bottom: 200.0,
               ),
             ),
           );

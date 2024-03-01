@@ -26,8 +26,8 @@ class GameTableScreen extends StatelessWidget {
                       Center(
                         child: ClipOval(
                           child: Container(
-                            width: 350.0,
-                            height: 650.0,
+                            width: 400.0,
+                            height: 730.0,
                             decoration: const BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage('assets/table.jpeg'),

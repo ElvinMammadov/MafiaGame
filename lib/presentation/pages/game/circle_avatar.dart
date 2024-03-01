@@ -6,6 +6,7 @@ import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
 import 'package:mafia_game/features/game/models/gamer.dart';
 import 'package:mafia_game/presentation/pages/game/add_user.dart';
+import 'package:mafia_game/utils/app_strings.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CircleAvatarWidget extends StatefulWidget {
@@ -37,15 +38,17 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
     final List<Widget> positionedAvatars = <Widget>[];
     const double ovalWidth = 450.0;
     const double ovalRadius = ovalWidth / 1.8;
-    const double radius = 40.0;
+    const double radius = 45.0;
     final double angleStep = (2 * pi) / count;
-    const double centerX = 390;
-    const double centerY = 560;
+    ///Below is for moving left , right, up and down
+    const double centerX = 500;
+    const double centerY = 630;
 
     for (int i = 0; i < count; i++) {
       final double angle = (3 * pi / 2) + i * angleStep;
-      final double avatarX = centerX + (ovalRadius + 10 + radius) * cos(angle);
-      final double avatarY = centerY + (ovalRadius + 110 + radius) * sin(angle);
+      ///Below is for resizing the avatars
+      final double avatarX = centerX + (ovalRadius + 60 + radius) * cos(angle);
+      final double avatarY = centerY + (ovalRadius + 220 + radius) * sin(angle);
 
       positionedAvatars.add(
         Positioned(
@@ -92,9 +95,10 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 ),
               ),
               Text(
-                'User ${i + 1}',
+                '${AppStrings.gamer} ${i + 1}',
                 style: const TextStyle(
                   color: Colors.white,
+                  fontSize: 20,
                 ),
               ),
             ],
