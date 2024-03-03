@@ -1,51 +1,69 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mafia_game/features/app/app.dart';
-import 'package:mafia_game/features/game/game.dart';
-import 'package:mafia_game/features/game/models/gamer.dart';
-import 'package:mafia_game/presentation/pages/game/add_user.dart';
-import 'package:mafia_game/utils/app_strings.dart';
-import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
+part of game;
 
 class CircleAvatarWidget extends StatefulWidget {
   final int numberOfGamers;
+  late List<Gamer> gamers = <Gamer>[];
 
-  const CircleAvatarWidget({required this.numberOfGamers});
+  CircleAvatarWidget({
+    required this.numberOfGamers,
+    required this.gamers,
+  });
 
   @override
   _CircleAvatarWidgetState createState() => _CircleAvatarWidgetState();
 }
 
 class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
-  List<Widget> _positionedAvatars = <Widget>[];
+  late List<Widget> _positionedAvatars = <Widget>[];
 
   @override
   void initState() {
     super.initState();
-    _positionedAvatars = _buildCircleAvatars(widget.numberOfGamers);
+    for (int i = 0; i < widget.numberOfGamers; i++) {
+      BlocProvider.of<GameBloc>(context).add(
+        AddGamer(
+          gamer: Gamer(
+            name: '${AppStrings.gamer} ${i + 1}',
+            id: i + 1,
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-        builder: (BuildContext context, AppState state) => Stack(
-          children: _positionedAvatars,
-        ),
+        builder: (BuildContext context, AppState state) {
+          if (widget.gamers.isNotEmpty) {
+            return Stack(
+              children: _positionedAvatars = _buildCircleAvatars(
+                widget.numberOfGamers,
+                widget.gamers,
+              ),
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
       );
 
-  List<Widget> _buildCircleAvatars(int count) {
+  List<Widget> _buildCircleAvatars(
+    int count,
+    List<Gamer> gamers,
+  ) {
     final List<Widget> positionedAvatars = <Widget>[];
     const double ovalWidth = 450.0;
     const double ovalRadius = ovalWidth / 1.8;
     const double radius = 45.0;
     final double angleStep = (2 * pi) / count;
+
     ///Below is for moving left , right, up and down
     const double centerX = 500;
     const double centerY = 630;
 
     for (int i = 0; i < count; i++) {
       final double angle = (3 * pi / 2) + i * angleStep;
+
       ///Below is for resizing the avatars
       final double avatarX = centerX + (ovalRadius + 60 + radius) * cos(angle);
       final double avatarY = centerY + (ovalRadius + 220 + radius) * sin(angle);
@@ -62,28 +80,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      BlocProvider.of<GameBloc>(context).add(
-                        AddGamer(
-                          gamer: Gamer(
-                            name: 'User ${i + 1}',
-                            role: 'Role ${i + 1}',
-                          ),
-                        ),
-                      );
-                      WoltModalSheet.show<void>(
-                        context: context,
-                        pageListBuilder: (BuildContext modalSheetContext) => [
-                          AddUser.build(
-                            onClosed: () {
-                              Navigator.of(context).pop();
-                            },
-                            context: context,
-                          ),
-                        ],
-                        modalTypeBuilder: (BuildContext context) =>
-                            WoltModalType.dialog,
-                        maxDialogWidth: 560,
-                        minDialogWidth: 400,
+                      DialogBuilder().showAddUserModal(
+                        context,
+                        i + 1,
                       );
                     });
                   },
@@ -95,7 +94,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 ),
               ),
               Text(
-                '${AppStrings.gamer} ${i + 1}',
+                gamers.isNotEmpty ? '${gamers[i].name}' : '',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,

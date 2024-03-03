@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mafia_game/features/auth/auth.dart';
 import 'package:mafia_game/presentation/pages/auth/login/login_page.dart';
 import 'package:mafia_game/presentation/pages/auth/signup/signup_page.dart';
-import 'package:mafia_game/presentation/pages/game/game_table.dart';
+import 'package:mafia_game/presentation/pages/game/game.dart';
 import 'package:mafia_game/presentation/pages/home/home.dart';
 
 class AppNavigator {

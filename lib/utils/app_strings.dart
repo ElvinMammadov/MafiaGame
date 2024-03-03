@@ -26,10 +26,14 @@ class AppStrings {
   static const String errorDuringSignup = 'Ошибка во время регистрации';
   static const String errorDuringLogin = 'Ошибка во время входа';
   static const String emailIsRequired = 'Требуется эл. почта';
+  static const String textIsRequired = 'Требуется текст';
   static const String enterValidEmailAddress = 'Введите действительный адрес эл. почты';
   static const String passwordIsRequired = 'Требуется пароль';
   static const String passwordLengthRequirement =
       'Пароль должен быть длиной не менее 6 символов';
   static const String or = 'Или';
   static const String gamer = 'Игрок';
+  static const String add = 'Добавить';
+  static const String nameOfGamer = 'Имя игрока';
+  static const String createGamer = 'Создать игрока';
 }

@@ -15,7 +15,7 @@ class Validator {
 
   static  String? validateText(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return AppStrings.emailIsRequired;
+      return AppStrings.textIsRequired;
     }
     return null;
   }

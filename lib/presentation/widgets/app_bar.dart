@@ -22,7 +22,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: MafiaTheme.themeData.colorScheme.background,
         leading: showBackButton
             ? IconButton(
-                icon: const Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back_ios_new),
                 onPressed: () {
                   Navigator.pop(context);
                 },

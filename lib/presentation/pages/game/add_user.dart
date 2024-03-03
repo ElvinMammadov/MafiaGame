@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:mafia_game/utils/dimensions.dart';
-import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
+part of game;
 
 class AddUser {
   AddUser._();

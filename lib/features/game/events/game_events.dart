@@ -27,6 +27,17 @@ class AddGamer extends GameEvent {
 
   const AddGamer({required this.gamer});
 
+
+  @override
+  List<Object?> get props => <Object?>[gamer];
+}
+
+class UpdateGamerName extends GameEvent {
+  final Gamer gamer;
+
+  const UpdateGamerName({required this.gamer});
+
+
   @override
   List<Object?> get props => <Object?>[gamer];
 }
