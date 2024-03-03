@@ -17,9 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-        builder: (BuildContext context, AppState state) {
-          print('state is $state');
-          return Scaffold(
+        builder: (BuildContext context, AppState state) => Scaffold(
             appBar: const DefaultAppBar(
               title: AppStrings.title,
             ),
@@ -65,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          );
-        },
+          ),
       );
 
   void _onChange({

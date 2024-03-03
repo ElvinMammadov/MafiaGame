@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:mafia_game/features/auth/auth.dart';
 import 'package:mafia_game/features/game/game.dart';
+import 'package:nested/nested.dart';
 
 class MultiBlocProviderWidget extends StatelessWidget {
   final Widget child;
@@ -15,14 +16,16 @@ class MultiBlocProviderWidget extends StatelessWidget {
     final AuthenticationBloc authenticationBloc =
         AuthenticationBloc(userRepository);
     authenticationBloc.add(AppStarted());
+    final GamerRepository gamerRepository = GamerRepository();
+    final GameBloc gameBloc = GameBloc(gamerRepository);
 
     return MultiBlocProvider(
-      providers: [
+      providers: <SingleChildWidget>[
         BlocProvider<AuthenticationBloc>(
           create: (BuildContext context) => authenticationBloc,
         ),
         BlocProvider<GameBloc>(
-          create: (BuildContext context) => GameBloc(),
+          create: (BuildContext context) => gameBloc,
         ),
       ],
       child: child,

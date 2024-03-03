@@ -3,10 +3,10 @@ part of game;
 class DialogBuilder {
   void showAddUserModal(
     BuildContext context,
-      int gameId,
+    int gameId,
   ) {
     final ValueNotifier<bool> isButtonEnabledNotifier =
-    ValueNotifier<bool>(false);
+        ValueNotifier<bool>(false);
     final TextEditingController textEditingController = TextEditingController();
     textEditingController.addListener(() {
       isButtonEnabledNotifier.value = textEditingController.text.isNotEmpty;
@@ -59,42 +59,77 @@ class DialogBuilder {
               ),
             ),
           ),
-          child: TextFormField(
-            controller: textEditingController,
-            style: MafiaTheme.themeData.textTheme.headlineSmall,
-            keyboardType: TextInputType.emailAddress,
-            autofocus: true,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 8,
+          child: Column(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  const CircleAvatar(
+                    radius: 90,
+                    child: ClipOval(
+                      child: Image(
+                        image: AssetImage('assets/roles/mirniy.png'),
+                        fit: BoxFit.fill,
+                        width: 192,
+                        height: 192,
+                      ),
+                    )
+                  ),
+                  Positioned(
+                    bottom: -10,
+                    left: 120,
+                    child: IconButton(
+                      onPressed: () {
+                        // Handle avatar selection
+                      },
+                      icon: const Icon(
+                        Icons.add_a_photo_outlined,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                ],
+              ).padding(
+                top: 16,
+                bottom: 16,
               ),
-              labelText: AppStrings.nameOfGamer,
-              labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: MafiaTheme.themeData.colorScheme.secondary,
+              TextFormField(
+                controller: textEditingController,
+                style: MafiaTheme.themeData.textTheme.headlineSmall,
+                keyboardType: TextInputType.emailAddress,
+                autofocus: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                  labelText: AppStrings.nameOfGamer,
+                  labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                  ),
                 ),
+                onChanged: (String value) {
+                  // Handle onChanged event
+                },
+                onSaved: (String? value) {
+                  // Handle onSaved event
+                },
+                validator: Validator.validateText,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: MafiaTheme.themeData.colorScheme.secondary,
-                ),
-              ),
-            ),
-            onChanged: (String value) {
-              // Handle onChanged event
-            },
-            onSaved: (String? value) {
-              // Handle onSaved event
-            },
-            validator: Validator.validateText,
+            ],
           ).padding(
             bottom: 100,
             top: 16,
             horizontal: 16,
           ),
         ),
-        // Add more SliverWoltModalSheetPage as needed
       ],
       modalTypeBuilder: (BuildContext context) => WoltModalType.dialog,
     );
