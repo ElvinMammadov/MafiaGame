@@ -32,8 +32,10 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       if (index != -1) {
         final List<Gamer> updatedGamersList =
             List<Gamer>.from(state.gamers.gamers);
-        updatedGamersList[index] =
-            updatedGamersList[index].copyWith(name: event.gamer.name);
+        updatedGamersList[index] = updatedGamersList[index].copyWith(
+          name: event.gamer.name,
+          gamerId: event.gamer.gamerId,
+        );
 
         try {
           final Gamer? gamer =

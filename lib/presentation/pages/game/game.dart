@@ -1,9 +1,12 @@
 library game;
 
+import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
 import 'package:mafia_game/features/game/models/gamer.dart';
@@ -16,8 +19,8 @@ import 'package:mafia_game/utils/theme/theme.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-
 part 'add_user.dart';
 part 'circle_avatar.dart';
 part 'game_table.dart';
 part 'widgets/dialog_builder.dart';
+part 'widgets/image_picker_sheet.dart';

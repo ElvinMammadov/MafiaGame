@@ -18,19 +18,33 @@ class FirestoreService {
   //         }).toList());
 
   Future<Gamer> addGamer(Gamer gamer) async {
-    final DocumentReference<Object?> documentReference =
-        await _gamersCollection.add(<String, dynamic>{
+    Gamer newGamer = const Gamer.empty();
+    await _gamersCollection.doc(gamer.gamerId).set(<String, dynamic>{
       'name': gamer.name,
       'role': gamer.role,
       'id': gamer.id,
+      'gamerId': gamer.gamerId,
+      'gamerCreated': DateTime.now().toString(),
     });
-    final Gamer newGamer = Gamer(
-      name: gamer.name,
-      role: gamer.role,
-      id: gamer.id,
-      documentId: documentReference.id,
+    final DocumentReference<Object?> docRef =
+        _gamersCollection.doc(gamer.gamerId);
+    docRef.get().then(
+      (DocumentSnapshot doc) {
+        final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+        newGamer = Gamer(
+          name: data['name'] as String,
+          role: gamer.role,
+          gamerId: data['gamerId'] as String,
+          gamerCreated: data['gamerCreated'] as String,
+          // documentId: documentReference.id,
+        );
+        print(
+            "Document data: ${data['name']}, gamerId: ${data['gamerId']},"
+                " gamerCreated: ${data['gamerCreated']}");
+      },
+      onError: (e) => print("Error getting document: $e"),
     );
-    log("Document id is ${documentReference.id}");
+
     return newGamer;
   }
 

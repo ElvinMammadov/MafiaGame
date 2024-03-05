@@ -26,11 +26,14 @@ class DialogBuilder {
               enabled: isEnabled,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
               action: () {
+                final String gamerId =  UniqueKey().toString();
+                print('gamerId: $gamerId');
                 BlocProvider.of<GameBloc>(context).add(
                   UpdateGamerName(
                     gamer: Gamer(
                       name: textEditingController.text,
                       id: gameId,
+                      gamerId: gamerId,
                     ),
                   ),
                 );
@@ -44,13 +47,9 @@ class DialogBuilder {
           ),
           trailingNavBarWidget: Padding(
             padding: const EdgeInsets.only(
-              right: 32,
+              right: 16,
             ),
             child: IconButton(
-              constraints: const BoxConstraints(
-                maxHeight: Dimensions.itemHeight32,
-                maxWidth: Dimensions.itemWidth32,
-              ),
               onPressed: Navigator.of(context).pop,
               icon: const Icon(
                 Icons.close,
@@ -59,75 +58,8 @@ class DialogBuilder {
               ),
             ),
           ),
-          child: Column(
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  const CircleAvatar(
-                    radius: 90,
-                    child: ClipOval(
-                      child: Image(
-                        image: AssetImage('assets/roles/mirniy.png'),
-                        fit: BoxFit.fill,
-                        width: 192,
-                        height: 192,
-                      ),
-                    )
-                  ),
-                  Positioned(
-                    bottom: -10,
-                    left: 120,
-                    child: IconButton(
-                      onPressed: () {
-                        // Handle avatar selection
-                      },
-                      icon: const Icon(
-                        Icons.add_a_photo_outlined,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                    ),
-                  ),
-                ],
-              ).padding(
-                top: 16,
-                bottom: 16,
-              ),
-              TextFormField(
-                controller: textEditingController,
-                style: MafiaTheme.themeData.textTheme.headlineSmall,
-                keyboardType: TextInputType.emailAddress,
-                autofocus: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                  ),
-                  labelText: AppStrings.nameOfGamer,
-                  labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
-                    ),
-                  ),
-                ),
-                onChanged: (String value) {
-                  // Handle onChanged event
-                },
-                onSaved: (String? value) {
-                  // Handle onSaved event
-                },
-                validator: Validator.validateText,
-              ),
-            ],
-          ).padding(
-            bottom: 100,
-            top: 16,
-            horizontal: 16,
+          child: ImagePickerSheet(
+            textEditingController: textEditingController,
           ),
         ),
       ],

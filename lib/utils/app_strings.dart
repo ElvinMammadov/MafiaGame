@@ -36,4 +36,8 @@ class AppStrings {
   static const String add = 'Добавить';
   static const String nameOfGamer = 'Имя игрока';
   static const String createGamer = 'Создать игрока';
+  static const String chooseResource = 'Выберите ресурс';
+  static const String gallery = 'Галерея';
+  static const String camera = 'Камера';
+
 }

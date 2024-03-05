@@ -7,6 +7,8 @@ class Gamer extends Equatable {
   final String? imageUrl;
   final int? id;
   final String? documentId;
+  final String? gamerId;
+  final String? gamerCreated ;
 
   const Gamer({
     this.name,
@@ -14,6 +16,8 @@ class Gamer extends Equatable {
     this.imageUrl,
     this.id,
     this.documentId,
+    this.gamerId,
+    this.gamerCreated,
   });
 
   const Gamer.empty()
@@ -21,7 +25,9 @@ class Gamer extends Equatable {
         role = '',
         imageUrl = '',
         id = 0,
-        documentId = '';
+        documentId = '',
+        gamerCreated = '',
+        gamerId = '';
 
   Gamer copyWith({
     String? name,
@@ -29,6 +35,8 @@ class Gamer extends Equatable {
     String? imageUrl,
     int? id,
     String? documentId,
+    String? gamerId,
+    String? gamerCreated,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -36,6 +44,8 @@ class Gamer extends Equatable {
         imageUrl: imageUrl ?? this.imageUrl,
         id: id ?? this.id,
         documentId: documentId ?? this.documentId,
+        gamerId: gamerId ?? this.gamerId,
+        gamerCreated: gamerCreated ?? this.gamerCreated,
       );
 
   factory Gamer.fromFireStore(
@@ -48,6 +58,7 @@ class Gamer extends Equatable {
       role: data['role'] as String,
       imageUrl: data['imageUrl'] as String,
       documentId: data['documentId'] as String,
+      gamerId: data['gamerId'] as String,
     );
     return gamer;
   }
@@ -57,6 +68,7 @@ class Gamer extends Equatable {
         if (role != null) "role": role,
         if (imageUrl != null) "imageUrl": imageUrl,
         if (documentId != null) "id": documentId,
+        if (gamerId != null) "gamerId": gamerId,
       };
 
   @override
@@ -66,10 +78,13 @@ class Gamer extends Equatable {
         imageUrl,
         id,
         documentId,
+        gamerId,
+        gamerCreated,
       ];
 
   @override
   String toString() => 'Gamer'
       '{name: $name, role: $role,'
-      ' imageUrl: $imageUrl}, id: $id, documentId: $documentId}';
+      ' imageUrl: $imageUrl}, id: $id, documentId: $documentId}'
+      ' gamerId: $gamerId' 'gamerCreated: $gamerCreated}';
 }

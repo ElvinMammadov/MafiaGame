@@ -12,25 +12,16 @@ class GameTableScreen extends StatelessWidget {
               showBackButton: true,
             ),
             resizeToAvoidBottomInset: false,
-            body: ColoredBox(
-              color: Colors.grey,
+            body: DecoratedBox(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/mafia_table.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
               child: SizedBox.expand(
                 child: Stack(
                   children: <Widget>[
-                    Center(
-                      child: ClipOval(
-                        child: Container(
-                          width: 400.0,
-                          height: 730.0,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/table.jpeg'),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                     CircleAvatarWidget(
                       numberOfGamers: numberOfGamers,
                       gamers: gamers,

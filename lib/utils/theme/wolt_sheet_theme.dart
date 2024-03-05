@@ -1,16 +1,14 @@
 part of theme;
 
 class WoltModalSheetTheme extends WoltModalSheetThemeData {
-   WoltModalSheetTheme()
+   const WoltModalSheetTheme()
       : super(
     dialogShape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topRight: Radius.circular(8.0),
-        topLeft: Radius.circular(8.0),
+      borderRadius: BorderRadius.all(
+        Radius.circular(16),
       ),
     ),
      backgroundColor: Colors.transparent,
-     navBarHeight: 56,
      maxDialogWidth: 560,
      shadowColor: const Color(0xFFEAD08A),
   );

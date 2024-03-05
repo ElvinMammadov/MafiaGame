@@ -14,7 +14,7 @@ class CircleAvatarWidget extends StatefulWidget {
 }
 
 class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
-  late List<Widget> _positionedAvatars = <Widget>[];
+  late List<Widget> positionedAvatars = <Widget>[];
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
         builder: (BuildContext context, AppState state) {
           if (widget.gamers.isNotEmpty) {
             return Stack(
-              children: _positionedAvatars = _buildCircleAvatars(
+              children: positionedAvatars = _buildCircleAvatars(
                 widget.numberOfGamers,
                 widget.gamers,
               ),
@@ -65,8 +65,8 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       final double angle = (3 * pi / 2) + i * angleStep;
 
       ///Below is for resizing the avatars
-      final double avatarX = centerX + (ovalRadius + 60 + radius) * cos(angle);
-      final double avatarY = centerY + (ovalRadius + 220 + radius) * sin(angle);
+      final double avatarX = centerX + (ovalRadius + 80 + radius) * cos(angle);
+      final double avatarY = centerY + (ovalRadius + 250 + radius) * sin(angle);
 
       positionedAvatars.add(
         Positioned(
@@ -74,30 +74,59 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
           left: avatarX - radius,
           child: Column(
             children: <Widget>[
-              CircleAvatar(
-                backgroundColor: Colors.red,
-                radius: radius,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      DialogBuilder().showAddUserModal(
-                        context,
-                        i + 1,
-                      );
-                    });
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    size: 50,
-                    color: Colors.white,
+              Stack(
+                children: <Widget>[
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(
+                          color: MafiaTheme.themeData.colorScheme.secondary,
+                          width: 2,
+                        ),
+                      ),
+                      color: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            DialogBuilder().showAddUserModal(
+                              context,
+                              i + 1,
+                            );
+                          });
+                        },
+                        child: Icon(
+                          Icons.person_add_rounded,
+                          size: 75,
+                          color: MafiaTheme.themeData.colorScheme.secondary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  side: BorderSide(
+                    color: MafiaTheme.themeData.colorScheme.secondary,
+                    width: 2,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-              ),
-              Text(
-                gamers.isNotEmpty ? '${gamers[i].name}' : '',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+                onPressed: () {},
+                child: Text(
+                  gamers.isNotEmpty ? '${gamers[i].name}' : '',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
