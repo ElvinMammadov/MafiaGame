@@ -8,7 +8,7 @@ class Gamer extends Equatable {
   final int? id;
   final String? documentId;
   final String? gamerId;
-  final String? gamerCreated ;
+  final String? gamerCreated;
 
   const Gamer({
     this.name,
@@ -86,5 +86,6 @@ class Gamer extends Equatable {
   String toString() => 'Gamer'
       '{name: $name, role: $role,'
       ' imageUrl: $imageUrl}, id: $id, documentId: $documentId}'
-      ' gamerId: $gamerId' 'gamerCreated: $gamerCreated}';
+      ' gamerId: $gamerId'
+      'gamerCreated: $gamerCreated';
 }

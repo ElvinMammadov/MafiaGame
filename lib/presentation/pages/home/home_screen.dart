@@ -89,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         numberOfGamers: numberOfGamers ?? 0,
       ),
     );
+    print('AppState is $AppState');
     AppNavigator.navigateToTablePage(context);
   }
 }

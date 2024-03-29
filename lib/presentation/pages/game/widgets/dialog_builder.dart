@@ -11,6 +11,9 @@ class DialogBuilder {
     textEditingController.addListener(() {
       isButtonEnabledNotifier.value = textEditingController.text.isNotEmpty;
     });
+    final FirestoreService firestoreService = FirestoreService();
+    File? imageFile;
+    String? roleName;
     WoltModalSheet.show<void>(
       context: context,
       pageListBuilder: (BuildContext modalSheetContext) =>
@@ -25,15 +28,22 @@ class DialogBuilder {
               label: AppStrings.add,
               enabled: isEnabled,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              action: () {
-                final String gamerId =  UniqueKey().toString();
-                print('gamerId: $gamerId');
+              action: () async {
+                final String gamerId = UniqueKey().toString();
+                final String imageUrl =
+                    await firestoreService.uploadImageToFirebaseStorage(
+                  imageFile!,
+                  gamerId,
+                );
+                print('gamerId: $gamerId, imageUrl: $imageUrl');
                 BlocProvider.of<GameBloc>(context).add(
-                  UpdateGamerName(
+                  UpdateGamer(
                     gamer: Gamer(
                       name: textEditingController.text,
                       id: gameId,
                       gamerId: gamerId,
+                      imageUrl: imageUrl,
+                      role: roleName,
                     ),
                   ),
                 );
@@ -60,6 +70,12 @@ class DialogBuilder {
           ),
           child: ImagePickerSheet(
             textEditingController: textEditingController,
+            onImageChanged: (File? file) {
+              imageFile = file;
+            },
+            onRoleChanged: (String? role) {
+              roleName = role;
+            },
           ),
         ),
       ],

@@ -32,10 +32,10 @@ class AddGamer extends GameEvent {
   List<Object?> get props => <Object?>[gamer];
 }
 
-class UpdateGamerName extends GameEvent {
+class UpdateGamer extends GameEvent {
   final Gamer gamer;
 
-  const UpdateGamerName({required this.gamer});
+  const UpdateGamer({required this.gamer});
 
 
   @override

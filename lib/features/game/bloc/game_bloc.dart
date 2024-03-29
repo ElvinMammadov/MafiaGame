@@ -3,7 +3,7 @@ part of game;
 class GameBloc extends Bloc<GameEvent, AppState> {
   final GameRepository gameRepository;
 
-  GameBloc(this.gameRepository) : super(const AppState.empty()) {
+  GameBloc(this.gameRepository) : super( AppState.empty()) {
     on<UpdateGameDetails>((UpdateGameDetails event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
@@ -25,7 +25,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       emit(appState);
     });
 
-    on<UpdateGamerName>((UpdateGamerName event, Emitter<AppState> emit) async {
+    on<UpdateGamer>((UpdateGamer event, Emitter<AppState> emit) async {
       final int index = state.gamers.gamers.indexWhere(
         (Gamer gamer) => gamer.id == event.gamer.id,
       );
@@ -35,6 +35,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         updatedGamersList[index] = updatedGamersList[index].copyWith(
           name: event.gamer.name,
           gamerId: event.gamer.gamerId,
+          imageUrl: event.gamer.imageUrl,
+          role: event.gamer.role,
         );
 
         try {

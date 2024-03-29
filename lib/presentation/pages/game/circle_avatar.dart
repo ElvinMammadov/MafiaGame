@@ -98,11 +98,19 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                             );
                           });
                         },
-                        child: Icon(
-                          Icons.person_add_rounded,
-                          size: 75,
-                          color: MafiaTheme.themeData.colorScheme.secondary,
-                        ),
+                        child: gamers[i].imageUrl == null
+                            ? Icon(
+                                Icons.person_add_rounded,
+                                size: 75,
+                                color:
+                                    MafiaTheme.themeData.colorScheme.secondary,
+                              )
+                            : Image.network(
+                                gamers[i].imageUrl!,
+                                fit: BoxFit.fill,
+                                width: 100,
+                                height: 100,
+                              ),
                       ),
                     ),
                   ),
