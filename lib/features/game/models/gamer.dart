@@ -9,6 +9,7 @@ class Gamer extends Equatable {
   final String? documentId;
   final String? gamerId;
   final String? gamerCreated;
+  final bool? isNameChanged;
 
   const Gamer({
     this.name,
@@ -18,6 +19,7 @@ class Gamer extends Equatable {
     this.documentId,
     this.gamerId,
     this.gamerCreated,
+    this.isNameChanged,
   });
 
   const Gamer.empty()
@@ -27,7 +29,8 @@ class Gamer extends Equatable {
         id = 0,
         documentId = '',
         gamerCreated = '',
-        gamerId = '';
+        gamerId = '',
+        isNameChanged = false;
 
   Gamer copyWith({
     String? name,
@@ -37,6 +40,7 @@ class Gamer extends Equatable {
     String? documentId,
     String? gamerId,
     String? gamerCreated,
+    bool? isNameChanged,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -46,6 +50,7 @@ class Gamer extends Equatable {
         documentId: documentId ?? this.documentId,
         gamerId: gamerId ?? this.gamerId,
         gamerCreated: gamerCreated ?? this.gamerCreated,
+        isNameChanged: isNameChanged ?? this.isNameChanged,
       );
 
   factory Gamer.fromFireStore(
@@ -80,6 +85,7 @@ class Gamer extends Equatable {
         documentId,
         gamerId,
         gamerCreated,
+        isNameChanged,
       ];
 
   @override
@@ -87,5 +93,5 @@ class Gamer extends Equatable {
       '{name: $name, role: $role,'
       ' imageUrl: $imageUrl}, id: $id, documentId: $documentId}'
       ' gamerId: $gamerId'
-      'gamerCreated: $gamerCreated';
+      'gamerCreated: $gamerCreated, isNameChanged: $isNameChanged}';
 }

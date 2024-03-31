@@ -3,7 +3,7 @@ part of app;
 class AppState extends Equatable {
   final UserState user;
   final GameState game;
-  final GamersState gamers;
+  final GamersState gamersState;
 
   const AppState({
     UserState? user,
@@ -12,7 +12,7 @@ class AppState extends Equatable {
   })
       : user = user ?? const UserState.empty(),
         game = game ?? const GameState.empty(),
-        gamers = gamers ?? const GamersState.empty();
+        gamersState = gamers ?? const GamersState.empty();
 
     const AppState.empty() : this();
 
@@ -23,7 +23,7 @@ class AppState extends Equatable {
   }) => AppState(
         user: user ?? this.user,
         game: game ?? this.game,
-        gamers: gamers?? this.gamers,
+        gamers: gamers?? gamersState,
       );
 
   @override
@@ -31,10 +31,10 @@ class AppState extends Equatable {
       <Object?>[
         user,
         game,
-        gamers,
+        gamersState,
       ];
 
   @override
   String toString() => 'AppState'
-      '{user: $user, game: $game, gamers: $gamers}';
+      '{user: $user, game: $game, gamers: $gamersState}';
 }

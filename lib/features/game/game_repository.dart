@@ -8,6 +8,7 @@ class GamerRepository implements GameRepository {
     required String typeOfGame,
     required String typeOfController,
     required int numberOfGamers,
+    required int gamerId,
   }) =>
       AppState(
         game: GameState(
@@ -15,6 +16,7 @@ class GamerRepository implements GameRepository {
           typeOfGame: typeOfGame,
           typeOfController: typeOfController,
           numberOfGamers: numberOfGamers,
+          gamerId: gamerId,
         ),
       );
 

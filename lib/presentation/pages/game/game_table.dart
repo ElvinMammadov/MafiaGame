@@ -1,15 +1,32 @@
 part of game;
 
-class GameTableScreen extends StatelessWidget {
+class GameTableScreen extends StatefulWidget {
+  @override
+  State<GameTableScreen> createState() => _GameTableScreenState();
+}
+
+class _GameTableScreenState extends State<GameTableScreen> {
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
           final int numberOfGamers = state.game.numberOfGamers;
-          final List<Gamer> gamers = state.gamers.gamers;
+          final List<Gamer> gamers = state.gamersState.gamers;
+          final bool isGameCouldStart = state.game.isGameCouldStart;
+          final double screenWidth = MediaQuery.of(context).size.width;
+          final double screenHeight = MediaQuery.of(context).size.height;
+
+          const double buttonLeftPercentage = 0.1;
+          const double buttonBottomPercentage = 0.03;
+          const double roundButtonBottomPercentage = 0.05;
           return Scaffold(
-            appBar: const DefaultAppBar(
+            appBar: DefaultAppBar(
               title: AppStrings.title,
               showBackButton: true,
+              actionCallback: () {
+                BlocProvider.of<GameBloc>(context).add(
+                  const CleanGamers(gamers: <Gamer>[]),
+                );
+              },
             ),
             resizeToAvoidBottomInset: false,
             body: DecoratedBox(
@@ -25,6 +42,31 @@ class GameTableScreen extends StatelessWidget {
                     CircleAvatarWidget(
                       numberOfGamers: numberOfGamers,
                       gamers: gamers,
+                    ),
+                    Positioned(
+                      right: screenWidth * buttonLeftPercentage,
+                      bottom: screenHeight * buttonBottomPercentage,
+                      child: SizedBox(
+                        width: 300,
+                        child: BaseButton(
+                          label: AppStrings.startGame,
+                          enabled: isGameCouldStart,
+                          textStyle:
+                              MafiaTheme.themeData.textTheme.headlineSmall,
+                          action: () {},
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: screenWidth * buttonLeftPercentage,
+                      bottom: screenHeight * roundButtonBottomPercentage,
+                      child: RoundedIconButton(
+                        icon: Icons.visibility,
+                        isVisible: true,
+                        onPressed: () {
+                          // Toggle the visibility state or perform any action
+                        },
+                      ),
                     ),
                   ],
                 ),

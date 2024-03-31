@@ -50,8 +50,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
-           final Roles roles = state.gamers.roles;
-          print('Roles: $roles');
+           final Roles roles = state.gamersState.roles;
           return Column(
             children: <Widget>[
               Stack(
@@ -61,7 +60,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     child: ClipOval(
                       child: image == null
                           ? const Image(
-                              image: AssetImage('assets/roles/mirniy.png'),
+                              image: AssetImage('assets/mafioz.jpg'),
                               fit: BoxFit.fill,
                               width: 192,
                               height: 180,
@@ -142,7 +141,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   ),
                 ),
                 hint: Text(
-                  AppStrings.typeOfGame,
+                  AppStrings.roleOfGamer,
                   style: MafiaTheme.themeData.textTheme.headlineSmall,
                 ),
                 value: selectedRole,
@@ -167,7 +166,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   // widget.onChange!(
                   //   typeOfGame: value!,
                   // );
-                  selectedRole = value!;
+                  selectedRole = value;
                   widget.onRoleChanged(selectedRole);
                 },
                 onSaved: (String? value) {

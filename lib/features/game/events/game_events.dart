@@ -22,6 +22,19 @@ class UpdateGameDetails extends GameEvent {
       <Object?>[gameName, typeOfGame, typeOfController, numberOfGamers];
 }
 
+class ChangeGameStartValue extends GameEvent {
+  final bool isGameStarted;
+
+
+  const ChangeGameStartValue({
+    required this.isGameStarted,
+  });
+
+  @override
+  List<Object?> get props =>
+      <Object?>[isGameStarted];
+}
+
 class AddGamer extends GameEvent {
   final Gamer gamer;
 
@@ -30,6 +43,16 @@ class AddGamer extends GameEvent {
 
   @override
   List<Object?> get props => <Object?>[gamer];
+}
+
+class CleanGamers extends GameEvent {
+  final List<Gamer> gamers;
+
+  const CleanGamers({required this.gamers});
+
+
+  @override
+  List<Object?> get props => <Object?>[gamers];
 }
 
 class UpdateGamer extends GameEvent {

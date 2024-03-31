@@ -3,7 +3,7 @@ part of game;
 class DialogBuilder {
   void showAddUserModal(
     BuildContext context,
-    int gameId,
+    int id,
   ) {
     final ValueNotifier<bool> isButtonEnabledNotifier =
         ValueNotifier<bool>(false);
@@ -32,7 +32,9 @@ class DialogBuilder {
                 final String gamerId = UniqueKey().toString();
                 final String imageUrl =
                     await firestoreService.uploadImageToFirebaseStorage(
-                  imageFile!,
+                  imageFile == null
+                      ? await getImageFileFromAssets('mafioz.jpg')
+                      : imageFile!,
                   gamerId,
                 );
                 print('gamerId: $gamerId, imageUrl: $imageUrl');
@@ -40,10 +42,11 @@ class DialogBuilder {
                   UpdateGamer(
                     gamer: Gamer(
                       name: textEditingController.text,
-                      id: gameId,
+                      id: id,
                       gamerId: gamerId,
                       imageUrl: imageUrl,
                       role: roleName,
+                      isNameChanged: true,
                     ),
                   ),
                 );
@@ -81,5 +84,17 @@ class DialogBuilder {
       ],
       modalTypeBuilder: (BuildContext context) => WoltModalType.dialog,
     );
+  }
+
+  Future<File> getImageFileFromAssets(String path) async {
+    final ByteData byteData = await rootBundle.load('assets/$path');
+
+    final File file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(
+      byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
+    );
+
+    return file;
   }
 }

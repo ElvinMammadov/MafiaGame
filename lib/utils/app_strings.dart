@@ -39,5 +39,6 @@ class AppStrings {
   static const String chooseResource = 'Выберите ресурс';
   static const String gallery = 'Галерея';
   static const String camera = 'Камера';
-
+  static const String roleOfGamer = 'Роль игрока';
+  static const String startGame = 'Начать игру';
 }

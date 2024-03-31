@@ -4,11 +4,13 @@ import 'package:mafia_game/utils/theme/theme.dart';
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
+  final VoidCallback? actionCallback;
 
   const DefaultAppBar({
     super.key,
     required this.title,
     this.showBackButton = false,
+    this.actionCallback,
   });
 
   @override
@@ -24,6 +26,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new),
                 onPressed: () {
+                  actionCallback?.call();
                   Navigator.pop(context);
                 },
                 color: MafiaTheme.themeData.colorScheme.surface,

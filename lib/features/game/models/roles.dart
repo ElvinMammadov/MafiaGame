@@ -33,6 +33,10 @@ class Roles extends Equatable {
         roles: roles ?? this.roles,
       );
 
+  bool hasRole(String roleName) => roles.any(
+        (Role role) => role.name == roleName,
+      );
+
   @override
   List<Object?> get props => <Object?>[roles];
 }
