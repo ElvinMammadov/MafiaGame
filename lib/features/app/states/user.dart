@@ -40,10 +40,10 @@ class UserState extends Equatable {
         // isVerified: isVerified ?? this.isVerified
       );
 
-  factory UserState.fromMap(Map<String, dynamic> json) =>
+  factory UserState.fromJson(Map<String, dynamic> json) =>
       _$UserStateFromJson(json);
 
-  Map<String, dynamic> toMap() => _$UserStateToJson(this);
+  Map<String, dynamic> toJson() => _$UserStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

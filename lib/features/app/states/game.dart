@@ -53,10 +53,10 @@ class GameState extends Equatable {
         isGameStarted: isGameStarted ?? this.isGameStarted,
       );
 
-  factory GameState.fromMap(Map<String, dynamic> json) =>
+  factory GameState.fromJson(Map<String, dynamic> json) =>
       _$GameStateFromJson(json);
 
-  Map<String, dynamic> toMap() => _$GameStateToJson(this);
+  Map<String, dynamic> toJson() => _$GameStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

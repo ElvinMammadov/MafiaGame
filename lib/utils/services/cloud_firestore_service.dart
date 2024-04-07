@@ -38,7 +38,7 @@ class FirestoreService {
     required String gameId,
     required List<Gamer> gamers,
   }) async {
-    await _gameCollection.doc(gameId).set({
+    await _gameCollection.doc(gameId).set(<String, Object>{
       'gameName': gameName,
       'numberOfGamers': numberOfGamers,
       'gameId': gameId,

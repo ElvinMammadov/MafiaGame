@@ -22,10 +22,10 @@ class GamersState extends Equatable {
         roles: roles ?? this.roles,
       );
 
-  factory GamersState.fromMap(Map<String, dynamic> json) =>
+  factory GamersState.fromJson(Map<String, dynamic> json) =>
       _$GamersStateFromJson(json);
 
-  Map<String, dynamic> toMap() => _$GamersStateToJson(this);
+  Map<String, dynamic> toJson() => _$GamersStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

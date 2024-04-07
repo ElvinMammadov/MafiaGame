@@ -31,3 +31,4 @@ part 'game_table.dart';
 part 'widgets/dialog_builder.dart';
 part 'widgets/image_picker_sheet.dart';
 part 'widgets/count_down_timer.dart';
+part 'gamers_avatars.dart';

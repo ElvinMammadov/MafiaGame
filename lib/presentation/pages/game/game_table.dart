@@ -14,10 +14,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int numberOfGamers = state.game.numberOfGamers;
           final List<Gamer> gamers = state.gamersState.gamers;
           final bool? isGameCouldStart = state.game.isGameCouldStart;
-          print('isGameCouldStart is $isGameCouldStart');
           final double screenWidth = MediaQuery.of(context).size.width;
           final double screenHeight = MediaQuery.of(context).size.height;
           final String gameName = state.game.gameName;
+          final bool isGameStarted = state.game.isGameStarted;
+          print('isGameStarted: $isGameStarted');
 
           const double buttonLeftPercentage = 0.1;
           const double buttonBottomPercentage = 0.03;
@@ -46,30 +47,33 @@ class _GameTableScreenState extends State<GameTableScreen> {
                     CircleAvatarWidget(
                       showRoles: showRoles,
                     ),
-                    Positioned(
-                      right: screenWidth * buttonLeftPercentage,
-                      bottom: screenHeight * buttonBottomPercentage,
-                      child: SizedBox(
-                        width: 300,
-                        child: BaseButton(
-                          label: AppStrings.startGame,
-                          enabled: isGameCouldStart!,
-                          textStyle:
-                              MafiaTheme.themeData.textTheme.headlineSmall,
-                          action: () {
-                            final String gameId = UniqueKey().toString();
-                            BlocProvider.of<GameBloc>(context).add(
-                              SendGameToFirebase(
-                                gameName: gameName,
-                                numberOfGamers: numberOfGamers,
-                                gameId: gameId,
-                                gamers: gamers,
-                              ),
-                            );
-                          },
+                    if (isGameStarted)
+                      const SizedBox()
+                    else
+                      Positioned(
+                        right: screenWidth * buttonLeftPercentage,
+                        bottom: screenHeight * buttonBottomPercentage,
+                        child: SizedBox(
+                          width: 300,
+                          child: BaseButton(
+                            label: AppStrings.startGame,
+                            enabled: isGameCouldStart!,
+                            textStyle:
+                                MafiaTheme.themeData.textTheme.headlineSmall,
+                            action: () {
+                              final String gameId = UniqueKey().toString();
+                              BlocProvider.of<GameBloc>(context).add(
+                                SendGameToFirebase(
+                                  gameName: gameName,
+                                  numberOfGamers: numberOfGamers,
+                                  gameId: gameId,
+                                  gamers: gamers,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
                     // Center(
                     //   child: CountDownTimer(),
                     // ),

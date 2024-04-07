@@ -47,12 +47,20 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     on<SendGameToFirebase>(
         (SendGameToFirebase event, Emitter<AppState> emit) async {
       try {
+
         await gameRepository.addGameToFirebase(
           gameName: event.gameName,
           numberOfGamers: event.numberOfGamers,
           gameId: event.gameId,
           gamers: event.gamers,
         );
+        final AppState appState = state.copyWith(
+          game: state.game.copyWith(
+            isGameStarted: true,
+          ),
+        );
+        print('appState is : ${appState}');
+        emit(appState);
       } catch (e) {
         print('Error sending game to Firebase: $e');
       }

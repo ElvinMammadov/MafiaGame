@@ -27,10 +27,10 @@ class AppState extends Equatable {
         gamers: gamers ?? gamersState,
       );
 
-  factory AppState.fromMap(Map<String, dynamic> json) =>
+  factory AppState.fromJson(Map<String, dynamic> json) =>
       _$AppStateFromJson(json);
 
-  Map<String, dynamic> toMap() => _$AppStateToJson(this);
+  Map<String, dynamic> toJson() => _$AppStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

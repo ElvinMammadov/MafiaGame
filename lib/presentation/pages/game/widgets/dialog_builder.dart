@@ -107,16 +107,13 @@ class DialogBuilder {
     textEditingController.addListener(() {
       isButtonEnabledNotifier.value = textEditingController.text.isNotEmpty;
     });
-    final List<String> items = <String>[
-      'Item1',
-      'Item2',
-      'Item3',
-      'Item4',
-      'Item5',
-      'Item6',
-      'Item7',
-      'Item8',
-    ];
+
+    final List<Gamer> gamers =
+        BlocProvider.of<GameBloc>(context).state.gamersState.gamers;
+    final List<String> items = <String>[];
+    for (int i = 0; i < gamers.length; i++) {
+      items.add(gamers[i].name!);
+    }
     String? selectedValue;
     WoltModalSheet.show<void>(
       context: context,

@@ -31,7 +31,7 @@ class BaseButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color?>(
           enabled
-              ? backgroundColor ?? theme.colorScheme.secondary
+              ? backgroundColor ?? theme.colorScheme.secondary.withOpacity(0.5)
               : disabledColor ?? theme.disabledColor,
         ),
         minimumSize: MaterialStateProperty.all(

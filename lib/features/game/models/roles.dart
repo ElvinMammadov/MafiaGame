@@ -33,9 +33,9 @@ class Roles extends Equatable {
         roles: roles ?? this.roles,
       );
 
-  factory Roles.fromMap(Map<String, dynamic> json) =>_$RolesFromJson(json);
+  factory Roles.fromJson(Map<String, dynamic> json) =>_$RolesFromJson(json);
 
-  Map<String, dynamic> toMap() => _$RolesToJson(this);
+  Map<String, dynamic> toJson() => _$RolesToJson(this);
 
   bool hasRole(String roleName) => roles.any(
         (Role role) => role.name == roleName,
