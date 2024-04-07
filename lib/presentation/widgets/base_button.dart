@@ -42,6 +42,7 @@ class BaseButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(6.0),
           ),
         ),
+        elevation: MaterialStateProperty.all(2),
       ),
       onPressed: enabled ? action : null,
       child: Text(

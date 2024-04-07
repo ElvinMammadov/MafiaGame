@@ -23,16 +23,34 @@ class UpdateGameDetails extends GameEvent {
 }
 
 class ChangeGameStartValue extends GameEvent {
-  final bool isGameStarted;
+  final bool isGameCouldStart;
 
 
   const ChangeGameStartValue({
-    required this.isGameStarted,
+    required this.isGameCouldStart,
   });
 
   @override
   List<Object?> get props =>
-      <Object?>[isGameStarted];
+      <Object?>[isGameCouldStart];
+}
+
+class SendGameToFirebase extends GameEvent {
+  final String gameName;
+  final int numberOfGamers;
+  final String gameId;
+  final List<Gamer> gamers;
+
+  const SendGameToFirebase({
+    required this.gameName,
+    required this.numberOfGamers,
+    required this.gameId,
+    required this.gamers,
+  });
+
+  @override
+  List<Object?> get props =>
+      <Object?>[gameName, numberOfGamers, gameId, gamers];
 }
 
 class AddGamer extends GameEvent {

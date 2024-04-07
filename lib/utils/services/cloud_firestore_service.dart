@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,6 +6,8 @@ import 'package:mafia_game/features/game/models/gamer.dart';
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
       FirebaseFirestore.instance.collection('gamers');
+  final CollectionReference<Object?> _gameCollection =
+  FirebaseFirestore.instance.collection('game');
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   // Stream<List<Gamer>> getGamers() =>
@@ -28,8 +29,22 @@ class FirestoreService {
     final UploadTask uploadTask = ref.putFile(imageFile);
     final TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
     final String imageUrl = await taskSnapshot.ref.getDownloadURL();
-    log('Image Url: $imageUrl');
     return imageUrl;
+  }
+
+
+  Future<void> addGameToFirebase({
+    required String gameName,
+    required int numberOfGamers,
+    required String gameId,
+    required List<Gamer> gamers,
+  }) async {
+    await _gameCollection.doc(gameId).set({
+      'gameName': gameName,
+      'numberOfGamers': numberOfGamers,
+      'gameId': gameId,
+      'gamers': gamers.map((Gamer gamer) => gamer.toJson()).toList(),
+    });
   }
 
   Future<Gamer> addGamer(Gamer gamer) async {
@@ -54,9 +69,9 @@ class FirestoreService {
           gamerCreated: data['gamerCreated'] as String,
           // documentId: documentReference.id,
         );
-        print("Document data: ${data['name']}, gamerId: ${data['gamerId']},"
-            " gamerCreated: ${data['gamerCreated']},"
-            " ImageUrl: ${data['imageUrl']}, role: ${data['role']}");
+        // print("Document data: ${data['name']}, gamerId: ${data['gamerId']},"
+        //     " gamerCreated: ${data['gamerCreated']},"
+        //     " ImageUrl: ${data['imageUrl']}, role: ${data['role']}");
       },
       onError: (e) => print("Error getting document: $e"),
     );

@@ -27,6 +27,8 @@ dependencies:
   firebase_storage: ^11.6.0
   path: ^1.8.3
   image_picker: ^1.0.7
+  aligned_dialog: ^0.0.7
+  audioplayers: ^5.2.1
 
 
 dev_dependencies:
@@ -47,6 +49,7 @@ flutter:
     - assets/mafia_table.png
     - assets/roles/mirniy.png
     - assets/mafioz.jpg
+    - assets/sounds/clock.mp3
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

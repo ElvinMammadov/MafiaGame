@@ -21,7 +21,7 @@ class MafiaTheme {
         hintColor: Colors.white,
         primaryColor: const Color(0xFFA9001B),
         secondaryHeaderColor: const Color(0xFFEAD08A),
-        extensions: <ThemeExtension>[
+        extensions: const <ThemeExtension>[
           WoltModalSheetTheme(),
         ],
       );

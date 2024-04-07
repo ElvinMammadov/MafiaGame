@@ -1,12 +1,10 @@
 part of game;
 
 class CircleAvatarWidget extends StatefulWidget {
-  final int numberOfGamers;
-  final List<Gamer> gamers;
+  final bool showRoles;
 
   const CircleAvatarWidget({
-    required this.numberOfGamers,
-    required this.gamers,
+    required this.showRoles,
   });
 
   @override
@@ -17,19 +15,27 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   late List<Widget> positionedAvatars = <Widget>[];
   bool allNamesChanged = false;
 
-  @override
-  void initState() {
-    super.initState();
-    for (int i = 0; i < widget.numberOfGamers; i++) {
+  void addGamers(Roles roles, int numberOfGamers) {
+    for (int i = 0; i < numberOfGamers; i++) {
       BlocProvider.of<GameBloc>(context).add(
         AddGamer(
           gamer: Gamer(
             name: '${AppStrings.gamer} ${i + 1}',
             id: i + 1,
+            role: roles.roles[4].name,
           ),
         ),
       );
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    addGamers(
+      BlocProvider.of<GameBloc>(context).state.gamersState.roles,
+      BlocProvider.of<GameBloc>(context).state.game.numberOfGamers,
+    );
   }
 
   void isAllGamersNameChanged(List<Gamer> gamers) {
@@ -37,11 +43,10 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       allNamesChanged = gamers.every(
         (Gamer gamer) => gamer.isNameChanged == true,
       );
-      print("allNamesChanged is $allNamesChanged");
       if (allNamesChanged) {
         BlocProvider.of<GameBloc>(context).add(
           const ChangeGameStartValue(
-            isGameStarted: true,
+            isGameCouldStart: true,
           ),
         );
       }
@@ -52,13 +57,21 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
           final Roles roles = state.gamersState.roles;
-          isAllGamersNameChanged(state.gamersState.gamers);
-          if (widget.gamers.isNotEmpty) {
+          final List<Gamer> gamers = state.gamersState.gamers;
+          final int numberOfGamers = state.game.numberOfGamers;
+          isAllGamersNameChanged(gamers);
+          if (gamers.isNotEmpty) {
             return SizedBox.expand(
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) =>
                     Stack(
-                  children: _buildCircleAvatars(constraints, roles),
+                  children: _buildCircleAvatars(
+                    constraints,
+                    roles,
+                    widget.showRoles,
+                    numberOfGamers,
+                    gamers,
+                  ),
                 ),
               ),
             );
@@ -71,6 +84,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   List<Widget> _buildCircleAvatars(
     BoxConstraints constraints,
     Roles roles,
+    bool showRoles,
+    int numberOfGamers,
+    List<Gamer> gamers,
   ) {
     final List<Widget> positionedAvatars = <Widget>[];
     final double ovalRadius = constraints.maxWidth / 2.6;
@@ -89,9 +105,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       ),
       maxAvatarRadius,
     );
-    final double angleStep = (2 * pi) / widget.numberOfGamers;
+    final double angleStep = (2 * pi) / numberOfGamers;
 
-    for (int i = 0; i < widget.numberOfGamers; i++) {
+    for (int i = 0; i < numberOfGamers; i++) {
       final double angle = (3 * pi / 2) + i * angleStep;
       final double avatarX =
           constraints.maxWidth / 2 + (ovalRadius + radius) * cos(angle);
@@ -122,27 +138,41 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            DialogBuilder().showAddUserModal(
-                              context,
-                              i + 1,
-                            );
+                            // DialogBuilder().showAddUserModal(
+                            //   context,
+                            //   i + 1,
+                            // );
+                            DialogBuilder().showPlayGame(context);
                           });
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: widget.gamers[i].imageUrl == null
-                              ? Icon(
-                                  Icons.person_add_rounded,
-                                  size: constraints.maxWidth / 20,
-                                  color: MafiaTheme
-                                      .themeData.colorScheme.secondary,
+                          child: showRoles == true
+                              ? Center(
+                                  child: Text(
+                                    gamers[i].role != null
+                                        ? '${gamers[i].role}'
+                                        : roles.roles[4].name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 )
-                              : Image.network(
-                                  widget.gamers[i].imageUrl!,
-                                  fit: BoxFit.fill,
-                                  width: constraints.maxWidth / 13,
-                                  height: constraints.maxWidth / 13,
-                                ),
+                              : gamers[i].imageUrl == null
+                                  ? Icon(
+                                      Icons.person_add_rounded,
+                                      size: constraints.maxWidth / 20,
+                                      color: MafiaTheme
+                                          .themeData.colorScheme.secondary,
+                                    )
+                                  : Image.network(
+                                      gamers[i].imageUrl!,
+                                      fit: BoxFit.fill,
+                                      width: constraints.maxWidth / 13,
+                                      height: constraints.maxWidth / 13,
+                                    ),
                         ),
                       ),
                     ),
@@ -163,7 +193,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 ),
                 onPressed: () {},
                 child: Text(
-                  widget.gamers.isNotEmpty ? '${widget.gamers[i].name}' : '',
+                  gamers.isNotEmpty ? '${gamers[i].name}' : '',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -171,29 +201,6 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                   ),
                 ),
               ),
-              // OutlinedButton(
-              //   style: OutlinedButton.styleFrom(
-              //     backgroundColor: Colors.transparent,
-              //     side: BorderSide(
-              //       color: MafiaTheme.themeData.colorScheme.secondary,
-              //       width: 2,
-              //     ),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(16),
-              //     ),
-              //   ),
-              //   onPressed: () {},
-              //   child: Text(
-              //     widget.gamers[i].role != null
-              //         ? '${widget.gamers[i].role}'
-              //         : roles.roles[4].name,
-              //     style: const TextStyle(
-              //       color: Colors.white,
-              //       fontSize: 14,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

@@ -16,7 +16,7 @@ class GamerRepository implements GameRepository {
           typeOfGame: typeOfGame,
           typeOfController: typeOfController,
           numberOfGamers: numberOfGamers,
-          gamerId: gamerId,
+          gameId: gamerId,
         ),
       );
 
@@ -28,8 +28,33 @@ class GamerRepository implements GameRepository {
       return Future<Gamer?>.error(e);
     }
   }
+
+  @override
+  Future<void> addGameToFirebase({
+    required String gameName,
+    required int numberOfGamers,
+    required String gameId,
+    required List<Gamer> gamers,
+  }) async {
+    try {
+      await firestoreService.addGameToFirebase(
+        gameName: gameName,
+        numberOfGamers: numberOfGamers,
+        gameId: gameId,
+        gamers: gamers,
+      );
+    } catch (e) {
+      return Future<void>.error(e);
+    }
+  }
 }
 
 abstract class GameRepository {
   Future<Gamer?> addGamer(Gamer gamer);
+  Future<void> addGameToFirebase({
+    required String gameName,
+    required int numberOfGamers,
+    required String gameId,
+    required List<Gamer> gamers,
+  });
 }

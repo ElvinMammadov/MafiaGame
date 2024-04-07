@@ -6,14 +6,18 @@ class GameTableScreen extends StatefulWidget {
 }
 
 class _GameTableScreenState extends State<GameTableScreen> {
+  bool showRoles = false;
+
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
           final int numberOfGamers = state.game.numberOfGamers;
           final List<Gamer> gamers = state.gamersState.gamers;
-          final bool isGameCouldStart = state.game.isGameCouldStart;
+          final bool? isGameCouldStart = state.game.isGameCouldStart;
+          print('isGameCouldStart is $isGameCouldStart');
           final double screenWidth = MediaQuery.of(context).size.width;
           final double screenHeight = MediaQuery.of(context).size.height;
+          final String gameName = state.game.gameName;
 
           const double buttonLeftPercentage = 0.1;
           const double buttonBottomPercentage = 0.03;
@@ -40,8 +44,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                 child: Stack(
                   children: <Widget>[
                     CircleAvatarWidget(
-                      numberOfGamers: numberOfGamers,
-                      gamers: gamers,
+                      showRoles: showRoles,
                     ),
                     Positioned(
                       right: screenWidth * buttonLeftPercentage,
@@ -50,21 +53,38 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         width: 300,
                         child: BaseButton(
                           label: AppStrings.startGame,
-                          enabled: isGameCouldStart,
+                          enabled: isGameCouldStart!,
                           textStyle:
                               MafiaTheme.themeData.textTheme.headlineSmall,
-                          action: () {},
+                          action: () {
+                            final String gameId = UniqueKey().toString();
+                            BlocProvider.of<GameBloc>(context).add(
+                              SendGameToFirebase(
+                                gameName: gameName,
+                                numberOfGamers: numberOfGamers,
+                                gameId: gameId,
+                                gamers: gamers,
+                              ),
+                            );
+                          },
                         ),
                       ),
+                    ),
+                    Center(
+                      child: CountDownTimer(),
                     ),
                     Positioned(
                       left: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * roundButtonBottomPercentage,
                       child: RoundedIconButton(
-                        icon: Icons.visibility,
+                        icon: showRoles
+                            ? Icons.visibility_off_sharp
+                            : Icons.visibility_sharp,
                         isVisible: true,
                         onPressed: () {
-                          // Toggle the visibility state or perform any action
+                          setState(() {
+                            showRoles = !showRoles;
+                          });
                         },
                       ),
                     ),

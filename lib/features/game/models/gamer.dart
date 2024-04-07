@@ -22,6 +22,14 @@ class Gamer extends Equatable {
     this.isNameChanged,
   });
 
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'name': name,
+        'role': role,
+        'imageUrl': imageUrl,
+        'gamerId': gamerId,
+        'gameCreated': gamerCreated,
+      };
+
   const Gamer.empty()
       : name = '',
         role = '',

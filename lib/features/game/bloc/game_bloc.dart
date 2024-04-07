@@ -20,7 +20,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         (ChangeGameStartValue event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
-          isGameStarted: event.isGameStarted,
+          isGameCouldStart: event.isGameCouldStart,
         ),
       );
       emit(appState);
@@ -44,6 +44,20 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       emit(appState);
     });
 
+    on<SendGameToFirebase>(
+        (SendGameToFirebase event, Emitter<AppState> emit) async {
+      try {
+        await gameRepository.addGameToFirebase(
+          gameName: event.gameName,
+          numberOfGamers: event.numberOfGamers,
+          gameId: event.gameId,
+          gamers: event.gamers,
+        );
+      } catch (e) {
+        print('Error sending game to Firebase: $e');
+      }
+    });
+
     on<UpdateGamer>((UpdateGamer event, Emitter<AppState> emit) async {
       final int index = state.gamersState.gamers.indexWhere(
         (Gamer gamer) => gamer.id == event.gamer.id,
@@ -64,7 +78,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
               await gameRepository.addGamer(updatedGamersList[index]);
 
           if (gamer != null) {
-            print('Result is : ${gamer}}');
+            // print('Result is : ${gamer}}');
           }
         } catch (e) {
           print('Error updating gamer name: $e');

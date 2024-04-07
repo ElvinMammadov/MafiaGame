@@ -5,18 +5,18 @@ class GameState extends Equatable {
   final String typeOfGame;
   final String typeOfController;
   final int numberOfGamers;
-  final int gamerId;
+  final int gameId;
   final List<Gamer>? gamers;
-  final bool isGameCouldStart;
+  final bool? isGameCouldStart;
 
   const GameState({
     required this.gameName,
     required this.typeOfGame,
     required this.typeOfController,
     required this.numberOfGamers,
-    required this.gamerId,
+    required this.gameId,
     this.gamers,
-    this.isGameCouldStart = false,
+    this.isGameCouldStart,
   });
 
   const GameState.empty()
@@ -24,7 +24,7 @@ class GameState extends Equatable {
         typeOfGame = '',
         typeOfController = '',
         numberOfGamers = 0,
-        gamerId = 0,
+        gameId = 0,
         gamers = const <Gamer>[],
         isGameCouldStart = false;
 
@@ -33,19 +33,20 @@ class GameState extends Equatable {
     String? typeOfGame,
     String? typeOfController,
     int? numberOfGamers,
-    int? gamerId,
+    int? gameId,
     List<Gamer>? gamers,
-    bool? isGameStarted,
+    bool? isGameCouldStart,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
         typeOfGame: typeOfGame ?? this.typeOfGame,
         typeOfController: typeOfController ?? this.typeOfController,
         numberOfGamers: numberOfGamers ?? this.numberOfGamers,
-        gamerId: gamerId ?? this.gamerId,
+        gameId: gameId ?? this.gameId,
         gamers: gamers ?? this.gamers,
-        isGameCouldStart: isGameStarted ?? this.isGameCouldStart,
+        isGameCouldStart: isGameCouldStart ?? this.isGameCouldStart,
       );
+
 
   @override
   List<Object?> get props => <Object?>[
@@ -53,7 +54,7 @@ class GameState extends Equatable {
         typeOfGame,
         typeOfController,
         numberOfGamers,
-        gamerId,
+        gameId,
         gamers,
         isGameCouldStart,
       ];
@@ -62,5 +63,5 @@ class GameState extends Equatable {
   String toString() => 'GameState'
       '{gameName: $gameName, typeOfGame: $typeOfGame,'
       ' typeOfController: $typeOfController, numberOfGamers: $numberOfGamers,'
-      ' gamerId: $gamerId}, gamers: $gamers}, isGameStarted: $isGameCouldStart}';
+      ' gamerId: $gameId}, gamers: $gamers}, isGameStarted: $isGameCouldStart}';
 }
