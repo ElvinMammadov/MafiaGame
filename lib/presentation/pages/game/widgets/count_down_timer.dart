@@ -8,32 +8,45 @@ class CountDownTimer extends StatefulWidget {
 class _CountDownTimerState extends State<CountDownTimer>
     with TickerProviderStateMixin {
   late AnimationController controller;
-  final AudioCache audioCache = AudioCache();
+  final AudioPlayer player = AudioPlayer();
 
   String get timerString {
     final Duration remainingTime =
         controller.duration! * (1 - controller.value);
-    print('${remainingTime.inMinutes}:${remainingTime.inSeconds % 60}');
+    // print('${remainingTime.inSeconds % 60}');
     return '${remainingTime.inSeconds % 60}';
   }
 
   @override
-
-  void initState() {
+  void initState()  {
     super.initState();
-    // await audioCache.load('assets/sounds/clock.mp3');
+
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 20),
     );
     controller.forward(
       from: controller.value == 0.0 ? controller.value : 1.0,
     );
+    controller.addListener(() async {
+      await player.setSource(AssetSource('sounds/clock.mp3'));
+      if (controller.status == AnimationStatus.forward &&
+          controller.value == 1) {
+        // If animation reaches 10 seconds, play audio
+        if (controller.duration! * controller.value ==
+            const Duration(
+              seconds: 10,
+            )) {
+          await player.resume();
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
     controller.dispose();
+    player.dispose();
     super.dispose();
   }
 

@@ -1,7 +1,6 @@
-import 'package:equatable/equatable.dart';
-import 'package:mafia_game/features/game/models/gamer.dart';
-import 'package:mafia_game/features/game/models/roles.dart';
+part of game;
 
+@JsonSerializable()
 class GamersState extends Equatable {
   final List<Gamer> gamers;
   final Roles roles;
@@ -22,6 +21,11 @@ class GamersState extends Equatable {
         gamers: gamers ?? this.gamers,
         roles: roles ?? this.roles,
       );
+
+  factory GamersState.fromMap(Map<String, dynamic> json) =>
+      _$GamersStateFromJson(json);
+
+  Map<String, dynamic> toMap() => _$GamersStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

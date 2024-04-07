@@ -1,5 +1,6 @@
 part of app;
 
+@JsonSerializable()
 class GameState extends Equatable {
   final String gameName;
   final String typeOfGame;
@@ -8,6 +9,7 @@ class GameState extends Equatable {
   final int gameId;
   final List<Gamer>? gamers;
   final bool? isGameCouldStart;
+  final bool isGameStarted;
 
   const GameState({
     required this.gameName,
@@ -17,6 +19,7 @@ class GameState extends Equatable {
     required this.gameId,
     this.gamers,
     this.isGameCouldStart,
+    this.isGameStarted = false,
   });
 
   const GameState.empty()
@@ -26,7 +29,8 @@ class GameState extends Equatable {
         numberOfGamers = 0,
         gameId = 0,
         gamers = const <Gamer>[],
-        isGameCouldStart = false;
+        isGameCouldStart = false,
+        isGameStarted = false;
 
   GameState copyWith({
     String? gameName,
@@ -36,6 +40,7 @@ class GameState extends Equatable {
     int? gameId,
     List<Gamer>? gamers,
     bool? isGameCouldStart,
+    bool? isGameStarted,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -45,8 +50,13 @@ class GameState extends Equatable {
         gameId: gameId ?? this.gameId,
         gamers: gamers ?? this.gamers,
         isGameCouldStart: isGameCouldStart ?? this.isGameCouldStart,
+        isGameStarted: isGameStarted ?? this.isGameStarted,
       );
 
+  factory GameState.fromMap(Map<String, dynamic> json) =>
+      _$GameStateFromJson(json);
+
+  Map<String, dynamic> toMap() => _$GameStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[
@@ -57,11 +67,13 @@ class GameState extends Equatable {
         gameId,
         gamers,
         isGameCouldStart,
+        isGameStarted,
       ];
 
   @override
   String toString() => 'GameState'
       '{gameName: $gameName, typeOfGame: $typeOfGame,'
       ' typeOfController: $typeOfController, numberOfGamers: $numberOfGamers,'
-      ' gamerId: $gameId}, gamers: $gamers}, isGameStarted: $isGameCouldStart}';
+      ' gamerId: $gameId}, gamers: $gamers}, isGameStarted: $isGameCouldStart}'
+      ' isGameStarted: $isGameStarted}';
 }

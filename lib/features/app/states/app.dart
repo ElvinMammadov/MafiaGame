@@ -1,5 +1,6 @@
 part of app;
 
+@JsonSerializable()
 class AppState extends Equatable {
   final UserState user;
   final GameState game;
@@ -9,26 +10,30 @@ class AppState extends Equatable {
     UserState? user,
     GameState? game,
     GamersState? gamers,
-  })
-      : user = user ?? const UserState.empty(),
+  })  : user = user ?? const UserState.empty(),
         game = game ?? const GameState.empty(),
         gamersState = gamers ?? const GamersState.empty();
 
-    const AppState.empty() : this();
+  const AppState.empty() : this();
 
   AppState copyWith({
     UserState? user,
     GameState? game,
     GamersState? gamers,
-  }) => AppState(
+  }) =>
+      AppState(
         user: user ?? this.user,
         game: game ?? this.game,
-        gamers: gamers?? gamersState,
+        gamers: gamers ?? gamersState,
       );
 
+  factory AppState.fromMap(Map<String, dynamic> json) =>
+      _$AppStateFromJson(json);
+
+  Map<String, dynamic> toMap() => _$AppStateToJson(this);
+
   @override
-  List<Object?> get props =>
-      <Object?>[
+  List<Object?> get props => <Object?>[
         user,
         game,
         gamersState,

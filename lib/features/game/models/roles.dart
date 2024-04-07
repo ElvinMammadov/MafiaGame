@@ -1,6 +1,6 @@
-import 'package:equatable/equatable.dart';
-import 'package:mafia_game/features/game/models/role.dart';
+part of game;
 
+@JsonSerializable()
 class Roles extends Equatable {
   final List<Role> roles;
 
@@ -32,6 +32,10 @@ class Roles extends Equatable {
       Roles(
         roles: roles ?? this.roles,
       );
+
+  factory Roles.fromMap(Map<String, dynamic> json) =>_$RolesFromJson(json);
+
+  Map<String, dynamic> toMap() => _$RolesToJson(this);
 
   bool hasRole(String roleName) => roles.any(
         (Role role) => role.name == roleName,

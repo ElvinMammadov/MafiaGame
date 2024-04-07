@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mafia_game/features/game/models/gamer.dart';
+import 'package:mafia_game/features/game/game.dart';
 
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
       FirebaseFirestore.instance.collection('gamers');
   final CollectionReference<Object?> _gameCollection =
-  FirebaseFirestore.instance.collection('game');
+      FirebaseFirestore.instance.collection('game');
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   // Stream<List<Gamer>> getGamers() =>
@@ -31,7 +31,6 @@ class FirestoreService {
     final String imageUrl = await taskSnapshot.ref.getDownloadURL();
     return imageUrl;
   }
-
 
   Future<void> addGameToFirebase({
     required String gameName,

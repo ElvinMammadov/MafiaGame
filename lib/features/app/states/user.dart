@@ -1,5 +1,6 @@
 part of app;
 
+@JsonSerializable()
 class UserState extends Equatable {
   final String? id;
   final String? email;
@@ -16,14 +17,6 @@ class UserState extends Equatable {
     this.password,
     this.accessToken = '',
   });
-
-  Map<String, dynamic> toMap() => <String, dynamic>{
-        'email': email,
-        'displayName': displayName,
-        'token': token,
-        'password': password,
-        'accessToken': accessToken,
-      };
 
   const UserState.empty() : this();
 
@@ -46,6 +39,11 @@ class UserState extends Equatable {
         accessToken: accessToken ?? this.accessToken,
         // isVerified: isVerified ?? this.isVerified
       );
+
+  factory UserState.fromMap(Map<String, dynamic> json) =>
+      _$UserStateFromJson(json);
+
+  Map<String, dynamic> toMap() => _$UserStateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

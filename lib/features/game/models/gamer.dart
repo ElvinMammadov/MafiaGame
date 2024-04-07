@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
+part of game;
 
+@JsonSerializable()
 class Gamer extends Equatable {
   final String? name;
   final String? role;
@@ -22,13 +22,6 @@ class Gamer extends Equatable {
     this.isNameChanged,
   });
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'name': name,
-        'role': role,
-        'imageUrl': imageUrl,
-        'gamerId': gamerId,
-        'gameCreated': gamerCreated,
-      };
 
   const Gamer.empty()
       : name = '',
@@ -83,6 +76,10 @@ class Gamer extends Equatable {
         if (documentId != null) "id": documentId,
         if (gamerId != null) "gamerId": gamerId,
       };
+
+  factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GamerToJson(this);
 
   @override
   List<Object?> get props => <Object?>[

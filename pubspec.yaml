@@ -29,6 +29,9 @@ dependencies:
   image_picker: ^1.0.7
   aligned_dialog: ^0.0.7
   audioplayers: ^5.2.1
+  build_runner: ^2.4.9
+  json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
 
 
 dev_dependencies:

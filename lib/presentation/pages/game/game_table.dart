@@ -70,9 +70,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: CountDownTimer(),
-                    ),
+                    // Center(
+                    //   child: CountDownTimer(),
+                    // ),
                     Positioned(
                       left: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * roundButtonBottomPercentage,
