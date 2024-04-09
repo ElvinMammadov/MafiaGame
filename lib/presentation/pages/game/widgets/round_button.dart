@@ -17,7 +17,7 @@ class RoundButton extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor:
               MafiaTheme.themeData.colorScheme.secondary,
-          radius: 30,
+          radius: 36,
           child: Icon(
             color: Colors.black,
             icon,

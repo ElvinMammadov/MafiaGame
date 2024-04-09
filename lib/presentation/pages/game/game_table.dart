@@ -19,8 +19,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final String gameName = state.game.gameName;
           final bool isGameStarted = state.game.isGameStarted;
           final bool isDiscussionStarted = state.game.isDiscussionStarted;
+          final bool isVotingStarted = state.game.isVotingStarted;
+          final int discussionTime = state.game.discussionTime;
+          final int votingTime = state.game.votingTime;
           print('isDiscussionStarted: $isDiscussionStarted');
           print('isGameStarted: $isGameStarted');
+          print('isVotingStarted: $isVotingStarted');
+          print('isGameStarted: $isGameStarted');
+          print('isGameCouldStart: $isGameCouldStart');
 
           const double buttonLeftPercentage = 0.1;
           const double buttonBottomPercentage = 0.03;
@@ -39,7 +45,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
             body: DecoratedBox(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/mafia_table.png'),
+                  image: AssetImage('assets/table.jpeg'),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -60,8 +66,10 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   ? AppStrings.startVoting
                                   : AppStrings.startDiscussion
                               : AppStrings.startGame,
-                          enabled: isGameStarted && !isDiscussionStarted ||
-                              !isGameStarted && isGameCouldStart!,
+                          enabled: isGameStarted &&
+                                  !isDiscussionStarted  ||
+                              !isGameStarted && isGameCouldStart!||
+                          !isVotingStarted,
                           textStyle:
                               MafiaTheme.themeData.textTheme.headlineSmall,
                           action: () {
@@ -94,9 +102,32 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: CountDownTimer(),
-                    ),
+                    if (isDiscussionStarted)
+                      Center(
+                        child: CountDownTimer(
+                          durationTime: discussionTime,
+                          changeTimer: (int time) {
+                            BlocProvider.of<GameBloc>(context).add(
+                              ChangeDiscussionTime(
+                                discussionTime: time,
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    else if (isVotingStarted)
+                      Center(
+                        child: CountDownTimer(
+                          durationTime: votingTime,
+                          changeTimer: (int time) {
+                            BlocProvider.of<GameBloc>(context).add(
+                              ChangeVotingTime(
+                                votingTime: time,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     Positioned(
                       left: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * roundButtonBottomPercentage,

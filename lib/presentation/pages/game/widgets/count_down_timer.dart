@@ -1,6 +1,14 @@
 part of game;
 
 class CountDownTimer extends StatefulWidget {
+  final int durationTime;
+  final Function(int)? changeTimer;
+
+  const CountDownTimer({
+    required this.durationTime,
+    this.changeTimer,
+  });
+
   @override
   _CountDownTimerState createState() => _CountDownTimerState();
 }
@@ -16,14 +24,24 @@ class _CountDownTimerState extends State<CountDownTimer>
   String get timerString {
     final Duration remainingTime =
         controller.duration! * (1 - controller.value);
-    print('${remainingTime.inSeconds % 60}');
-    return '${remainingTime.inSeconds % 60}';
+    // print('controller.duration: ${remainingTime.inSeconds}, '
+    //     ' ${remainingTime.inMinutes % 60}');
+    return '${remainingTime.inSeconds}';
   }
+
+  int get durationTime => widget.durationTime;
 
   void notify() {
     if (timerString == '10') {
       print('10 seconds left');
       // FlutterRingtonePlayer().playNotification();
+    }
+  }
+
+  void restartController() {
+    if (controller.isCompleted) {
+      print('Time is 0');
+      controller.reset();
     }
   }
 
@@ -33,12 +51,13 @@ class _CountDownTimerState extends State<CountDownTimer>
 
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: Duration(seconds: durationTime),
     );
     controller.forward();
 
     controller.addListener(() {
       notify();
+      restartController();
       if (controller.isAnimating) {
         setState(() {
           isPlaying = true;
@@ -90,16 +109,28 @@ class _CountDownTimerState extends State<CountDownTimer>
                           if (controller.isDismissed) {
                             showModalBottomSheet(
                               context: context,
+                              backgroundColor: Colors.transparent,
+                              constraints: const BoxConstraints(
+                                maxWidth: 400.0,
+                              ),
                               builder: (BuildContext context) => SizedBox(
-                                height: 300.0,
-                                child: CupertinoTimerPicker(
-                                  mode: CupertinoTimerPickerMode.ms,
-                                  initialTimerDuration: controller.duration!,
-                                  onTimerDurationChanged: (Duration time) {
-                                    setState(() {
-                                      controller.duration = time;
-                                    });
-                                  },
+                                height: 700.0,
+                                child: CupertinoTheme(
+                                  data: const CupertinoThemeData(
+                                    brightness: Brightness.dark,
+                                  ),
+                                  child: CupertinoTimerPicker(
+                                    mode: CupertinoTimerPickerMode.ms,
+                                    initialTimerDuration: controller.duration!,
+                                    onTimerDurationChanged: (Duration time) {
+                                      setState(() {
+                                        controller.duration = time;
+                                        widget.changeTimer!(
+                                          controller.duration!.inSeconds,
+                                        );
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                             );
@@ -113,10 +144,11 @@ class _CountDownTimerState extends State<CountDownTimer>
                           children: <Widget>[
                             Text(
                               timerString,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 70.0,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color:
+                                    MafiaTheme.themeData.colorScheme.secondary,
                               ),
                             ),
                           ],

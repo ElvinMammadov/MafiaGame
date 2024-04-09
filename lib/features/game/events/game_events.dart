@@ -73,6 +73,28 @@ class StartVoting extends GameEvent {
   List<Object?> get props => <Object?>[isVotingStarted];
 }
 
+class ChangeDiscussionTime extends GameEvent {
+  final int discussionTime;
+
+  const ChangeDiscussionTime({
+    required this.discussionTime,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[discussionTime];
+}
+
+class ChangeVotingTime extends GameEvent {
+  final int votingTime;
+
+  const ChangeVotingTime({
+    required this.votingTime,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[votingTime];
+}
+
 class AddGamer extends GameEvent {
   final Gamer gamer;
 

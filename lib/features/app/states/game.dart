@@ -12,6 +12,8 @@ class GameState extends Equatable {
   final bool isGameStarted;
   final bool isDiscussionStarted;
   final bool isVotingStarted;
+  final int discussionTime;
+  final int votingTime;
 
   const GameState({
     required this.gameName,
@@ -24,6 +26,8 @@ class GameState extends Equatable {
     this.isGameStarted = false,
     this.isDiscussionStarted = false,
     this.isVotingStarted = false,
+    this.discussionTime = 60,
+    this.votingTime = 30,
   });
 
   const GameState.empty()
@@ -36,7 +40,9 @@ class GameState extends Equatable {
         isGameCouldStart = false,
         isDiscussionStarted = false,
         isGameStarted = false,
-        isVotingStarted = false;
+        isVotingStarted = false,
+        discussionTime = 60,
+        votingTime = 30;
 
   GameState copyWith({
     String? gameName,
@@ -49,6 +55,8 @@ class GameState extends Equatable {
     bool? isGameStarted,
     bool? isDiscussionStarted,
     bool? isVotingStarted,
+    int? discussionTime,
+    int? votingTime,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -61,6 +69,8 @@ class GameState extends Equatable {
         isGameStarted: isGameStarted ?? this.isGameStarted,
         isDiscussionStarted: isDiscussionStarted ?? this.isDiscussionStarted,
         isVotingStarted: isVotingStarted ?? this.isVotingStarted,
+        discussionTime: discussionTime ?? this.discussionTime,
+        votingTime: votingTime ?? this.votingTime,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -80,6 +90,8 @@ class GameState extends Equatable {
         isGameStarted,
         isDiscussionStarted,
         isVotingStarted,
+        discussionTime,
+        votingTime,
       ];
 
   @override
@@ -89,5 +101,6 @@ class GameState extends Equatable {
       ' gamerId: $gameId, gamers: $gamers, isGameStarted: $isGameCouldStart'
       ' isGameStarted: $isGameStarted,'
       ' isDiscussionStarted: $isDiscussionStarted, '
-      'isVotingStarted: $isVotingStarted}';
+      'isVotingStarted: $isVotingStarted, discussionTime: $discussionTime,'
+      ' votingTime: $votingTime}';
 }

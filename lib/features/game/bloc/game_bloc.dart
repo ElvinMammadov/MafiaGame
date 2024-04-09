@@ -35,6 +35,25 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       emit(appState);
     });
 
+    on<ChangeDiscussionTime>(
+        (ChangeDiscussionTime event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          discussionTime: event.discussionTime,
+        ),
+      );
+      emit(appState);
+    });
+
+    on<ChangeVotingTime>((ChangeVotingTime event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          votingTime: event.votingTime,
+        ),
+      );
+      emit(appState);
+    });
+
     on<StartVoting>((StartVoting event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
@@ -65,7 +84,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     on<SendGameToFirebase>(
         (SendGameToFirebase event, Emitter<AppState> emit) async {
       try {
-
         await gameRepository.addGameToFirebase(
           gameName: event.gameName,
           numberOfGamers: event.numberOfGamers,

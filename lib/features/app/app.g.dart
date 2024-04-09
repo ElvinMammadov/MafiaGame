@@ -31,6 +31,10 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
           .toList(),
       isGameCouldStart: json['isGameCouldStart'] as bool?,
       isGameStarted: json['isGameStarted'] as bool? ?? false,
+      isDiscussionStarted: json['isDiscussionStarted'] as bool? ?? false,
+      isVotingStarted: json['isVotingStarted'] as bool? ?? false,
+      discussionTime: json['discussionTime'] as int? ?? 60,
+      votingTime: json['votingTime'] as int? ?? 30,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -42,6 +46,10 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'gamers': instance.gamers,
       'isGameCouldStart': instance.isGameCouldStart,
       'isGameStarted': instance.isGameStarted,
+      'isDiscussionStarted': instance.isDiscussionStarted,
+      'isVotingStarted': instance.isVotingStarted,
+      'discussionTime': instance.discussionTime,
+      'votingTime': instance.votingTime,
     };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(
