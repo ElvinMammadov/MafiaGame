@@ -32,6 +32,7 @@ dependencies:
   build_runner: ^2.4.9
   json_serializable: ^6.7.1
   json_annotation: ^4.8.1
+  flutter_ringtone_player: ^4.0.0+2
 
 
 dev_dependencies:

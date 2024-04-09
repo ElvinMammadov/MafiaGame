@@ -1,4 +1,4 @@
-part  of game;
+part of game;
 
 abstract class GameEvent extends Equatable {
   const GameEvent();
@@ -25,14 +25,12 @@ class UpdateGameDetails extends GameEvent {
 class ChangeGameStartValue extends GameEvent {
   final bool isGameCouldStart;
 
-
   const ChangeGameStartValue({
     required this.isGameCouldStart,
   });
 
   @override
-  List<Object?> get props =>
-      <Object?>[isGameCouldStart];
+  List<Object?> get props => <Object?>[isGameCouldStart];
 }
 
 class SendGameToFirebase extends GameEvent {
@@ -53,11 +51,32 @@ class SendGameToFirebase extends GameEvent {
       <Object?>[gameName, numberOfGamers, gameId, gamers];
 }
 
+class StartDiscussion extends GameEvent {
+  final bool isDiscussionStarted;
+
+  const StartDiscussion({
+    required this.isDiscussionStarted,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[isDiscussionStarted];
+}
+
+class StartVoting extends GameEvent {
+  final bool isVotingStarted;
+
+  const StartVoting({
+    required this.isVotingStarted,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[isVotingStarted];
+}
+
 class AddGamer extends GameEvent {
   final Gamer gamer;
 
   const AddGamer({required this.gamer});
-
 
   @override
   List<Object?> get props => <Object?>[gamer];
@@ -68,7 +87,6 @@ class CleanGamers extends GameEvent {
 
   const CleanGamers({required this.gamers});
 
-
   @override
   List<Object?> get props => <Object?>[gamers];
 }
@@ -78,9 +96,6 @@ class UpdateGamer extends GameEvent {
 
   const UpdateGamer({required this.gamer});
 
-
   @override
   List<Object?> get props => <Object?>[gamer];
 }
-
-

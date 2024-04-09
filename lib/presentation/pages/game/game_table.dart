@@ -18,6 +18,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final double screenHeight = MediaQuery.of(context).size.height;
           final String gameName = state.game.gameName;
           final bool isGameStarted = state.game.isGameStarted;
+          final bool isDiscussionStarted = state.game.isDiscussionStarted;
+          print('isDiscussionStarted: $isDiscussionStarted');
           print('isGameStarted: $isGameStarted');
 
           const double buttonLeftPercentage = 0.1;
@@ -47,20 +49,37 @@ class _GameTableScreenState extends State<GameTableScreen> {
                     CircleAvatarWidget(
                       showRoles: showRoles,
                     ),
-                    if (isGameStarted)
-                      const SizedBox()
-                    else
-                      Positioned(
-                        right: screenWidth * buttonLeftPercentage,
-                        bottom: screenHeight * buttonBottomPercentage,
-                        child: SizedBox(
-                          width: 300,
-                          child: BaseButton(
-                            label: AppStrings.startGame,
-                            enabled: isGameCouldStart!,
-                            textStyle:
-                                MafiaTheme.themeData.textTheme.headlineSmall,
-                            action: () {
+                    Positioned(
+                      right: screenWidth * buttonLeftPercentage,
+                      bottom: screenHeight * buttonBottomPercentage,
+                      child: SizedBox(
+                        width: 300,
+                        child: BaseButton(
+                          label: isGameStarted
+                              ? isDiscussionStarted
+                                  ? AppStrings.startVoting
+                                  : AppStrings.startDiscussion
+                              : AppStrings.startGame,
+                          enabled: isGameStarted && !isDiscussionStarted ||
+                              !isGameStarted && isGameCouldStart!,
+                          textStyle:
+                              MafiaTheme.themeData.textTheme.headlineSmall,
+                          action: () {
+                            if (isGameStarted) {
+                              if (!isDiscussionStarted) {
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const StartDiscussion(
+                                    isDiscussionStarted: true,
+                                  ),
+                                );
+                              } else {
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const StartVoting(
+                                    isVotingStarted: true,
+                                  ),
+                                );
+                              }
+                            } else {
                               final String gameId = UniqueKey().toString();
                               BlocProvider.of<GameBloc>(context).add(
                                 SendGameToFirebase(
@@ -70,13 +89,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   gamers: gamers,
                                 ),
                               );
-                            },
-                          ),
+                            }
+                          },
                         ),
                       ),
-                    // Center(
-                    //   child: CountDownTimer(),
-                    // ),
+                    ),
+                    Center(
+                      child: CountDownTimer(),
+                    ),
                     Positioned(
                       left: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * roundButtonBottomPercentage,

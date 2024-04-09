@@ -10,6 +10,8 @@ class GameState extends Equatable {
   final List<Gamer>? gamers;
   final bool? isGameCouldStart;
   final bool isGameStarted;
+  final bool isDiscussionStarted;
+  final bool isVotingStarted;
 
   const GameState({
     required this.gameName,
@@ -20,6 +22,8 @@ class GameState extends Equatable {
     this.gamers,
     this.isGameCouldStart,
     this.isGameStarted = false,
+    this.isDiscussionStarted = false,
+    this.isVotingStarted = false,
   });
 
   const GameState.empty()
@@ -30,7 +34,9 @@ class GameState extends Equatable {
         gameId = 0,
         gamers = const <Gamer>[],
         isGameCouldStart = false,
-        isGameStarted = false;
+        isDiscussionStarted = false,
+        isGameStarted = false,
+        isVotingStarted = false;
 
   GameState copyWith({
     String? gameName,
@@ -41,6 +47,8 @@ class GameState extends Equatable {
     List<Gamer>? gamers,
     bool? isGameCouldStart,
     bool? isGameStarted,
+    bool? isDiscussionStarted,
+    bool? isVotingStarted,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -51,6 +59,8 @@ class GameState extends Equatable {
         gamers: gamers ?? this.gamers,
         isGameCouldStart: isGameCouldStart ?? this.isGameCouldStart,
         isGameStarted: isGameStarted ?? this.isGameStarted,
+        isDiscussionStarted: isDiscussionStarted ?? this.isDiscussionStarted,
+        isVotingStarted: isVotingStarted ?? this.isVotingStarted,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -68,12 +78,16 @@ class GameState extends Equatable {
         gamers,
         isGameCouldStart,
         isGameStarted,
+        isDiscussionStarted,
+        isVotingStarted,
       ];
 
   @override
   String toString() => 'GameState'
       '{gameName: $gameName, typeOfGame: $typeOfGame,'
       ' typeOfController: $typeOfController, numberOfGamers: $numberOfGamers,'
-      ' gamerId: $gameId}, gamers: $gamers}, isGameStarted: $isGameCouldStart}'
-      ' isGameStarted: $isGameStarted}';
+      ' gamerId: $gameId, gamers: $gamers, isGameStarted: $isGameCouldStart'
+      ' isGameStarted: $isGameStarted,'
+      ' isDiscussionStarted: $isDiscussionStarted, '
+      'isVotingStarted: $isVotingStarted}';
 }

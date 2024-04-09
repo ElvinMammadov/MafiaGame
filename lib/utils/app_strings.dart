@@ -47,6 +47,6 @@ class AppStrings {
   static const String fol = 'Фол';
   static const String delete = 'Удалить игрока';
   static const String profile = 'Профиль';
-
-
+  static const String startDiscussion = 'Начать обсуждение';
+  static const String startVoting = 'Начать голосование';
 }
