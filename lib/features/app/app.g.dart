@@ -29,7 +29,7 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       gamers: (json['gamers'] as List<dynamic>?)
           ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
           .toList(),
-      isGameCouldStart: json['isGameCouldStart'] as bool?,
+      isGameCouldStart: json['isGameCouldStart'] as bool? ?? false,
       isGameStarted: json['isGameStarted'] as bool? ?? false,
       isDiscussionStarted: json['isDiscussionStarted'] as bool? ?? false,
       isVotingStarted: json['isVotingStarted'] as bool? ?? false,

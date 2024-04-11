@@ -13,7 +13,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
         builder: (BuildContext context, AppState state) {
           final int numberOfGamers = state.game.numberOfGamers;
           final List<Gamer> gamers = state.gamersState.gamers;
-          final bool? isGameCouldStart = state.game.isGameCouldStart;
+          final bool isGameCouldStart = state.game.isGameCouldStart;
           final double screenWidth = MediaQuery.of(context).size.width;
           final double screenHeight = MediaQuery.of(context).size.height;
           final String gameName = state.game.gameName;
@@ -27,6 +27,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
           print('isVotingStarted: $isVotingStarted');
           print('isGameStarted: $isGameStarted');
           print('isGameCouldStart: $isGameCouldStart');
+          print('discussionTime: $discussionTime');
+          print('votingTime: $votingTime');
 
           const double buttonLeftPercentage = 0.1;
           const double buttonBottomPercentage = 0.03;
@@ -59,31 +61,30 @@ class _GameTableScreenState extends State<GameTableScreen> {
                       right: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * buttonBottomPercentage,
                       child: SizedBox(
-                        width: 300,
+                        width: 400,
                         child: BaseButton(
                           label: isGameStarted
-                              ? isDiscussionStarted
-                                  ? AppStrings.startVoting
-                                  : AppStrings.startDiscussion
+                              ? !isDiscussionStarted
+                                  ? AppStrings.endVoting
+                                  : AppStrings.endDiscussion
                               : AppStrings.startGame,
-                          enabled: isGameStarted &&
-                                  !isDiscussionStarted  ||
-                              !isGameStarted && isGameCouldStart!||
-                          !isVotingStarted,
+                          enabled: isGameStarted && !isDiscussionStarted ||
+                              !isGameStarted && isGameCouldStart ||
+                              isDiscussionStarted && !isVotingStarted,
                           textStyle:
                               MafiaTheme.themeData.textTheme.headlineSmall,
                           action: () {
                             if (isGameStarted) {
-                              if (!isDiscussionStarted) {
+                              if (isDiscussionStarted) {
                                 BlocProvider.of<GameBloc>(context).add(
-                                  const StartDiscussion(
-                                    isDiscussionStarted: true,
+                                  const EndDiscussion(
+                                    isDiscussionStarted: false,
                                   ),
                                 );
-                              } else {
+                              } else if (isVotingStarted) {
                                 BlocProvider.of<GameBloc>(context).add(
-                                  const StartVoting(
-                                    isVotingStarted: true,
+                                  const EndVoting(
+                                    isVotingStarted: false,
                                   ),
                                 );
                               }
@@ -102,7 +103,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         ),
                       ),
                     ),
-                    if (isDiscussionStarted)
+                    if (isDiscussionStarted && !isVotingStarted)
                       Center(
                         child: CountDownTimer(
                           durationTime: discussionTime,

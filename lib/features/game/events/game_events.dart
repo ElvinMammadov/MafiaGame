@@ -51,10 +51,10 @@ class SendGameToFirebase extends GameEvent {
       <Object?>[gameName, numberOfGamers, gameId, gamers];
 }
 
-class StartDiscussion extends GameEvent {
+class EndDiscussion extends GameEvent {
   final bool isDiscussionStarted;
 
-  const StartDiscussion({
+  const EndDiscussion({
     required this.isDiscussionStarted,
   });
 
@@ -62,10 +62,10 @@ class StartDiscussion extends GameEvent {
   List<Object?> get props => <Object?>[isDiscussionStarted];
 }
 
-class StartVoting extends GameEvent {
+class EndVoting extends GameEvent {
   final bool isVotingStarted;
 
-  const StartVoting({
+  const EndVoting({
     required this.isVotingStarted,
   });
 

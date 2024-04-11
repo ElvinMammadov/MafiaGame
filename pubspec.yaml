@@ -53,6 +53,7 @@ flutter:
     - assets/roles/mirniy.png
     - assets/mafioz.jpg
     - assets/sounds/clock.mp3
+    - assets/sounds/clock2.wav
     - assets/table.jpeg
 
   # The following line ensures that the Material Icons font is

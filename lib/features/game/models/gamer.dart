@@ -10,6 +10,9 @@ class Gamer extends Equatable {
   final String? gamerId;
   final String? gamerCreated;
   final bool? isNameChanged;
+  final int foulCount;
+  final int votesCount;
+  final bool wasDeleted;
 
   const Gamer({
     this.name,
@@ -20,8 +23,10 @@ class Gamer extends Equatable {
     this.gamerId,
     this.gamerCreated,
     this.isNameChanged,
+    this.foulCount = 0,
+    this.votesCount = 0,
+    this.wasDeleted = false,
   });
-
 
   const Gamer.empty()
       : name = '',
@@ -31,7 +36,10 @@ class Gamer extends Equatable {
         documentId = '',
         gamerCreated = '',
         gamerId = '',
-        isNameChanged = false;
+        isNameChanged = false,
+        foulCount = 0,
+        votesCount = 0,
+        wasDeleted = false;
 
   Gamer copyWith({
     String? name,
@@ -42,6 +50,9 @@ class Gamer extends Equatable {
     String? gamerId,
     String? gamerCreated,
     bool? isNameChanged,
+    int? foulCount,
+    int? votesCount,
+    bool? wasDeleted,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -52,30 +63,10 @@ class Gamer extends Equatable {
         gamerId: gamerId ?? this.gamerId,
         gamerCreated: gamerCreated ?? this.gamerCreated,
         isNameChanged: isNameChanged ?? this.isNameChanged,
+        foulCount: foulCount ?? this.foulCount,
+        votesCount: votesCount ?? this.votesCount,
+        wasDeleted: wasDeleted ?? this.wasDeleted,
       );
-
-  factory Gamer.fromFireStore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) {
-    final Map<String, dynamic> data = snapshot.data()!;
-    final Gamer gamer = Gamer(
-      name: data['name'] as String,
-      role: data['role'] as String,
-      imageUrl: data['imageUrl'] as String,
-      documentId: data['documentId'] as String,
-      gamerId: data['gamerId'] as String,
-    );
-    return gamer;
-  }
-
-  Map<String, dynamic> toFireStore() => <String, dynamic>{
-        if (name != null) "name": name,
-        if (role != null) "role": role,
-        if (imageUrl != null) "imageUrl": imageUrl,
-        if (documentId != null) "id": documentId,
-        if (gamerId != null) "gamerId": gamerId,
-      };
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
 
@@ -91,6 +82,9 @@ class Gamer extends Equatable {
         gamerId,
         gamerCreated,
         isNameChanged,
+        foulCount,
+        votesCount,
+        wasDeleted,
       ];
 
   @override
@@ -98,5 +92,7 @@ class Gamer extends Equatable {
       '{name: $name, role: $role,'
       ' imageUrl: $imageUrl}, id: $id, documentId: $documentId}'
       ' gamerId: $gamerId'
-      'gamerCreated: $gamerCreated, isNameChanged: $isNameChanged}';
+      'gamerCreated: $gamerCreated, isNameChanged: $isNameChanged,'
+      ' foulCount: $foulCount, votesCount:'
+      ' $votesCount, isDeleted: $wasDeleted}';
 }

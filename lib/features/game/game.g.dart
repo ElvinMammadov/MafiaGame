@@ -15,6 +15,9 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       gamerId: json['gamerId'] as String?,
       gamerCreated: json['gamerCreated'] as String?,
       isNameChanged: json['isNameChanged'] as bool?,
+      foulCount: json['foulCount'] as int? ?? 0,
+      votesCount: json['votesCount'] as int? ?? 0,
+      wasDeleted: json['wasDeleted'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -26,6 +29,9 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'gamerId': instance.gamerId,
       'gamerCreated': instance.gamerCreated,
       'isNameChanged': instance.isNameChanged,
+      'foulCount': instance.foulCount,
+      'votesCount': instance.votesCount,
+      'wasDeleted': instance.wasDeleted,
     };
 
 GamersState _$GamersStateFromJson(Map<String, dynamic> json) => GamersState(

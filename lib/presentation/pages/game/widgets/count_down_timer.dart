@@ -18,29 +18,31 @@ class _CountDownTimerState extends State<CountDownTimer>
   late AnimationController controller;
   final AudioPlayer player = AudioPlayer();
   bool isPlaying = false;
-
-  // FlutterRingtonePlayer ringtonePlayer = FlutterRingtonePlayer();
+  bool playTicking = false;
 
   String get timerString {
     final Duration remainingTime =
         controller.duration! * (1 - controller.value);
-    // print('controller.duration: ${remainingTime.inSeconds}, '
-    //     ' ${remainingTime.inMinutes % 60}');
     return '${remainingTime.inSeconds}';
   }
 
   int get durationTime => widget.durationTime;
 
-  void notify() {
-    if (timerString == '10') {
-      print('10 seconds left');
-      // FlutterRingtonePlayer().playNotification();
+  Future<void> notify() async {
+    if (timerString == '10' && !playTicking) {
+      setState(() {
+        playTicking = true;
+      });
+      await player.resume();
     }
   }
 
   void restartController() {
     if (controller.isCompleted) {
-      print('Time is 0');
+      setState(() {
+        playTicking = false;
+      });
+      player.stop();
       controller.reset();
     }
   }
@@ -48,12 +50,26 @@ class _CountDownTimerState extends State<CountDownTimer>
   @override
   void initState() {
     super.initState();
+    _initializeController();
+  }
 
+  @override
+  void didUpdateWidget(CountDownTimer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.durationTime != widget.durationTime) {
+      _initializeController();
+    }
+  }
+
+  Future<void> _initializeController() async {
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: durationTime),
+      duration: Duration(
+        seconds: widget.durationTime,
+      ), // Use the updated durationTime
     );
-    controller.forward();
+    await player.setSource(AssetSource('sounds/clock2.wav'));
+    player.setReleaseMode(ReleaseMode.loop);
 
     controller.addListener(() {
       notify();

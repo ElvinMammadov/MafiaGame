@@ -8,7 +8,7 @@ class GameState extends Equatable {
   final int numberOfGamers;
   final int gameId;
   final List<Gamer>? gamers;
-  final bool? isGameCouldStart;
+  final bool isGameCouldStart;
   final bool isGameStarted;
   final bool isDiscussionStarted;
   final bool isVotingStarted;
@@ -22,7 +22,7 @@ class GameState extends Equatable {
     required this.numberOfGamers,
     required this.gameId,
     this.gamers,
-    this.isGameCouldStart,
+    this.isGameCouldStart = false,
     this.isGameStarted = false,
     this.isDiscussionStarted = false,
     this.isVotingStarted = false,

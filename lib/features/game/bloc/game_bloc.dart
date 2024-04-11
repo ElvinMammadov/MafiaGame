@@ -26,10 +26,21 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       emit(appState);
     });
 
-    on<StartDiscussion>((StartDiscussion event, Emitter<AppState> emit) {
+    on<EndDiscussion>((EndDiscussion event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           isDiscussionStarted: event.isDiscussionStarted,
+          isVotingStarted: true,
+        ),
+      );
+      emit(appState);
+    });
+
+    on<EndVoting>((EndVoting event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          isVotingStarted: event.isVotingStarted,
+          isDiscussionStarted: true,
         ),
       );
       emit(appState);
@@ -49,15 +60,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           votingTime: event.votingTime,
-        ),
-      );
-      emit(appState);
-    });
-
-    on<StartVoting>((StartVoting event, Emitter<AppState> emit) {
-      final AppState appState = state.copyWith(
-        game: state.game.copyWith(
-          isVotingStarted: event.isVotingStarted,
         ),
       );
       emit(appState);
@@ -93,6 +95,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         final AppState appState = state.copyWith(
           game: state.game.copyWith(
             isGameStarted: true,
+            isDiscussionStarted: true,
           ),
         );
         print('appState is : ${appState}');
