@@ -95,6 +95,42 @@ class ChangeVotingTime extends GameEvent {
   List<Object?> get props => <Object?>[votingTime];
 }
 
+class AddVoteToGamer extends GameEvent {
+  final Gamer gamer;
+
+  const AddVoteToGamer({required this.gamer});
+
+  @override
+  List<Object?> get props => <Object?>[gamer];
+}
+
+class RemoveVote extends GameEvent {
+  final Gamer gamer;
+
+  const RemoveVote({required this.gamer});
+
+  @override
+  List<Object?> get props => <Object?>[gamer];
+}
+
+class AddFaultToGamer extends GameEvent {
+  final int gamerId;
+
+  const AddFaultToGamer({required this.gamerId});
+
+  @override
+  List<Object?> get props => <Object?>[gamerId];
+}
+
+class RemoveFault extends GameEvent {
+  final Gamer gamer;
+
+  const RemoveFault({required this.gamer});
+
+  @override
+  List<Object?> get props => <Object?>[gamer];
+}
+
 class AddGamer extends GameEvent {
   final Gamer gamer;
 

@@ -60,6 +60,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
           final List<Gamer> gamers = state.gamersState.gamers;
           final int numberOfGamers = state.game.numberOfGamers;
           final bool isGameStarted = state.game.isGameStarted;
+          final bool isVotingStarted = state.game.isVotingStarted;
           isAllGamersNameChanged(gamers);
           if (gamers.isNotEmpty) {
             return SizedBox.expand(
@@ -74,6 +75,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                     numberOfGamers: numberOfGamers,
                     gamers: gamers,
                     context: context,
+                    isVotingStarted: isVotingStarted,
                   ),
                 ),
               ),

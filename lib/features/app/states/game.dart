@@ -26,7 +26,7 @@ class GameState extends Equatable {
     this.isGameStarted = false,
     this.isDiscussionStarted = false,
     this.isVotingStarted = false,
-    this.discussionTime = 60,
+    this.discussionTime = 30,
     this.votingTime = 30,
   });
 
@@ -41,7 +41,7 @@ class GameState extends Equatable {
         isDiscussionStarted = false,
         isGameStarted = false,
         isVotingStarted = false,
-        discussionTime = 60,
+        discussionTime = 30,
         votingTime = 30;
 
   GameState copyWith({

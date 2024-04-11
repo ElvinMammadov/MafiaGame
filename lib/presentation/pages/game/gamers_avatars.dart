@@ -8,8 +8,8 @@ List<Widget> gamersAvatars({
   required int numberOfGamers,
   required List<Gamer> gamers,
   required BuildContext context,
-}
-) {
+  required bool isVotingStarted,
+}) {
   final List<Widget> positionedAvatars = <Widget>[];
   final double ovalRadius = constraints.maxWidth / 2.6;
 
@@ -60,12 +60,15 @@ List<Widget> gamersAvatars({
                     child: GestureDetector(
                       onTap: () {
                         isGameStarted
-                            ? DialogBuilder().showPlayGame(context)
-                            :
-                        DialogBuilder().showAddUserModal(
-                          context,
-                          i + 1,
-                        );
+                            ? DialogBuilder().showPlayGame(
+                                context,
+                                isVotingStarted: isVotingStarted,
+                                gamerId: gamers[i].id ?? 0,
+                              )
+                            : DialogBuilder().showAddUserModal(
+                                context,
+                                i + 1,
+                              );
                         // DialogBuilder().showPlayGame(context);
                       },
                       child: ClipRRect(
@@ -100,6 +103,52 @@ List<Widget> gamersAvatars({
                     ),
                   ),
                 ),
+                if (gamers[i].foulCount >= 1)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration:  BoxDecoration(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          gamers[i].foulCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (gamers[i].votesCount >= 1)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          gamers[i].votesCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
             OutlinedButton(
