@@ -3,8 +3,12 @@ part of game;
 @JsonSerializable()
 class Role extends Equatable {
   final String name;
+  final int roleId;
 
-  const Role(this.name);
+  const Role(
+    this.name, {
+    this.roleId = 0,
+  });
 
   const Role.empty() : this('');
 
@@ -13,6 +17,7 @@ class Role extends Equatable {
   }) =>
       Role(
         name ?? this.name,
+        roleId: roleId,
       );
 
   factory Role.fromJson(Map<String, dynamic> json) => _$RoleFromJson(json);
@@ -20,7 +25,10 @@ class Role extends Equatable {
   Map<String, dynamic> toJson() => _$RoleToJson(this);
 
   @override
-  List<Object?> get props => <Object?>[name];
+  List<Object?> get props => <Object?>[
+        name,
+        roleId,
+      ];
 
   @override
   bool get stringify => true;

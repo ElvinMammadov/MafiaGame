@@ -25,7 +25,7 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       typeOfGame: json['typeOfGame'] as String,
       typeOfController: json['typeOfController'] as String,
       numberOfGamers: json['numberOfGamers'] as int,
-      gameId: json['gameId'] as int,
+      gameId: json['gameId'] as String,
       gamers: (json['gamers'] as List<dynamic>?)
           ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -33,8 +33,11 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       isGameStarted: json['isGameStarted'] as bool? ?? false,
       isDiscussionStarted: json['isDiscussionStarted'] as bool? ?? false,
       isVotingStarted: json['isVotingStarted'] as bool? ?? false,
-      discussionTime: json['discussionTime'] as int? ?? 60,
+      discussionTime: json['discussionTime'] as int? ?? 30,
       votingTime: json['votingTime'] as int? ?? 30,
+      gameStartTime: json['gameStartTime'] == null
+          ? null
+          : DateTime.parse(json['gameStartTime'] as String),
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -50,6 +53,7 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'isVotingStarted': instance.isVotingStarted,
       'discussionTime': instance.discussionTime,
       'votingTime': instance.votingTime,
+      'gameStartTime': instance.gameStartTime?.toIso8601String(),
     };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(

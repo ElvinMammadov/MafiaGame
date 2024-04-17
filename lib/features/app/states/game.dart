@@ -6,7 +6,7 @@ class GameState extends Equatable {
   final String typeOfGame;
   final String typeOfController;
   final int numberOfGamers;
-  final int gameId;
+  final String gameId;
   final List<Gamer>? gamers;
   final bool isGameCouldStart;
   final bool isGameStarted;
@@ -14,6 +14,7 @@ class GameState extends Equatable {
   final bool isVotingStarted;
   final int discussionTime;
   final int votingTime;
+  final DateTime? gameStartTime;
 
   const GameState({
     required this.gameName,
@@ -28,6 +29,7 @@ class GameState extends Equatable {
     this.isVotingStarted = false,
     this.discussionTime = 30,
     this.votingTime = 30,
+    this.gameStartTime,
   });
 
   const GameState.empty()
@@ -35,21 +37,22 @@ class GameState extends Equatable {
         typeOfGame = '',
         typeOfController = '',
         numberOfGamers = 0,
-        gameId = 0,
+        gameId = '',
         gamers = const <Gamer>[],
         isGameCouldStart = false,
         isDiscussionStarted = false,
         isGameStarted = false,
         isVotingStarted = false,
         discussionTime = 30,
-        votingTime = 30;
+        votingTime = 30,
+        gameStartTime = null;
 
   GameState copyWith({
     String? gameName,
     String? typeOfGame,
     String? typeOfController,
     int? numberOfGamers,
-    int? gameId,
+    String? gameId,
     List<Gamer>? gamers,
     bool? isGameCouldStart,
     bool? isGameStarted,
@@ -57,6 +60,7 @@ class GameState extends Equatable {
     bool? isVotingStarted,
     int? discussionTime,
     int? votingTime,
+    DateTime? gameStartTime,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -71,6 +75,7 @@ class GameState extends Equatable {
         isVotingStarted: isVotingStarted ?? this.isVotingStarted,
         discussionTime: discussionTime ?? this.discussionTime,
         votingTime: votingTime ?? this.votingTime,
+        gameStartTime: gameStartTime ?? this.gameStartTime,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -92,6 +97,7 @@ class GameState extends Equatable {
         isVotingStarted,
         discussionTime,
         votingTime,
+        gameStartTime,
       ];
 
   @override
@@ -102,5 +108,5 @@ class GameState extends Equatable {
       ' isGameStarted: $isGameStarted,'
       ' isDiscussionStarted: $isDiscussionStarted, '
       'isVotingStarted: $isVotingStarted, discussionTime: $discussionTime,'
-      ' votingTime: $votingTime}';
+      ' votingTime: $votingTime, gameStartTime: $gameStartTime}';
 }

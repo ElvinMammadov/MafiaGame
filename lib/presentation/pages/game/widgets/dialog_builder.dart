@@ -4,6 +4,7 @@ class DialogBuilder {
   void showAddUserModal(
     BuildContext context,
     int id,
+    Role? role,
   ) {
     final ValueNotifier<bool> isButtonEnabledNotifier =
         ValueNotifier<bool>(false);
@@ -13,7 +14,7 @@ class DialogBuilder {
     });
     final FirestoreService firestoreService = FirestoreService();
     File? imageFile;
-    String? roleName;
+    Role? newRole = role;
     WoltModalSheet.show<void>(
       context: context,
       pageListBuilder: (BuildContext modalSheetContext) =>
@@ -44,8 +45,9 @@ class DialogBuilder {
                       id: id,
                       gamerId: gamerId,
                       imageUrl: imageUrl,
-                      role: roleName,
+                      role: newRole?.name,
                       isNameChanged: true,
+                      roleId: newRole?.roleId,
                     ),
                   ),
                 );
@@ -75,8 +77,8 @@ class DialogBuilder {
             onImageChanged: (File? file) {
               imageFile = file;
             },
-            onRoleChanged: (String? role) {
-              roleName = role;
+            onRoleChanged: (Role? updatedRole) {
+              newRole = updatedRole;
             },
           ),
         ),
@@ -137,10 +139,6 @@ class DialogBuilder {
           hasSabGradient: false,
           isTopBarLayerAlwaysVisible: true,
           hasTopBarLayer: false,
-          // topBarTitle: Text(
-          //   AppStrings.createGamer,
-          //   style: MafiaTheme.themeData.textTheme.headlineSmall,
-          // ),
           trailingNavBarWidget: Padding(
             padding: const EdgeInsets.only(
               right: 16,
@@ -234,16 +232,6 @@ class DialogBuilder {
                   horizontal: 16,
                   vertical: 16,
                 ),
-
-              // BaseButton(
-              //   label: AppStrings.vote,
-              //   textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              //   backgroundColor:
-              //       MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
-              //   action: () {
-              //     Navigator.of(context).pop();
-              //   },
-              // ),
               BaseButton(
                 label: AppStrings.fol,
                 textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
@@ -273,22 +261,6 @@ class DialogBuilder {
                   Navigator.of(context).pop();
                 },
               ),
-              // BaseButton(
-              //   label: AppStrings.add,
-              //   textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              //   backgroundColor: MafiaTheme.themeData.disabledColor,
-              //   action: () {
-              //     Navigator.of(context).pop();
-              //   },
-              // ),
-              // BaseButton(
-              //   label: AppStrings.add,
-              //   textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              //   backgroundColor: MafiaTheme.themeData.disabledColor,
-              //   action: () {
-              //     Navigator.of(context).pop();
-              //   },
-              // ),
             ],
           ),
         ),

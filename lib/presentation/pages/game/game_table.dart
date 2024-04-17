@@ -22,13 +22,15 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final bool isVotingStarted = state.game.isVotingStarted;
           final int discussionTime = state.game.discussionTime;
           final int votingTime = state.game.votingTime;
-          print('isDiscussionStarted: $isDiscussionStarted');
-          print('isGameStarted: $isGameStarted');
-          print('isVotingStarted: $isVotingStarted');
-          print('isGameStarted: $isGameStarted');
-          print('isGameCouldStart: $isGameCouldStart');
-          print('discussionTime: $discussionTime');
-          print('votingTime: $votingTime');
+          final String gameId = state.game.gameId;
+          final DateTime? gameStartTime = state.game.gameStartTime;
+          // print('isDiscussionStarted: $isDiscussionStarted');
+          // print('isGameStarted: $isGameStarted');
+          // print('isVotingStarted: $isVotingStarted');
+          // print('isGameStarted: $isGameStarted');
+          // print('isGameCouldStart: $isGameCouldStart');
+          // print('discussionTime: $discussionTime');
+          // print('votingTime: $votingTime');
 
           const double buttonLeftPercentage = 0.1;
           const double buttonBottomPercentage = 0.03;
@@ -89,13 +91,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                 );
                               }
                             } else {
-                              final String gameId = UniqueKey().toString();
                               BlocProvider.of<GameBloc>(context).add(
                                 SendGameToFirebase(
                                   gameName: gameName,
                                   numberOfGamers: numberOfGamers,
                                   gameId: gameId,
                                   gamers: gamers,
+                                  gameStartTime:
+                                      gameStartTime ?? DateTime.now(),
                                 ),
                               );
                             }

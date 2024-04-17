@@ -13,6 +13,9 @@ class Gamer extends Equatable {
   final int foulCount;
   final int votesCount;
   final bool wasDeleted;
+  final DateTime? gamerCreatedDate;
+  final int? roleId;
+  final int positionOnTable;
 
   const Gamer({
     this.name,
@@ -26,6 +29,9 @@ class Gamer extends Equatable {
     this.foulCount = 0,
     this.votesCount = 0,
     this.wasDeleted = false,
+    this.gamerCreatedDate,
+    this.roleId,
+    this.positionOnTable = 0,
   });
 
   const Gamer.empty()
@@ -39,7 +45,10 @@ class Gamer extends Equatable {
         isNameChanged = false,
         foulCount = 0,
         votesCount = 0,
-        wasDeleted = false;
+        wasDeleted = false,
+        gamerCreatedDate = null,
+        roleId = 0,
+        positionOnTable = 0;
 
   Gamer copyWith({
     String? name,
@@ -53,6 +62,9 @@ class Gamer extends Equatable {
     int? foulCount,
     int? votesCount,
     bool? wasDeleted,
+    DateTime? gamerCreatedDate,
+    int? roleId,
+    int? positionOnTable,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -66,6 +78,9 @@ class Gamer extends Equatable {
         foulCount: foulCount ?? this.foulCount,
         votesCount: votesCount ?? this.votesCount,
         wasDeleted: wasDeleted ?? this.wasDeleted,
+        gamerCreatedDate: gamerCreatedDate ?? this.gamerCreatedDate,
+        roleId: roleId ?? this.roleId,
+        positionOnTable: positionOnTable ?? this.positionOnTable,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -85,14 +100,19 @@ class Gamer extends Equatable {
         foulCount,
         votesCount,
         wasDeleted,
+        gamerCreatedDate,
+        roleId,
+        positionOnTable,
       ];
 
   @override
   String toString() => 'Gamer'
       '{name: $name, role: $role,'
-      ' imageUrl: $imageUrl}, id: $id, documentId: $documentId}'
+      ' imageUrl: $imageUrl, id: $id, documentId: $documentId'
       ' gamerId: $gamerId'
       'gamerCreated: $gamerCreated, isNameChanged: $isNameChanged,'
       ' foulCount: $foulCount, votesCount:'
-      ' $votesCount, isDeleted: $wasDeleted}';
+      ' $votesCount, isDeleted: '
+      '$wasDeleted, gamerCreatedDate: $gamerCreatedDate, roleId: $roleId, '
+      'positionOnTable: $positionOnTable,}';
 }

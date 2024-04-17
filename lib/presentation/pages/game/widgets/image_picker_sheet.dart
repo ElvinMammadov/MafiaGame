@@ -3,7 +3,7 @@ part of game;
 class ImagePickerSheet extends StatefulWidget {
   final TextEditingController textEditingController;
   final ValueChanged<File?> onImageChanged;
-  final ValueChanged<String?> onRoleChanged;
+  final ValueChanged<Role?> onRoleChanged;
 
   const ImagePickerSheet({
     super.key,
@@ -18,10 +18,11 @@ class ImagePickerSheet extends StatefulWidget {
 
 class _ImagePickerSheetState extends State<ImagePickerSheet> {
   File? image;
-  String? selectedRole;
+  Role? selectedRole;
   final ImagePicker picker = ImagePicker();
+  // final Stream<QuerySnapshot> _usersStream =
+  //     FirebaseFirestore.instance.collection('gamers').snapshots();
 
-  //Image Picker function to get image from gallery
   Future<void> getImageFromGallery() async {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.gallery);
@@ -34,7 +35,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
     });
   }
 
-  //Image Picker function to get image from camera
   Future<void> getImageFromCamera() async {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.camera);
@@ -47,10 +47,24 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
     });
   }
 
+  Future<List> fetchData() async {
+    await Future.delayed(
+      const Duration(
+        milliseconds: 1000,
+      ),
+    );
+    final List list = <String>[];
+    final String inputText = widget.textEditingController.text;
+    list.add('$inputText Item 1');
+    list.add('$inputText Item 2');
+    list.add('$inputText Item 3');
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
-           final Roles roles = state.gamersState.roles;
+          final Roles roles = state.gamersState.roles;
           return Column(
             children: <Widget>[
               Stack(
@@ -92,6 +106,41 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 top: 16,
                 bottom: 16,
               ),
+              // TextFieldSearch(
+              //   label: AppStrings.nameOfGamer,
+              //   controller: widget.textEditingController,
+              //   decoration: InputDecoration(
+              //     contentPadding: const EdgeInsets.symmetric(
+              //       horizontal: 8,
+              //     ),
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         color: MafiaTheme.themeData.colorScheme.secondary,
+              //       ),
+              //     ),
+              //     enabledBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         color: MafiaTheme.themeData.colorScheme.secondary,
+              //       ),
+              //     ),
+              //   ),
+              //   textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+              //   scrollbarDecoration: ScrollbarDecoration(
+              //     controller: ScrollController(),
+              //     theme: ScrollbarThemeData(
+              //       radius: const Radius.circular(30.0),
+              //       thickness: MaterialStateProperty.all(20.0),
+              //       thumbVisibility: MaterialStateProperty.all(true),
+              //       trackColor: MaterialStateProperty.all(Colors.blue),
+              //       thumbColor: MaterialStateProperty.all(Colors.cyan),
+              //     ),
+              //   ),
+              //   future: () {
+              //     print('fetchData ${fetchData()}');
+              //     return fetchData();
+              //   },
+              // ),
+
               TextFormField(
                 controller: widget.textEditingController,
                 style: MafiaTheme.themeData.textTheme.headlineSmall,
@@ -122,7 +171,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 },
                 validator: Validator.validateText,
               ),
-              DropdownButtonFormField2<String>(
+              DropdownButtonFormField2<Role>(
                 isExpanded: true,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
@@ -147,8 +196,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 value: selectedRole,
                 items: roles.roles
                     .map(
-                      (Role item) => DropdownMenuItem<String>(
-                        value: item.name,
+                      (Role item) => DropdownMenuItem<Role>(
+                        value: item,
                         child: Text(
                           item.name,
                           style: MafiaTheme.themeData.textTheme.headlineSmall,
@@ -156,21 +205,21 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                       ),
                     )
                     .toList(),
-                validator: (String? value) {
+                validator: (Role? value) {
                   if (value == null) {
                     return 'Please select gender.';
                   }
                   return null;
                 },
-                onChanged: (String? value) {
+                onChanged: (Role? value) {
                   // widget.onChange!(
                   //   typeOfGame: value!,
                   // );
                   selectedRole = value;
                   widget.onRoleChanged(selectedRole);
                 },
-                onSaved: (String? value) {
-                  selectedRole = value.toString();
+                onSaved: (Role? value) {
+                  selectedRole = value;
                 },
                 iconStyleData: const IconStyleData(
                   icon: Icon(

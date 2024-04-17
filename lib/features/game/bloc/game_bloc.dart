@@ -4,20 +4,27 @@ class GameBloc extends Bloc<GameEvent, AppState> {
   final GameRepository gameRepository;
 
   GameBloc(this.gameRepository) : super(const AppState.empty()) {
-    on<UpdateGameDetails>((UpdateGameDetails event, Emitter<AppState> emit) {
+    on<UpdateGameDetails>((
+      UpdateGameDetails event,
+      Emitter<AppState> emit,
+    ) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           gameName: event.gameName,
           typeOfGame: event.typeOfGame,
           typeOfController: event.typeOfController,
           numberOfGamers: event.numberOfGamers,
+          gameStartTime: DateTime.now(),
+          gameId: event.gameId,
         ),
       );
       emit(appState);
     });
 
-    on<ChangeGameStartValue>(
-        (ChangeGameStartValue event, Emitter<AppState> emit) {
+    on<ChangeGameStartValue>((
+      ChangeGameStartValue event,
+      Emitter<AppState> emit,
+    ) {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           isGameCouldStart: event.isGameCouldStart,
@@ -102,6 +109,28 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       emit(appState);
     });
 
+    on<RearrangeGamersPosition>(
+        (RearrangeGamersPosition event, Emitter<AppState> emit) {
+      final List<Gamer> updatedGamersList =
+          List<Gamer>.from(state.gamersState.gamers);
+      int currentPosition = 1;
+      for (int i = event.newPosition; i < updatedGamersList.length; i++) {
+        updatedGamersList[i] =
+            updatedGamersList[i].copyWith(positionOnTable: currentPosition);
+        currentPosition++;
+      }
+      for (int i = 0; i < event.newPosition; i++) {
+        updatedGamersList[i] =
+            updatedGamersList[i].copyWith(positionOnTable: currentPosition);
+        currentPosition++;
+      }
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+      );
+      // print('appState is : ${appState.gamersState.gamers}');
+      emit(appState);
+    });
+
     on<CleanGamers>((CleanGamers event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(
@@ -119,6 +148,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           numberOfGamers: event.numberOfGamers,
           gameId: event.gameId,
           gamers: event.gamers,
+          gameStartTime: event.gameStartTime,
         );
         final AppState appState = state.copyWith(
           game: state.game.copyWith(
@@ -126,7 +156,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             isDiscussionStarted: true,
           ),
         );
-        print('appState is : ${appState}');
+        // print('appState is : ${appState}');
         emit(appState);
       } catch (e) {
         print('Error sending game to Firebase: $e');
@@ -146,6 +176,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           imageUrl: event.gamer.imageUrl,
           role: event.gamer.role,
           isNameChanged: event.gamer.isNameChanged,
+          roleId: event.gamer.roleId,
         );
 
         try {

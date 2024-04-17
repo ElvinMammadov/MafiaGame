@@ -11,14 +11,14 @@ List<Widget> gamersAvatars({
   required bool isVotingStarted,
 }) {
   final List<Widget> positionedAvatars = <Widget>[];
-  final double ovalRadius = constraints.maxWidth / 2.6;
+  final double ovalRadius = constraints.maxWidth / 2.5;
 
   final double screenWidth = MediaQuery.of(context).size.width;
   final double screenHeight = MediaQuery.of(context).size.height;
 
   const double minAvatarRadius = 20.0;
   const double maxAvatarRadius = 100.0;
-  const double defaultAvatarRadiusPercentage = 0.05;
+  const double defaultAvatarRadiusPercentage = 0.045;
 
   final double radius = min(
     max(
@@ -67,7 +67,8 @@ List<Widget> gamersAvatars({
                               )
                             : DialogBuilder().showAddUserModal(
                                 context,
-                                i + 1,
+                                gamers[i].id ?? 0,
+                                roles.roles[4],
                               );
                         // DialogBuilder().showPlayGame(context);
                       },
@@ -110,7 +111,7 @@ List<Widget> gamersAvatars({
                     child: Container(
                       width: 20,
                       height: 20,
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                         color: MafiaTheme.themeData.colorScheme.secondary,
                         shape: BoxShape.circle,
                       ),
@@ -154,7 +155,7 @@ List<Widget> gamersAvatars({
             OutlinedButton(
               style: OutlinedButton.styleFrom(
                 backgroundColor: Colors.transparent,
-                minimumSize: const Size(60, 25),
+                minimumSize: const Size(60, 30),
                 side: BorderSide(
                   color: MafiaTheme.themeData.colorScheme.secondary,
                   width: 2,
@@ -163,9 +164,17 @@ List<Widget> gamersAvatars({
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                BlocProvider.of<GameBloc>(context).add(
+                  RearrangeGamersPosition(
+                    newPosition: gamers[i].id ?? 0,
+                  ),
+                );
+              },
               child: Text(
-                gamers.isNotEmpty ? '${gamers[i].name}' : '',
+                gamers.isNotEmpty
+                    ? '${gamers[i].positionOnTable}  ${gamers[i].name}'
+                    : '',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,

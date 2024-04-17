@@ -9,17 +9,24 @@ class UpdateGameDetails extends GameEvent {
   final String typeOfGame;
   final String typeOfController;
   final int numberOfGamers;
+  final String gameId;
 
   const UpdateGameDetails({
     required this.gameName,
     required this.typeOfGame,
     required this.typeOfController,
     required this.numberOfGamers,
+    required this.gameId,
   });
 
   @override
-  List<Object?> get props =>
-      <Object?>[gameName, typeOfGame, typeOfController, numberOfGamers];
+  List<Object?> get props => <Object?>[
+        gameName,
+        typeOfGame,
+        typeOfController,
+        numberOfGamers,
+        gameId,
+      ];
 }
 
 class ChangeGameStartValue extends GameEvent {
@@ -38,17 +45,24 @@ class SendGameToFirebase extends GameEvent {
   final int numberOfGamers;
   final String gameId;
   final List<Gamer> gamers;
+  final DateTime gameStartTime;
 
   const SendGameToFirebase({
     required this.gameName,
     required this.numberOfGamers,
     required this.gameId,
     required this.gamers,
+    required this.gameStartTime,
   });
 
   @override
-  List<Object?> get props =>
-      <Object?>[gameName, numberOfGamers, gameId, gamers];
+  List<Object?> get props => <Object?>[
+        gameName,
+        numberOfGamers,
+        gameId,
+        gamers,
+        gameStartTime,
+      ];
 }
 
 class EndDiscussion extends GameEvent {
@@ -120,6 +134,19 @@ class AddFaultToGamer extends GameEvent {
 
   @override
   List<Object?> get props => <Object?>[gamerId];
+}
+
+class RearrangeGamersPosition extends GameEvent {
+  final int newPosition;
+
+  const RearrangeGamersPosition({
+    required this.newPosition,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        newPosition,
+      ];
 }
 
 class RemoveFault extends GameEvent {

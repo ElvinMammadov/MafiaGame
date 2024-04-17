@@ -7,6 +7,7 @@ import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
 import 'package:mafia_game/presentation/validators/validators.dart';
 import 'package:mafia_game/presentation/widgets/app_bar.dart';
+import 'package:mafia_game/presentation/widgets/base_button.dart';
 import 'package:mafia_game/utils/app_strings.dart';
 import 'package:mafia_game/utils/dimensions.dart';
 import 'package:mafia_game/utils/navigator.dart';

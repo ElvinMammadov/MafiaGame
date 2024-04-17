@@ -8,7 +8,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final bool _isLoading = false;
+  // final bool _isLoading = false;
   String? typeOfGame;
 
   String? typeOfController;
@@ -36,29 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     onChange: _onChange,
                   ),
                   SizedBox(
-                    width: 250,
-                    height: 70,
-                    child: ElevatedButton(
-                      onPressed: () {
+                    width: 300,
+                    child: BaseButton(
+                      label: AppStrings.start,
+                      enabled: gameName != null &&
+                          gameName!.isNotEmpty &&
+                          numberOfGamers != null &&
+                          numberOfGamers! > 0,
+                      backgroundColor:
+                          MafiaTheme.themeData.colorScheme.secondary,
+                      action: () {
                         _startButtonPressed(context);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            MafiaTheme.themeData.colorScheme.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                      child: _isLoading
-                          ? CircularProgressIndicator(
-                              color: MafiaTheme.themeData.colorScheme.surface,
-                            )
-                          : Text(
-                              AppStrings.start,
-                              style:
-                                  MafiaTheme.themeData.textTheme.headlineMedium,
-                            ),
-                    ).padding(top: Dimensions.padding16),
+                      textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                    ),
                   ),
                 ],
               ),
@@ -82,12 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startButtonPressed(BuildContext context) {
+    final String gameId = UniqueKey().toString();
     BlocProvider.of<GameBloc>(context).add(
       UpdateGameDetails(
         gameName: gameName ?? '',
         typeOfGame: typeOfGame ?? '',
         typeOfController: typeOfController ?? '',
         numberOfGamers: numberOfGamers ?? 0,
+        gameId: gameId,
       ),
     );
     AppNavigator.navigateToTablePage(context);

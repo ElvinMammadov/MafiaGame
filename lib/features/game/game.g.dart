@@ -18,6 +18,9 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       foulCount: json['foulCount'] as int? ?? 0,
       votesCount: json['votesCount'] as int? ?? 0,
       wasDeleted: json['wasDeleted'] as bool? ?? false,
+      gamerCreatedDate: json['gamerCreatedDate'] == null
+          ? null
+          : DateTime.parse(json['gamerCreatedDate'] as String),
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -32,6 +35,25 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'foulCount': instance.foulCount,
       'votesCount': instance.votesCount,
       'wasDeleted': instance.wasDeleted,
+      'gamerCreatedDate': instance.gamerCreatedDate?.toIso8601String(),
+    };
+
+Role _$RoleFromJson(Map<String, dynamic> json) => Role(
+      json['name'] as String,
+    );
+
+Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
+      'name': instance.name,
+    };
+
+Roles _$RolesFromJson(Map<String, dynamic> json) => Roles(
+      roles: (json['roles'] as List<dynamic>)
+          .map((e) => Role.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$RolesToJson(Roles instance) => <String, dynamic>{
+      'roles': instance.roles,
     };
 
 GamersState _$GamersStateFromJson(Map<String, dynamic> json) => GamersState(
@@ -45,22 +67,4 @@ Map<String, dynamic> _$GamersStateToJson(GamersState instance) =>
     <String, dynamic>{
       'gamers': instance.gamers,
       'roles': instance.roles,
-    };
-
-Roles _$RolesFromJson(Map<String, dynamic> json) => Roles(
-      roles: (json['roles'] as List<dynamic>)
-          .map((e) => Role.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$RolesToJson(Roles instance) => <String, dynamic>{
-      'roles': instance.roles,
-    };
-
-Role _$RoleFromJson(Map<String, dynamic> json) => Role(
-      json['name'] as String,
-    );
-
-Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
-      'name': instance.name,
     };

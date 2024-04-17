@@ -33,6 +33,8 @@ dependencies:
   json_serializable: ^6.7.1
   json_annotation: ^4.8.1
   flutter_ringtone_player: ^4.0.0+2
+  intl: ^0.19.0
+  textfield_search: ^0.10.0
 
 
 dev_dependencies:

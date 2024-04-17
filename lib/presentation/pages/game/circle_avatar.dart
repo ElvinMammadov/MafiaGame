@@ -20,8 +20,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       BlocProvider.of<GameBloc>(context).add(
         AddGamer(
           gamer: Gamer(
-            name: '${AppStrings.gamer} ${i + 1}',
-            id: i + 1,
+            name: AppStrings.gamer,
+            id: i,
+            positionOnTable: i + 1,
             role: roles.roles[4].name,
           ),
         ),

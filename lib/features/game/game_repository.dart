@@ -8,7 +8,7 @@ class GamerRepository implements GameRepository {
     required String typeOfGame,
     required String typeOfController,
     required int numberOfGamers,
-    required int gamerId,
+    required String gamerId,
   }) =>
       AppState(
         game: GameState(
@@ -35,6 +35,7 @@ class GamerRepository implements GameRepository {
     required int numberOfGamers,
     required String gameId,
     required List<Gamer> gamers,
+    required DateTime gameStartTime,
   }) async {
     try {
       await firestoreService.addGameToFirebase(
@@ -42,6 +43,7 @@ class GamerRepository implements GameRepository {
         numberOfGamers: numberOfGamers,
         gameId: gameId,
         gamers: gamers,
+        gameStartTime: gameStartTime,
       );
     } catch (e) {
       return Future<void>.error(e);
@@ -56,5 +58,6 @@ abstract class GameRepository {
     required int numberOfGamers,
     required String gameId,
     required List<Gamer> gamers,
+    required DateTime gameStartTime,
   });
 }

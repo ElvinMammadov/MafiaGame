@@ -182,13 +182,16 @@ class _CountDownTimerState extends State<CountDownTimer>
                   onTap: () {
                     if (controller.isAnimating) {
                       controller.stop();
+                      player.stop();
                       setState(() {
                         isPlaying = false;
+                        isPlaying = true;
                       });
                     } else {
                       controller.forward();
                       setState(() {
                         isPlaying = true;
+                        isPlaying = false;
                       });
                     }
                   },
@@ -199,6 +202,7 @@ class _CountDownTimerState extends State<CountDownTimer>
                 GestureDetector(
                   onTap: () {
                     controller.reset();
+                    player.stop();
                     setState(() {
                       isPlaying = false;
                     });
