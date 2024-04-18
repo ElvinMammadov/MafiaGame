@@ -29,7 +29,7 @@ class _CountDownTimerState extends State<CountDownTimer>
   int get durationTime => widget.durationTime;
 
   Future<void> notify() async {
-    if (timerString == '10' && !playTicking) {
+    if (int.parse(timerString) <= 10 && !playTicking) {
       setState(() {
         playTicking = true;
       });
@@ -182,16 +182,17 @@ class _CountDownTimerState extends State<CountDownTimer>
                   onTap: () {
                     if (controller.isAnimating) {
                       controller.stop();
-                      player.stop();
+                      player.pause();
                       setState(() {
                         isPlaying = false;
-                        isPlaying = true;
+                        playTicking = true;
                       });
                     } else {
                       controller.forward();
+                      // player.resume();
                       setState(() {
                         isPlaying = true;
-                        isPlaying = false;
+                        playTicking = false;
                       });
                     }
                   },

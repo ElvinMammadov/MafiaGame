@@ -15,6 +15,9 @@ class GameState extends Equatable {
   final int discussionTime;
   final int votingTime;
   final DateTime? gameStartTime;
+  final bool isDay;
+  final int dayNumber;
+  final int nightNumber;
 
   const GameState({
     required this.gameName,
@@ -30,6 +33,9 @@ class GameState extends Equatable {
     this.discussionTime = 30,
     this.votingTime = 30,
     this.gameStartTime,
+    this.isDay = true,
+    this.dayNumber = 1,
+    this.nightNumber = 1,
   });
 
   const GameState.empty()
@@ -45,7 +51,10 @@ class GameState extends Equatable {
         isVotingStarted = false,
         discussionTime = 30,
         votingTime = 30,
-        gameStartTime = null;
+        gameStartTime = null,
+        isDay = true,
+        dayNumber = 1,
+        nightNumber = 1;
 
   GameState copyWith({
     String? gameName,
@@ -61,6 +70,9 @@ class GameState extends Equatable {
     int? discussionTime,
     int? votingTime,
     DateTime? gameStartTime,
+    bool? isDay,
+    int? dayNumber,
+    int? nightNumber,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -76,6 +88,9 @@ class GameState extends Equatable {
         discussionTime: discussionTime ?? this.discussionTime,
         votingTime: votingTime ?? this.votingTime,
         gameStartTime: gameStartTime ?? this.gameStartTime,
+        isDay: isDay ?? this.isDay,
+        dayNumber: dayNumber ?? this.dayNumber,
+        nightNumber: nightNumber ?? this.nightNumber,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -98,6 +113,9 @@ class GameState extends Equatable {
         discussionTime,
         votingTime,
         gameStartTime,
+        isDay,
+        dayNumber,
+        nightNumber,
       ];
 
   @override
@@ -108,5 +126,6 @@ class GameState extends Equatable {
       ' isGameStarted: $isGameStarted,'
       ' isDiscussionStarted: $isDiscussionStarted, '
       'isVotingStarted: $isVotingStarted, discussionTime: $discussionTime,'
-      ' votingTime: $votingTime, gameStartTime: $gameStartTime}';
+      ' votingTime: $votingTime, gameStartTime: $gameStartTime, '
+      'isDay: $isDay, dayNumber: $dayNumber, nightNumber: $nightNumber}';
 }

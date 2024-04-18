@@ -38,6 +38,9 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       gameStartTime: json['gameStartTime'] == null
           ? null
           : DateTime.parse(json['gameStartTime'] as String),
+      isDay: json['isDay'] as bool? ?? true,
+      dayNumber: json['dayNumber'] as int? ?? 1,
+      nightNumber: json['nightNumber'] as int? ?? 1,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -54,6 +57,9 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'discussionTime': instance.discussionTime,
       'votingTime': instance.votingTime,
       'gameStartTime': instance.gameStartTime?.toIso8601String(),
+      'isDay': instance.isDay,
+      'dayNumber': instance.dayNumber,
+      'nightNumber': instance.nightNumber,
     };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(

@@ -47,7 +47,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           isVotingStarted: event.isVotingStarted,
-          isDiscussionStarted: true,
+          // isDiscussionStarted: true,
         ),
       );
       emit(appState);
@@ -161,6 +161,27 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       } catch (e) {
         print('Error sending game to Firebase: $e');
       }
+    });
+
+    on<AddDayNumber>((AddDayNumber event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          dayNumber: state.game.dayNumber + 1,
+          isDay: false,
+        ),
+      );
+      emit(appState);
+    });
+
+    on<AddNightNumber>((AddNightNumber event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          nightNumber: state.game.nightNumber + 1,
+          isDay: true,
+          isDiscussionStarted: true,
+        ),
+      );
+      emit(appState);
     });
 
     on<UpdateGamer>((UpdateGamer event, Emitter<AppState> emit) async {

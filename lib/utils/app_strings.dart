@@ -50,4 +50,7 @@ class AppStrings {
   static const String profile = 'Профиль';
   static const String endDiscussion = 'Завершить обсуждение';
   static const String endVoting = 'Завершить голосование';
+  static const String day = 'День';
+  static const String night = 'Ночь';
+  static const String endNight = 'Завершить ночь';
 }

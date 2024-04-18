@@ -24,6 +24,10 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int votingTime = state.game.votingTime;
           final String gameId = state.game.gameId;
           final DateTime? gameStartTime = state.game.gameStartTime;
+          final bool isDay = state.game.isDay;
+          final int dayNumber = state.game.dayNumber;
+          final int nightNumber = state.game.nightNumber;
+          print('isday $isDay');
           // print('isDiscussionStarted: $isDiscussionStarted');
           // print('isGameStarted: $isGameStarted');
           // print('isVotingStarted: $isVotingStarted');
@@ -67,7 +71,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         child: BaseButton(
                           label: isGameStarted
                               ? !isDiscussionStarted
-                                  ? AppStrings.endVoting
+                                  ? isDay
+                                      ? AppStrings.endVoting
+                                      : AppStrings.endNight
                                   : AppStrings.endDiscussion
                               : AppStrings.startGame,
                           enabled: isGameStarted && !isDiscussionStarted ||
@@ -88,6 +94,15 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   const EndVoting(
                                     isVotingStarted: false,
                                   ),
+                                );
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const AddDayNumber(),
+                                );
+                              }
+                             else if (!isDay) {
+                                print('add night number');
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const AddNightNumber(),
                                 );
                               }
                             } else {
@@ -132,6 +147,21 @@ class _GameTableScreenState extends State<GameTableScreen> {
                           },
                         ),
                       ),
+                    Positioned(
+                      left: screenWidth * buttonLeftPercentage,
+                      top: screenHeight * roundButtonBottomPercentage,
+                      child: SizedBox(
+                        width: 200,
+                        child: BaseButton(
+                          label: isDay
+                              ? "$dayNumber ${AppStrings.day}"
+                              : "$nightNumber ${AppStrings.night}",
+                          enabled: false,
+                          textStyle:
+                              MafiaTheme.themeData.textTheme.headlineSmall,
+                        ),
+                      ),
+                    ),
                     Positioned(
                       left: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * roundButtonBottomPercentage,

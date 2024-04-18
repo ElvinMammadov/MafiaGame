@@ -65,6 +65,20 @@ class SendGameToFirebase extends GameEvent {
       ];
 }
 
+class AddDayNumber extends GameEvent {
+  const AddDayNumber();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
+class AddNightNumber extends GameEvent {
+  const AddNightNumber();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
 class EndDiscussion extends GameEvent {
   final bool isDiscussionStarted;
 
