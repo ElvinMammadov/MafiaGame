@@ -16,6 +16,7 @@ class Gamer extends Equatable {
   final DateTime? gamerCreatedDate;
   final int? roleId;
   final int positionOnTable;
+  final int? selectedNumber;
 
   const Gamer({
     this.name,
@@ -32,6 +33,7 @@ class Gamer extends Equatable {
     this.gamerCreatedDate,
     this.roleId,
     this.positionOnTable = 0,
+    this.selectedNumber,
   });
 
   const Gamer.empty()
@@ -48,7 +50,8 @@ class Gamer extends Equatable {
         wasDeleted = false,
         gamerCreatedDate = null,
         roleId = 0,
-        positionOnTable = 0;
+        positionOnTable = 0,
+        selectedNumber = 0;
 
   Gamer copyWith({
     String? name,
@@ -65,6 +68,7 @@ class Gamer extends Equatable {
     DateTime? gamerCreatedDate,
     int? roleId,
     int? positionOnTable,
+    int? selectedNumber,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -81,6 +85,7 @@ class Gamer extends Equatable {
         gamerCreatedDate: gamerCreatedDate ?? this.gamerCreatedDate,
         roleId: roleId ?? this.roleId,
         positionOnTable: positionOnTable ?? this.positionOnTable,
+        selectedNumber: selectedNumber ?? this.selectedNumber,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -103,6 +108,7 @@ class Gamer extends Equatable {
         gamerCreatedDate,
         roleId,
         positionOnTable,
+        selectedNumber,
       ];
 
   @override
@@ -114,5 +120,5 @@ class Gamer extends Equatable {
       ' foulCount: $foulCount, votesCount:'
       ' $votesCount, isDeleted: '
       '$wasDeleted, gamerCreatedDate: $gamerCreatedDate, roleId: $roleId, '
-      'positionOnTable: $positionOnTable,}';
+      'positionOnTable: $positionOnTable, selectedNumber: $selectedNumber}';
 }

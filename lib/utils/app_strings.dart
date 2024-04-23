@@ -53,4 +53,6 @@ class AppStrings {
   static const String day = 'День';
   static const String night = 'Ночь';
   static const String endNight = 'Завершить ночь';
+  static const String killOfGamer = 'Убийство игрока';
+  static const String duringDayTrial = 'Во время дневного суда игрок был убит';
 }

@@ -27,7 +27,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final bool isDay = state.game.isDay;
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
-          print('isday $isDay');
+          // print('isday $isDay');
           // print('isDiscussionStarted: $isDiscussionStarted');
           // print('isGameStarted: $isGameStarted');
           // print('isVotingStarted: $isVotingStarted');
@@ -90,17 +90,36 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   ),
                                 );
                               } else if (isVotingStarted) {
-                                BlocProvider.of<GameBloc>(context).add(
-                                  const EndVoting(
-                                    isVotingStarted: false,
-                                  ),
+
+                                final int maxVotes = gamers.fold(
+                                  0,
+                                  (int prev, Gamer gamer) =>
+                                      gamer.votesCount > prev
+                                          ? gamer.votesCount
+                                          : prev,
                                 );
-                                BlocProvider.of<GameBloc>(context).add(
-                                  const AddDayNumber(),
+
+                                final List<Gamer> topGamers = gamers
+                                    .where(
+                                      (Gamer gamer) =>
+                                          gamer.votesCount == maxVotes,
+                                    )
+                                    .map((Gamer gamer) => gamer)
+                                    .toList();
+
+                                showPickNumber(
+                                  context,
+                                  topGamers,
                                 );
-                              }
-                             else if (!isDay) {
-                                print('add night number');
+                                // BlocProvider.of<GameBloc>(context).add(
+                                //   const EndVoting(
+                                //     isVotingStarted: false,
+                                //   ),
+                                // );
+                                // BlocProvider.of<GameBloc>(context).add(
+                                //   const AddDayNumber(),
+                                // );
+                              } else if (!isDay) {
                                 BlocProvider.of<GameBloc>(context).add(
                                   const AddNightNumber(),
                                 );

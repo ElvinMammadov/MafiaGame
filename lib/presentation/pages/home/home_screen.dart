@@ -8,7 +8,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final bool _isLoading = false;
   String? typeOfGame;
 
   String? typeOfController;
@@ -43,8 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           gameName!.isNotEmpty &&
                           numberOfGamers != null &&
                           numberOfGamers! > 0,
-                      backgroundColor:
-                          MafiaTheme.themeData.colorScheme.secondary,
+                      backgroundColor: MafiaTheme
+                          .themeData.colorScheme.secondary
+                          .withOpacity(0.8),
                       action: () {
                         _startButtonPressed(context);
                       },

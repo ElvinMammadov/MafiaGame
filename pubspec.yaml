@@ -35,6 +35,7 @@ dependencies:
   flutter_ringtone_player: ^4.0.0+2
   intl: ^0.19.0
   textfield_search: ^0.10.0
+  avatar_glow: ^3.0.1
 
 
 dev_dependencies:

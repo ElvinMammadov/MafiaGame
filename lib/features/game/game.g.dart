@@ -23,6 +23,7 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
           : DateTime.parse(json['gamerCreatedDate'] as String),
       roleId: json['roleId'] as int?,
       positionOnTable: json['positionOnTable'] as int? ?? 0,
+      selectedNumber: json['selectedNumber'] as int?,
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -40,6 +41,7 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'gamerCreatedDate': instance.gamerCreatedDate?.toIso8601String(),
       'roleId': instance.roleId,
       'positionOnTable': instance.positionOnTable,
+      'selectedNumber': instance.selectedNumber,
     };
 
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(

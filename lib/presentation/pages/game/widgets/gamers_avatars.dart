@@ -60,7 +60,7 @@ List<Widget> gamersAvatars({
                     child: GestureDetector(
                       onTap: () {
                         isGameStarted
-                            ? DialogBuilder().showPlayGame(
+                            ? showAddFunctionality(
                                 context,
                                 isVotingStarted: isVotingStarted,
                                 gamerId: gamers[i].id ?? 0,
