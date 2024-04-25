@@ -45,9 +45,8 @@ class DialogBuilder {
                       id: id,
                       gamerId: gamerId,
                       imageUrl: imageUrl,
-                      role: newRole?.name,
+                      role: newRole,
                       isNameChanged: true,
-                      roleId: newRole?.roleId,
                     ),
                   ),
                 );

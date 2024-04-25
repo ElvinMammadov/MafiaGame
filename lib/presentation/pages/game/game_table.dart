@@ -7,6 +7,7 @@ class GameTableScreen extends StatefulWidget {
 
 class _GameTableScreenState extends State<GameTableScreen> {
   bool showRoles = false;
+  Gamer killedGamer = const Gamer.empty();
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
@@ -90,7 +91,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   ),
                                 );
                               } else if (isVotingStarted) {
-
                                 final int maxVotes = gamers.fold(
                                   0,
                                   (int prev, Gamer gamer) =>
@@ -98,27 +98,45 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           ? gamer.votesCount
                                           : prev,
                                 );
+                                print('maxVotes: $maxVotes');
 
+                                if(maxVotes == 0) {
+                                  SnackBarManager.showFailure(
+                                    context,
+                                    message: AppStrings.votesHaveNotAdded,
+                                  );
+                                }
                                 final List<Gamer> topGamers = gamers
                                     .where(
                                       (Gamer gamer) =>
-                                          gamer.votesCount == maxVotes,
+                                          gamer.votesCount == maxVotes &&
+                                          maxVotes != 0,
                                     )
                                     .map((Gamer gamer) => gamer)
                                     .toList();
 
-                                showPickNumber(
-                                  context,
-                                  topGamers,
-                                );
-                                // BlocProvider.of<GameBloc>(context).add(
-                                //   const EndVoting(
-                                //     isVotingStarted: false,
-                                //   ),
-                                // );
-                                // BlocProvider.of<GameBloc>(context).add(
-                                //   const AddDayNumber(),
-                                // );
+                                if (topGamers.length == 1) {
+                                  showKilledGamer(
+                                    context,
+                                    topGamers[0],
+                                  );
+                                  BlocProvider.of<GameBloc>(context).add(
+                                    KillGamer(gamer: topGamers[0]),
+                                  );
+                                  BlocProvider.of<GameBloc>(context).add(
+                                    const EndVoting(
+                                      isVotingStarted: false,
+                                    ),
+                                  );
+                                  BlocProvider.of<GameBloc>(context).add(
+                                    const AddDayNumber(),
+                                  );
+                                } else if (topGamers.length > 1) {
+                                  showPickNumber(
+                                    context,
+                                    topGamers,
+                                  );
+                                }
                               } else if (!isDay) {
                                 BlocProvider.of<GameBloc>(context).add(
                                   const AddNightNumber(),

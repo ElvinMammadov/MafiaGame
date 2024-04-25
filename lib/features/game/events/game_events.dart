@@ -79,6 +79,15 @@ class AddNightNumber extends GameEvent {
   List<Object?> get props => <Object?>[];
 }
 
+class KillGamer extends GameEvent {
+  final Gamer gamer;
+
+  const KillGamer({required this.gamer});
+
+  @override
+  List<Object?> get props => <Object?>[gamer];
+}
+
 class EndDiscussion extends GameEvent {
   final bool isDiscussionStarted;
 

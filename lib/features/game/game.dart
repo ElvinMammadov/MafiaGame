@@ -14,3 +14,4 @@ part 'models/gamer.dart';
 part 'models/role.dart';
 part 'models/roles.dart';
 part 'states/gamers_state.dart';
+part 'models/doctor.dart';

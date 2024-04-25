@@ -184,6 +184,22 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       emit(appState);
     });
 
+    on<KillGamer>((KillGamer event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasKilled: true, votesCount: 0);
+            } else {
+              return gamer.copyWith(votesCount: 0);
+            }
+
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
     on<UpdateGamer>((UpdateGamer event, Emitter<AppState> emit) async {
       final int index = state.gamersState.gamers.indexWhere(
         (Gamer gamer) => gamer.id == event.gamer.id,
@@ -197,7 +213,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           imageUrl: event.gamer.imageUrl,
           role: event.gamer.role,
           isNameChanged: event.gamer.isNameChanged,
-          roleId: event.gamer.roleId,
         );
 
         try {
@@ -213,7 +228,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
         final GamersState updatedGamersState =
             state.gamersState.copyWith(gamers: updatedGamersList);
-        print('gamer is : ${updatedGamersState.gamers[index]}}');
         final AppState updatedAppState =
             state.copyWith(gamers: updatedGamersState);
 

@@ -40,150 +40,153 @@ List<Widget> gamersAvatars({
       Positioned(
         top: avatarY - radius,
         left: avatarX - radius,
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                SizedBox(
-                  width: constraints.maxWidth / 13,
-                  height: constraints.maxWidth / 13,
-                  child: Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+        child: gamers[i].wasKilled
+            ? const SizedBox.shrink()
+            : Column(
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      SizedBox(
+                        width: constraints.maxWidth / 13,
+                        height: constraints.maxWidth / 13,
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                              color: MafiaTheme.themeData.colorScheme.secondary,
+                              width: 2,
+                            ),
+                          ),
+                          color: Colors.transparent,
+                          child: GestureDetector(
+                            onTap: () {
+                              isGameStarted
+                                  ? showAddFunctionality(
+                                      context,
+                                      isVotingStarted: isVotingStarted,
+                                      gamerId: gamers[i].id ?? 0,
+                                      roleId: gamers[i].role?.roleId ?? 0,
+                                    )
+                                  : DialogBuilder().showAddUserModal(
+                                      context,
+                                      gamers[i].id ?? 0,
+                                      roles.roles[4],
+                                    );
+                              // DialogBuilder().showPlayGame(context);
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: showRoles == true
+                                  ? Center(
+                                      child: Text(
+                                        gamers[i].role != null
+                                            ? '${gamers[i].role}'
+                                            : roles.roles[4].name,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  : gamers[i].imageUrl == null
+                                      ? Icon(
+                                          Icons.person_add_rounded,
+                                          size: constraints.maxWidth / 20,
+                                          color: MafiaTheme
+                                              .themeData.colorScheme.secondary,
+                                        )
+                                      : Image.network(
+                                          gamers[i].imageUrl!,
+                                          fit: BoxFit.fill,
+                                          width: constraints.maxWidth / 13,
+                                          height: constraints.maxWidth / 13,
+                                        ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (gamers[i].foulCount >= 1)
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: MafiaTheme.themeData.colorScheme.secondary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                gamers[i].foulCount.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (gamers[i].votesCount >= 1)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                gamers[i].votesCount.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      minimumSize: const Size(60, 30),
                       side: BorderSide(
                         color: MafiaTheme.themeData.colorScheme.secondary,
                         width: 2,
                       ),
-                    ),
-                    color: Colors.transparent,
-                    child: GestureDetector(
-                      onTap: () {
-                        isGameStarted
-                            ? showAddFunctionality(
-                                context,
-                                isVotingStarted: isVotingStarted,
-                                gamerId: gamers[i].id ?? 0,
-                              )
-                            : DialogBuilder().showAddUserModal(
-                                context,
-                                gamers[i].id ?? 0,
-                                roles.roles[4],
-                              );
-                        // DialogBuilder().showPlayGame(context);
-                      },
-                      child: ClipRRect(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
-                        child: showRoles == true
-                            ? Center(
-                                child: Text(
-                                  gamers[i].role != null
-                                      ? '${gamers[i].role}'
-                                      : roles.roles[4].name,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              )
-                            : gamers[i].imageUrl == null
-                                ? Icon(
-                                    Icons.person_add_rounded,
-                                    size: constraints.maxWidth / 20,
-                                    color: MafiaTheme
-                                        .themeData.colorScheme.secondary,
-                                  )
-                                : Image.network(
-                                    gamers[i].imageUrl!,
-                                    fit: BoxFit.fill,
-                                    width: constraints.maxWidth / 13,
-                                    height: constraints.maxWidth / 13,
-                                  ),
                       ),
                     ),
-                  ),
-                ),
-                if (gamers[i].foulCount >= 1)
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: MafiaTheme.themeData.colorScheme.secondary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          gamers[i].foulCount.toString(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                          ),
+                    onPressed: () {
+                      BlocProvider.of<GameBloc>(context).add(
+                        RearrangeGamersPosition(
+                          newPosition: gamers[i].id ?? 0,
                         ),
+                      );
+                    },
+                    child: Text(
+                      gamers.isNotEmpty
+                          ? '${gamers[i].positionOnTable}  ${gamers[i].name}'
+                          : '',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                if (gamers[i].votesCount >= 1)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          gamers[i].votesCount.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                minimumSize: const Size(60, 30),
-                side: BorderSide(
-                  color: MafiaTheme.themeData.colorScheme.secondary,
-                  width: 2,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
+                ],
               ),
-              onPressed: () {
-                BlocProvider.of<GameBloc>(context).add(
-                  RearrangeGamersPosition(
-                    newPosition: gamers[i].id ?? 0,
-                  ),
-                );
-              },
-              child: Text(
-                gamers.isNotEmpty
-                    ? '${gamers[i].positionOnTable}  ${gamers[i].name}'
-                    : '',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -8,7 +8,9 @@ part of 'game.dart';
 
 Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       name: json['name'] as String?,
-      role: json['role'] as String?,
+      role: json['role'] == null
+          ? null
+          : Role.fromJson(json['role'] as Map<String, dynamic>),
       imageUrl: json['imageUrl'] as String?,
       id: json['id'] as int?,
       documentId: json['documentId'] as String?,
@@ -17,11 +19,10 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       isNameChanged: json['isNameChanged'] as bool?,
       foulCount: json['foulCount'] as int? ?? 0,
       votesCount: json['votesCount'] as int? ?? 0,
-      wasDeleted: json['wasDeleted'] as bool? ?? false,
+      wasKilled: json['wasKilled'] as bool? ?? false,
       gamerCreatedDate: json['gamerCreatedDate'] == null
           ? null
           : DateTime.parse(json['gamerCreatedDate'] as String),
-      roleId: json['roleId'] as int?,
       positionOnTable: json['positionOnTable'] as int? ?? 0,
       selectedNumber: json['selectedNumber'] as int?,
     );
@@ -37,9 +38,8 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'isNameChanged': instance.isNameChanged,
       'foulCount': instance.foulCount,
       'votesCount': instance.votesCount,
-      'wasDeleted': instance.wasDeleted,
+      'wasKilled': instance.wasKilled,
       'gamerCreatedDate': instance.gamerCreatedDate?.toIso8601String(),
-      'roleId': instance.roleId,
       'positionOnTable': instance.positionOnTable,
       'selectedNumber': instance.selectedNumber,
     };
@@ -75,4 +75,16 @@ Map<String, dynamic> _$GamersStateToJson(GamersState instance) =>
     <String, dynamic>{
       'gamers': instance.gamers,
       'roles': instance.roles,
+    };
+
+Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int? ?? 0,
+      healCount: json['healCount'] as int? ?? 2,
+    );
+
+Map<String, dynamic> _$DoctorToJson(Doctor instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+      'healCount': instance.healCount,
     };

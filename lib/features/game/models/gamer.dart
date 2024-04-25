@@ -3,7 +3,7 @@ part of game;
 @JsonSerializable()
 class Gamer extends Equatable {
   final String? name;
-  final String? role;
+  final Role? role;
   final String? imageUrl;
   final int? id;
   final String? documentId;
@@ -12,9 +12,8 @@ class Gamer extends Equatable {
   final bool? isNameChanged;
   final int foulCount;
   final int votesCount;
-  final bool wasDeleted;
+  final bool wasKilled;
   final DateTime? gamerCreatedDate;
-  final int? roleId;
   final int positionOnTable;
   final int? selectedNumber;
 
@@ -29,16 +28,15 @@ class Gamer extends Equatable {
     this.isNameChanged,
     this.foulCount = 0,
     this.votesCount = 0,
-    this.wasDeleted = false,
+    this.wasKilled = false,
     this.gamerCreatedDate,
-    this.roleId,
     this.positionOnTable = 0,
     this.selectedNumber,
   });
 
   const Gamer.empty()
       : name = '',
-        role = '',
+        role = const Role.empty(),
         imageUrl = '',
         id = 0,
         documentId = '',
@@ -47,15 +45,14 @@ class Gamer extends Equatable {
         isNameChanged = false,
         foulCount = 0,
         votesCount = 0,
-        wasDeleted = false,
+        wasKilled = false,
         gamerCreatedDate = null,
-        roleId = 0,
         positionOnTable = 0,
         selectedNumber = 0;
 
   Gamer copyWith({
     String? name,
-    String? role,
+    Role? role,
     String? imageUrl,
     int? id,
     String? documentId,
@@ -64,7 +61,7 @@ class Gamer extends Equatable {
     bool? isNameChanged,
     int? foulCount,
     int? votesCount,
-    bool? wasDeleted,
+    bool? wasKilled,
     DateTime? gamerCreatedDate,
     int? roleId,
     int? positionOnTable,
@@ -81,9 +78,8 @@ class Gamer extends Equatable {
         isNameChanged: isNameChanged ?? this.isNameChanged,
         foulCount: foulCount ?? this.foulCount,
         votesCount: votesCount ?? this.votesCount,
-        wasDeleted: wasDeleted ?? this.wasDeleted,
+        wasKilled: wasKilled ?? this.wasKilled,
         gamerCreatedDate: gamerCreatedDate ?? this.gamerCreatedDate,
-        roleId: roleId ?? this.roleId,
         positionOnTable: positionOnTable ?? this.positionOnTable,
         selectedNumber: selectedNumber ?? this.selectedNumber,
       );
@@ -104,9 +100,8 @@ class Gamer extends Equatable {
         isNameChanged,
         foulCount,
         votesCount,
-        wasDeleted,
+        wasKilled,
         gamerCreatedDate,
-        roleId,
         positionOnTable,
         selectedNumber,
       ];
@@ -119,6 +114,6 @@ class Gamer extends Equatable {
       'gamerCreated: $gamerCreated, isNameChanged: $isNameChanged,'
       ' foulCount: $foulCount, votesCount:'
       ' $votesCount, isDeleted: '
-      '$wasDeleted, gamerCreatedDate: $gamerCreatedDate, roleId: $roleId, '
+      '$wasKilled, gamerCreatedDate: $gamerCreatedDate, '
       'positionOnTable: $positionOnTable, selectedNumber: $selectedNumber}';
 }

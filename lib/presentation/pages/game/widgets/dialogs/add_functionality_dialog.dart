@@ -1,12 +1,13 @@
 part of game;
 
 void showAddFunctionality(
-    BuildContext context, {
-      required bool isVotingStarted,
-      required int gamerId,
-    }) {
+  BuildContext context, {
+  required bool isVotingStarted,
+  required int gamerId,
+  required int roleId,
+}) {
   final ValueNotifier<bool> isButtonEnabledNotifier =
-  ValueNotifier<bool>(false);
+      ValueNotifier<bool>(false);
   final TextEditingController textEditingController = TextEditingController();
   textEditingController.addListener(() {
     isButtonEnabledNotifier.value = textEditingController.text.isNotEmpty;
@@ -14,10 +15,16 @@ void showAddFunctionality(
 
   final List<Gamer> gamers =
       BlocProvider.of<GameBloc>(context).state.gamersState.gamers;
+  final bool isDay = BlocProvider.of<GameBloc>(context).state.game.isDay;
   final List<String> items = <String>[];
   for (int i = 0; i < gamers.length; i++) {
-    items.add(gamers[i].name!);
+    if (gamers[i].id != gamerId) {
+      if (gamers[i].wasKilled == false) {
+        items.add(gamers[i].name!);
+      }
+    }
   }
+  String buttonTitle = '';
 
   void checkGamer(String gamerName) {
     for (final Gamer gamer in gamers) {
@@ -31,11 +38,26 @@ void showAddFunctionality(
     }
   }
 
-  String? selectedValue;
+  void createFunctionality() {
+    switch (roleId) {
+      case 2 || 3 || 6:
+        buttonTitle = AppStrings.killGamer;
+        break;
+      case 1:
+        buttonTitle = AppStrings.healGamer;
+        break;
+      case 4:
+        buttonTitle = AppStrings.killGamer;
+        break;
+      default:
+        break;
+    }
+  }
+
   WoltModalSheet.show<void>(
     context: context,
     pageListBuilder: (BuildContext modalSheetContext) =>
-    <SliverWoltModalSheetPage>[
+        <SliverWoltModalSheetPage>[
       WoltModalSheetPage(
         hasSabGradient: false,
         isTopBarLayerAlwaysVisible: true,
@@ -56,88 +78,24 @@ void showAddFunctionality(
         child: Column(
           children: <Widget>[
             if (isVotingStarted)
-              DropdownButtonHideUnderline(
-                child: DropdownButton2<String>(
-                  isExpanded: true,
-                  hint: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        AppStrings.vote,
-                        style: MafiaTheme.themeData.textTheme.headlineSmall,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  items: items
-                      .map(
-                        (String item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style:
-                        MafiaTheme.themeData.textTheme.headlineSmall,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  )
-                      .toList(),
-                  value: selectedValue,
-                  onChanged: (String? value) {
-                    checkGamer(value!);
-                  },
-                  buttonStyleData: ButtonStyleData(
-                    height: 48,
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
-                      color: MafiaTheme.themeData.colorScheme.secondary
-                          .withOpacity(0.5),
-                    ),
-                    elevation: 2,
-                  ),
-                  iconStyleData: IconStyleData(
-                    icon: const Icon(
-                      Icons.arrow_forward_ios_outlined,
-                    ),
-                    iconSize: 18,
-                    iconEnabledColor: MafiaTheme.themeData.hintColor,
-                    iconDisabledColor: Colors.grey,
-                  ),
-                  dropdownStyleData: DropdownStyleData(
-                    maxHeight: 350,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: MafiaTheme.themeData.colorScheme.secondary
-                          .withOpacity(0.5),
-                    ),
-                    scrollbarTheme: ScrollbarThemeData(
-                      radius: const Radius.circular(40),
-                      thickness: MaterialStateProperty.all(6),
-                      thumbVisibility: MaterialStateProperty.all(true),
-                    ),
-                  ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    height: 40,
-                    padding: EdgeInsets.only(left: 150),
-                  ),
-                ),
-              ).padding(
-                horizontal: 16,
-                vertical: 16,
+              FunctionalDropDownButton(
+                items: items,
+                title: AppStrings.vote,
+                onChanged: (String gamerName) {
+                  checkGamer(gamerName);
+                },
+              ),
+            if (!isDay)
+              FunctionalDropDownButton(
+                items: items,
+                title: buttonTitle,
+                onChanged: (String gamerName) {},
               ),
             BaseButton(
               label: AppStrings.fol,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
               backgroundColor:
-              MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
+                  MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
               action: () {
                 BlocProvider.of<GameBloc>(context).add(
                   AddFaultToGamer(gamerId: gamerId),
@@ -149,7 +107,7 @@ void showAddFunctionality(
               label: AppStrings.profile,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
               backgroundColor:
-              MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
+                  MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
               action: () {
                 Navigator.of(context).pop();
               },

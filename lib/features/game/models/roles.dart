@@ -9,20 +9,20 @@ class Roles extends Equatable {
   const Roles.empty()
       : this(
           roles: const <Role>[
-            Role('Werewolf', roleId: 1),
-            Role('Virus', roleId: 2),
-            Role('Sheriff', roleId: 3),
-            Role('Security', roleId: 4),
-            Role('Mirniy', roleId: 5),
-            Role('Medium', roleId: 6),
-            Role('Doktor', roleId: 7),
-            Role('Mafia', roleId: 8),
-            Role('Madam', roleId: 9),
-            Role('Killer', roleId: 10),
-            Role('Don', roleId: 11),
-            Role('Chameleon', roleId: 12),
-            Role('Boomerang', roleId: 13),
-            Role('Advokat', roleId: 14),
+            Role('Doktor', roleId: 1),
+            Role('Mafia', roleId: 2),
+            Role('Don', roleId: 3),
+            Role('Sheriff', roleId: 4),
+            Role('Madam', roleId: 5),
+            Role('Killer', roleId: 6),
+            Role('Werewolf', roleId: 7),
+            Role('Virus', roleId: 8),
+            Role('Advokat', roleId: 9),
+            Role('Security', roleId: 10),
+            Role('Mirniy', roleId: 11),
+            Role('Medium', roleId: 12),
+            Role('Chameleon', roleId: 13),
+            Role('Boomerang', roleId: 14),
           ],
         );
 
@@ -33,7 +33,7 @@ class Roles extends Equatable {
         roles: roles ?? this.roles,
       );
 
-  factory Roles.fromJson(Map<String, dynamic> json) =>_$RolesFromJson(json);
+  factory Roles.fromJson(Map<String, dynamic> json) => _$RolesFromJson(json);
 
   Map<String, dynamic> toJson() => _$RolesToJson(this);
 

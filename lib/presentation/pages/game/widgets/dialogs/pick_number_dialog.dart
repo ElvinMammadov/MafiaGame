@@ -32,9 +32,19 @@ void showPickNumber(
           gamers: gamers,
           deletedGamer: (Gamer gamer) {
             print('deleted gamer ${gamer.name}');
-
+            BlocProvider.of<GameBloc>(context).add(
+              KillGamer(gamer: gamer),
+            );
             Navigator.of(context).pop();
             showKilledGamer(context, gamer);
+            BlocProvider.of<GameBloc>(context).add(
+              const EndVoting(
+                isVotingStarted: false,
+              ),
+            );
+            BlocProvider.of<GameBloc>(context).add(
+              const AddDayNumber(),
+            );
           },
         ),
       ),

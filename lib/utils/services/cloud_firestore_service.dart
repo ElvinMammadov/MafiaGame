@@ -59,7 +59,6 @@ class FirestoreService {
       'gamerId': gamer.gamerId,
       'gamerCreatedTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
       "imageUrl": gamer.imageUrl,
-      "roleId": gamer.roleId,
     });
     final DocumentReference<Object?> docRef =
         _gamersCollection.doc(gamer.name);

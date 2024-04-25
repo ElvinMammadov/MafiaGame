@@ -30,6 +30,4 @@ class Role extends Equatable {
         roleId,
       ];
 
-  @override
-  bool get stringify => true;
 }

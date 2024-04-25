@@ -55,4 +55,7 @@ class AppStrings {
   static const String endNight = 'Завершить ночь';
   static const String killOfGamer = 'Убийство игрока';
   static const String duringDayTrial = 'Во время дневного суда игрок был убит';
+  static const String votesHaveNotAdded = 'Вы не добавили голосов.';
+  static const String killGamer = 'Убить игрока';
+  static const String healGamer = 'Вылечить игрока';
 }
