@@ -77,6 +77,7 @@ class DialogBuilder {
               imageFile = file;
             },
             onRoleChanged: (Role? updatedRole) {
+              print("updatedRole: $updatedRole");
               newRole = updatedRole;
             },
           ),

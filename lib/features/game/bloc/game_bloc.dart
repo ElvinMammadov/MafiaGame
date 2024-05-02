@@ -193,7 +193,113 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             } else {
               return gamer.copyWith(votesCount: 0);
             }
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
 
+    on<HealGamer>((HealGamer event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasKilled: false, wasHealed: true);
+            }
+            if (gamer.role?.roleId == 1) {
+              return gamer.copyWith(
+                // role: gamer.role!.copyWith(healCount: gamer.role!.healCount - 1),
+              );
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<KillGamerByMafia>((KillGamerByMafia event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasKilled: true, wasKilledByMafia: true);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<KillGamerByKiller>((KillGamerByKiller event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasKilled: true, wasKilledByKiller: true);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<KillGamerBySheriff>((KillGamerBySheriff event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasKilled: true, wasKilledBySheriff: true);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<GiveAlibi>((GiveAlibi event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(hasAlibi: true);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<SecureGamer>((SecureGamer event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasKilled: false, wasSecured: true);
+            }
+            if (gamer.role?.roleId == 10) {
+              return gamer.copyWith(wasKilled: true);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<TakeAbilityFromGamer>(
+        (TakeAbilityFromGamer event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(wasSecured: false);
+            }
+            return gamer;
           }).toList(),
         ),
       );

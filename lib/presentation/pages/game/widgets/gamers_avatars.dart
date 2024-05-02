@@ -67,11 +67,16 @@ List<Widget> gamersAvatars({
                                       isVotingStarted: isVotingStarted,
                                       gamerId: gamers[i].id ?? 0,
                                       roleId: gamers[i].role?.roleId ?? 0,
+                                      nightNumber:
+                                          BlocProvider.of<GameBloc>(context)
+                                              .state
+                                              .game
+                                              .nightNumber,
                                     )
                                   : DialogBuilder().showAddUserModal(
                                       context,
                                       gamers[i].id ?? 0,
-                                      roles.roles[4],
+                                      roles.roles[10],
                                     );
                               // DialogBuilder().showPlayGame(context);
                             },
@@ -81,8 +86,8 @@ List<Widget> gamersAvatars({
                                   ? Center(
                                       child: Text(
                                         gamers[i].role != null
-                                            ? '${gamers[i].role}'
-                                            : roles.roles[4].name,
+                                            ? '${gamers[i].role?.name}'
+                                            : roles.roles[10].name,
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,

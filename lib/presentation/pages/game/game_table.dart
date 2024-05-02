@@ -28,17 +28,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final bool isDay = state.game.isDay;
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
-          // print('isday $isDay');
-          // print('isDiscussionStarted: $isDiscussionStarted');
-          // print('isGameStarted: $isGameStarted');
-          // print('isVotingStarted: $isVotingStarted');
-          // print('isGameStarted: $isGameStarted');
-          // print('isGameCouldStart: $isGameCouldStart');
-          // print('discussionTime: $discussionTime');
-          // print('votingTime: $votingTime');
 
-          const double buttonLeftPercentage = 0.1;
-          const double buttonBottomPercentage = 0.03;
+          const double buttonLeftPercentage = 0.07;
+          const double buttonBottomPercentage = 0.02;
           const double roundButtonBottomPercentage = 0.05;
           return Scaffold(
             appBar: DefaultAppBar(
@@ -98,9 +90,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           ? gamer.votesCount
                                           : prev,
                                 );
-                                print('maxVotes: $maxVotes');
 
-                                if(maxVotes == 0) {
+                                if (maxVotes == 0) {
                                   SnackBarManager.showFailure(
                                     context,
                                     message: AppStrings.votesHaveNotAdded,

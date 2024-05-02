@@ -5,6 +5,7 @@ void showAddFunctionality(
   required bool isVotingStarted,
   required int gamerId,
   required int roleId,
+  required int nightNumber,
 }) {
   final ValueNotifier<bool> isButtonEnabledNotifier =
       ValueNotifier<bool>(false);
@@ -13,20 +14,14 @@ void showAddFunctionality(
     isButtonEnabledNotifier.value = textEditingController.text.isNotEmpty;
   });
 
+  final bool nightIsEven = nightNumber.isEven;
+  String buttonTitle = '';
+
   final List<Gamer> gamers =
       BlocProvider.of<GameBloc>(context).state.gamersState.gamers;
   final bool isDay = BlocProvider.of<GameBloc>(context).state.game.isDay;
-  final List<String> items = <String>[];
-  for (int i = 0; i < gamers.length; i++) {
-    if (gamers[i].id != gamerId) {
-      if (gamers[i].wasKilled == false) {
-        items.add(gamers[i].name!);
-      }
-    }
-  }
-  String buttonTitle = '';
 
-  void checkGamer(String gamerName) {
+  void addVoteToGamer(String gamerName) {
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
@@ -38,21 +33,128 @@ void showAddFunctionality(
     }
   }
 
+  void killGamerByMafia(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          KillGamerByMafia(gamer: gamer),
+        );
+        Navigator.of(context).pop();
+        break;
+      }
+    }
+  }
+
+  void killGamerByKiller(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          KillGamerByKiller(gamer: gamer),
+        );
+        Navigator.of(context).pop();
+        break;
+      }
+    }
+  }
+
+  void killGamerBySheriff(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          KillGamerBySheriff(gamer: gamer),
+        );
+        Navigator.of(context).pop();
+        break;
+      }
+    }
+  }
+
+  void healGamer(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          HealGamer(gamer: gamer),
+        );
+        Navigator.of(context).pop();
+        break;
+      }
+    }
+  }
+
+  void giveAlibi(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          GiveAlibi(gamer: gamer),
+        );
+        Navigator.of(context).pop();
+        break;
+      }
+    }
+  }
+
+  void secureGamer(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          SecureGamer(gamer: gamer),
+        );
+        Navigator.of(context).pop();
+        break;
+      }
+    }
+  }
+
   void createFunctionality() {
     switch (roleId) {
-      case 2 || 3 || 6:
-        buttonTitle = AppStrings.killGamer;
-        break;
       case 1:
         buttonTitle = AppStrings.healGamer;
         break;
+      case 2:
+      case 3:
+      case 6:
+        buttonTitle = AppStrings.killGamer;
+        break;
       case 4:
         buttonTitle = AppStrings.killGamer;
+        break;
+      case 9:
+        buttonTitle = AppStrings.giveAlibi;
+        break;
+      case 10:
+        buttonTitle = AppStrings.secureGamer;
         break;
       default:
         break;
     }
   }
+
+  List<String> getVotingItems(List<Gamer> gamers) => gamers
+      .where((Gamer gamer) => gamer.id != gamerId && !gamer.wasKilled)
+      .map((Gamer gamer) => gamer.name!)
+      .toList();
+
+  List<String> getKillingItems(List<Gamer> gamers) => gamers
+      .where(
+        (Gamer gamer) =>
+            gamer.id != gamerId &&
+            !gamer.wasKilled &&
+            (gamer.role!.roleId != 2 && gamer.role!.roleId != 3),
+      )
+      .map((Gamer gamer) => gamer.name!)
+      .toList();
+
+  List<String> getSheriffItems(List<Gamer> gamers) => gamers
+      .where(
+        (Gamer gamer) =>
+            gamer.id != gamerId &&
+            !gamer.wasKilled &&
+            (gamer.role!.roleId == 2 || gamer.role!.roleId == 3),
+      )
+      .map((Gamer gamer) => gamer.name!)
+      .toList();
+
+  createFunctionality();
 
   WoltModalSheet.show<void>(
     context: context,
@@ -79,17 +181,60 @@ void showAddFunctionality(
           children: <Widget>[
             if (isVotingStarted)
               FunctionalDropDownButton(
-                items: items,
+                items: getVotingItems(gamers),
                 title: AppStrings.vote,
                 onChanged: (String gamerName) {
-                  checkGamer(gamerName);
+                  addVoteToGamer(gamerName);
                 },
               ),
             if (!isDay)
+              if (roleId == 2 || roleId == 3)
+                FunctionalDropDownButton(
+                  items: getKillingItems(gamers),
+                  title: buttonTitle,
+                  onChanged: (String gamerName) {
+                    killGamerByMafia(gamerName);
+                  },
+                ),
+            if (roleId == 6)
               FunctionalDropDownButton(
-                items: items,
+                items: getVotingItems(gamers),
                 title: buttonTitle,
-                onChanged: (String gamerName) {},
+                onChanged: (String gamerName) {
+                  killGamerByKiller(gamerName);
+                },
+              ),
+            if (roleId == 1)
+              FunctionalDropDownButton(
+                items: getVotingItems(gamers),
+                title: buttonTitle,
+                onChanged: (String gamerName) {
+                  healGamer(gamerName);
+                },
+              ),
+            if (roleId == 4 && nightIsEven)
+              FunctionalDropDownButton(
+                items: getSheriffItems(gamers),
+                title: buttonTitle,
+                onChanged: (String gamerName) {
+                  killGamerBySheriff(gamerName);
+                },
+              ),
+            if (roleId == 9)
+              FunctionalDropDownButton(
+                items: getVotingItems(gamers),
+                title: buttonTitle,
+                onChanged: (String gamerName) {
+                  giveAlibi(gamerName);
+                },
+              ),
+            if (roleId == 10)
+              FunctionalDropDownButton(
+                items: getVotingItems(gamers),
+                title: buttonTitle,
+                onChanged: (String gamerName) {
+                  secureGamer(gamerName);
+                },
               ),
             BaseButton(
               label: AppStrings.fol,

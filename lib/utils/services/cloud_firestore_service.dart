@@ -44,24 +44,35 @@ class FirestoreService {
       'gameName': gameName,
       'numberOfGamers': numberOfGamers,
       'gameId': gameId,
-      'gamers': gamers.map((Gamer gamer) => gamer.toJson()).toList(),
+      'gamers': gamers
+          .map(
+            (Gamer gamer) => <String, dynamic>{
+              'name': gamer.name,
+              'role': gamer.role?.name,
+              'roleId': gamer.role?.roleId,
+              'id': gamer.id,
+              'gamerId': gamer.gamerId,
+              'gamerCreatedTime': gamer.gamerCreated,
+              'imageUrl': gamer.imageUrl,
+            },
+          )
+          .toList(),
       'gameStartTime': DateFormat('yyyy-MM-dd').format(gameStartTime),
     });
   }
 
   Future<Gamer> addGamer(Gamer gamer) async {
-    // print("Gamer: ${gamer}");
     Gamer newGamer = const Gamer.empty();
     await _gamersCollection.doc(gamer.name).set(<String, dynamic>{
       'name': gamer.name,
-      'role': gamer.role,
+      'role': gamer.role?.name,
+      'roleId': gamer.role?.roleId,
       'id': gamer.id,
       'gamerId': gamer.gamerId,
       'gamerCreatedTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
       "imageUrl": gamer.imageUrl,
     });
-    final DocumentReference<Object?> docRef =
-        _gamersCollection.doc(gamer.name);
+    final DocumentReference<Object?> docRef = _gamersCollection.doc(gamer.name);
     docRef.get().then(
       (DocumentSnapshot doc) {
         final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;

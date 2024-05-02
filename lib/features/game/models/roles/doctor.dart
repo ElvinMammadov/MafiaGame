@@ -6,20 +6,21 @@ class Doctor extends Role with EquatableMixin {
 
   const Doctor({
     required String name,
-    int roleId = 0,
-    this.healCount = 2,
+    required int roleId ,
+    required this.healCount ,
   }) : super(name, roleId: roleId);
 
-  const Doctor.empty() : this(name: '', healCount: 0);
+  const Doctor.empty() : this(name: 'Doktor', healCount: 2, roleId: 1);
 
   @override
   Doctor copyWith({
     String? name,
     int? healCount,
+    int? roleId,
   }) =>
       Doctor(
         name: name ?? this.name,
-        roleId: roleId,
+        roleId: roleId?? this.roleId,
         healCount: healCount ?? this.healCount,
       );
 

@@ -83,7 +83,7 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
             ),
             onPressed: () {},
             child: Text(
-              widget.killedGamer.role ?? '',
+              widget.killedGamer.role?.name ?? '',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,

@@ -16,6 +16,13 @@ class Gamer extends Equatable {
   final DateTime? gamerCreatedDate;
   final int positionOnTable;
   final int? selectedNumber;
+  final bool? wasHealed;
+  final bool hasAlibi;
+  final bool wasKilledByKiller;
+  final bool wasKilledByMafia;
+  final bool wasKilledBySheriff;
+  final bool wasBumeranged;
+  final bool wasSecured;
 
   const Gamer({
     this.name,
@@ -32,6 +39,13 @@ class Gamer extends Equatable {
     this.gamerCreatedDate,
     this.positionOnTable = 0,
     this.selectedNumber,
+    this.wasHealed = false,
+    this.hasAlibi = false,
+    this.wasKilledByKiller = false,
+    this.wasKilledByMafia = false,
+    this.wasKilledBySheriff = false,
+    this.wasBumeranged = false,
+    this.wasSecured = false,
   });
 
   const Gamer.empty()
@@ -48,7 +62,14 @@ class Gamer extends Equatable {
         wasKilled = false,
         gamerCreatedDate = null,
         positionOnTable = 0,
-        selectedNumber = 0;
+        selectedNumber = 0,
+        wasHealed = false,
+        hasAlibi = false,
+        wasKilledByKiller = false,
+        wasKilledByMafia = false,
+        wasKilledBySheriff = false,
+        wasBumeranged = false,
+        wasSecured = false;
 
   Gamer copyWith({
     String? name,
@@ -66,6 +87,13 @@ class Gamer extends Equatable {
     int? roleId,
     int? positionOnTable,
     int? selectedNumber,
+    bool? wasHealed,
+    bool? hasAlibi,
+    bool? wasKilledByKiller,
+    bool? wasKilledByMafia,
+    bool? wasKilledBySheriff,
+    bool? wasBumeranged,
+    bool? wasSecured,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -82,6 +110,13 @@ class Gamer extends Equatable {
         gamerCreatedDate: gamerCreatedDate ?? this.gamerCreatedDate,
         positionOnTable: positionOnTable ?? this.positionOnTable,
         selectedNumber: selectedNumber ?? this.selectedNumber,
+        wasHealed: wasHealed ?? this.wasHealed,
+        hasAlibi: hasAlibi ?? this.hasAlibi,
+        wasKilledByKiller: wasKilledByKiller ?? this.wasKilledByKiller,
+        wasKilledByMafia: wasKilledByMafia ?? this.wasKilledByMafia,
+        wasKilledBySheriff: wasKilledBySheriff ?? this.wasKilledBySheriff,
+        wasBumeranged: wasBumeranged ?? this.wasBumeranged,
+        wasSecured: wasSecured ?? this.wasSecured,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -104,6 +139,13 @@ class Gamer extends Equatable {
         gamerCreatedDate,
         positionOnTable,
         selectedNumber,
+        wasHealed,
+        hasAlibi,
+        wasKilledByKiller,
+        wasKilledByMafia,
+        wasKilledBySheriff,
+        wasBumeranged,
+        wasSecured,
       ];
 
   @override
@@ -115,5 +157,10 @@ class Gamer extends Equatable {
       ' foulCount: $foulCount, votesCount:'
       ' $votesCount, isDeleted: '
       '$wasKilled, gamerCreatedDate: $gamerCreatedDate, '
-      'positionOnTable: $positionOnTable, selectedNumber: $selectedNumber}';
+      'positionOnTable: $positionOnTable, selectedNumber: $selectedNumber,'
+      ' isAlive: $wasHealed, hasAlibi: $hasAlibi}'
+      ' wasKilledByKiller: $wasKilledByKiller,'
+      ' wasKilledByMafia: $wasKilledByMafia, '
+      'wasKilledBySheriff: $wasKilledBySheriff,'
+      ' wasBumeranged: $wasBumeranged}, wasSecured: $wasSecured}';
 }

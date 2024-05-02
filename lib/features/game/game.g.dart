@@ -25,6 +25,12 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
           : DateTime.parse(json['gamerCreatedDate'] as String),
       positionOnTable: json['positionOnTable'] as int? ?? 0,
       selectedNumber: json['selectedNumber'] as int?,
+      wasHealed: json['wasHealed'] as bool? ?? false,
+      hasAlibi: json['hasAlibi'] as bool? ?? false,
+      wasKilledByKiller: json['wasKilledByKiller'] as bool? ?? false,
+      wasKilledByMafia: json['wasKilledByMafia'] as bool? ?? false,
+      wasKilledBySheriff: json['wasKilledBySheriff'] as bool? ?? false,
+      wasBumeranged: json['wasBumeranged'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -42,6 +48,12 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'gamerCreatedDate': instance.gamerCreatedDate?.toIso8601String(),
       'positionOnTable': instance.positionOnTable,
       'selectedNumber': instance.selectedNumber,
+      'wasHealed': instance.wasHealed,
+      'hasAlibi': instance.hasAlibi,
+      'wasKilledByKiller': instance.wasKilledByKiller,
+      'wasKilledByMafia': instance.wasKilledByMafia,
+      'wasKilledBySheriff': instance.wasKilledBySheriff,
+      'wasBumeranged': instance.wasBumeranged,
     };
 
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(
@@ -79,12 +91,142 @@ Map<String, dynamic> _$GamersStateToJson(GamersState instance) =>
 
 Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
       name: json['name'] as String,
-      roleId: json['roleId'] as int? ?? 0,
-      healCount: json['healCount'] as int? ?? 2,
+      roleId: json['roleId'] as int,
+      healCount: json['healCount'] as int,
     );
 
 Map<String, dynamic> _$DoctorToJson(Doctor instance) => <String, dynamic>{
       'name': instance.name,
       'roleId': instance.roleId,
       'healCount': instance.healCount,
+    };
+
+Mafia _$MafiaFromJson(Map<String, dynamic> json) => Mafia(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$MafiaToJson(Mafia instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Don _$DonFromJson(Map<String, dynamic> json) => Don(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$DonToJson(Don instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Sheriff _$SheriffFromJson(Map<String, dynamic> json) => Sheriff(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$SheriffToJson(Sheriff instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Madam _$MadamFromJson(Map<String, dynamic> json) => Madam(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$MadamToJson(Madam instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Killer _$KillerFromJson(Map<String, dynamic> json) => Killer(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$KillerToJson(Killer instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Werewolf _$WerewolfFromJson(Map<String, dynamic> json) => Werewolf(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$WerewolfToJson(Werewolf instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Virus _$VirusFromJson(Map<String, dynamic> json) => Virus(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$VirusToJson(Virus instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Advokat _$AdvokatFromJson(Map<String, dynamic> json) => Advokat(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$AdvokatToJson(Advokat instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Security _$SecurityFromJson(Map<String, dynamic> json) => Security(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$SecurityToJson(Security instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Mirniy _$MirniyFromJson(Map<String, dynamic> json) => Mirniy(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$MirniyToJson(Mirniy instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Medium _$MediumFromJson(Map<String, dynamic> json) => Medium(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$MediumToJson(Medium instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Chameleon _$ChameleonFromJson(Map<String, dynamic> json) => Chameleon(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$ChameleonToJson(Chameleon instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
+    };
+
+Boomerang _$BoomerangFromJson(Map<String, dynamic> json) => Boomerang(
+      name: json['name'] as String,
+      roleId: json['roleId'] as int,
+    );
+
+Map<String, dynamic> _$BoomerangToJson(Boomerang instance) => <String, dynamic>{
+      'name': instance.name,
+      'roleId': instance.roleId,
     };

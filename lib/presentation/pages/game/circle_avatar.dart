@@ -23,7 +23,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             name: AppStrings.gamer,
             id: i,
             positionOnTable: i + 1,
-            role: roles.roles[4].name,
+            role: roles.roles[10],
           ),
         ),
       );

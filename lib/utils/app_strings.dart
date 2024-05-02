@@ -58,4 +58,6 @@ class AppStrings {
   static const String votesHaveNotAdded = 'Вы не добавили голосов.';
   static const String killGamer = 'Убить игрока';
   static const String healGamer = 'Вылечить игрока';
+  static const String giveAlibi = 'Дать алиби';
+  static const String secureGamer = 'Обезопасить игрока';
 }
