@@ -33,6 +33,7 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
           ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
+              elevation: 8.0,
               backgroundColor: Colors.transparent,
               minimumSize: const Size(150, 50),
               side: BorderSide(
@@ -40,7 +41,7 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
                 width: 2,
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
             onPressed: () {},
@@ -53,24 +54,39 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
               ),
             ),
           ).padding(vertical: 16),
-          const Text(
-            AppStrings.duringDayTrial,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          Card(
+            elevation: 4,
+            color: MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
+            child: const Text(
+              AppStrings.duringDayTrial,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ).padding(
+              vertical: 16,
+              horizontal: 16,
             ),
-          ).padding(vertical: 16),
-          const Text(
-            AppStrings.roleOfGamer,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          ),
+          Card(
+            elevation: 4,
+            color: MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
+            child: const Text(
+              AppStrings.roleOfGamer,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ).padding(
+              vertical: 16,
+              horizontal: 16,
             ),
-          ).padding(vertical: 16),
+          ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
+              elevation: 8.0,
               backgroundColor: Colors.transparent,
               minimumSize: const Size(150, 50),
               side: BorderSide(
@@ -78,7 +94,7 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
                 width: 2,
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
             onPressed: () {},

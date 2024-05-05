@@ -30,7 +30,11 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       wasKilledByKiller: json['wasKilledByKiller'] as bool? ?? false,
       wasKilledByMafia: json['wasKilledByMafia'] as bool? ?? false,
       wasKilledBySheriff: json['wasKilledBySheriff'] as bool? ?? false,
-      wasBumeranged: json['wasBumeranged'] as bool? ?? false,
+      wasBoomeranged: json['wasBoomeranged'] as bool? ?? false,
+      wasSecured: json['wasSecured'] as bool? ?? false,
+      targetId: json['targetId'] as int?,
+      canTarget: json['canTarget'] as bool? ?? true,
+      killSecurity: json['killSecurity'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -53,7 +57,11 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'wasKilledByKiller': instance.wasKilledByKiller,
       'wasKilledByMafia': instance.wasKilledByMafia,
       'wasKilledBySheriff': instance.wasKilledBySheriff,
-      'wasBumeranged': instance.wasBumeranged,
+      'wasBoomeranged': instance.wasBoomeranged,
+      'wasSecured': instance.wasSecured,
+      'targetId': instance.targetId,
+      'canTarget': instance.canTarget,
+      'killSecurity': instance.killSecurity,
     };
 
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(

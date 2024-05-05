@@ -60,4 +60,5 @@ class AppStrings {
   static const String healGamer = 'Вылечить игрока';
   static const String giveAlibi = 'Дать алиби';
   static const String secureGamer = 'Обезопасить игрока';
+  static const String takeAwayAbility = 'Забрать способность';
 }

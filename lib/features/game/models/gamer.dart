@@ -16,13 +16,16 @@ class Gamer extends Equatable {
   final DateTime? gamerCreatedDate;
   final int positionOnTable;
   final int? selectedNumber;
-  final bool? wasHealed;
+  final bool wasHealed;
   final bool hasAlibi;
   final bool wasKilledByKiller;
   final bool wasKilledByMafia;
   final bool wasKilledBySheriff;
-  final bool wasBumeranged;
+  final bool wasBoomeranged;
   final bool wasSecured;
+  final int? targetId;
+  final bool canTarget;
+  final bool killSecurity;
 
   const Gamer({
     this.name,
@@ -44,8 +47,11 @@ class Gamer extends Equatable {
     this.wasKilledByKiller = false,
     this.wasKilledByMafia = false,
     this.wasKilledBySheriff = false,
-    this.wasBumeranged = false,
+    this.wasBoomeranged = false,
     this.wasSecured = false,
+    this.targetId,
+    this.canTarget = true,
+    this.killSecurity = false,
   });
 
   const Gamer.empty()
@@ -68,8 +74,11 @@ class Gamer extends Equatable {
         wasKilledByKiller = false,
         wasKilledByMafia = false,
         wasKilledBySheriff = false,
-        wasBumeranged = false,
-        wasSecured = false;
+        wasBoomeranged = false,
+        wasSecured = false,
+        targetId = 0,
+        canTarget = true,
+        killSecurity = false;
 
   Gamer copyWith({
     String? name,
@@ -92,8 +101,11 @@ class Gamer extends Equatable {
     bool? wasKilledByKiller,
     bool? wasKilledByMafia,
     bool? wasKilledBySheriff,
-    bool? wasBumeranged,
+    bool? wasBoomeranged,
     bool? wasSecured,
+    int? targetId,
+    bool? canTarget,
+    bool? killSecurity,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -115,8 +127,11 @@ class Gamer extends Equatable {
         wasKilledByKiller: wasKilledByKiller ?? this.wasKilledByKiller,
         wasKilledByMafia: wasKilledByMafia ?? this.wasKilledByMafia,
         wasKilledBySheriff: wasKilledBySheriff ?? this.wasKilledBySheriff,
-        wasBumeranged: wasBumeranged ?? this.wasBumeranged,
+        wasBoomeranged: wasBoomeranged ?? this.wasBoomeranged,
         wasSecured: wasSecured ?? this.wasSecured,
+        targetId: targetId ?? this.targetId,
+        canTarget: canTarget ?? this.canTarget,
+        killSecurity: killSecurity ?? this.killSecurity,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -144,23 +159,28 @@ class Gamer extends Equatable {
         wasKilledByKiller,
         wasKilledByMafia,
         wasKilledBySheriff,
-        wasBumeranged,
+        wasBoomeranged,
         wasSecured,
+        targetId,
+        canTarget,
+        killSecurity,
       ];
 
   @override
   String toString() => 'Gamer'
       '{name: $name, role: $role,'
-      ' imageUrl: $imageUrl, id: $id, documentId: $documentId'
-      ' gamerId: $gamerId'
-      'gamerCreated: $gamerCreated, isNameChanged: $isNameChanged,'
+      // ' imageUrl: $imageUrl,'
+      ' id: $id, documentId: $documentId'
+      ' gamerId: $gamerId,gamerCreated: $gamerCreated, '
+      'isNameChanged: $isNameChanged,'
       ' foulCount: $foulCount, votesCount:'
-      ' $votesCount, isDeleted: '
-      '$wasKilled, gamerCreatedDate: $gamerCreatedDate, '
+      ' $votesCount, wasKilled: $wasKilled, '
+      'gamerCreatedDate: $gamerCreatedDate, '
       'positionOnTable: $positionOnTable, selectedNumber: $selectedNumber,'
-      ' isAlive: $wasHealed, hasAlibi: $hasAlibi}'
+      ' wasHealed: $wasHealed, hasAlibi: $hasAlibi'
       ' wasKilledByKiller: $wasKilledByKiller,'
       ' wasKilledByMafia: $wasKilledByMafia, '
       'wasKilledBySheriff: $wasKilledBySheriff,'
-      ' wasBumeranged: $wasBumeranged}, wasSecured: $wasSecured}';
+      ' wasBumeranged: $wasBoomeranged, wasSecured: $wasSecured, '
+      'targetId: $targetId, canTarget: $canTarget, killSecurity: $killSecurity';
 }

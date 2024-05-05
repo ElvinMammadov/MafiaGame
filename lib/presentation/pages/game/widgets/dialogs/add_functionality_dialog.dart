@@ -14,8 +14,8 @@ void showAddFunctionality(
     isButtonEnabledNotifier.value = textEditingController.text.isNotEmpty;
   });
 
-  final bool nightIsEven = nightNumber.isEven;
-  String buttonTitle = '';
+  // final bool nightIsEven = nightNumber.isEven;
+  // String buttonTitle;
 
   final List<Gamer> gamers =
       BlocProvider.of<GameBloc>(context).state.gamersState.gamers;
@@ -37,7 +37,10 @@ void showAddFunctionality(
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          KillGamerByMafia(gamer: gamer),
+          KillGamerByMafia(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
         );
         Navigator.of(context).pop();
         break;
@@ -49,7 +52,10 @@ void showAddFunctionality(
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          KillGamerByKiller(gamer: gamer),
+          KillGamerByKiller(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
         );
         Navigator.of(context).pop();
         break;
@@ -61,7 +67,10 @@ void showAddFunctionality(
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          KillGamerBySheriff(gamer: gamer),
+          KillGamerBySheriff(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
         );
         Navigator.of(context).pop();
         break;
@@ -73,7 +82,10 @@ void showAddFunctionality(
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          HealGamer(gamer: gamer),
+          HealGamer(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
         );
         Navigator.of(context).pop();
         break;
@@ -85,7 +97,10 @@ void showAddFunctionality(
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          GiveAlibi(gamer: gamer),
+          GiveAlibi(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
         );
         Navigator.of(context).pop();
         break;
@@ -97,7 +112,10 @@ void showAddFunctionality(
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          SecureGamer(gamer: gamer),
+          SecureGamer(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
         );
         Navigator.of(context).pop();
         break;
@@ -105,29 +123,47 @@ void showAddFunctionality(
     }
   }
 
-  void createFunctionality() {
-    switch (roleId) {
-      case 1:
-        buttonTitle = AppStrings.healGamer;
+  void takeAbilityFromGamer(String gamerName) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          TakeAbilityFromGamer(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
+        );
+        Navigator.of(context).pop();
         break;
-      case 2:
-      case 3:
-      case 6:
-        buttonTitle = AppStrings.killGamer;
-        break;
-      case 4:
-        buttonTitle = AppStrings.killGamer;
-        break;
-      case 9:
-        buttonTitle = AppStrings.giveAlibi;
-        break;
-      case 10:
-        buttonTitle = AppStrings.secureGamer;
-        break;
-      default:
-        break;
+      }
     }
   }
+
+  // void createFunctionality() {
+  //   switch (roleId) {
+  //     case 1:
+  //       buttonTitle = AppStrings.healGamer;
+  //       break;
+  //     case 2:
+  //     case 3:
+  //     case 6:
+  //       buttonTitle = AppStrings.killGamer;
+  //       break;
+  //     case 4:
+  //       buttonTitle = AppStrings.killGamer;
+  //       break;
+  //     case 5:
+  //       buttonTitle = AppStrings.takeAwayAbility;
+  //       break;
+  //     case 9:
+  //       buttonTitle = AppStrings.giveAlibi;
+  //       break;
+  //     case 10:
+  //       buttonTitle = AppStrings.secureGamer;
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   List<String> getVotingItems(List<Gamer> gamers) => gamers
       .where((Gamer gamer) => gamer.id != gamerId && !gamer.wasKilled)
@@ -154,7 +190,71 @@ void showAddFunctionality(
       .map((Gamer gamer) => gamer.name!)
       .toList();
 
-  createFunctionality();
+  // createFunctionality();
+
+  Widget returnWidget() {
+    switch (roleId) {
+      case 1:
+        return FunctionalDropDownButton(
+          items: getVotingItems(gamers),
+          title: AppStrings.healGamer,
+          onChanged: (String gamerName) {
+            healGamer(gamerName);
+          },
+        );
+      case 2:
+      case 3:
+        return FunctionalDropDownButton(
+          items: getKillingItems(gamers),
+          title: AppStrings.killGamer,
+          onChanged: (String gamerName) {
+            killGamerByMafia(gamerName);
+          },
+        );
+      case 4:
+        return FunctionalDropDownButton(
+          items: getSheriffItems(gamers),
+          title: AppStrings.killGamer,
+          onChanged: (String gamerName) {
+            killGamerBySheriff(gamerName);
+          },
+        );
+      case 5:
+        return FunctionalDropDownButton(
+          items: getVotingItems(gamers),
+          title: AppStrings.takeAwayAbility,
+          onChanged: (String gamerName) {
+            takeAbilityFromGamer(gamerName);
+          },
+        );
+      case 6:
+        return FunctionalDropDownButton(
+          items: getVotingItems(gamers),
+          title: AppStrings.killGamer,
+          onChanged: (String gamerName) {
+            killGamerByKiller(gamerName);
+          },
+        );
+      case 9:
+        return FunctionalDropDownButton(
+          items: getVotingItems(gamers),
+          title: AppStrings.giveAlibi,
+          onChanged: (String gamerName) {
+            giveAlibi(gamerName);
+          },
+        );
+      case 10:
+        return FunctionalDropDownButton(
+          items: getVotingItems(gamers),
+          title: AppStrings.secureGamer,
+          onChanged: (String gamerName) {
+            secureGamer(gamerName);
+          },
+        );
+      default:
+        return const SizedBox.shrink();
+    }
+  }
 
   WoltModalSheet.show<void>(
     context: context,
@@ -187,55 +287,7 @@ void showAddFunctionality(
                   addVoteToGamer(gamerName);
                 },
               ),
-            if (!isDay)
-              if (roleId == 2 || roleId == 3)
-                FunctionalDropDownButton(
-                  items: getKillingItems(gamers),
-                  title: buttonTitle,
-                  onChanged: (String gamerName) {
-                    killGamerByMafia(gamerName);
-                  },
-                ),
-            if (roleId == 6)
-              FunctionalDropDownButton(
-                items: getVotingItems(gamers),
-                title: buttonTitle,
-                onChanged: (String gamerName) {
-                  killGamerByKiller(gamerName);
-                },
-              ),
-            if (roleId == 1)
-              FunctionalDropDownButton(
-                items: getVotingItems(gamers),
-                title: buttonTitle,
-                onChanged: (String gamerName) {
-                  healGamer(gamerName);
-                },
-              ),
-            if (roleId == 4 && nightIsEven)
-              FunctionalDropDownButton(
-                items: getSheriffItems(gamers),
-                title: buttonTitle,
-                onChanged: (String gamerName) {
-                  killGamerBySheriff(gamerName);
-                },
-              ),
-            if (roleId == 9)
-              FunctionalDropDownButton(
-                items: getVotingItems(gamers),
-                title: buttonTitle,
-                onChanged: (String gamerName) {
-                  giveAlibi(gamerName);
-                },
-              ),
-            if (roleId == 10)
-              FunctionalDropDownButton(
-                items: getVotingItems(gamers),
-                title: buttonTitle,
-                onChanged: (String gamerName) {
-                  secureGamer(gamerName);
-                },
-              ),
+            if (!isDay) returnWidget(),
             BaseButton(
               label: AppStrings.fol,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,

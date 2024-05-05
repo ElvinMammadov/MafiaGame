@@ -89,66 +89,130 @@ class KillGamer extends GameEvent {
 }
 
 class KillGamerByMafia extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const KillGamerByMafia({required this.gamer});
+  const KillGamerByMafia({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
 
 class KillGamerByKiller extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const KillGamerByKiller({required this.gamer});
+  const KillGamerByKiller({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
 
 class KillGamerBySheriff extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const KillGamerBySheriff({required this.gamer});
+  const KillGamerBySheriff({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
-
 class GiveAlibi extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const GiveAlibi({required this.gamer});
+  const GiveAlibi({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
 
 class SecureGamer extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const SecureGamer({required this.gamer});
+  const SecureGamer({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
 
 class TakeAbilityFromGamer extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const TakeAbilityFromGamer({required this.gamer});
+  const TakeAbilityFromGamer({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
+}
+
+class BoomerangGamer extends GameEvent {
+  final Gamer targetedGamer;
+  final int gamerId;
+
+  const BoomerangGamer({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
 
 class HealGamer extends GameEvent {
-  final Gamer gamer;
+  final Gamer targetedGamer;
+  final int gamerId;
 
-  const HealGamer({required this.gamer});
+  const HealGamer({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+    gamerId,
+  ];
 }
 
 class EndDiscussion extends GameEvent {
