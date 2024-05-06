@@ -127,7 +127,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(gamers: updatedGamersList),
       );
-      // print('appState is : ${appState.gamersState.gamers}');
       emit(appState);
     });
 
@@ -204,7 +203,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int targetedIndex = state.gamersState.gamers
           .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
 
-      print('targetedIndex: $targetedIndex, isTargetingSelf: $isTargetingSelf');
       if (targetedIndex != -1 &&
           (isTargetingSelf ||
               state.gamersState.gamers[event.gamerId].canTarget)) {
@@ -212,7 +210,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             state.gamersState.gamers.map((Gamer gamer) {
           if (gamer.id == event.targetedGamer.id) {
             return gamer.copyWith(wasHealed: true);
-          } else if (isTargetingSelf) {
+          } else if (gamer.id == event.gamerId) {
             return gamer.copyWith(targetId: event.targetedGamer.id);
           } else {
             return gamer;
@@ -240,7 +238,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         ) {
           if (gamer.id == event.targetedGamer.id) {
             return gamer.copyWith(wasKilledByMafia: true);
-          } else if (isTargetingSelf) {
+          } else if (gamer.id == event.gamerId) {
             return gamer.copyWith(targetId: event.targetedGamer.id);
           } else {
             return gamer;
@@ -267,7 +265,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         ) {
           if (gamer.id == event.targetedGamer.id) {
             return gamer.copyWith(wasKilledByKiller: true);
-          } else if (isTargetingSelf) {
+          } else if (gamer.id == event.gamerId) {
             return gamer.copyWith(targetId: event.targetedGamer.id);
           } else {
             return gamer;
@@ -285,9 +283,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(
           gamers: state.gamersState.gamers.map((Gamer gamer) {
-            if (gamer.id == event.targetedGamer.id && gamer.canTarget) {
+            if (gamer.id == event.targetedGamer.id &&
+                state.gamersState.gamers[event.gamerId].canTarget) {
               return gamer.copyWith(
-                // wasKilled: true,
                 wasKilledBySheriff: true,
               );
             }
@@ -318,7 +316,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           gamers: state.gamersState.gamers.map((Gamer gamer) {
             if (gamer.id == event.targetedGamer.id) {
               return gamer.copyWith(
-                // wasKilled: false,
                 wasSecured: true,
               );
             }
@@ -344,7 +341,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             state.gamersState.gamers.map((Gamer gamer) {
           if (gamer.id == event.targetedGamer.id) {
             return gamer.copyWith(wasKilled: true, wasBoomeranged: true);
-          } else if (isTargetingSelf) {
+          } else if (gamer.id == event.gamerId) {
             return gamer.copyWith(targetId: event.targetedGamer.id);
           } else {
             return gamer;
@@ -362,19 +359,28 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       (TakeAbilityFromGamer event, Emitter<AppState> emit) {
         final AppState appState = state;
 
-        void removeTargetId(int targetId) {
+        void removeTargetId(int targetId, int roleId) {
           for (int i = 0; i < appState.gamersState.gamers.length; i++) {
             final Gamer gamer = appState.gamersState.gamers[i];
             if (gamer.id == targetId) {
-              if (gamer.wasKilledByKiller ||
-                  gamer.wasKilledByMafia ||
-                  gamer.wasBoomeranged) {
-                appState.gamersState.gamers[i] =
-                    gamer.copyWith(wasKilled: false);
-              }
-              if (gamer.wasHealed) {
-                appState.gamersState.gamers[i] =
-                    gamer.copyWith(wasHealed: false);
+              switch(roleId){
+                case 1:
+                  appState.gamersState.gamers[i] =
+                      gamer.copyWith(wasHealed: false);
+                  break;
+                case 2:
+                case 3:
+                  appState.gamersState.gamers[i] =
+                      gamer.copyWith(wasKilledByMafia: false);
+                  break;
+                case 6:
+                  appState.gamersState.gamers[i] =
+                      gamer.copyWith(wasKilledByKiller: false);
+                  break;
+                case 14:
+                  appState.gamersState.gamers[i] =
+                      gamer.copyWith(wasBoomeranged: false);
+                  break;
               }
             }
           }
@@ -386,9 +392,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
               gamers: appState.gamersState.gamers.map((Gamer gamer) {
                 if (gamer.id == event.targetedGamer.id) {
                   if (gamer.targetId != null) {
-                    removeTargetId(gamer.targetId!);
+                    removeTargetId(gamer.targetId!, gamer.role!.roleId);
                   }
-                  return gamer.copyWith(canTarget: false);
+                  return gamer.copyWith(canTarget: false, targetId: 0);
                 }
                 return gamer;
               }).toList(),

@@ -138,33 +138,6 @@ void showAddFunctionality(
     }
   }
 
-  // void createFunctionality() {
-  //   switch (roleId) {
-  //     case 1:
-  //       buttonTitle = AppStrings.healGamer;
-  //       break;
-  //     case 2:
-  //     case 3:
-  //     case 6:
-  //       buttonTitle = AppStrings.killGamer;
-  //       break;
-  //     case 4:
-  //       buttonTitle = AppStrings.killGamer;
-  //       break;
-  //     case 5:
-  //       buttonTitle = AppStrings.takeAwayAbility;
-  //       break;
-  //     case 9:
-  //       buttonTitle = AppStrings.giveAlibi;
-  //       break;
-  //     case 10:
-  //       buttonTitle = AppStrings.secureGamer;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-
   List<String> getVotingItems(List<Gamer> gamers) => gamers
       .where((Gamer gamer) => gamer.id != gamerId && !gamer.wasKilled)
       .map((Gamer gamer) => gamer.name!)

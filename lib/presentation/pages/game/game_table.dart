@@ -28,6 +28,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final bool isDay = state.game.isDay;
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
+          final List<Gamer> killedGamers = <Gamer>[];
 
           const double buttonLeftPercentage = 0.07;
           const double buttonBottomPercentage = 0.02;
@@ -129,6 +130,23 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   );
                                 }
                               } else if (!isDay) {
+                                for (final Gamer gamer in gamers) {
+                                  if (!gamer.wasKilled) {
+                                    if (!gamer.wasSecured || !gamer.wasHealed) {
+                                      if (gamer.wasKilledByMafia ||
+                                          gamer.wasKilledByKiller ||
+                                          gamer.wasKilledBySheriff) {
+                                        print('Gamer name  ${gamer.name}');
+                                        killedGamers.add(gamer);
+                                      }
+                                    }
+                                  }
+                                }
+                                showKilledGamersAtNight(
+                                  context,
+                                  killedGamers,
+                                );
+
                                 BlocProvider.of<GameBloc>(context).add(
                                   const AddNightNumber(),
                                 );

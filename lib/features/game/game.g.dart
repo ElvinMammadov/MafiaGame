@@ -32,7 +32,7 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       wasKilledBySheriff: json['wasKilledBySheriff'] as bool? ?? false,
       wasBoomeranged: json['wasBoomeranged'] as bool? ?? false,
       wasSecured: json['wasSecured'] as bool? ?? false,
-      targetId: json['targetId'] as int?,
+      targetId: json['targetId'] as int? ?? 0,
       canTarget: json['canTarget'] as bool? ?? true,
       killSecurity: json['killSecurity'] as bool? ?? false,
     );

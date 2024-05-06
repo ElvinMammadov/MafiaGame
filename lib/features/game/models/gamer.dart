@@ -49,7 +49,7 @@ class Gamer extends Equatable {
     this.wasKilledBySheriff = false,
     this.wasBoomeranged = false,
     this.wasSecured = false,
-    this.targetId,
+    this.targetId = 0,
     this.canTarget = true,
     this.killSecurity = false,
   });

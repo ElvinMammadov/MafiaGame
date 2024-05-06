@@ -1,15 +1,16 @@
 part of game;
 
 void showKilledGamersAtNight(
-    BuildContext context,
-    Gamer killedGamer,
-    ) {
+  BuildContext context,
+  List<Gamer> killedGamers,
+) {
   WoltModalSheet.show<void>(
     context: context,
     // maxPageHeight: 600,
+    // minPageHeight: 1000,
     pageListBuilder: (BuildContext modalSheetContext) =>
-    <SliverWoltModalSheetPage>[
-      WoltModalSheetPage(
+        <SliverWoltModalSheetPage>[
+          SliverWoltModalSheetPage(
         hasSabGradient: false,
         isTopBarLayerAlwaysVisible: true,
         hasTopBarLayer: true,
@@ -29,12 +30,22 @@ void showKilledGamersAtNight(
               color: Colors.white,
             ),
           ),
-        ), child: KilledGamerScreen(
-          killedGamer: killedGamer,
         ),
-        // child: ImagePickerSheet(
-        // ),
+            mainContentSlivers: <Widget>[
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  final Gamer gamer = killedGamers[index];
+                  return KilledGamerScreen(
+                    killedGamer: gamer,
+                  );
+                },
+                childCount: killedGamers.length,
+              ),
+            ),
+          ],
       ),
     ],
+    modalTypeBuilder: (BuildContext context) => WoltModalType.bottomSheet,
   );
 }
