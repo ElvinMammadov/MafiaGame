@@ -48,7 +48,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/table.jpeg'),
-                  fit: BoxFit.fill,
+                 fit: BoxFit.cover,
                 ),
               ),
               child: SizedBox.expand(
@@ -132,7 +132,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                               } else if (!isDay) {
                                 for (final Gamer gamer in gamers) {
                                   if (!gamer.wasKilled) {
-                                    if (!gamer.wasSecured || !gamer.wasHealed) {
+                                    if (!gamer.wasSecured && !gamer.wasHealed) {
                                       if (gamer.wasKilledByMafia ||
                                           gamer.wasKilledByKiller ||
                                           gamer.wasKilledBySheriff) {
@@ -142,10 +142,12 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     }
                                   }
                                 }
-                                showKilledGamersAtNight(
+                                if(killedGamers.isNotEmpty) {
+                                  showKilledGamersAtNight(
                                   context,
                                   killedGamers,
                                 );
+                                }
 
                                 BlocProvider.of<GameBloc>(context).add(
                                   const AddNightNumber(),

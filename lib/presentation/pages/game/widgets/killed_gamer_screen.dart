@@ -2,9 +2,13 @@ part of game;
 
 class KilledGamerScreen extends StatefulWidget {
   final Gamer killedGamer;
+  final String title;
+  final bool isKillerExist;
 
   const KilledGamerScreen({
     required this.killedGamer,
+    required this.title,
+    this.isKillerExist = false,
   });
 
   @override
@@ -31,82 +35,89 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
           ).padding(
             vertical: 16,
           ),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              elevation: 8.0,
-              backgroundColor: Colors.transparent,
-              minimumSize: const Size(150, 50),
-              side: BorderSide(
-                color: MafiaTheme.themeData.colorScheme.secondary,
-                width: 2,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: () {},
-            child: Text(
-              widget.killedGamer.name ?? '',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ).padding(vertical: 16),
           Card(
-            elevation: 4,
+            elevation: 8,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
             color: MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
-            child: const Text(
-              AppStrings.duringDayTrial,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  widget.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Divider(
+                  height: 16.0,
+                  thickness: 1.0,
+                  color: Colors.white24, // Subtle divider
+                ),
+                _buildTextRow(
+                  AppStrings.nameOfGamer,
+                  widget.killedGamer.name ?? '',
+                ),
+                const Divider(
+                  height: 16.0,
+                  thickness: 1.0,
+                  color: Colors.white24, // Subtle divider
+                ),
+                _buildTextRow(
+                  AppStrings.roleOfGamer,
+                  widget.killedGamer.role?.name ?? '',
+                ),
+                const Divider(
+                  height: 16.0,
+                  thickness: 1.0,
+                  color: Colors.white24, // Subtle divider
+                ),
+                if (widget.isKillerExist)
+                  _buildTextRow(
+                    AppStrings.roleOfKiller,
+                    widget.killedGamer.wasKilledByMafia
+                        ? const Mafia.empty().name
+                        : widget.killedGamer.wasKilledByKiller
+                        ? const Killer.empty().name
+                        : const Sheriff.empty().name,
+                  ),
+              ],
             ).padding(
               vertical: 16,
               horizontal: 16,
             ),
+          ).padding(
+            top: 16,
+            horizontal: 32,
+            bottom: 32,
           ),
-          Card(
-            elevation: 4,
-            color: MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.5),
-            child: const Text(
-              AppStrings.roleOfGamer,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ).padding(
-              vertical: 16,
-              horizontal: 16,
-            ),
-          ),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              elevation: 8.0,
-              backgroundColor: Colors.transparent,
-              minimumSize: const Size(150, 50),
-              side: BorderSide(
-                color: MafiaTheme.themeData.colorScheme.secondary,
-                width: 2,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: () {},
-            child: Text(
-              widget.killedGamer.role?.name ?? '',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ).padding(vertical: 16),
         ],
+      );
+
+  Widget _buildTextRow(String labelText, String text) => Row(
+        children: <Widget>[
+          Text(
+            '$labelText:  ',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ).padding(
+        vertical: 16,
+        horizontal: 16,
       );
 }

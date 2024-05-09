@@ -9,17 +9,33 @@ List<Widget> gamersAvatars({
   required List<Gamer> gamers,
   required BuildContext context,
   required bool isVotingStarted,
+  required Orientation orientation,
 }) {
-  final List<Widget> positionedAvatars = <Widget>[];
-  final double ovalRadius = constraints.maxWidth / 2.5;
-
   final double screenWidth = MediaQuery.of(context).size.width;
   final double screenHeight = MediaQuery.of(context).size.height;
+  final List<Widget> positionedAvatars = <Widget>[];
 
-  const double minAvatarRadius = 20.0;
-  const double maxAvatarRadius = 100.0;
-  const double defaultAvatarRadiusPercentage = 0.045;
-
+  final double ovalRadius;
+  double minAvatarRadius;
+  double maxAvatarRadius;
+  double defaultAvatarRadiusPercentage;
+  double sizeBoxSize;
+  double iconSize;
+  if (orientation == Orientation.portrait) {
+    minAvatarRadius = 20.0;
+    maxAvatarRadius = 100.0;
+    defaultAvatarRadiusPercentage = 0.04;
+    ovalRadius = constraints.maxWidth / 2.5;
+    sizeBoxSize = constraints.maxWidth / 13;
+    iconSize = constraints.maxWidth / 20;
+  } else {
+    minAvatarRadius = 10.0;
+    maxAvatarRadius = 80.0;
+    defaultAvatarRadiusPercentage = 0.065;
+    ovalRadius = constraints.maxWidth / 4;
+    sizeBoxSize = constraints.maxWidth / 20;
+    iconSize = constraints.maxWidth / 27;
+  }
   final double radius = min(
     max(
       minAvatarRadius,
@@ -43,12 +59,13 @@ List<Widget> gamersAvatars({
         child: gamers[i].wasKilled
             ? const SizedBox.shrink()
             : Column(
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
                       SizedBox(
-                        width: constraints.maxWidth / 13,
-                        height: constraints.maxWidth / 13,
+                        width: sizeBoxSize,
+                        height: sizeBoxSize,
                         child: Card(
                           elevation: 5,
                           shape: RoundedRectangleBorder(
@@ -98,15 +115,15 @@ List<Widget> gamersAvatars({
                                   : gamers[i].imageUrl == null
                                       ? Icon(
                                           Icons.person_add_rounded,
-                                          size: constraints.maxWidth / 20,
+                                          size: iconSize,
                                           color: MafiaTheme
                                               .themeData.colorScheme.secondary,
                                         )
                                       : Image.network(
                                           gamers[i].imageUrl!,
                                           fit: BoxFit.fill,
-                                          width: constraints.maxWidth / 13,
-                                          height: constraints.maxWidth / 13,
+                                          width: sizeBoxSize,
+                                          height: sizeBoxSize,
                                         ),
                             ),
                           ),

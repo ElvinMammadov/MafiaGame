@@ -23,6 +23,7 @@ class DialogBuilder {
           hasSabGradient: false,
           isTopBarLayerAlwaysVisible: true,
           hasTopBarLayer: true,
+          navBarHeight: 48,
           stickyActionBar: ValueListenableBuilder<bool>(
             valueListenable: isButtonEnabledNotifier,
             builder: (_, bool isEnabled, __) => BaseButton(

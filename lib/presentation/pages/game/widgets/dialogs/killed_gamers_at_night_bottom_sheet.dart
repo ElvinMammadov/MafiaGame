@@ -6,8 +6,6 @@ void showKilledGamersAtNight(
 ) {
   WoltModalSheet.show<void>(
     context: context,
-    // maxPageHeight: 600,
-    // minPageHeight: 1000,
     pageListBuilder: (BuildContext modalSheetContext) =>
         <SliverWoltModalSheetPage>[
           SliverWoltModalSheetPage(
@@ -38,6 +36,8 @@ void showKilledGamersAtNight(
                   final Gamer gamer = killedGamers[index];
                   return KilledGamerScreen(
                     killedGamer: gamer,
+                    title: AppStrings.duringNightTrial,
+                    isKillerExist: true,
                   );
                 },
                 childCount: killedGamers.length,

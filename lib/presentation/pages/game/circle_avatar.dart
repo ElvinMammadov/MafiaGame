@@ -21,7 +21,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
         AddGamer(
           gamer: Gamer(
             name: AppStrings.gamer,
-            id: i+1,
+            id: i + 1,
             positionOnTable: i + 1,
             role: roles.roles[10],
           ),
@@ -55,36 +55,40 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-        builder: (BuildContext context, AppState state) {
-          final Roles roles = state.gamersState.roles;
-          final List<Gamer> gamers = state.gamersState.gamers;
-          final int numberOfGamers = state.game.numberOfGamers;
-          final bool isGameStarted = state.game.isGameStarted;
-          final bool isVotingStarted = state.game.isVotingStarted;
-          logger.log('gamers are $gamers');
-          isAllGamersNameChanged(gamers);
-          if (gamers.isNotEmpty) {
-            return SizedBox.expand(
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) =>
-                    Stack(
-                  children: gamersAvatars(
-                    constraints: constraints,
-                    roles: roles,
-                    showRoles: widget.showRoles,
-                    isGameStarted: isGameStarted,
-                    numberOfGamers: numberOfGamers,
-                    gamers: gamers,
-                    context: context,
-                    isVotingStarted: isVotingStarted,
+  Widget build(BuildContext context) => OrientationBuilder(
+        builder: (BuildContext context, Orientation orientation) =>
+            BlocBuilder<GameBloc, AppState>(
+          builder: (BuildContext context, AppState state) {
+            final Roles roles = state.gamersState.roles;
+            final List<Gamer> gamers = state.gamersState.gamers;
+            final int numberOfGamers = state.game.numberOfGamers;
+            final bool isGameStarted = state.game.isGameStarted;
+            final bool isVotingStarted = state.game.isVotingStarted;
+            logger.log('gamers are $gamers');
+            isAllGamersNameChanged(gamers);
+            if (gamers.isNotEmpty) {
+              return SizedBox.expand(
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) =>
+                      Stack(
+                    children: gamersAvatars(
+                      constraints: constraints,
+                      roles: roles,
+                      showRoles: widget.showRoles,
+                      isGameStarted: isGameStarted,
+                      numberOfGamers: numberOfGamers,
+                      gamers: gamers,
+                      context: context,
+                      isVotingStarted: isVotingStarted,
+                      orientation: orientation,
+                    ),
                   ),
                 ),
-              ),
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ),
       );
 }

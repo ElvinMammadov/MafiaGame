@@ -33,7 +33,7 @@ part 'add_user.dart';
 part 'circle_avatar.dart';
 part 'game_table.dart';
 part 'widgets/count_down_timer.dart';
-part 'widgets/dialog_builder.dart';
+part 'widgets/dialogs/dialog_builder.dart';
 part 'widgets/dialogs/add_functionality_dialog.dart';
 part 'widgets/dialogs/killed_gamer_dialog.dart';
 part 'widgets/dialogs/pick_number_dialog.dart';

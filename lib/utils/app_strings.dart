@@ -55,10 +55,12 @@ class AppStrings {
   static const String endNight = 'Завершить ночь';
   static const String killOfGamer = 'Убийство игрока';
   static const String duringDayTrial = 'Во время дневного суда игрок был убит';
+  static const String duringNightTrial = 'Во время ночного суда игрок был убит';
   static const String votesHaveNotAdded = 'Вы не добавили голосов.';
   static const String killGamer = 'Убить игрока';
   static const String healGamer = 'Вылечить игрока';
   static const String giveAlibi = 'Дать алиби';
   static const String secureGamer = 'Обезопасить игрока';
   static const String takeAwayAbility = 'Забрать способность';
+  static const String roleOfKiller = 'Роль убийцы';
 }

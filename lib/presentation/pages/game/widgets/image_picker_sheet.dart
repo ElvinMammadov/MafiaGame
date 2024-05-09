@@ -246,7 +246,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
             ],
           ).padding(
             bottom: 100,
-            top: 16,
             horizontal: 16,
           );
         },

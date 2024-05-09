@@ -6,9 +6,9 @@ void showKilledGamer(
     ) {
   WoltModalSheet.show<void>(
     context: context,
-    maxDialogWidth: 800,
-    minDialogWidth: 500,
-    maxPageHeight: 600,
+    maxDialogWidth: 1000,
+    minDialogWidth: 800,
+    maxPageHeight: 800,
     pageListBuilder: (BuildContext modalSheetContext) =>
     <SliverWoltModalSheetPage>[
       WoltModalSheetPage(
@@ -33,6 +33,7 @@ void showKilledGamer(
           ),
         ), child: KilledGamerScreen(
           killedGamer: killedGamer,
+          title: AppStrings.duringDayTrial,
         ),
         // child: ImagePickerSheet(
         // ),
