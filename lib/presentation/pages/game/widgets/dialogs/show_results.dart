@@ -1,20 +1,27 @@
 part of game;
 
-void showPickNumber(
-    BuildContext context,
-    List<Gamer> gamers,
-    ) {
+void showResults(
+  BuildContext context,
+  List<Gamer> gamers, {
+  bool isMafia = false,
+  String gameName = '',
+  String gameStartTime = '',
+}) {
   WoltModalSheet.show<void>(
     context: context,
     maxDialogWidth: 1000,
-    minDialogWidth: 700,
-    maxPageHeight: 600,
+    minDialogWidth: 800,
+    maxPageHeight: 800,
     pageListBuilder: (BuildContext modalSheetContext) =>
-    <SliverWoltModalSheetPage>[
+        <SliverWoltModalSheetPage>[
       WoltModalSheetPage(
         hasSabGradient: false,
         isTopBarLayerAlwaysVisible: true,
-        hasTopBarLayer: false,
+        hasTopBarLayer: true,
+        topBarTitle: Text(
+          AppStrings.resultsOfBattle,
+          style: MafiaTheme.themeData.textTheme.headlineSmall,
+        ),
         trailingNavBarWidget: Padding(
           padding: const EdgeInsets.only(
             right: 16,
@@ -28,24 +35,14 @@ void showPickNumber(
             ),
           ),
         ),
-        child: NumberPicker(
+        child: GamesResults(
           gamers: gamers,
-          deletedGamer: (Gamer gamer) {
-            BlocProvider.of<GameBloc>(context).add(
-              KillGamer(gamer: gamer),
-            );
-            Navigator.of(context).pop();
-            showKilledGamer(context, gamer);
-            BlocProvider.of<GameBloc>(context).add(
-              const EndVoting(
-                isVotingStarted: false,
-              ),
-            );
-            BlocProvider.of<GameBloc>(context).add(
-              const AddDayNumber(),
-            );
-          },
+          isMafia: isMafia,
+          gameName: gameName,
+          gameStartTime: gameStartTime,
         ),
+        // child: ImagePickerSheet(
+        // ),
       ),
     ],
     modalTypeBuilder: (BuildContext context) => WoltModalType.dialog,

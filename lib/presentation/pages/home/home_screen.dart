@@ -7,82 +7,86 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   String? typeOfGame;
 
   String? typeOfController;
   int? numberOfGamers = 0;
   String? gameName = '';
 
+  static const int _initTabIndex = 1;
+  late TabController _tabController;
+
   @override
-  Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-        builder: (BuildContext context, AppState state) => Scaffold(
-          appBar: const DefaultAppBar(
-            title: AppStrings.title,
-          ),
-          body: DecoratedBox(
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: HomeViewModel.tabsCount,
+      vsync: this,
+      initialIndex: _initTabIndex,
+    );
+    // _onRefresh();
+  }
+
+  @override
+  Widget build(BuildContext context) => OrientationBuilder(
+        builder: (BuildContext context, Orientation orientation) =>
+            BlocBuilder<GameBloc, AppState>(
+          builder: (BuildContext context, AppState state) => DecoratedBox(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.png'),
-                fit: BoxFit.fill,
+                image: AssetImage('assets/faces.jpeg'),
+                fit: BoxFit.cover,
               ),
             ),
-            child: SizedBox.expand(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  HomeScreenForm(
-                    onChange: _onChange,
+            child: Scaffold(
+              appBar: const DefaultAppBar(
+                title: AppStrings.title,
+              ),
+              backgroundColor: Colors.transparent,
+              bottomNavigationBar: SizedBox(
+                height: 80,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  SizedBox(
-                    width: 300,
-                    child: BaseButton(
-                      label: AppStrings.start,
-                      enabled: gameName != null &&
-                          gameName!.isNotEmpty &&
-                          numberOfGamers != null &&
-                          numberOfGamers! > 0,
-                      backgroundColor: MafiaTheme
-                          .themeData.colorScheme.secondary
-                          .withOpacity(0.8),
-                      action: () {
-                        _startButtonPressed(context);
-                      },
-                      textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                  color: MafiaTheme.themeData.colorScheme.secondary
+                      .withOpacity(0.8),
+                  child: TabBar(
+                    controller: _tabController,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: MafiaTheme.themeData.colorScheme.surface,
+                    labelColor: MafiaTheme.themeData.colorScheme.secondary,
+                    unselectedLabelStyle:
+                        MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    // unselectedLabelColor:
+                    //     Colors.white,
+                    tabs: List<Widget>.from(
+                      HomeViewModel.create().tabs.map(
+                            (HomeTab tab) => SizedBox(
+                              height: 64,
+                              child: MafiaGameTabs(
+                                label: tab.title,
+                                icon: tab.icon,
+                                imageIcon: tab.imageIcon,
+                              ),
+                            ),
+                          ),
                     ),
                   ),
-                ],
+                ).padding(
+                  horizontal: 84,
+                ),
+              ).padding(
+                bottom: 16,
+              ),
+              body: HomeContainer(
+                tabController: _tabController,
               ),
             ),
           ),
         ),
       );
-
-  void _onChange({
-    String? typeOfGame,
-    String? typeOfController,
-    int? numberOfGamers,
-    String? gameName,
-  }) {
-    setState(() {
-      this.typeOfGame = typeOfGame ?? this.typeOfGame;
-      this.typeOfController = typeOfController ?? this.typeOfController;
-      this.numberOfGamers = numberOfGamers ?? this.numberOfGamers;
-      this.gameName = gameName ?? this.gameName;
-    });
-  }
-
-  void _startButtonPressed(BuildContext context) {
-    final String gameId = UniqueKey().toString();
-    BlocProvider.of<GameBloc>(context).add(
-      UpdateGameDetails(
-        gameName: gameName ?? '',
-        typeOfGame: typeOfGame ?? '',
-        typeOfController: typeOfController ?? '',
-        numberOfGamers: numberOfGamers ?? 0,
-        gameId: gameId,
-      ),
-    );
-    AppNavigator.navigateToTablePage(context);
-  }
 }

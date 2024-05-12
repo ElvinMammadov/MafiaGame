@@ -3,9 +3,9 @@ part of game;
 @JsonSerializable()
 class Virus extends Role with EquatableMixin {
   const Virus({
-    required String name,
-    required int roleId,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+  });
 
   const Virus.empty() : this(name: 'Virus', roleId: 8);
 

@@ -31,22 +31,23 @@ class GamerRepository implements GameRepository {
 
   @override
   Future<void> addGameToFirebase({
-    required String gameName,
-    required int numberOfGamers,
-    required String gameId,
-    required List<Gamer> gamers,
-    required DateTime gameStartTime,
+    required GameState gameState,
   }) async {
     try {
       await firestoreService.addGameToFirebase(
-        gameName: gameName,
-        numberOfGamers: numberOfGamers,
-        gameId: gameId,
-        gamers: gamers,
-        gameStartTime: gameStartTime,
+        gameState: gameState,
       );
     } catch (e) {
       return Future<void>.error(e);
+    }
+  }
+
+  @override
+  Future<List<GameState>> getGames(DateTime dateTime) async {
+    try {
+      return await firestoreService.getGames(dateTime);
+    } catch (e) {
+      return Future<List<GameState>>.error(e);
     }
   }
 }
@@ -54,10 +55,7 @@ class GamerRepository implements GameRepository {
 abstract class GameRepository {
   Future<Gamer?> addGamer(Gamer gamer);
   Future<void> addGameToFirebase({
-    required String gameName,
-    required int numberOfGamers,
-    required String gameId,
-    required List<Gamer> gamers,
-    required DateTime gameStartTime,
+    required GameState gameState,
   });
+  Future<List<GameState>> getGames(DateTime dateTime);
 }

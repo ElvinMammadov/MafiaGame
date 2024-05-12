@@ -13,22 +13,27 @@ AppState _$AppStateFromJson(Map<String, dynamic> json) => AppState(
       game: json['game'] == null
           ? null
           : GameState.fromJson(json['game'] as Map<String, dynamic>),
+      games: (json['games'] as List<dynamic>?)
+          ?.map((e) => GameState.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$AppStateToJson(AppState instance) => <String, dynamic>{
       'user': instance.user,
       'game': instance.game,
+      'games': instance.games,
     };
 
 GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
-      gameName: json['gameName'] as String,
-      typeOfGame: json['typeOfGame'] as String,
-      typeOfController: json['typeOfController'] as String,
-      numberOfGamers: json['numberOfGamers'] as int,
-      gameId: json['gameId'] as String,
+      gameId: json['gameId'] as String? ?? '',
+      gameName: json['gameName'] as String? ?? '',
+      typeOfGame: json['typeOfGame'] as String? ?? '',
+      typeOfController: json['typeOfController'] as String? ?? '',
+      numberOfGamers: json['numberOfGamers'] as int? ?? 0,
       gamers: (json['gamers'] as List<dynamic>?)
-          ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Gamer>[],
       isGameCouldStart: json['isGameCouldStart'] as bool? ?? false,
       isGameStarted: json['isGameStarted'] as bool? ?? false,
       isDiscussionStarted: json['isDiscussionStarted'] as bool? ?? false,
@@ -41,6 +46,9 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       isDay: json['isDay'] as bool? ?? true,
       dayNumber: json['dayNumber'] as int? ?? 1,
       nightNumber: json['nightNumber'] as int? ?? 1,
+      mafiaCount: json['mafiaCount'] as int? ?? 0,
+      civilianCount: json['civilianCount'] as int? ?? 0,
+      isMafiaWin: json['isMafiaWin'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -60,6 +68,9 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'isDay': instance.isDay,
       'dayNumber': instance.dayNumber,
       'nightNumber': instance.nightNumber,
+      'mafiaCount': instance.mafiaCount,
+      'civilianCount': instance.civilianCount,
+      'isMafiaWin': instance.isMafiaWin,
     };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(

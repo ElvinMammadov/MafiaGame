@@ -114,20 +114,21 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final List<Gamer> updatedGamersList =
           List<Gamer>.from(state.gamersState.gamers);
       int currentPosition = 1;
-      for (int i = event.newPosition; i < updatedGamersList.length; i++) {
+      for (int i = event.newPosition - 1; i < updatedGamersList.length; i++) {
         updatedGamersList[i] =
             updatedGamersList[i].copyWith(positionOnTable: currentPosition);
         currentPosition++;
       }
-      for (int i = 0; i < event.newPosition; i++) {
+      for (int i = 0; i < event.newPosition - 1; i++) {
         updatedGamersList[i] =
             updatedGamersList[i].copyWith(positionOnTable: currentPosition);
         currentPosition++;
       }
-      final AppState appState = state.copyWith(
-        gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+      emit(
+        state.copyWith(
+          gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+        ),
       );
-      emit(appState);
     });
 
     on<CleanGamers>((CleanGamers event, Emitter<AppState> emit) {
@@ -143,22 +144,40 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         (SendGameToFirebase event, Emitter<AppState> emit) async {
       try {
         await gameRepository.addGameToFirebase(
-          gameName: event.gameName,
-          numberOfGamers: event.numberOfGamers,
-          gameId: event.gameId,
-          gamers: event.gamers,
-          gameStartTime: event.gameStartTime,
+          gameState: event.gameState,
         );
-        final AppState appState = state.copyWith(
-          game: state.game.copyWith(
-            isGameStarted: true,
-            isDiscussionStarted: true,
+        final int mafiaCount = event.gameState.gamers
+            .where(
+              (Gamer gamer) =>
+                  gamer.role?.roleId == 2 || gamer.role?.roleId == 3,
+            )
+            .toList()
+            .length;
+        final int civilianCount = event.gameState.gamers.length - mafiaCount;
+        // print('mafiaCount: $mafiaCount, civilianCount: $civilianCount');
+        emit(
+          state.copyWith(
+            game: state.game.copyWith(
+              isGameStarted: true,
+              isDiscussionStarted: true,
+              mafiaCount: mafiaCount,
+              civilianCount: civilianCount,
+            ),
           ),
         );
-        // print('appState is : ${appState}');
-        emit(appState);
       } catch (e) {
         print('Error sending game to Firebase: $e');
+      }
+    });
+
+    on<GetGames>((GetGames event, Emitter<AppState> emit) async {
+      try {
+        final List<GameState> games =
+            await gameRepository.getGames(event.dateTime);
+        print('Games: $games');
+        emit(state.copyWith(games: games));
+      } catch (e) {
+        print('Error getting games: $e');
       }
     });
 
@@ -184,18 +203,23 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<KillGamer>((KillGamer event, Emitter<AppState> emit) {
-      final AppState appState = state.copyWith(
-        gamers: state.gamersState.copyWith(
-          gamers: state.gamersState.gamers.map((Gamer gamer) {
-            if (gamer.id == event.gamer.id) {
-              return gamer.copyWith(wasKilled: true, votesCount: 0);
-            } else {
-              return gamer.copyWith(votesCount: 0);
-            }
-          }).toList(),
+      emit(
+        state.copyWith(
+          game: event.gamer.role?.roleId == 2 || event.gamer.role?.roleId == 3
+              ? state.game.copyWith(mafiaCount: state.game.mafiaCount - 1)
+              : state.game
+                  .copyWith(civilianCount: state.game.civilianCount - 1),
+          gamers: state.gamersState.copyWith(
+            gamers: state.gamersState.gamers.map((Gamer gamer) {
+              if (gamer.id == event.gamer.id) {
+                return gamer.copyWith(wasKilled: true, votesCount: 0);
+              } else {
+                return gamer.copyWith(votesCount: 0);
+              }
+            }).toList(),
+          ),
         ),
       );
-      emit(appState);
     });
 
     on<HealGamer>((HealGamer event, Emitter<AppState> emit) {
@@ -203,6 +227,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int targetedIndex = state.gamersState.gamers
           .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
 
+      print('event.gamerId: ${event.gamerId}, '
+          'event.targetedGamer.id: ${event.targetedGamer.id}');
       if (targetedIndex != -1 &&
           (isTargetingSelf ||
               state.gamersState.gamers[event.gamerId].canTarget)) {
@@ -216,7 +242,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             return gamer;
           }
         }).toList();
-        print('updatedGamers: $updatedGamers');
         emit(
           state.copyWith(
             gamers: state.gamersState.copyWith(gamers: updatedGamers),
@@ -250,6 +275,30 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           ),
         );
       }
+    });
+
+    on<CleanGamersAfterNight>(
+        (CleanGamersAfterNight event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: event.gamers
+              .map(
+                (Gamer gamer) => gamer.copyWith(
+                  wasHealed: false,
+                  wasKilledByMafia: false,
+                  wasKilledByKiller: false,
+                  wasKilledBySheriff: false,
+                  wasBoomeranged: false,
+                  wasSecured: false,
+                  canTarget: true,
+                  targetId: 0,
+                  killSecurity: false,
+                ),
+              )
+              .toList(),
+        ),
+      );
+      emit(appState);
     });
 
     on<KillGamerByKiller>((KillGamerByKiller event, Emitter<AppState> emit) {
@@ -363,7 +412,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           for (int i = 0; i < appState.gamersState.gamers.length; i++) {
             final Gamer gamer = appState.gamersState.gamers[i];
             if (gamer.id == targetId) {
-              switch(roleId){
+              switch (roleId) {
                 case 1:
                   appState.gamersState.gamers[i] =
                       gamer.copyWith(wasHealed: false);
@@ -408,6 +457,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int index = state.gamersState.gamers.indexWhere(
         (Gamer gamer) => gamer.id == event.gamer.id,
       );
+      final Gamer gamer = event.gamer;
       if (index != -1) {
         final List<Gamer> updatedGamersList =
             List<Gamer>.from(state.gamersState.gamers);
@@ -417,6 +467,11 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           imageUrl: event.gamer.imageUrl,
           role: event.gamer.role,
           isNameChanged: event.gamer.isNameChanged,
+          roleCounts: <String, int>{
+            ...gamer.roleCounts,
+            '${gamer.role!.roleId}':
+                (gamer.roleCounts[gamer.role!.roleId.toString()] ?? 0) + 1,
+          },
         );
 
         try {

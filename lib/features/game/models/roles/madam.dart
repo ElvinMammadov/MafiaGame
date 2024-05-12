@@ -3,9 +3,9 @@ part of game;
 @JsonSerializable()
 class Madam extends Role with EquatableMixin {
   const Madam({
-    required String name,
-    required int roleId,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+  });
 
   const Madam.empty() : this(name: 'Madam', roleId: 5);
 

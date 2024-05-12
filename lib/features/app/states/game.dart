@@ -7,7 +7,7 @@ class GameState extends Equatable {
   final String typeOfController;
   final int numberOfGamers;
   final String gameId;
-  final List<Gamer>? gamers;
+  final List<Gamer> gamers;
   final bool isGameCouldStart;
   final bool isGameStarted;
   final bool isDiscussionStarted;
@@ -18,14 +18,17 @@ class GameState extends Equatable {
   final bool isDay;
   final int dayNumber;
   final int nightNumber;
+  final int mafiaCount;
+  final int civilianCount;
+  final bool isMafiaWin;
 
   const GameState({
-    required this.gameName,
-    required this.typeOfGame,
-    required this.typeOfController,
-    required this.numberOfGamers,
-    required this.gameId,
-    this.gamers,
+    this.gameId = '',
+    this.gameName = '',
+    this.typeOfGame = '',
+    this.typeOfController = '',
+    this.numberOfGamers = 0,
+    this.gamers = const <Gamer>[],
     this.isGameCouldStart = false,
     this.isGameStarted = false,
     this.isDiscussionStarted = false,
@@ -36,6 +39,9 @@ class GameState extends Equatable {
     this.isDay = true,
     this.dayNumber = 1,
     this.nightNumber = 1,
+    this.mafiaCount = 0,
+    this.civilianCount = 0,
+    this.isMafiaWin = false,
   });
 
   const GameState.empty()
@@ -54,7 +60,10 @@ class GameState extends Equatable {
         gameStartTime = null,
         isDay = true,
         dayNumber = 1,
-        nightNumber = 1;
+        nightNumber = 1,
+        mafiaCount = 0,
+        civilianCount = 0,
+        isMafiaWin = false;
 
   GameState copyWith({
     String? gameName,
@@ -73,6 +82,9 @@ class GameState extends Equatable {
     bool? isDay,
     int? dayNumber,
     int? nightNumber,
+    int? mafiaCount,
+    int? civilianCount,
+    bool? isMafiaWin,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -91,6 +103,9 @@ class GameState extends Equatable {
         isDay: isDay ?? this.isDay,
         dayNumber: dayNumber ?? this.dayNumber,
         nightNumber: nightNumber ?? this.nightNumber,
+        mafiaCount: mafiaCount ?? this.mafiaCount,
+        civilianCount: civilianCount ?? this.civilianCount,
+        isMafiaWin: isMafiaWin ?? this.isMafiaWin,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -116,6 +131,8 @@ class GameState extends Equatable {
         isDay,
         dayNumber,
         nightNumber,
+        mafiaCount,
+        civilianCount,
       ];
 
   @override
@@ -127,5 +144,7 @@ class GameState extends Equatable {
       ' isDiscussionStarted: $isDiscussionStarted, '
       'isVotingStarted: $isVotingStarted, discussionTime: $discussionTime,'
       ' votingTime: $votingTime, gameStartTime: $gameStartTime, '
-      'isDay: $isDay, dayNumber: $dayNumber, nightNumber: $nightNumber}';
+      'isDay: $isDay, dayNumber: $dayNumber, nightNumber: $nightNumber, '
+      'mafiaCount: $mafiaCount, civilianCount: $civilianCount}, '
+      'isMafiaWin: $isMafiaWin}';
 }

@@ -48,6 +48,9 @@ class DialogBuilder {
                       imageUrl: imageUrl,
                       role: newRole,
                       isNameChanged: true,
+                      // roleCounts:  <String, int>{
+                      //   newRole!.roleId.toString(): 1,
+                      // },
                     ),
                   ),
                 );

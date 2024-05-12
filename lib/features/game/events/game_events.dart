@@ -41,28 +41,29 @@ class ChangeGameStartValue extends GameEvent {
 }
 
 class SendGameToFirebase extends GameEvent {
-  final String gameName;
-  final int numberOfGamers;
-  final String gameId;
-  final List<Gamer> gamers;
-  final DateTime gameStartTime;
+ final GameState gameState;
 
   const SendGameToFirebase({
-    required this.gameName,
-    required this.numberOfGamers,
-    required this.gameId,
-    required this.gamers,
-    required this.gameStartTime,
+    required this.gameState,
   });
 
   @override
   List<Object?> get props => <Object?>[
-        gameName,
-        numberOfGamers,
-        gameId,
-        gamers,
-        gameStartTime,
+    gameState,
       ];
+}
+
+class GetGames extends GameEvent {
+  final DateTime dateTime;
+
+  const GetGames({
+    required this.dateTime,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+    dateTime,
+  ];
 }
 
 class AddDayNumber extends GameEvent {
@@ -149,6 +150,15 @@ class GiveAlibi extends GameEvent {
     targetedGamer,
     gamerId,
   ];
+}
+
+class CleanGamersAfterNight extends GameEvent {
+  final List<Gamer> gamers;
+
+  const CleanGamersAfterNight({required this.gamers});
+
+  @override
+  List<Object?> get props => <Object?>[gamers];
 }
 
 class SecureGamer extends GameEvent {

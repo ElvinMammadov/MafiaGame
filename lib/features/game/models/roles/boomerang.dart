@@ -3,9 +3,9 @@ part of game;
 @JsonSerializable()
 class Boomerang extends Role with EquatableMixin {
   const Boomerang({
-    required String name,
-    required int roleId,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+  });
 
   const Boomerang.empty() : this(name: 'Boomerang', roleId: 14);
 

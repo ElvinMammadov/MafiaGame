@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mafia_game/features/auth/auth.dart';
 import 'package:mafia_game/features/bloc/multibloc_provider.dart';
 import 'package:mafia_game/firebase_options.dart';
@@ -30,6 +31,15 @@ class _MyAppState extends State<MyApp> {
           title: 'M Legends',
           theme: MafiaTheme.themeData,
           onGenerateRoute: AppNavigator.generateRoute,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', 'GB'), // English, UK
+            Locale('ru', 'RU'), // Arabic, UAE
+          ],
           home: const AuthenticationChecker(),
         ),
       );

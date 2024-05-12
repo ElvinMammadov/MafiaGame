@@ -3,9 +3,9 @@ part of game;
 @JsonSerializable()
 class Security extends Role with EquatableMixin {
   const Security({
-    required String name,
-    required int roleId,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+  });
 
   const Security.empty()
       : this(

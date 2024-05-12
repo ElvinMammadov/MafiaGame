@@ -3,9 +3,9 @@ part of game;
 @JsonSerializable()
 class Chameleon extends Role with EquatableMixin {
   const Chameleon({
-    required String name,
-    required int roleId,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+  });
 
   const Chameleon.empty() : this(name: 'Chameleon', roleId: 13);
 

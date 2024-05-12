@@ -3,9 +3,9 @@ part of game;
 @JsonSerializable()
 class Werewolf extends Role with EquatableMixin {
   const Werewolf({
-    required String name,
-    required int roleId,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+  });
 
   const Werewolf.empty()
       : this(

@@ -27,7 +27,8 @@ class AppStrings {
   static const String errorDuringLogin = 'Ошибка во время входа';
   static const String emailIsRequired = 'Требуется эл. почта';
   static const String textIsRequired = 'Добовьте текст';
-  static const String enterValidEmailAddress = 'Введите действительный адрес эл. почты';
+  static const String enterValidEmailAddress =
+      'Введите действительный адрес эл. почты';
   static const String passwordIsRequired = 'Требуется пароль';
   static const String gamersNumberIsRequired = 'Требуется количество игроков';
   static const String passwordLengthRequirement =
@@ -63,4 +64,26 @@ class AppStrings {
   static const String secureGamer = 'Обезопасить игрока';
   static const String takeAwayAbility = 'Забрать способность';
   static const String roleOfKiller = 'Роль убийцы';
+  static const String resultsOfBattle = 'Результаты боя';
+  static const String mafiaWon = 'Мафия победила';
+  static const String citizensWon = 'Мирные победили';
+  static const String mafiaWonExplanation =
+      'Мафия одержала победу в этом игровом '
+      'круге! Их коварство и обман восторжествовали ночью. '
+      'Но город не сдается, '
+      ' мирные жители постараются вычислить  мафиози и одержать верх в '
+      'следующей схватке.';
+  static const String citizensWonExplanation = 'Благодаря бдительности и '
+      'сплоченности горожан, все мафиози были разоблачены и обезврежены.'
+      ' Город торжествует!';
+  static const String civilians = 'Мирные';
+  static const String games = 'Игры';
+  static const String statistics = 'Статистика';
+  static const String mLegends = 'Legends';
+  static const String date = 'Дата';
+  static const String cancel = 'Отмена';
+  static const String choose = 'Выбрать';
+  static const String chooseDate = 'Выберите дату';
+  static const String doesNotHaveGame = 'На данный день отсутствуют игры';
+
 }

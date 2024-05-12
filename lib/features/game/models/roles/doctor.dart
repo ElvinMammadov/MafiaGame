@@ -5,10 +5,10 @@ class Doctor extends Role with EquatableMixin {
   final int healCount;
 
   const Doctor({
-    required String name,
-    required int roleId ,
-    required this.healCount ,
-  }) : super(name, roleId: roleId);
+    required super.name,
+    required super.roleId,
+    required this.healCount,
+  });
 
   const Doctor.empty() : this(name: 'Doktor', healCount: 2, roleId: 1);
 
@@ -20,10 +20,9 @@ class Doctor extends Role with EquatableMixin {
   }) =>
       Doctor(
         name: name ?? this.name,
-        roleId: roleId?? this.roleId,
+        roleId: roleId ?? this.roleId,
         healCount: healCount ?? this.healCount,
       );
-
 
   factory Doctor.fromJson(Map<String, dynamic> json) => _$DoctorFromJson(json);
 

@@ -64,7 +64,8 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             final int numberOfGamers = state.game.numberOfGamers;
             final bool isGameStarted = state.game.isGameStarted;
             final bool isVotingStarted = state.game.isVotingStarted;
-            logger.log('gamers are $gamers');
+            logger.log('mafia counts are ${state.game.mafiaCount}, '
+                'civilian counts are ${state.game.civilianCount}');
             isAllGamersNameChanged(gamers);
             if (gamers.isNotEmpty) {
               return SizedBox.expand(

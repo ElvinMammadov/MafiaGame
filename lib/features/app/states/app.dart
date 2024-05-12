@@ -5,14 +5,17 @@ class AppState extends Equatable {
   final UserState user;
   final GameState game;
   final GamersState gamersState;
+  final List<GameState> games;
 
   const AppState({
     UserState? user,
     GameState? game,
     GamersState? gamers,
+    List<GameState>? games,
   })  : user = user ?? const UserState.empty(),
         game = game ?? const GameState.empty(),
-        gamersState = gamers ?? const GamersState.empty();
+        gamersState = gamers ?? const GamersState.empty(),
+        games = games ?? const <GameState>[];
 
   const AppState.empty() : this();
 
@@ -20,11 +23,13 @@ class AppState extends Equatable {
     UserState? user,
     GameState? game,
     GamersState? gamers,
+    List<GameState>? games,
   }) =>
       AppState(
         user: user ?? this.user,
         game: game ?? this.game,
         gamers: gamers ?? gamersState,
+        games: games ?? this.games,
       );
 
   factory AppState.fromJson(Map<String, dynamic> json) =>
@@ -37,9 +42,10 @@ class AppState extends Equatable {
         user,
         game,
         gamersState,
+        games,
       ];
 
   @override
   String toString() => 'AppState'
-      '{user: $user, game: $game, gamers: $gamersState}';
+      '{user: $user, game: $game, gamers: $gamersState, games: $games}';
 }

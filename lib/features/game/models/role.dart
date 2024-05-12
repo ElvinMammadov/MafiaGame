@@ -5,19 +5,20 @@ class Role extends Equatable {
   final String name;
   final int roleId;
 
-  const Role(
-    this.name, {
+  const Role({
+    this.name = '',
     this.roleId = 0,
   });
 
-  const Role.empty() : this('');
+  const Role.empty() : this();
 
   Role copyWith({
     String? name,
+    int? roleId,
   }) =>
       Role(
-        name ?? this.name,
-        roleId: roleId,
+        name: name ?? this.name,
+        roleId: roleId ?? this.roleId,
       );
 
   factory Role.fromJson(Map<String, dynamic> json) => _$RoleFromJson(json);
@@ -29,5 +30,4 @@ class Role extends Equatable {
         name,
         roleId,
       ];
-
 }

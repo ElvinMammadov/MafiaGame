@@ -26,16 +26,17 @@ class Gamer extends Equatable {
   final int? targetId;
   final bool canTarget;
   final bool killSecurity;
+  final Map<String, int> roleCounts;
 
   const Gamer({
-    this.name,
-    this.role,
-    this.imageUrl,
-    this.id,
-    this.documentId,
-    this.gamerId,
-    this.gamerCreated,
-    this.isNameChanged,
+    this.name = '',
+    this.role = const Role.empty(),
+    this.imageUrl = '',
+    this.id = 0,
+    this.documentId = '',
+    this.gamerId = '',
+    this.gamerCreated = '',
+    this.isNameChanged = false,
     this.foulCount = 0,
     this.votesCount = 0,
     this.wasKilled = false,
@@ -52,6 +53,22 @@ class Gamer extends Equatable {
     this.targetId = 0,
     this.canTarget = true,
     this.killSecurity = false,
+    this.roleCounts = const <String, int>{
+      '1': 0,
+      '2': 0,
+      '3': 0,
+      '4': 0,
+      '5': 0,
+      '6': 0,
+      '7': 0,
+      '8': 0,
+      '9': 0,
+      '10': 0,
+      '11': 0,
+      '12': 0,
+      '13': 0,
+      '14': 0,
+    },
   });
 
   const Gamer.empty()
@@ -78,7 +95,23 @@ class Gamer extends Equatable {
         wasSecured = false,
         targetId = 0,
         canTarget = true,
-        killSecurity = false;
+        killSecurity = false,
+        roleCounts = const <String, int>{
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 0,
+          '6': 0,
+          '7': 0,
+          '8': 0,
+          '9': 0,
+          '10': 0,
+          '11': 0,
+          '12': 0,
+          '13': 0,
+          '14': 0,
+        };
 
   Gamer copyWith({
     String? name,
@@ -106,6 +139,7 @@ class Gamer extends Equatable {
     int? targetId,
     bool? canTarget,
     bool? killSecurity,
+    Map<String, int>? roleCounts,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -132,6 +166,7 @@ class Gamer extends Equatable {
         targetId: targetId ?? this.targetId,
         canTarget: canTarget ?? this.canTarget,
         killSecurity: killSecurity ?? this.killSecurity,
+        roleCounts: roleCounts ?? this.roleCounts,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -164,6 +199,7 @@ class Gamer extends Equatable {
         targetId,
         canTarget,
         killSecurity,
+        roleCounts,
       ];
 
   @override

@@ -112,7 +112,7 @@ List<Widget> gamersAvatars({
                                         ),
                                       ),
                                     )
-                                  : gamers[i].imageUrl == null
+                                  : gamers[i].imageUrl!.isEmpty
                                       ? Icon(
                                           Icons.person_add_rounded,
                                           size: iconSize,

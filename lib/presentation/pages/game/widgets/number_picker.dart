@@ -77,7 +77,6 @@ class _NumberPickerState extends State<NumberPicker> {
                           animateStates[i] = (i == index);
                         }
                       });
-                      print('Avatar pressed at index $index');
                     }
                   },
                   child: Column(
@@ -145,9 +144,6 @@ class _NumberPickerState extends State<NumberPicker> {
             NumberButtons(
               number: quantityOfButtons,
               onPressed: (int buttonNumber) {
-                print('Main button: $mainButton');
-                print('Button $buttonNumber pressed');
-
                 // Adjust index
                 if (selectedGamer != null &&
                     selectedGamer! >= 0 &&
@@ -155,8 +151,6 @@ class _NumberPickerState extends State<NumberPicker> {
                   assignNumberToGamer(selectedGamer!, buttonNumber);
                 }
                 if (buttonNumber == mainButton && mainButton != null) {
-                  print('Main button found!');
-
                   widget.deletedGamer!(
                     getGamerAtIndex(
                       findGamerWithMainNumber(
@@ -166,13 +160,6 @@ class _NumberPickerState extends State<NumberPicker> {
                       widget.gamers,
                     ),
                   );
-                  print('Gamer is ${getGamerAtIndex(
-                    findGamerWithMainNumber(
-                      buttonNumber,
-                      gamerSelectedNumbers,
-                    )!,
-                    widget.gamers,
-                  )}');
                 }
                 if (selectedButton == null && mainButton == null) {
                   setState(() {
@@ -190,8 +177,6 @@ class _NumberPickerState extends State<NumberPicker> {
                     selectedButtons.add(buttonNumber);
                   });
                 }
-
-                print('gamerSelectedNumbers: $gamerSelectedNumbers');
               },
               mainButton: mainButton,
               selectedButton: selectedButton,

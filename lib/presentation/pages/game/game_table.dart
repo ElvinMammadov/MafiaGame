@@ -29,6 +29,20 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
           final List<Gamer> killedGamers = <Gamer>[];
+          final int mafiaCount = state.game.mafiaCount;
+          final int civilianCount = state.game.civilianCount;
+          // final List<Gamer> mafia = gamers
+          //     .where(
+          //       (Gamer gamer) =>
+          //           gamer.role?.roleId == 2 || gamer.role?.roleId == 3,
+          //     )
+          //     .toList();
+          // final List<Gamer> citizens = gamers
+          //     .where(
+          //       (Gamer gamer) =>
+          //           gamer.role?.roleId != 2 || gamer.role?.roleId != 3,
+          //     )
+          //     .toList();
 
           const double buttonLeftPercentage = 0.07;
           const double buttonBottomPercentage = 0.02;
@@ -48,7 +62,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/table.jpeg'),
-                 fit: BoxFit.cover,
+                  fit: BoxFit.cover,
                 ),
               ),
               child: SizedBox.expand(
@@ -129,6 +143,24 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     topGamers,
                                   );
                                 }
+                                if (mafiaCount == civilianCount) {
+                                  showResults(
+                                    context,
+                                    gamers,
+                                    isMafia: true,
+                                    gameName: gameName,
+                                    gameStartTime: DateFormat('yyyy-MM-dd')
+                                        .format(gameStartTime!),
+                                  );
+                                } else if (mafiaCount == 0) {
+                                  showResults(
+                                    context,
+                                    gamers,
+                                    gameName: gameName,
+                                    gameStartTime: DateFormat('yyyy-MM-dd')
+                                        .format(gameStartTime!),
+                                  );
+                                }
                               } else if (!isDay) {
                                 for (final Gamer gamer in gamers) {
                                   if (!gamer.wasKilled) {
@@ -136,17 +168,40 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                       if (gamer.wasKilledByMafia ||
                                           gamer.wasKilledByKiller ||
                                           gamer.wasKilledBySheriff) {
-                                        print('Gamer name  ${gamer.name}');
                                         killedGamers.add(gamer);
                                       }
                                     }
                                   }
                                 }
-                                if(killedGamers.isNotEmpty) {
+                                if (killedGamers.isNotEmpty) {
                                   showKilledGamersAtNight(
-                                  context,
-                                  killedGamers,
-                                );
+                                    context,
+                                    killedGamers,
+                                  );
+
+                                  for (final Gamer gamer in killedGamers) {
+                                    BlocProvider.of<GameBloc>(context).add(
+                                      KillGamer(gamer: gamer),
+                                    );
+                                  }
+                                }
+                                if (mafiaCount == civilianCount) {
+                                  showResults(
+                                    context,
+                                    gamers,
+                                    isMafia: true,
+                                    gameName: gameName,
+                                    gameStartTime: DateFormat('yyyy-MM-dd')
+                                        .format(gameStartTime!),
+                                  );
+                                } else if (mafiaCount == 0) {
+                                  showResults(
+                                    context,
+                                    gamers,
+                                    gameName: gameName,
+                                    gameStartTime: DateFormat('yyyy-MM-dd')
+                                        .format(gameStartTime!),
+                                  );
                                 }
 
                                 BlocProvider.of<GameBloc>(context).add(
@@ -156,13 +211,23 @@ class _GameTableScreenState extends State<GameTableScreen> {
                             } else {
                               BlocProvider.of<GameBloc>(context).add(
                                 SendGameToFirebase(
-                                  gameName: gameName,
-                                  numberOfGamers: numberOfGamers,
-                                  gameId: gameId,
-                                  gamers: gamers,
-                                  gameStartTime:
-                                      gameStartTime ?? DateTime.now(),
+                                  gameState: state.game.copyWith(
+                                    gameName: gameName,
+                                    numberOfGamers: numberOfGamers,
+                                    gameId: gameId,
+                                    gamers: gamers,
+                                    gameStartTime:
+                                        gameStartTime ?? DateTime.now(),
+                                  ),
                                 ),
+                              );
+                              showResults(
+                                context,
+                                gamers,
+                                isMafia: true,
+                                gameName: gameName,
+                                gameStartTime: DateFormat('yyyy-MM-dd')
+                                    .format(gameStartTime!),
                               );
                             }
                           },

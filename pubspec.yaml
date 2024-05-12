@@ -12,6 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.16.0
@@ -36,12 +38,15 @@ dependencies:
   intl: ^0.19.0
   textfield_search: ^0.10.0
   avatar_glow: ^3.0.1
+  introduction_screen: ^3.1.6
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+dependency_overrides:
+  intl: ^0.18.1
 
   flutter_lints: ^3.0.1
 
@@ -58,6 +63,7 @@ flutter:
     - assets/sounds/clock.mp3
     - assets/sounds/clock2.wav
     - assets/table.jpeg
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
