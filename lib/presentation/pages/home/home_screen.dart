@@ -26,6 +26,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       initialIndex: _initTabIndex,
     );
     // _onRefresh();
+    BlocProvider.of<GameBloc>(context).add(
+      GetGames(dateTime: DateTime.now()),
+    );
   }
 
   @override
@@ -45,10 +48,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               backgroundColor: Colors.transparent,
               bottomNavigationBar: SizedBox(
-                height: 80,
+                height: 75,
                 child: Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   color: MafiaTheme.themeData.colorScheme.secondary
                       .withOpacity(0.8),

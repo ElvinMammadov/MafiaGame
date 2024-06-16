@@ -34,7 +34,7 @@ class AuthenticationBloc
 
     on<SignInRequested>(
         (SignInRequested event, Emitter<AuthenticationState> emit) async {
-      emit(LoadingState());
+      // emit(LoadingState());
       try {
         final UserModel? user = await _authenticationRepository.signIn(
           UserModel(

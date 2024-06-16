@@ -31,12 +31,12 @@ class _MyAppState extends State<MyApp> {
           title: 'M Legends',
           theme: MafiaTheme.themeData,
           onGenerateRoute: AppNavigator.generateRoute,
-          localizationsDelegates: const [
+          localizationsDelegates: const <LocalizationsDelegate>[
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
+          supportedLocales: const <Locale>[
             Locale('en', 'GB'), // English, UK
             Locale('ru', 'RU'), // Arabic, UAE
           ],

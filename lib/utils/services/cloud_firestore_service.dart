@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
-// import 'dart:developer' as logger;
+import 'dart:developer' as logger;
 
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
@@ -108,7 +108,7 @@ class FirestoreService {
               .toList(),
         );
       }).toList();
-
+      // logger.log('Games from Firebase: $games');
       return games;
     } catch (error) {
       print('Error fetching games: $error');

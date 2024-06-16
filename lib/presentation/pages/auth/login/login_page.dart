@@ -28,56 +28,50 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          appBar: const DefaultAppBar(
-            title: AppStrings.title,
-          ),
-          body: DecoratedBox(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/background.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  LoginForm(
-                    formKey: _formKey,
-                    emailController: _emailController,
-                    passwordController: _passwordController,
-                    isPasswordVisible: _isPasswordVisible,
-                    onSignIn: _signInWithEmailAndPassword,
-                    onTogglePasswordVisibility: _togglePasswordVisibility,
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () {
-                      AppNavigator.navigateToSignupPage(context);
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor:
-                          MafiaTheme.themeData.colorScheme.secondary,
-                    ),
-                    child: const Text(
-                      AppStrings.noAccount,
-                    ),
-                  ),
-                ],
-              ),
-            ).padding(
-              top: 16.0,
-              bottom: 300.0,
-            ),
-          ),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: const DefaultAppBar(
+      title: AppStrings.title,
+    ),
+    body: DecoratedBox(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background.png'),
+          fit: BoxFit.fill,
         ),
-      );
+      ),
+      child: SizedBox.expand(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            LoginForm(
+              formKey: _formKey,
+              emailController: _emailController,
+              passwordController: _passwordController,
+              isPasswordVisible: _isPasswordVisible,
+              onSignIn: _signInWithEmailAndPassword,
+              onTogglePasswordVisibility: _togglePasswordVisibility,
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                AppNavigator.navigateToSignupPage(context);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor:
+                    MafiaTheme.themeData.colorScheme.secondary,
+              ),
+              child: const Text(
+                AppStrings.noAccount,
+              ),
+            ),
+          ],
+        ).padding(
+          top: 16.0,
+          bottom: 300.0,
+        ),
+      ),
+    ),
+  );
 
   Future<void> _signInWithEmailAndPassword() async {
     if (_formKey.currentState?.validate() ?? false) {

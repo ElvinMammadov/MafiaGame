@@ -17,7 +17,7 @@ class AppStrings {
   static const String signUpButton = 'Зарегистрироваться';
   static const String noAccount = 'Нет аккаунта? Зарегистрируйтесь здесь.';
   static const String haveAccount = 'Уже есть аккаунт? Войдите здесь.';
-  static const String registeredSuccessfully = 'Успешная регистрация!';
+  static const String youRegisteredSuccessfully = 'Вы успешно зарегистрировались.';
   static const String userDoesNotExist = 'Пользователь не существует';
   static const String wrongPassword = 'Неверный пароль';
   static const String formNotValid = 'Форма недействительна';
@@ -49,8 +49,8 @@ class AppStrings {
   static const String fol = 'Фол';
   static const String delete = 'Удалить игрока';
   static const String profile = 'Профиль';
-  static const String endDiscussion = 'Завершить обсуждение';
-  static const String endVoting = 'Завершить голосование';
+  static const String endDiscussion = 'Завершить обсуждению';
+  static const String endVoting = 'Завершить голосованию';
   static const String day = 'День';
   static const String night = 'Ночь';
   static const String endNight = 'Завершить ночь';
@@ -64,7 +64,7 @@ class AppStrings {
   static const String secureGamer = 'Обезопасить игрока';
   static const String takeAwayAbility = 'Забрать способность';
   static const String roleOfKiller = 'Роль убийцы';
-  static const String resultsOfBattle = 'Результаты боя';
+  static const String resultsOfBattle = 'Результаты игры';
   static const String mafiaWon = 'Мафия победила';
   static const String citizensWon = 'Мирные победили';
   static const String mafiaWonExplanation =

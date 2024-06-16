@@ -174,7 +174,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       try {
         final List<GameState> games =
             await gameRepository.getGames(event.dateTime);
-        print('Games: $games');
+        // logger.log('Games: $games');
         emit(state.copyWith(games: games));
       } catch (e) {
         print('Error getting games: $e');
@@ -227,8 +227,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int targetedIndex = state.gamersState.gamers
           .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
 
-      print('event.gamerId: ${event.gamerId}, '
-          'event.targetedGamer.id: ${event.targetedGamer.id}');
+      // print('event.gamerId: ${event.gamerId}, '
+      //     'event.targetedGamer.id: ${event.targetedGamer.id}');
       if (targetedIndex != -1 &&
           (isTargetingSelf ||
               state.gamersState.gamers[event.gamerId].canTarget)) {

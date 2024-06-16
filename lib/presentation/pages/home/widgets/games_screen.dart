@@ -65,6 +65,7 @@ class _GamesScreenState extends State<GamesScreen> {
         //   GetGames(dateTime: DateTime.now()),
         // );
         final List<GameState> games = state.games;
+        logger.log('games from state: ${state.games}, ');
         return Stack(
           children: <Widget>[
             Positioned(
@@ -101,11 +102,11 @@ class _GamesScreenState extends State<GamesScreen> {
                         height: 600,
                         width: 900,
                         child: GamesResults(
-                          gamers: games[0].gamers,
-                          isMafia: games[0].isMafiaWin,
-                          gameName: games[0].gameName,
+                          gamers: games[index].gamers,
+                          isMafia: games[index].isMafiaWin,
+                          gameName: games[index].gameName,
                           gameStartTime: DateFormat('yyyy-MM-dd')
-                              .format(games[0].gameStartTime!),
+                              .format(games[index].gameStartTime!),
                         ),
                       ),
                     ).padding(

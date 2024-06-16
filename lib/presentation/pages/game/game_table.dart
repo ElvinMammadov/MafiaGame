@@ -221,14 +221,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   ),
                                 ),
                               );
-                              showResults(
-                                context,
-                                gamers,
-                                isMafia: true,
-                                gameName: gameName,
-                                gameStartTime: DateFormat('yyyy-MM-dd')
-                                    .format(gameStartTime!),
-                              );
+                              // showResults(
+                              //   context,
+                              //   gamers,
+                              //   isMafia: true,
+                              //   gameName: gameName,
+                              //   gameStartTime: DateFormat('yyyy-MM-dd')
+                              //       .format(gameStartTime!),
+                              // );
                             }
                           },
                         ),

@@ -34,9 +34,7 @@ class _SignupPageState extends State<SignupPage> {
               fit: BoxFit.fill,
             ),
           ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-            ),
+          child: SizedBox.expand(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -67,10 +65,10 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
               ],
+            ).padding(
+              top: 16.0,
+              bottom: 400.0,
             ),
-          ).padding(
-            top: 16.0,
-            bottom: 400.0,
           ),
         ),
       );
@@ -89,7 +87,7 @@ class _SignupPageState extends State<SignupPage> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(AppStrings.registeredSuccessfully),
+            content: Text(AppStrings.youRegisteredSuccessfully),
             duration: Duration(seconds: 2),
             backgroundColor: Colors.green,
           ),
