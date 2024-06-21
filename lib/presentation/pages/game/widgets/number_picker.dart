@@ -26,7 +26,8 @@ class _NumberPickerState extends State<NumberPicker> {
   @override
   void initState() {
     super.initState();
-    animateStates = List.generate(widget.gamers.length, (int index) => false);
+    animateStates = List<bool>.generate(widget.gamers.length, (int index) =>
+    false,);
     if (widget.gamers.length == 3) {
       quantityOfButtons = 9;
     } else if (widget.gamers.length > 3) {

@@ -39,6 +39,7 @@ dependencies:
   textfield_search: ^0.10.0
   avatar_glow: ^3.0.1
   introduction_screen: ^3.1.6
+  flutter_typeahead: ^5.2.0
 
 
 dev_dependencies:

@@ -20,8 +20,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
   File? image;
   Role? selectedRole;
   final ImagePicker picker = ImagePicker();
-  // final Stream<QuerySnapshot> _usersStream =
-  //     FirebaseFirestore.instance.collection('gamers').snapshots();
+  final List<String> list = <String>[];
 
   Future<void> getImageFromGallery() async {
     final XFile? pickedFile =
@@ -47,13 +46,21 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
     });
   }
 
-  Future<List> fetchData() async {
+  @override
+  void initState() {
+    super.initState();
+    list.add('Item 1');
+    list.add('Item 2');
+    list.add(' Item 3');
+  }
+
+  Future<List<String>> fetchData() async {
     await Future.delayed(
       const Duration(
         milliseconds: 1000,
       ),
     );
-    final List list = <String>[];
+    final List<String> list = <String>[];
     final String inputText = widget.textEditingController.text;
     list.add('$inputText Item 1');
     list.add('$inputText Item 2');
@@ -106,70 +113,58 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 top: 16,
                 bottom: 16,
               ),
-              // TextFieldSearch(
-              //   label: AppStrings.nameOfGamer,
-              //   controller: widget.textEditingController,
-              //   decoration: InputDecoration(
-              //     contentPadding: const EdgeInsets.symmetric(
-              //       horizontal: 8,
-              //     ),
-              //     focusedBorder: OutlineInputBorder(
-              //       borderSide: BorderSide(
-              //         color: MafiaTheme.themeData.colorScheme.secondary,
-              //       ),
-              //     ),
-              //     enabledBorder: OutlineInputBorder(
-              //       borderSide: BorderSide(
-              //         color: MafiaTheme.themeData.colorScheme.secondary,
-              //       ),
-              //     ),
-              //   ),
-              //   textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              //   scrollbarDecoration: ScrollbarDecoration(
-              //     controller: ScrollController(),
-              //     theme: ScrollbarThemeData(
-              //       radius: const Radius.circular(30.0),
-              //       thickness: MaterialStateProperty.all(20.0),
-              //       thumbVisibility: MaterialStateProperty.all(true),
-              //       trackColor: MaterialStateProperty.all(Colors.blue),
-              //       thumbColor: MaterialStateProperty.all(Colors.cyan),
-              //     ),
-              //   ),
-              //   future: () {
-              //     print('fetchData ${fetchData()}');
-              //     return fetchData();
-              //   },
-              // ),
-
-              TextFormField(
+              TypeAheadField<Gamer>(
                 controller: widget.textEditingController,
-                style: MafiaTheme.themeData.textTheme.headlineSmall,
-                keyboardType: TextInputType.emailAddress,
-                autofocus: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                  ),
-                  labelText: AppStrings.nameOfGamer,
-                  labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
+                suggestionsCallback: (String search) async {
+                  final List<Gamer> gamers = await FirestoreService().getGamers(search);
+                  print(' Gamers name ${gamers.map((Gamer gamer) => gamer.name).toList()}');
+                  return gamers;
+                },
+                hideOnEmpty: true,
+                builder: (
+                  BuildContext context,
+                  TextEditingController controller,
+                  FocusNode focusNode,
+                ) =>
+                    TextField(
+                  controller: widget.textEditingController,
+                  focusNode: focusNode,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
                     ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
                     ),
                   ),
                 ),
-                onChanged: (String value) {
-                  // Handle onChanged event
+                decorationBuilder: (BuildContext context, Widget child) =>
+                    Material(
+                  color: MafiaTheme.themeData.colorScheme.secondary
+                      .withOpacity(0.8),
+                  type: MaterialType.card,
+                  elevation: 4,
+                  borderRadius: BorderRadius.circular(10),
+                  child: child,
+                ),
+                itemBuilder: (
+                  BuildContext context,
+                  Gamer? gamer,
+                ) {
+                  if(widget.textEditingController.text.isEmpty) {
+                    return Container();
+                  }
+                  return ListTile(
+                  title: Text(gamer?.name ?? '1'),
+                  textColor: Colors.white,
+                );
                 },
-                onSaved: (String? value) {
-                  // Handle onSaved event
+                onSelected: (Gamer? gamer) {
+                  widget.textEditingController.text = gamer!.name!;
                 },
-                validator: Validator.validateText,
               ),
               DropdownButtonFormField2<Role>(
                 isExpanded: true,
