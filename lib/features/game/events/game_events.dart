@@ -338,9 +338,10 @@ class CleanGamers extends GameEvent {
 
 class UpdateGamer extends GameEvent {
   final Gamer gamer;
+  final bool isGamerExist;
 
-  const UpdateGamer({required this.gamer});
+  const UpdateGamer({required this.gamer, this.isGamerExist = false});
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[gamer, isGamerExist];
 }

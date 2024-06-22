@@ -4,12 +4,14 @@ class ImagePickerSheet extends StatefulWidget {
   final TextEditingController textEditingController;
   final ValueChanged<File?> onImageChanged;
   final ValueChanged<Role?> onRoleChanged;
+  final ValueChanged<Gamer?>? gamerChosenFromFirebase;
 
   const ImagePickerSheet({
     super.key,
     required this.textEditingController,
     required this.onImageChanged,
     required this.onRoleChanged,
+    this.gamerChosenFromFirebase,
   });
 
   @override
@@ -20,7 +22,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
   File? image;
   Role? selectedRole;
   final ImagePicker picker = ImagePicker();
-  final List<String> list = <String>[];
+  late String imageUrl = '';
 
   Future<void> getImageFromGallery() async {
     final XFile? pickedFile =
@@ -46,32 +48,12 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    list.add('Item 1');
-    list.add('Item 2');
-    list.add(' Item 3');
-  }
-
-  Future<List<String>> fetchData() async {
-    await Future.delayed(
-      const Duration(
-        milliseconds: 1000,
-      ),
-    );
-    final List<String> list = <String>[];
-    final String inputText = widget.textEditingController.text;
-    list.add('$inputText Item 1');
-    list.add('$inputText Item 2');
-    list.add('$inputText Item 3');
-    return list;
-  }
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
           final Roles roles = state.gamersState.roles;
+          print("imageUrl $imageUrl");
           return Column(
             children: <Widget>[
               Stack(
@@ -80,18 +62,23 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     radius: 90,
                     child: ClipOval(
                       child: image == null
-                          ? const Image(
+                          ? imageUrl.isEmpty ?const Image(
                               image: AssetImage('assets/mafioz.jpg'),
                               fit: BoxFit.fill,
                               width: 192,
                               height: 180,
                             )
-                          : Image.file(
-                              image!,
+                          :Image.network(
+                              imageUrl,
                               fit: BoxFit.fill,
                               width: 192,
                               height: 180,
-                            ),
+                            ): Image.file(
+                        image!,
+                        fit: BoxFit.fill,
+                        width: 192,
+                        height: 180,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -164,6 +151,11 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 },
                 onSelected: (Gamer? gamer) {
                   widget.textEditingController.text = gamer!.name!;
+                  setState(() {
+                    print('gamer.imageUrl ${gamer.imageUrl}');
+                    imageUrl = gamer.imageUrl!;
+                  });
+                  widget.gamerChosenFromFirebase!(gamer);
                 },
               ),
               DropdownButtonFormField2<Role>(

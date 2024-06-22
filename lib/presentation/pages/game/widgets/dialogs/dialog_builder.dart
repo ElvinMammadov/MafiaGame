@@ -15,6 +15,7 @@ class DialogBuilder {
     final FirestoreService firestoreService = FirestoreService();
     File? imageFile;
     Role? newRole = role;
+    Gamer? chosenGamer;
     WoltModalSheet.show<void>(
       context: context,
       pageListBuilder: (BuildContext modalSheetContext) =>
@@ -31,30 +32,49 @@ class DialogBuilder {
               enabled: isEnabled,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
               action: () async {
-                final String gamerId = UniqueKey().toString();
-                final String imageUrl =
-                    await firestoreService.uploadImageToFirebaseStorage(
-                  imageFile == null
-                      ? await getImageFileFromAssets('mafioz.jpg')
-                      : imageFile!,
-                  gamerId,
-                );
-                BlocProvider.of<GameBloc>(context).add(
-                  UpdateGamer(
-                    gamer: Gamer(
-                      name: textEditingController.text,
-                      id: id,
-                      gamerId: gamerId,
-                      imageUrl: imageUrl,
-                      role: newRole,
-                      isNameChanged: true,
-                      // roleCounts:  <String, int>{
-                      //   newRole!.roleId.toString(): 1,
-                      // },
+                if(chosenGamer != null) {
+                  BlocProvider.of<GameBloc>(context).add(
+                    UpdateGamer(
+                      isGamerExist: true,
+                      gamer: Gamer(
+                        name: chosenGamer!.name,
+                        id: id,
+                        gamerId: chosenGamer!.gamerId,
+                        imageUrl: chosenGamer!.imageUrl,
+                        isNameChanged: true,
+                        // roleCounts:  <String, int>{
+                        //   newRole!.roleId.toString(): 1,
+                        // },
+                      ),
                     ),
-                  ),
-                );
-                Navigator.of(context).pop();
+                  );
+                  Navigator.of(context).pop();
+                  return;
+                }else{
+                  final String gamerId = UniqueKey().toString();
+                  final String imageUrl =
+                  await firestoreService.uploadImageToFirebaseStorage(
+                    imageFile == null
+                        ? await getImageFileFromAssets('mafioz.jpg')
+                        : imageFile!,
+                    gamerId,
+                  );
+
+                  BlocProvider.of<GameBloc>(context).add(
+                    UpdateGamer(
+                      gamer: Gamer(
+                        name: textEditingController.text,
+                        id: id,
+                        gamerId: gamerId,
+                        imageUrl: imageUrl,
+                        isNameChanged: true,
+                      ),
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                }
+
+
               },
             ),
           ),
@@ -84,6 +104,9 @@ class DialogBuilder {
               print("updatedRole: $updatedRole");
               newRole = updatedRole;
             },
+              gamerChosenFromFirebase: (Gamer? gamer) {
+                chosenGamer = gamer;
+              },
           ),
         ),
       ],

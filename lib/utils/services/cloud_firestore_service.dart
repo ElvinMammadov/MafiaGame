@@ -120,13 +120,9 @@ class FirestoreService {
     Gamer newGamer = const Gamer.empty();
     await _gamersCollection.doc(gamer.name).set(<String, dynamic>{
       'name': gamer.name,
-      'role': gamer.role?.name,
-      'roleId': gamer.role?.roleId,
-      'id': gamer.id,
       'gamerId': gamer.gamerId,
       'gamerCreatedTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
       "imageUrl": gamer.imageUrl,
-      'roleCounts': gamer.roleCounts,
     });
     final DocumentReference<Object?> docRef = _gamersCollection.doc(gamer.name);
     docRef.get().then(
@@ -134,15 +130,10 @@ class FirestoreService {
         final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
         newGamer = Gamer(
           name: data['name'] as String,
-          role: gamer.role,
           gamerId: data['gamerId'] as String,
           gamerCreated: data['gamerCreatedTime'] as String,
           // documentId: documentReference.id,
         );
-        // print("New Gamer: ${newGamer}");
-        // print("Document data: ${data['name']}, gamerId: ${data['gamerId']},"
-        //     " gamerCreated: ${data['gamerCreated']},"
-        //     " ImageUrl: ${data['imageUrl']}, role: ${data['role']}");
       },
       onError: (e) => print("Error getting document: $e"),
     );

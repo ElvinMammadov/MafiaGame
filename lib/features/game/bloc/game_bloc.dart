@@ -475,12 +475,11 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         );
 
         try {
-          final Gamer? gamer =
+          if(!event.isGamerExist) {
+            print('Adding gamer to Firebase: ${event.gamer}');
               await gameRepository.addGamer(updatedGamersList[index]);
-
-          if (gamer != null) {
-            // print('Result is : ${gamer}}');
           }
+
         } catch (e) {
           print('Error updating gamer name: $e');
         }
