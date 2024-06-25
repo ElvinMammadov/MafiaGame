@@ -9,20 +9,20 @@ class Roles extends Equatable {
   const Roles.empty()
       : this(
           roles: const <Role>[
-            Doctor.empty(),
-            Mafia.empty(),
-            Don.empty(),
-            Sheriff.empty(),
-            Madam.empty(),
-            Killer.empty(),
-            Werewolf.empty(),
-            Virus.empty(),
-            Advokat.empty(),
-            Security.empty(),
-            Mirniy.empty(),
-            Medium.empty(),
             Chameleon.empty(),
+            Don.empty(),
+            Mafia.empty(),
+            Madam.empty(),
+            Sheriff.empty(),
+            Doctor.empty(),
+            Advokat.empty(),
+            Killer.empty(),
             Boomerang.empty(),
+            Werewolf.empty(),
+            Medium.empty(),
+            Security.empty(),
+            Virus.empty(),
+            Mirniy.empty(),
           ],
         );
 

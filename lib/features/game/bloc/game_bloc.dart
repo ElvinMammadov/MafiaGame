@@ -453,6 +453,35 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       },
     );
 
+    on<AddRoleToGamer>((AddRoleToGamer event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.gamerId == event.targetedGamer.gamerId) {
+              return gamer.copyWith(
+                role: event.targetedGamer.role,
+                isRoleGiven: true,
+              );
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      print('roles: ${appState.gamersState.gamers.map(
+        (Gamer gamer) => gamer.role,
+      )}');
+      emit(appState);
+    });
+
+    on<ChangeRoleIndex>((ChangeRoleIndex event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          roleIndex: event.roleIndex,
+        ),
+      );
+      emit(appState);
+    });
+
     on<UpdateGamer>((UpdateGamer event, Emitter<AppState> emit) async {
       final int index = state.gamersState.gamers.indexWhere(
         (Gamer gamer) => gamer.id == event.gamer.id,
@@ -475,11 +504,10 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         );
 
         try {
-          if(!event.isGamerExist) {
+          if (!event.isGamerExist) {
             print('Adding gamer to Firebase: ${event.gamer}');
-              await gameRepository.addGamer(updatedGamersList[index]);
+            await gameRepository.addGamer(updatedGamersList[index]);
           }
-
         } catch (e) {
           print('Error updating gamer name: $e');
         }
@@ -488,7 +516,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             state.gamersState.copyWith(gamers: updatedGamersList);
         final AppState updatedAppState =
             state.copyWith(gamers: updatedGamersState);
-
         emit(updatedAppState);
       } else {
         emit(state);

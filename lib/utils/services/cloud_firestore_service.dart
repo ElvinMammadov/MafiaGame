@@ -158,6 +158,7 @@ class FirestoreService {
           name: data['name'] as String,
           id: data['id'] as int,
           imageUrl: data['imageUrl'] as String,
+          gamerId: data['gamerId'] as String,
         );
       }).toList();
 

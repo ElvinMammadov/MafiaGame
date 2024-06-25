@@ -14,6 +14,7 @@ class CircleAvatarWidget extends StatefulWidget {
 class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   late List<Widget> positionedAvatars = <Widget>[];
   bool allNamesChanged = false;
+  int currentRoleIndex = 0;
 
   void addGamers(Roles roles, int numberOfGamers) {
     for (int i = 0; i < numberOfGamers; i++) {
@@ -23,8 +24,34 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             name: AppStrings.gamer,
             id: i + 1,
             positionOnTable: i + 1,
-            role: roles.roles[10],
+            role: roles.roles[13],
           ),
+        ),
+      );
+    }
+  }
+
+  void changeRole(Gamer gamer) {
+    final Roles gamerRoles =
+        BlocProvider.of<GameBloc>(context).state.gamersState.roles;
+    final int roleIndex =
+        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+    BlocProvider.of<GameBloc>(context).add(
+      AddRoleToGamer(
+        targetedGamer: Gamer(
+          gamerId: gamer.gamerId,
+          role: Role(
+            roleId: gamerRoles.roles[roleIndex].roleId,
+            name: gamerRoles.roles[roleIndex].name,
+          ),
+          isRoleGiven: true,
+        ),
+      ),
+    );
+    if (roleIndex < gamerRoles.roles.length - 1 && roleIndex != 2) {
+      BlocProvider.of<GameBloc>(context).add(
+        ChangeRoleIndex(
+          roleIndex: roleIndex + 1,
         ),
       );
     }
@@ -64,8 +91,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             final int numberOfGamers = state.game.numberOfGamers;
             final bool isGameStarted = state.game.isGameStarted;
             final bool isVotingStarted = state.game.isVotingStarted;
-            // logger.log('mafia counts are ${state.game.mafiaCount}, '
-            //     'civilian counts are ${state.game.civilianCount}');
+            final bool isGameCouldStart = state.game.isGameCouldStart;
             isAllGamersNameChanged(gamers);
             if (gamers.isNotEmpty) {
               return SizedBox.expand(
@@ -82,6 +108,8 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                       context: context,
                       isVotingStarted: isVotingStarted,
                       orientation: orientation,
+                      isGameCouldStart: isGameCouldStart,
+                      changeRole: changeRole,
                     ),
                   ),
                 ),

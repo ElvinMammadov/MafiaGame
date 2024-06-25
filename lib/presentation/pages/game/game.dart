@@ -48,3 +48,4 @@ part 'widgets/functional_drop_down_button.dart';
 part 'widgets/dialogs/killed_gamers_at_night_bottom_sheet.dart';
 part 'widgets/dialogs/show_results.dart';
 part 'widgets/games_results.dart';
+part 'widgets/roles_changer.dart';

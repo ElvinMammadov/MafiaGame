@@ -85,5 +85,8 @@ class AppStrings {
   static const String choose = 'Выбрать';
   static const String chooseDate = 'Выберите дату';
   static const String doesNotHaveGame = 'На данный день отсутствуют игры';
+  static const String chooseRole = 'Выберите ';
+  static const String next = 'Далее';
+  static const String back = 'Назад';
 
 }

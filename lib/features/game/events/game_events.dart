@@ -161,6 +161,32 @@ class CleanGamersAfterNight extends GameEvent {
   List<Object?> get props => <Object?>[gamers];
 }
 
+class AddRoleToGamer extends GameEvent {
+  final Gamer targetedGamer;
+
+  const AddRoleToGamer({
+    required this.targetedGamer,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+    targetedGamer,
+  ];
+}
+
+class ChangeRoleIndex extends GameEvent {
+  final int roleIndex;
+
+  const ChangeRoleIndex({
+    required this.roleIndex,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+    roleIndex,
+  ];
+}
+
 class SecureGamer extends GameEvent {
   final Gamer targetedGamer;
   final int gamerId;

@@ -10,6 +10,8 @@ List<Widget> gamersAvatars({
   required BuildContext context,
   required bool isVotingStarted,
   required Orientation orientation,
+  required bool isGameCouldStart,
+  Function(Gamer)? changeRole,
 }) {
   final double screenWidth = MediaQuery.of(context).size.width;
   final double screenHeight = MediaQuery.of(context).size.height;
@@ -78,53 +80,63 @@ List<Widget> gamersAvatars({
                           color: Colors.transparent,
                           child: GestureDetector(
                             onTap: () {
-                              isGameStarted
-                                  ? showAddFunctionality(
-                                      context,
-                                      isVotingStarted: isVotingStarted,
-                                      gamerId: gamers[i].id ?? 0,
-                                      roleId: gamers[i].role?.roleId ?? 0,
-                                      nightNumber:
-                                          BlocProvider.of<GameBloc>(context)
-                                              .state
-                                              .game
-                                              .nightNumber,
-                                    )
-                                  : DialogBuilder().showAddUserModal(
-                                      context,
-                                      gamers[i].id ?? 0,
-                                      roles.roles[10],
-                                    );
+                              isGameCouldStart
+                                  ? changeRole!(gamers[i])
+                                  : isGameStarted
+                                      ? showAddFunctionality(
+                                          context,
+                                          isVotingStarted: isVotingStarted,
+                                          gamerId: gamers[i].id ?? 0,
+                                          roleId: gamers[i].role?.roleId ?? 0,
+                                          nightNumber:
+                                              BlocProvider.of<GameBloc>(context)
+                                                  .state
+                                                  .game
+                                                  .nightNumber,
+                                        )
+                                      : DialogBuilder().showAddUserModal(
+                                          context,
+                                          gamers[i].id ?? 0,
+                                          roles.roles[13],
+                                        );
                               // DialogBuilder().showPlayGame(context);
                             },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: showRoles == true
-                                  ? Center(
-                                      child: Text(
-                                        gamers[i].role != null
-                                            ? '${gamers[i].role?.name}'
-                                            : roles.roles[10].name,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                            child: AvatarGlow(
+                              glowColor: isGameCouldStart
+                                  ? MafiaTheme.themeData.colorScheme.secondary
+                                  : Colors.transparent,
+                              startDelay: const Duration(seconds: 1),
+                              animate:
+                              !gamers[i].isRoleGiven! && isGameCouldStart,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: showRoles == true
+                                    ? Center(
+                                        child: Text(
+                                          gamers[i].role != null
+                                              ? '${gamers[i].role?.name}'
+                                              : roles.roles[13].name,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : gamers[i].imageUrl!.isEmpty
-                                      ? Icon(
-                                          Icons.person_add_rounded,
-                                          size: iconSize,
-                                          color: MafiaTheme
-                                              .themeData.colorScheme.secondary,
-                                        )
-                                      : Image.network(
-                                          gamers[i].imageUrl!,
-                                          fit: BoxFit.fill,
-                                          width: sizeBoxSize,
-                                          height: sizeBoxSize,
-                                        ),
+                                      )
+                                    : gamers[i].imageUrl!.isEmpty
+                                        ? Icon(
+                                            Icons.person_add_rounded,
+                                            size: iconSize,
+                                            color: MafiaTheme.themeData
+                                                .colorScheme.secondary,
+                                          )
+                                        : Image.network(
+                                            gamers[i].imageUrl!,
+                                            fit: BoxFit.fill,
+                                            width: sizeBoxSize,
+                                            height: sizeBoxSize,
+                                          ),
+                              ),
                             ),
                           ),
                         ),

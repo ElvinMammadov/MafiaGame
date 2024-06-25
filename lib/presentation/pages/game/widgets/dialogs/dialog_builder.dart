@@ -42,6 +42,7 @@ class DialogBuilder {
                         gamerId: chosenGamer!.gamerId,
                         imageUrl: chosenGamer!.imageUrl,
                         isNameChanged: true,
+                        role: newRole,
                         // roleCounts:  <String, int>{
                         //   newRole!.roleId.toString(): 1,
                         // },
@@ -68,13 +69,12 @@ class DialogBuilder {
                         gamerId: gamerId,
                         imageUrl: imageUrl,
                         isNameChanged: true,
+                        role: newRole,
                       ),
                     ),
                   );
                   Navigator.of(context).pop();
                 }
-
-
               },
             ),
           ),
@@ -101,7 +101,6 @@ class DialogBuilder {
               imageFile = file;
             },
             onRoleChanged: (Role? updatedRole) {
-              print("updatedRole: $updatedRole");
               newRole = updatedRole;
             },
               gamerChosenFromFirebase: (Gamer? gamer) {

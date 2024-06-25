@@ -53,7 +53,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
           final Roles roles = state.gamersState.roles;
-          print("imageUrl $imageUrl");
           return Column(
             children: <Widget>[
               Stack(
@@ -104,7 +103,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 controller: widget.textEditingController,
                 suggestionsCallback: (String search) async {
                   final List<Gamer> gamers = await FirestoreService().getGamers(search);
-                  print(' Gamers name ${gamers.map((Gamer gamer) => gamer.name).toList()}');
                   return gamers;
                 },
                 hideOnEmpty: true,
@@ -152,7 +150,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 onSelected: (Gamer? gamer) {
                   widget.textEditingController.text = gamer!.name!;
                   setState(() {
-                    print('gamer.imageUrl ${gamer.imageUrl}');
                     imageUrl = gamer.imageUrl!;
                   });
                   widget.gamerChosenFromFirebase!(gamer);

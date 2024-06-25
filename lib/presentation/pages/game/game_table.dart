@@ -31,18 +31,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final List<Gamer> killedGamers = <Gamer>[];
           final int mafiaCount = state.game.mafiaCount;
           final int civilianCount = state.game.civilianCount;
-          // final List<Gamer> mafia = gamers
-          //     .where(
-          //       (Gamer gamer) =>
-          //           gamer.role?.roleId == 2 || gamer.role?.roleId == 3,
-          //     )
-          //     .toList();
-          // final List<Gamer> citizens = gamers
-          //     .where(
-          //       (Gamer gamer) =>
-          //           gamer.role?.roleId != 2 || gamer.role?.roleId != 3,
-          //     )
-          //     .toList();
 
           const double buttonLeftPercentage = 0.07;
           const double buttonBottomPercentage = 0.02;
@@ -260,6 +248,13 @@ class _GameTableScreenState extends State<GameTableScreen> {
                           },
                         ),
                       ),
+                    if(isGameCouldStart && !isGameStarted)
+                      Positioned(
+                        left: screenWidth/3,
+                        bottom: screenHeight/3.3,
+                        child: const RolesChanger(),
+                      ),
+
                     Positioned(
                       left: screenWidth * buttonLeftPercentage,
                       top: screenHeight * roundButtonBottomPercentage,
