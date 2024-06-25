@@ -143,14 +143,20 @@ class FirestoreService {
 
   Future<List<Gamer>> getGamers(String search) async {
     try {
-      final String endString = search + '\uf8ff';
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await FirebaseFirestore.instance
-          .collection('gamers')
-          .where('name', isGreaterThanOrEqualTo: search)
-          .where('name', isLessThanOrEqualTo: endString)
-          .get();
-
+      QuerySnapshot<Map<String, dynamic>> querySnapshot;
+      if (search.isEmpty) {
+        querySnapshot = await FirebaseFirestore.instance
+            .collection('gamers')
+            .limit(10)
+            .get();
+      } else {
+        final String endString = search + '\uf8ff';
+        querySnapshot = await FirebaseFirestore.instance
+            .collection('gamers')
+            .where('name', isGreaterThanOrEqualTo: search)
+            .where('name', isLessThanOrEqualTo: endString)
+            .get();
+      }
       final List<Gamer> gamers = querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
         final Map<String, dynamic> data = doc.data();
@@ -159,6 +165,7 @@ class FirestoreService {
           id: data['id'] as int,
           imageUrl: data['imageUrl'] as String,
           gamerId: data['gamerId'] as String,
+          gamerCreated: data['gamerCreatedTime'] as String
         );
       }).toList();
 
@@ -168,7 +175,6 @@ class FirestoreService {
       return <Gamer>[];
     }
   }
-
 
   // Future<void> updateGamer(Gamer gamer) =>
   //     _gamersCollection.doc(gamer.id).update(<Object, Object?>{
