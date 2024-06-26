@@ -48,7 +48,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
@@ -61,23 +60,25 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     radius: 90,
                     child: ClipOval(
                       child: image == null
-                          ? imageUrl.isEmpty ?const Image(
-                              image: AssetImage('assets/mafioz.jpg'),
+                          ? imageUrl.isEmpty
+                              ? const Image(
+                                  image: AssetImage('assets/mafioz.jpg'),
+                                  fit: BoxFit.fill,
+                                  width: 192,
+                                  height: 180,
+                                )
+                              : Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.fill,
+                                  width: 192,
+                                  height: 180,
+                                )
+                          : Image.file(
+                              image!,
                               fit: BoxFit.fill,
                               width: 192,
                               height: 180,
-                            )
-                          :Image.network(
-                              imageUrl,
-                              fit: BoxFit.fill,
-                              width: 192,
-                              height: 180,
-                            ): Image.file(
-                        image!,
-                        fit: BoxFit.fill,
-                        width: 192,
-                        height: 180,
-                      ),
+                            ),
                     ),
                   ),
                   Positioned(
@@ -102,7 +103,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
               TypeAheadField<Gamer>(
                 controller: widget.textEditingController,
                 suggestionsCallback: (String search) async {
-                  final List<Gamer> gamers = await FirestoreService().getGamers(search);
+                  final List<Gamer> gamers =
+                      await FirestoreService().getGamers(search);
                   return gamers;
                 },
                 hideOnEmpty: true,
@@ -139,13 +141,13 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   BuildContext context,
                   Gamer? gamer,
                 ) {
-                  if(widget.textEditingController.text.isEmpty) {
+                  if (widget.textEditingController.text.isEmpty) {
                     return Container();
                   }
                   return ListTile(
-                  title: Text(gamer?.name ?? '1'),
-                  textColor: Colors.white,
-                );
+                    title: Text(gamer?.name ?? '1'),
+                    textColor: Colors.white,
+                  );
                 },
                 onSelected: (Gamer? gamer) {
                   widget.textEditingController.text = gamer!.name!;

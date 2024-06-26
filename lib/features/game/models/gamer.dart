@@ -28,6 +28,7 @@ class Gamer extends Equatable {
   final bool canTarget;
   final bool killSecurity;
   final Map<String, int> roleCounts;
+  final bool isAnimated;
 
   const Gamer({
     this.name = '',
@@ -55,6 +56,7 @@ class Gamer extends Equatable {
     this.targetId = 0,
     this.canTarget = true,
     this.killSecurity = false,
+    this.isAnimated = true,
     this.roleCounts = const <String, int>{
       '1': 0,
       '2': 0,
@@ -99,6 +101,7 @@ class Gamer extends Equatable {
         targetId = 0,
         canTarget = true,
         killSecurity = false,
+        isAnimated = true,
         roleCounts = const <String, int>{
           '1': 0,
           '2': 0,
@@ -144,6 +147,7 @@ class Gamer extends Equatable {
     bool? canTarget,
     bool? killSecurity,
     Map<String, int>? roleCounts,
+    bool? isAnimated,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -172,6 +176,7 @@ class Gamer extends Equatable {
         killSecurity: killSecurity ?? this.killSecurity,
         roleCounts: roleCounts ?? this.roleCounts,
         isRoleGiven: isRoleGiven ?? this.isRoleGiven,
+        isAnimated: isAnimated ?? this.isAnimated,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -206,6 +211,7 @@ class Gamer extends Equatable {
         killSecurity,
         roleCounts,
         isRoleGiven,
+        isAnimated,
       ];
 
   @override
@@ -225,5 +231,6 @@ class Gamer extends Equatable {
       'wasKilledBySheriff: $wasKilledBySheriff,'
       ' wasBumeranged: $wasBoomeranged, wasSecured: $wasSecured, '
       'targetId: $targetId, canTarget: $canTarget, killSecurity: $killSecurity'
-      ' roleCounts: $roleCounts, isRoleGiven: $isRoleGiven}';
+      ' roleCounts: $roleCounts, isRoleGiven: '
+      '$isRoleGiven, isAnimated: $isAnimated}';
 }

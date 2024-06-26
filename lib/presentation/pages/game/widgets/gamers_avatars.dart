@@ -68,77 +68,17 @@ List<Widget> gamersAvatars({
                       SizedBox(
                         width: sizeBoxSize,
                         height: sizeBoxSize,
-                        child: Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: MafiaTheme.themeData.colorScheme.secondary,
-                              width: 2,
-                            ),
-                          ),
-                          color: Colors.transparent,
-                          child: GestureDetector(
-                            onTap: () {
-                              isGameCouldStart
-                                  ? changeRole!(gamers[i])
-                                  : isGameStarted
-                                      ? showAddFunctionality(
-                                          context,
-                                          isVotingStarted: isVotingStarted,
-                                          gamerId: gamers[i].id ?? 0,
-                                          roleId: gamers[i].role?.roleId ?? 0,
-                                          nightNumber:
-                                              BlocProvider.of<GameBloc>(context)
-                                                  .state
-                                                  .game
-                                                  .nightNumber,
-                                        )
-                                      : DialogBuilder().showAddUserModal(
-                                          context,
-                                          gamers[i].id ?? 0,
-                                          roles.roles[13],
-                                        );
-                              // DialogBuilder().showPlayGame(context);
-                            },
-                            child: AvatarGlow(
-                              glowColor: isGameCouldStart
-                                  ? MafiaTheme.themeData.colorScheme.secondary
-                                  : Colors.transparent,
-                              startDelay: const Duration(seconds: 1),
-                              animate:
-                              !gamers[i].isRoleGiven! && isGameCouldStart,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: showRoles == true
-                                    ? Center(
-                                        child: Text(
-                                          gamers[i].role != null
-                                              ? '${gamers[i].role?.name}'
-                                              : roles.roles[13].name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      )
-                                    : gamers[i].imageUrl!.isEmpty
-                                        ? Icon(
-                                            Icons.person_add_rounded,
-                                            size: iconSize,
-                                            color: MafiaTheme.themeData
-                                                .colorScheme.secondary,
-                                          )
-                                        : Image.network(
-                                            gamers[i].imageUrl!,
-                                            fit: BoxFit.fill,
-                                            width: sizeBoxSize,
-                                            height: sizeBoxSize,
-                                          ),
-                              ),
-                            ),
-                          ),
+                        child: BlinkingAvatar(
+                          showRoles: showRoles,
+                          gamers: gamers,
+                          index: i,
+                          iconSize: iconSize,
+                          sizeBoxSize: sizeBoxSize,
+                          roles: roles,
+                          isGameCouldStart: isGameCouldStart,
+                          changeRole: changeRole,
+                          isGameStarted: isGameStarted,
+                          isVotingStarted: isVotingStarted,
                         ),
                       ),
                       if (gamers[i].foulCount >= 1)

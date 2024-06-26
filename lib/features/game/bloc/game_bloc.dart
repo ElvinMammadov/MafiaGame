@@ -521,5 +521,32 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         emit(state);
       }
     });
+
+    on<ChangeAnimation>((ChangeAnimation event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.gamerId == event.gamerId) {
+              return gamer.copyWith(isAnimated: false);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<UpdateAnimation>((UpdateAnimation event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers
+              .map(
+                (Gamer gamer) => gamer.copyWith(isAnimated: true),
+              )
+              .toList(),
+        ),
+      );
+      emit(appState);
+    });
   }
 }

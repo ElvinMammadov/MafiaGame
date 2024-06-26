@@ -65,7 +65,7 @@ class _GamesScreenState extends State<GamesScreen> {
         //   GetGames(dateTime: DateTime.now()),
         // );
         final List<GameState> games = state.games;
-        logger.log('games from state: ${state.games}, ');
+        // logger.log('games from state: ${state.games}, ');
         return Stack(
           children: <Widget>[
             Positioned(
