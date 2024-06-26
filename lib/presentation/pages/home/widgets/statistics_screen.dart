@@ -10,14 +10,64 @@ class StatisticScreen extends StatefulWidget {
 class _StatisticScreenState extends State<StatisticScreen> {
   final TextEditingController _searchController = TextEditingController();
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<StatisticsBloc>(
-      create: (context) =>
-          StatisticsBloc(StatisticsRepositoryImpl())..add(FetchInitialData()),
-      child: BlocBuilder<StatisticsBloc, StatisticsState>(
-        builder: (context, state) {
-          return Column(
-            children: [
+  Widget build(BuildContext context) => BlocProvider<StatisticsBloc>(
+        create: (BuildContext context) =>
+            StatisticsBloc(StatisticsRepositoryImpl())
+              ..add(GetSearchData(searchQuery: "")),
+        child: BlocBuilder<StatisticsBloc, StatisticsState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.amber,
+                      ),
+                      child: SearchBar(
+                        searchController: _searchController,
+                        context: context,
+                      ),
+                    ),
+         /*            ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(listResult[index].name!),
+                          visualDensity: VisualDensity.comfortable,
+                        );
+                      },
+                      itemCount: listResult.length,
+                    ), */
+                  ],
+                ),
+                Expanded(child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) =>
+                            ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: state.pageList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Gamer gamer = state.pageList[index];
+                        return StatisticsItem(
+                          customImageWidth: 96,
+                          gamer: gamer,
+                        );
+                      },
+                    ),
+                  ),
+                ),)
+              ],
+            );
+          },
+        ),
+/*         child: BlocBuilder<StatisticsBloc, StatisticsState>(
+          builder: (BuildContext context, StatisticsState state) => Column(
+            children: <Widget>[
               Container(
                 margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
@@ -26,82 +76,80 @@ class _StatisticScreenState extends State<StatisticScreen> {
                 ),
                 child: SearchBar(
                   searchController: _searchController,
+                  context: context,
                 ),
               ),
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: state.gamerList.length,
-                        itemBuilder: (context, index) {
-                          final gamer = state.gamerList[index];
-                          return StatisticsItem(
-                            customImageWidth: 96,
-                            gamer: gamer,
-                          );
-                        },
-                      );
-                    },
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) =>
+                            ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: state.gamerList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Gamer gamer = state.gamerList[index];
+                        return StatisticsItem(
+                          customImageWidth: 96,
+                          gamer: gamer,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
             ],
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ), */
+      );
 }
 
 class SearchBar extends StatelessWidget {
   SearchBar({
     super.key,
-    required TextEditingController searchController,
-  }) : _searchController = searchController;
+    required this.searchController,
+    required this.context,
+  });
 
-  final TextEditingController _searchController;
-  // final StatisticsBloc? statisticsBloc;
+  final TextEditingController searchController;
+  final BuildContext context;
   Timer? _debounce;
   @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _searchController,
-      decoration: InputDecoration(
-        hintText: 'Поиск',
-        hintStyle: TextStyle(
+  Widget build(BuildContext context) => TextFormField(
+        controller: searchController,
+        decoration: InputDecoration(
+          hintText: 'Поиск',
+          hintStyle: const TextStyle(
+            color: Colors.black,
+          ),
+          prefixIcon: const Icon(
+            Icons.search,
+            color: Colors.black,
+          ),
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        style: const TextStyle(
           color: Colors.black,
         ),
-        prefixIcon: Icon(
-          Icons.search,
-          color: Colors.black,
-        ),
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      style: const TextStyle(
-        color: Colors.black,
-      ),
-      onChanged: (value) => _onSearchChanged(value),
-      onFieldSubmitted: (query) => _onSearchChanged(query),
-    );
-  }
+        onChanged: (String value) => _onSearchChanged(value),
+        onFieldSubmitted: (String query) => _onSearchChanged(query),
+      );
 
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 200), () {
       if (value.length >= 2) {
-/*         searchBloc.add(
-            // SearchQueryChanged(query: value),
-            ); */
+        BlocProvider.of<StatisticsBloc>(context).add(
+          GetSearchData(searchQuery: value),
+        );
       } else if (value.isEmpty || value == "") {
-/*         searchBloc.add(
-            // ClearSearchResults(),
-            ); */
+        BlocProvider.of<StatisticsBloc>(context).add(
+          ClearSearchResults(),
+        );
       }
     });
   }

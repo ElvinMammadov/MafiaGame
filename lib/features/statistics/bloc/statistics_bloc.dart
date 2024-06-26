@@ -1,18 +1,25 @@
 part of 'bloc.dart';
-class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState>{
+
+class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   final StatisticsRepository statisticsRepository;
 
-  StatisticsBloc( this.statisticsRepository):super(StatisticsState.empty()){
-    on<FetchInitialData>(_getSearchResult);
+  StatisticsBloc(this.statisticsRepository) : super(StatisticsState()) {
+    on<GetSearchData>(_getSearchResult);
     // on<GetSearchResult>(_getSearchResult);
   }
 
-
-  FutureOr<void> _getSearchResult(FetchInitialData event, emit) async{
+  FutureOr<void> _getSearchResult(GetSearchData event, emit) async {
     print("HERE I AM");
-    final List<Gamer> gamers = await statisticsRepository.getGamers("");
-    print(gamers.length);
-    print(gamers[0].id);
-    emit(state.copyWith(gamerList: gamers));
+    try {
+      final List<Gamer> gamers =
+          await statisticsRepository.getGamers(event.searchQuery);
+      emit(
+        state.copyWith(
+          pageList: gamers,
+        ),
+      );
+    } catch (e) {
+      print('Error sending game to Firebase: $e');
+    }
   }
 }
