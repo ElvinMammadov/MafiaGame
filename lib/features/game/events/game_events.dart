@@ -371,3 +371,22 @@ class UpdateGamer extends GameEvent {
   @override
   List<Object?> get props => <Object?>[gamer, isGamerExist];
 }
+
+class ChangeAnimation extends GameEvent {
+  final String gamerId;
+
+  const ChangeAnimation({
+    required this.gamerId,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[gamerId];
+}
+
+class UpdateAnimation extends GameEvent {
+
+  const UpdateAnimation();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}

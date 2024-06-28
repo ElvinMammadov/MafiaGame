@@ -2,16 +2,15 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
-    if (this.startsWith('http') || this.startsWith("https")) {
+    if (startsWith('http') || this.startsWith("https")) {
       return ImageType.network;
-    } else if (this.endsWith(".svg")) {
+    } else if (endsWith(".svg")) {
       return ImageType.svg;
-    } else if (this.startsWith("file://")) {
+    } else if (startsWith("file://")) {
       return ImageType.file;
     } else {
       ImageType.png;
@@ -23,7 +22,7 @@ extension ImageTypeExtension on String {
 enum ImageType { svg, png, network, file, unknown }
 
 class CustomImageView extends StatelessWidget {
-  CustomImageView(
+  const CustomImageView(
       {required this.imagePath,
       this.height,
       this.width,
@@ -35,42 +34,38 @@ class CustomImageView extends StatelessWidget {
       this.margin,
       this.border,
       this.placeHolder = 'assets/images/image_not_found.png',
-      this.gap = 8});
+      this.gap = 8,});
 
-  String imagePath;
-  double? height;
-  double? width;
-  Color? color;
-  BoxFit? fit;
+  final String imagePath;
+  final double? height;
+  final double? width;
+  final Color? color;
+  final BoxFit? fit;
   final String placeHolder;
-  Alignment? alignment;
-  VoidCallback? onTap;
-  EdgeInsetsGeometry? margin;
-  BorderRadius? radius;
-  BoxBorder? border;
-  double gap;
+  final Alignment? alignment;
+  final VoidCallback? onTap;
+  final EdgeInsetsGeometry? margin;
+  final BorderRadius? radius;
+  final BoxBorder? border;
+  final double gap;
 
   @override
-  Widget build(BuildContext context) {
-    return alignment != null
-        ? Align(
-            alignment: alignment!,
-            child: _buildWidget(),
-          )
-        : _buildWidget();
-  }
+  Widget build(BuildContext context) => alignment != null
+      ? Align(
+          alignment: alignment!,
+          child: _buildWidget(),
+        )
+      : _buildWidget();
 
-  Widget _buildWidget() {
-    return Padding(
-      padding: margin ?? EdgeInsets.zero,
-      child: InkWell(
-        onTap: onTap,
-        child: _buildCircleImage(),
-      ),
-    );
-  }
+  Widget _buildWidget() => Padding(
+        padding: margin ?? EdgeInsets.zero,
+        child: InkWell(
+          onTap: onTap,
+          child: _buildCircleImage(),
+        ),
+      );
 
-  _buildCircleImage() {
+  Widget _buildCircleImage() {
     if (radius != null) {
       return ClipRRect(
         borderRadius: radius ?? BorderRadius.zero,
@@ -81,7 +76,7 @@ class CustomImageView extends StatelessWidget {
     }
   }
 
- Widget _buildImageWithBorder() {
+  Widget _buildImageWithBorder() {
     if (border != null) {
       return Container(
         decoration: BoxDecoration(
@@ -91,7 +86,8 @@ class CustomImageView extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(gap),
           child: ClipRRect(
-            borderRadius: radius?.subtract(BorderRadius.circular(gap)) ?? BorderRadius.zero,
+            borderRadius: radius?.subtract(BorderRadius.circular(gap)) ??
+                BorderRadius.zero,
             child: _buildImageView(),
           ),
         ),
@@ -101,7 +97,7 @@ class CustomImageView extends StatelessWidget {
     }
   }
 
-  _buildImageView() {
+  Widget _buildImageView() {
     switch (imagePath.imageType) {
       case ImageType.svg:
         return Container(
@@ -112,9 +108,11 @@ class CustomImageView extends StatelessWidget {
             height: height,
             width: width,
             fit: fit ?? BoxFit.contain,
-            colorFilter: this.color != null
+            colorFilter: color != null
                 ? ColorFilter.mode(
-                    this.color ?? Colors.transparent, BlendMode.srcIn)
+                    color ?? Colors.transparent,
+                    BlendMode.srcIn,
+                  )
                 : null,
           ),
         );
@@ -133,7 +131,7 @@ class CustomImageView extends StatelessWidget {
           width: width,
           fit: fit,
           color: color,
-          placeholder: (context, url) => Container(
+          placeholder: (BuildContext context, String url) => Container(
             height: 30,
             width: 30,
             child: LinearProgressIndicator(
@@ -141,7 +139,8 @@ class CustomImageView extends StatelessWidget {
               backgroundColor: Colors.grey.shade100,
             ),
           ),
-          errorWidget: (context, url, error) => Image.asset(
+          errorWidget: (BuildContext context, String url, Object error) =>
+              Image.asset(
             placeHolder,
             height: height,
             width: width,

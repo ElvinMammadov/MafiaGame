@@ -9,29 +9,29 @@ class StatisticScreen extends StatefulWidget {
 
 class _StatisticScreenState extends State<StatisticScreen> {
   final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) => BlocProvider<StatisticsBloc>(
         create: (BuildContext context) =>
             StatisticsBloc(StatisticsRepositoryImpl())
               ..add(GetSearchData(searchQuery: "")),
         child: BlocBuilder<StatisticsBloc, StatisticsState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.amber,
-                      ),
-                      child: SearchBar(
-                        searchController: _searchController,
-                        context: context,
-                      ),
+          builder: (BuildContext context, StatisticsState state) => Column(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.transparent,
                     ),
-         /*            ListView.builder(
+                    child: SearchBar(
+                      searchController: _searchController,
+                      context: context,
+                    ),
+                  ),
+                  /*            ListView.builder(
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return ListTile(
@@ -41,9 +41,10 @@ class _StatisticScreenState extends State<StatisticScreen> {
                       },
                       itemCount: listResult.length,
                     ), */
-                  ],
-                ),
-                Expanded(child: Container(
+                ],
+              ),
+              Expanded(
+                child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: LayoutBuilder(
                     builder:
@@ -60,10 +61,10 @@ class _StatisticScreenState extends State<StatisticScreen> {
                       },
                     ),
                   ),
-                ),)
-              ],
-            );
-          },
+                ),
+              )
+            ],
+          ),
         ),
 /*         child: BlocBuilder<StatisticsBloc, StatisticsState>(
           builder: (BuildContext context, StatisticsState state) => Column(
@@ -115,25 +116,33 @@ class SearchBar extends StatelessWidget {
   final TextEditingController searchController;
   final BuildContext context;
   Timer? _debounce;
+
   @override
   Widget build(BuildContext context) => TextFormField(
         controller: searchController,
         decoration: InputDecoration(
           hintText: AppStrings.search,
           hintStyle: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: Colors.black,
+            color: Colors.white,
           ),
           filled: true,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+            borderSide: BorderSide(
+              color: MafiaTheme.themeData.colorScheme.secondary,
+              width: 0.5,
+            ),
+          ),
         ),
         style: const TextStyle(
-          color: Colors.black,
+          color: Colors.white,
         ),
         onChanged: (String value) => _onSearchChanged(value),
         onFieldSubmitted: (String query) => _onSearchChanged(query),

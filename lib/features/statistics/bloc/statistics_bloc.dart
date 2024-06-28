@@ -8,8 +8,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<ClearSearchResult>(_clearSearchResult);
   }
 
-  FutureOr<void> _getSearchResult(GetSearchData event, emit) async {
-    print("HERE I AM");
+  FutureOr<void> _getSearchResult(
+    GetSearchData event,
+    Emitter<StatisticsState> emit,
+  ) async {
     try {
       final List<Gamer> gamers =
           await statisticsRepository.getGamers(event.searchQuery);

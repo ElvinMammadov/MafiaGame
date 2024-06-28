@@ -209,6 +209,10 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   ),
                                 ),
                               );
+
+                              BlocProvider.of<GameBloc>(context).add(
+                                const UpdateAnimation(),
+                              );
                               // showResults(
                               //   context,
                               //   gamers,

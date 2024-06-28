@@ -641,14 +641,6 @@ PODS:
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FBAEMKit (16.3.1):
-    - FBSDKCoreKit_Basics (= 16.3.1)
-  - FBSDKCoreKit (16.3.1):
-    - FBAEMKit (= 16.3.1)
-    - FBSDKCoreKit_Basics (= 16.3.1)
-  - FBSDKCoreKit_Basics (16.3.1)
-  - FBSDKLoginKit (16.3.1):
-    - FBSDKCoreKit (= 16.3.1)
   - Firebase/Auth (10.18.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.18.0)
@@ -715,14 +707,9 @@ PODS:
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - Flutter (1.0.0)
-  - flutter_facebook_auth (6.0.4):
-    - FBSDKLoginKit (~> 16.3.1)
-    - Flutter
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
   - flutter_ringtone_player (0.0.1):
-    - Flutter
-  - flutter_secure_storage (6.0.0):
     - Flutter
   - GoogleUtilities/AppDelegateSwizzler (7.13.0):
     - GoogleUtilities/Environment
@@ -823,6 +810,9 @@ PODS:
     - Flutter
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (100.0.0)
+  - sqflite (0.0.3):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
@@ -831,22 +821,17 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
-  - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_ringtone_player (from `.symlinks/plugins/flutter_ringtone_player/ios`)
-  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
 
 SPEC REPOS:
   trunk:
     - abseil
     - BoringSSL-GRPC
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKLoginKit
     - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
@@ -880,30 +865,24 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
-  flutter_facebook_auth:
-    :path: ".symlinks/plugins/flutter_facebook_auth/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_ringtone_player:
     :path: ".symlinks/plugins/flutter_ringtone_player/ios"
-  flutter_secure_storage:
-    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   pointer_interceptor_ios:
     :path: ".symlinks/plugins/pointer_interceptor_ios/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/darwin"
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: 73eece22ce25a0565238c283ee9990f1618d8063
-  FBAEMKit: 6c7b5eb77c96861bb59e040842c6e55bf39512ce
-  FBSDKCoreKit: 5e4dd478947ab1bcc887e8cfadeae0727af1a942
-  FBSDKCoreKit_Basics: cd7b5f5d1e8868c26706917919d058999ca672c3
-  FBSDKLoginKit: 572cca0bc6c90067ef197187697cb3b584310c52
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_auth: 8e9ec02991ca4659111cc671c84d0c010b6bfb26
   firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
@@ -919,10 +898,8 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: 19b3f709993d6fa1d84941d41c01e3c4c11eab93
   FirebaseStorage: 8333c4b183764cdd170d9539a61322b71c23adff
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_facebook_auth: c8700ab1770f3d8e5e7456220e4f3bbcdb831454
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_ringtone_player: 15eba85187230b87b2512f0e1b92225618bc03e7
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   "gRPC-C++": 2df8cba576898bdacd29f0266d5236fa0e26ba6a
   gRPC-Core: a21a60aefc08c68c247b439a9ef97174b0c54f96
@@ -934,6 +911,7 @@ SPEC CHECKSUMS:
   pointer_interceptor_ios: 9280618c0b2eeb80081a343924aa8ad756c21375
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
 
 PODFILE CHECKSUM: 392f9d8135514bd195a274605d864adbeed29701
 
