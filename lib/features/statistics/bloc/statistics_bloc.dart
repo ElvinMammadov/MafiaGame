@@ -5,7 +5,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
   StatisticsBloc(this.statisticsRepository) : super(StatisticsState()) {
     on<GetSearchData>(_getSearchResult);
-    // on<GetSearchResult>(_getSearchResult);
+    on<ClearSearchResult>(_clearSearchResult);
   }
 
   FutureOr<void> _getSearchResult(GetSearchData event, emit) async {
@@ -19,7 +19,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         ),
       );
     } catch (e) {
-      print('Error sending game to Firebase: $e');
+      print('Error searching gamer in Firebase: $e');
     }
+  }
+
+  FutureOr<void> _clearSearchResult(ClearSearchResult event, emit) {
+    emit(
+      state.copyWith(pageList: []),
+    );
   }
 }

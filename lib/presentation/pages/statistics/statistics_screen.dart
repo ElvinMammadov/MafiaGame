@@ -119,7 +119,7 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) => TextFormField(
         controller: searchController,
         decoration: InputDecoration(
-          hintText: 'Поиск',
+          hintText: AppStrings.search,
           hintStyle: const TextStyle(
             color: Colors.black,
           ),
@@ -148,7 +148,7 @@ class SearchBar extends StatelessWidget {
         );
       } else if (value.isEmpty || value == "") {
         BlocProvider.of<StatisticsBloc>(context).add(
-          ClearSearchResults(),
+          ClearSearchResult(),
         );
       }
     });
