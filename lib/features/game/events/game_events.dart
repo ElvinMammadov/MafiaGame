@@ -390,3 +390,21 @@ class UpdateAnimation extends GameEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class SetVoter extends GameEvent {
+  final Gamer voter;
+
+  const SetVoter({
+    required this.voter,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[voter];
+}
+
+class ResetVoter extends GameEvent {
+  const ResetVoter();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}

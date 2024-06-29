@@ -149,9 +149,16 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                         .format(gameStartTime!),
                                   );
                                 }
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const ResetVoter(),
+                                );
                               } else if (!isDay) {
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const UpdateAnimation(),
+                                );
                                 for (final Gamer gamer in gamers) {
                                   if (!gamer.wasKilled) {
+
                                     if (!gamer.wasSecured && !gamer.wasHealed) {
                                       if (gamer.wasKilledByMafia ||
                                           gamer.wasKilledByKiller ||
