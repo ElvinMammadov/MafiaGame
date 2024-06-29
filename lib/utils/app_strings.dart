@@ -88,5 +88,7 @@ class AppStrings {
   static const String chooseRole = 'Выберите ';
   static const String next = 'Далее';
   static const String back = 'Назад';
-
+  static const String registrationDate = 'Дата регистрации';
+  static const String other = 'Другой';
+  static const String search = 'Поиск';
 }
