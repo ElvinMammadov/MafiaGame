@@ -2,19 +2,19 @@ part of 'bloc.dart';
 
 class StatisticsState {
   final List<Gamer> pageList;
-  final List<Gamer> searchList;
+  final PageStatus pageStatus;
 
   StatisticsState({
     this.pageList = const [],
-    this.searchList = const [],
+    this.pageStatus = const Initial(),
   });
 
   StatisticsState copyWith({
     List<Gamer>? pageList,
-    List<Gamer>? searchList,
+    PageStatus? pageStatus,
   }) =>
       StatisticsState(
         pageList: pageList ?? this.pageList,
-        searchList: searchList ?? this.searchList,
+        pageStatus: pageStatus ?? this.pageStatus,
       );
 }

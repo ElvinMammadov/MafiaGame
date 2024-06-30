@@ -11,8 +11,3 @@ class GetSearchData extends StatisticsEvent {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
-
-class ClearSearchResult extends StatisticsEvent {
-  @override
-  List<Object?> get props => [];
-}

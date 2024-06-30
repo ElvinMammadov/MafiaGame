@@ -31,78 +31,43 @@ class _StatisticScreenState extends State<StatisticScreen> {
                       context: context,
                     ),
                   ),
-                  /*            ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(listResult[index].name!),
-                          visualDensity: VisualDensity.comfortable,
-                        );
-                      },
-                      itemCount: listResult.length,
-                    ), */
                 ],
               ),
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) =>
-                            ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: state.pageList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Gamer gamer = state.pageList[index];
-                        return StatisticsItem(
-                          customImageWidth: 96,
-                          gamer: gamer,
-                        );
-                      },
-                    ),
-                  ),
+                  child: LayoutBuilder(builder:
+                      (BuildContext context, BoxConstraints constraints) {
+                    if (state.pageList.isEmpty && state.pageStatus is! Initial) {
+                      return const Center(
+                        child: Text(
+                          AppStrings.notFound,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: state.pageList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final Gamer gamer = state.pageList[index];
+                          return StatisticsItem(
+                            customImageWidth: 96,
+                            gamer: gamer,
+                          );
+                        },
+                      );
+                    }
+                  }),
                 ),
               )
             ],
           ),
         ),
-/*         child: BlocBuilder<StatisticsBloc, StatisticsState>(
-          builder: (BuildContext context, StatisticsState state) => Column(
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.amber,
-                ),
-                child: SearchBar(
-                  searchController: _searchController,
-                  context: context,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) =>
-                            ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: state.gamerList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Gamer gamer = state.gamerList[index];
-                        return StatisticsItem(
-                          customImageWidth: 96,
-                          gamer: gamer,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ), */
       );
 }
 
@@ -123,11 +88,11 @@ class SearchBar extends StatelessWidget {
         decoration: InputDecoration(
           hintText: AppStrings.search,
           hintStyle: const TextStyle(
-            color: Colors.white,
+            color: Colors.black,
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: Colors.white,
+            color: Colors.black,
           ),
           filled: true,
           border: OutlineInputBorder(
@@ -142,7 +107,7 @@ class SearchBar extends StatelessWidget {
           ),
         ),
         style: const TextStyle(
-          color: Colors.white,
+          color: Colors.black,
         ),
         onChanged: (String value) => _onSearchChanged(value),
         onFieldSubmitted: (String query) => _onSearchChanged(query),
@@ -157,7 +122,7 @@ class SearchBar extends StatelessWidget {
         );
       } else if (value.isEmpty || value == "") {
         BlocProvider.of<StatisticsBloc>(context).add(
-          ClearSearchResult(),
+          GetSearchData(searchQuery: ""),
         );
       }
     });
