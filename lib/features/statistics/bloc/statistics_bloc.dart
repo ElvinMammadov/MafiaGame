@@ -5,7 +5,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
   StatisticsBloc(this.statisticsRepository) : super(StatisticsState()) {
     on<GetSearchData>(_getSearchResult);
-    on<ClearSearchResult>(_clearSearchResult);
   }
 
   FutureOr<void> _getSearchResult(
@@ -18,16 +17,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       emit(
         state.copyWith(
           pageList: gamers,
+          pageStatus: DataLoaded(),
         ),
       );
     } catch (e) {
       print('Error searching gamer in Firebase: $e');
     }
-  }
-
-  FutureOr<void> _clearSearchResult(ClearSearchResult event, emit) {
-    emit(
-      state.copyWith(pageList: []),
-    );
   }
 }
