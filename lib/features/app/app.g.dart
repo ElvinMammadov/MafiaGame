@@ -29,7 +29,7 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       gameName: json['gameName'] as String? ?? '',
       typeOfGame: json['typeOfGame'] as String? ?? '',
       typeOfController: json['typeOfController'] as String? ?? '',
-      numberOfGamers: json['numberOfGamers'] as int? ?? 0,
+      numberOfGamers: (json['numberOfGamers'] as num?)?.toInt() ?? 0,
       gamers: (json['gamers'] as List<dynamic>?)
               ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -38,17 +38,25 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       isGameStarted: json['isGameStarted'] as bool? ?? false,
       isDiscussionStarted: json['isDiscussionStarted'] as bool? ?? false,
       isVotingStarted: json['isVotingStarted'] as bool? ?? false,
-      discussionTime: json['discussionTime'] as int? ?? 30,
-      votingTime: json['votingTime'] as int? ?? 30,
+      discussionTime: (json['discussionTime'] as num?)?.toInt() ?? 30,
+      votingTime: (json['votingTime'] as num?)?.toInt() ?? 30,
       gameStartTime: json['gameStartTime'] == null
           ? null
           : DateTime.parse(json['gameStartTime'] as String),
       isDay: json['isDay'] as bool? ?? true,
-      dayNumber: json['dayNumber'] as int? ?? 1,
-      nightNumber: json['nightNumber'] as int? ?? 1,
-      mafiaCount: json['mafiaCount'] as int? ?? 0,
-      civilianCount: json['civilianCount'] as int? ?? 0,
+      dayNumber: (json['dayNumber'] as num?)?.toInt() ?? 1,
+      nightNumber: (json['nightNumber'] as num?)?.toInt() ?? 1,
+      mafiaCount: (json['mafiaCount'] as num?)?.toInt() ?? 0,
+      civilianCount: (json['civilianCount'] as num?)?.toInt() ?? 0,
       isMafiaWin: json['isMafiaWin'] as bool? ?? false,
+      roleIndex: (json['roleIndex'] as num?)?.toInt() ?? 0,
+      currentVoter: json['currentVoter'] == null
+          ? const Gamer.empty()
+          : Gamer.fromJson(json['currentVoter'] as Map<String, dynamic>),
+      votedGamers: (json['votedGamers'] as List<dynamic>?)
+              ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Gamer>[],
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -71,13 +79,16 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'mafiaCount': instance.mafiaCount,
       'civilianCount': instance.civilianCount,
       'isMafiaWin': instance.isMafiaWin,
+      'roleIndex': instance.roleIndex,
+      'currentVoter': instance.currentVoter,
+      'votedGamers': instance.votedGamers,
     };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(
       id: json['id'] as String?,
       email: json['email'] as String?,
       displayName: json['displayName'] as String?,
-      token: json['token'] as int?,
+      token: (json['token'] as num?)?.toInt(),
       password: json['password'] as String?,
       accessToken: json['accessToken'] as String? ?? '',
     );

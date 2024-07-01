@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
-import 'dart:developer' as logger;
 
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
@@ -65,7 +64,6 @@ class FirestoreService {
 
   Future<List<GameState>> getGames(DateTime dateTime) async {
     final String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
-    print('Formatted Date: $formattedDate');
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance

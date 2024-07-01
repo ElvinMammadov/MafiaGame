@@ -17,7 +17,8 @@ class AppStrings {
   static const String signUpButton = 'Зарегистрироваться';
   static const String noAccount = 'Нет аккаунта? Зарегистрируйтесь здесь.';
   static const String haveAccount = 'Уже есть аккаунт? Войдите здесь.';
-  static const String youRegisteredSuccessfully = 'Вы успешно зарегистрировались.';
+  static const String youRegisteredSuccessfully =
+      'Вы успешно зарегистрировались.';
   static const String userDoesNotExist = 'Пользователь не существует';
   static const String wrongPassword = 'Неверный пароль';
   static const String formNotValid = 'Форма недействительна';
@@ -92,4 +93,37 @@ class AppStrings {
   static const String other = 'Другой';
   static const String search = 'Поиск';
   static const String notFound ='Игрок не найден';
+  static const String totalPoints = 'Общие очки';
+  static const String alivePoints = 'Дожил до конца';
+  static const String votesForCitizen = 'Голосов за мирного';
+  static const String votesForMafia = 'Голосов за мафию';
+  static const String pointsIfCheckerDead = 'Очки если проверяющий мертв';
+  static const String gaveAlibiToCitizen = 'Дал алиби мирному';
+  static const String gaveAlibiToMafia = 'Дал алиби мафии';
+  static const String citizenAlibiWorked = 'Алиби мирного сработало';
+  static const String mafiaAlibiWorked = 'Алиби мафии сработало';
+  static const String killedCitizens = 'Убил(а) мирных';
+  static const String killedMafias = 'Убил(а) мафию';
+  static const String healedCitizen = 'Вылечил(а) мирного';
+  static const String healedMafia = 'Вылечил(а) мафию';
+  static const String securedCitizen = 'Обезопасил(а) мирного';
+  static const String securedMafia = 'Обезопасил(а) мафию';
+  static const String tookAwayAbility = 'Забрал(а) способность';
+  static const String votedAgainstMainCharacters = 'Голосовал(а) против мирных';
+  static const String votedAgainstOthers = 'Голосовал(а) против других';
+  static const String votedAgainstMafia = 'Голосовал(а) против мафии';
+  static const String deadMafiaPoints = 'Очки мафии после смерти';
+  static const String entersToMafia = 'Зашел(ла) к мафию';
+  static const String entersToAnother = 'Зашел(ла) к другим';
+  static const String cityKillsMafia = 'Город убивает мафию';
+  static const String infectedCitizens = 'Заразил(а) мирных';
+  static const String infectedMafia = 'Заразил(а) мафию';
+  static const String aliveUntilChange = 'Дожил(а) до смены';
+  static const String killedCitizensAfterChange = 'Убил(а) мирных после смены';
+  static const String rolePoints = 'Очки роли';
+  static const String killedMafiasBeforeChange = 'Убил(а) мафию до смены';
+  static const String killedKillerBeforeChange = 'Убил(а) убийцу до смены';
+  static const String pointsIfWonGame = 'Очки если победил(а)';
+  static const String pointIfDeadByWin = 'Очки если мертв при победе';
+
 }

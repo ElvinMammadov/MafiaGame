@@ -2,21 +2,38 @@ part of game;
 
 @JsonSerializable()
 class Killer extends Role with EquatableMixin {
+  final Map<String, int>? points;
+
   const Killer({
     required super.name,
     required super.roleId,
+    this.points,
   });
 
-  const Killer.empty() : this(name: 'Killer', roleId: 6);
+  const Killer.empty()
+      : this(
+          name: 'Killer',
+          roleId: 6,
+          points: const <String, int>{
+            AppStrings.totalPoints: 0,
+            AppStrings.alivePoints: 0,
+            AppStrings.votesForMafia: 0,
+            AppStrings.votesForCitizen: 0,
+            AppStrings.killedCitizens: 0,
+            AppStrings.killedMafias: 0,
+          },
+        );
 
   @override
   Killer copyWith({
     String? name,
     int? roleId,
+    Map<String, int>? points,
   }) =>
       Killer(
         name: name ?? this.name,
-        roleId: roleId?? this.roleId,
+        roleId: roleId ?? this.roleId,
+        points: points ?? this.points,
       );
 
   factory Killer.fromJson(Map<String, dynamic> json) => _$KillerFromJson(json);
@@ -26,9 +43,10 @@ class Killer extends Role with EquatableMixin {
 
   @override
   List<Object?> get props => <Object?>[
-    name,
-    roleId,
-  ];
+        name,
+        roleId,
+        points,
+      ];
 
   @override
   bool get stringify => true;

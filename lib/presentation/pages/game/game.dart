@@ -3,7 +3,6 @@ library game;
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:developer' as logger;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:avatar_glow/avatar_glow.dart';

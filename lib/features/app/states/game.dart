@@ -22,6 +22,8 @@ class GameState extends Equatable {
   final int civilianCount;
   final bool isMafiaWin;
   final int roleIndex;
+  final Gamer currentVoter;
+  final List<Gamer> votedGamers;
 
   const GameState({
     this.gameId = '',
@@ -44,6 +46,8 @@ class GameState extends Equatable {
     this.civilianCount = 0,
     this.isMafiaWin = false,
     this.roleIndex = 0,
+    this.currentVoter = const Gamer.empty(),
+    this.votedGamers = const <Gamer>[],
   });
 
   const GameState.empty()
@@ -66,7 +70,9 @@ class GameState extends Equatable {
         mafiaCount = 0,
         civilianCount = 0,
         isMafiaWin = false,
-        roleIndex = 0;
+        roleIndex = 0,
+    currentVoter = const Gamer.empty(),
+    votedGamers = const <Gamer>[];
 
   GameState copyWith({
     String? gameName,
@@ -89,6 +95,8 @@ class GameState extends Equatable {
     int? civilianCount,
     bool? isMafiaWin,
     int? roleIndex,
+    Gamer? currentVoter,
+    List<Gamer>? votedGamers,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -111,6 +119,8 @@ class GameState extends Equatable {
         civilianCount: civilianCount ?? this.civilianCount,
         isMafiaWin: isMafiaWin ?? this.isMafiaWin,
         roleIndex: roleIndex ?? this.roleIndex,
+        currentVoter: currentVoter ?? this.currentVoter,
+        votedGamers: votedGamers ?? this.votedGamers,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -139,6 +149,8 @@ class GameState extends Equatable {
         mafiaCount,
         civilianCount,
         roleIndex,
+        currentVoter,
+        votedGamers,
       ];
 
   @override
