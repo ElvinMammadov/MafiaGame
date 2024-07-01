@@ -49,8 +49,8 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
       end: Colors.green,
     ).animate(_controller);
 
-    print('isGameStarted: ${!widget.isGameStarted},'
-        ' isGameCouldStart: ${widget.isGameCouldStart}');
+    // print('isGameStarted: ${!widget.isGameStarted},'
+    //     ' isGameCouldStart: ${widget.isGameCouldStart}');
     if (!widget.isGameStarted && widget.isGameCouldStart) {
       _controller.repeat(reverse: true);
     }
@@ -58,7 +58,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   void _handleTap() {
     _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
-    print('currentVoter: $_currentVoter');
+    // print('currentVoter: $_currentVoter');
     if (_currentVoter!.name!.isNotEmpty &&
         _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
       BlocProvider.of<GameBloc>(context).add(
@@ -195,10 +195,24 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
+  void boomerangGamer(String gamerName){
+    for (final Gamer gamer in widget.gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          BoomerangGamer(
+            targetedGamer: gamer,
+            gamerId: widget.gamers[widget.index].id ?? 0,
+          ),
+        );
+        break;
+      }
+    }
+  }
+
   void _handleHitting() {
     _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
     print('currentVoter hitter: ${_currentVoter?.role?.roleId}');
-    print('currentVoter hitter name: ${_currentVoter?.name?.isNotEmpty}');
+    // print('currentVoter hitter name: ${_currentVoter?.name?.isNotEmpty}');
     if (_currentVoter!.name!.isNotEmpty &&
         _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
       switch (_currentVoter!.role?.roleId) {
@@ -224,6 +238,9 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
         case 10:
           secureGamer(widget.gamers[widget.index].name!);
           break;
+        case 14:
+          boomerangGamer(widget.gamers[widget.index].name!);
+          break;
         default:
           break;
       }
@@ -247,13 +264,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   @override
   Widget build(BuildContext context) {
-    print('isAnimating: ${widget.gamers[widget.index].isAnimated}');
-    print('isGameStarted: ${widget.isGameStarted},'
-        ' isGameCouldStart: ${widget.isGameCouldStart} '
-        'is Voting Started: ${widget.isVotingStarted}');
-    print(
-        'is condition: ${!widget.isGameStarted && widget.isGameCouldStart && widget.gamers[widget.index].isAnimated}');
-    // _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
+    // print('isAnimating: ${widget.gamers[widget.index].isAnimated}');
+    // print('isGameStarted: ${widget.isGameStarted},'
+    //     ' isGameCouldStart: ${widget.isGameCouldStart} '
+    //     'is Voting Started: ${widget.isVotingStarted}');
+    // print(
+    //     'is condition: ${!widget.isGameStarted && widget.isGameCouldStart && widget.gamers[widget.index].isAnimated}');
+    // // _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
     if ((!widget.isGameStarted &&
             widget.isGameCouldStart &&
             widget.gamers[widget.index].isAnimated) ||
@@ -274,7 +291,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               border: Border.all(
                 color: (!widget.isGameCouldStart && !widget.isGameStarted) ||
                         !widget.gamers[widget.index].isAnimated ||
-                        isDiscussionStarted
+                        isDiscussionStarted || !isDay
                     ? Colors.transparent
                     : _animation.value!,
                 width: _controller.value * 10,
@@ -313,7 +330,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                     // );
                   } else if (!isDay) {
                     _handleHitting();
-                  } else {
+                  } else if (!widget.isGameCouldStart && !widget.isGameStarted){
                     DialogBuilder().showAddUserModal(
                       context,
                       widget.gamers[widget.index].id ?? 0,

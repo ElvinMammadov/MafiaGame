@@ -202,6 +202,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<KillGamer>((KillGamer event, Emitter<AppState> emit) {
+      print('event.gamer.role?.roleId: ${event.gamer.role?.roleId},'
+          ' event.gamer.role?.mafiacount: ${state.game.mafiaCount}');
       emit(
         state.copyWith(
           game: event.gamer.role?.roleId == 2 || event.gamer.role?.roleId == 3
@@ -219,6 +221,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           ),
         ),
       );
+      event.onCompleted?.call();
     });
 
     on<HealGamer>((HealGamer event, Emitter<AppState> emit) {
@@ -377,29 +380,20 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<BoomerangGamer>((BoomerangGamer event, Emitter<AppState> emit) {
-      final bool isTargetingSelf = event.gamerId == event.targetedGamer.id;
-      final int targetedIndex = state.gamersState.gamers
-          .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
-
-      if (targetedIndex != -1 &&
-          (isTargetingSelf ||
-              state.gamersState.gamers[event.gamerId].canTarget)) {
-        final List<Gamer> updatedGamers =
-        state.gamersState.gamers.map((Gamer gamer) {
-          if (gamer.id == event.targetedGamer.id) {
-            return gamer.copyWith(wasKilled: true, wasBoomeranged: true);
-          } else if (gamer.id == event.gamerId) {
-            return gamer.copyWith(targetId: event.targetedGamer.id);
-          } else {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.targetedGamer.id) {
+              return gamer.copyWith(
+                wasBoomeranged: true,
+              );
+            }
             return gamer;
-          }
-        }).toList();
-        emit(
-          state.copyWith(
-            gamers: state.gamersState.copyWith(gamers: updatedGamers),
-          ),
-        );
-      }
+          }).toList(),
+        ),
+      );
+      emit(appState);
+
     });
 
     on<TakeAbilityFromGamer>(

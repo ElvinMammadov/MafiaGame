@@ -82,11 +82,12 @@ class AddNightNumber extends GameEvent {
 
 class KillGamer extends GameEvent {
   final Gamer gamer;
+  final VoidCallback? onCompleted;
 
-  const KillGamer({required this.gamer});
+  const KillGamer({required this.gamer, this.onCompleted});
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[gamer, onCompleted];
 }
 
 class KillGamerByMafia extends GameEvent {

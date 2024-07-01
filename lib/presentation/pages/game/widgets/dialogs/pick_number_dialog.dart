@@ -3,6 +3,7 @@ part of game;
 void showPickNumber(
     BuildContext context,
     List<Gamer> gamers,
+    Function() closeDialog,
     ) {
   WoltModalSheet.show<void>(
     context: context,
@@ -34,6 +35,7 @@ void showPickNumber(
             BlocProvider.of<GameBloc>(context).add(
               KillGamer(gamer: gamer),
             );
+            closeDialog();
             Navigator.of(context).pop();
             showKilledGamer(context, gamer);
             BlocProvider.of<GameBloc>(context).add(

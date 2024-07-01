@@ -36,6 +36,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
         BlocProvider.of<GameBloc>(context).state.gamersState.roles;
     final int roleIndex =
         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+    print('roleIndex: $roleIndex , length: ${gamerRoles.roles.length}');
+    print('rolename: ${gamerRoles.roles[roleIndex].name}, '
+        'roleid: ${gamerRoles.roles[roleIndex].roleId}');
     BlocProvider.of<GameBloc>(context).add(
       AddRoleToGamer(
         targetedGamer: Gamer(
@@ -48,7 +51,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
         ),
       ),
     );
-    if (roleIndex < gamerRoles.roles.length - 1 && roleIndex != 2) {
+    if (roleIndex < gamerRoles.roles.length - 2 && roleIndex != 2) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeRoleIndex(
           roleIndex: roleIndex + 1,
