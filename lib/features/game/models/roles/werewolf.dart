@@ -2,12 +2,10 @@ part of game;
 
 @JsonSerializable()
 class Werewolf extends Role with EquatableMixin {
-  final Map<String, int>? points;
-
   const Werewolf({
     required super.name,
     required super.roleId,
-    this.points,
+    required super.points,
   });
 
   const Werewolf.empty()
@@ -15,8 +13,8 @@ class Werewolf extends Role with EquatableMixin {
           name: 'Werewolf',
           roleId: 7,
           points: const <String, int>{
-            AppStrings.alivePoints: 0,
-            AppStrings.votesForCitizen: 0,
+            AppStrings.votedAgainstMafia: 0,
+            AppStrings.votedAgainstMainCharacters: 0,
             AppStrings.killedCitizens: 0,
             AppStrings.killedMafias: 0,
             AppStrings.aliveUntilChange: 0,
@@ -25,6 +23,8 @@ class Werewolf extends Role with EquatableMixin {
             AppStrings.killedMafiasBeforeChange: 0,
             AppStrings.killedKillerBeforeChange: 0,
             AppStrings.pointsIfWonGame: 0,
+            AppStrings.alivePoints: 0,
+            AppStrings.totalPoints: 0,
           },
         );
 

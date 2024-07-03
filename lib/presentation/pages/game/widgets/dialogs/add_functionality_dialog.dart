@@ -24,9 +24,9 @@ void showAddFunctionality(
   void addVoteToGamer(String gamerName) {
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          AddVoteToGamer(gamer: gamer),
-        );
+        // BlocProvider.of<GameBloc>(context).add(
+        //   AddVoteToGamer(gamer: gamer),
+        // );
         Navigator.of(context).pop();
         break;
       }

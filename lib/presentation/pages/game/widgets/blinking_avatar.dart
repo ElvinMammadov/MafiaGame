@@ -49,8 +49,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
       end: Colors.green,
     ).animate(_controller);
 
-    // print('isGameStarted: ${!widget.isGameStarted},'
-    //     ' isGameCouldStart: ${widget.isGameCouldStart}');
     if (!widget.isGameStarted && widget.isGameCouldStart) {
       _controller.repeat(reverse: true);
     }
@@ -58,12 +56,12 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   void _handleTap() {
     _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
-    // print('currentVoter: $_currentVoter');
     if (_currentVoter!.name!.isNotEmpty &&
         _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
       BlocProvider.of<GameBloc>(context).add(
         AddVoteToGamer(
           gamer: widget.gamers[widget.index],
+          voter: _currentVoter!,
         ),
       );
       BlocProvider.of<GameBloc>(context).add(
@@ -73,11 +71,23 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
         const ResetVoter(),
       );
     } else {
-      BlocProvider.of<GameBloc>(context).add(
-        SetVoter(
-          voter: widget.gamers[widget.index],
-        ),
-      );
+      if (widget.gamers[widget.index].wasVoted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              AppStrings.gamerAlreadyVoted,
+              style: TextStyle(color: Colors.white, fontSize: 18.0),
+            ),
+          ),
+        );
+      } else {
+        BlocProvider.of<GameBloc>(context).add(
+          SetVoter(
+            voter: widget.gamers[widget.index],
+          ),
+        );
+      }
     }
   }
 
@@ -195,7 +205,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void boomerangGamer(String gamerName){
+  void boomerangGamer(String gamerName) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
@@ -212,7 +222,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
   void _handleHitting() {
     _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
     print('currentVoter hitter: ${_currentVoter?.role?.roleId}');
-    // print('currentVoter hitter name: ${_currentVoter?.name?.isNotEmpty}');
     if (_currentVoter!.name!.isNotEmpty &&
         _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
       switch (_currentVoter!.role?.roleId) {
@@ -291,7 +300,8 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               border: Border.all(
                 color: (!widget.isGameCouldStart && !widget.isGameStarted) ||
                         !widget.gamers[widget.index].isAnimated ||
-                        isDiscussionStarted || !isDay
+                        isDiscussionStarted ||
+                        !isDay
                     ? Colors.transparent
                     : _animation.value!,
                 width: _controller.value * 10,
@@ -314,27 +324,14 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                     widget.changeRole!(widget.gamers[widget.index]);
                   } else if (widget.isVotingStarted && isDay) {
                     _handleTap();
-                    // showAddFunctionality(
-                    //   context,
-                    //   isVotingStarted: widget.isVotingStarted,
-                    //   gamerId: widget.gamers[widget.index].id ?? 0,
-                    //   roleId: widget.gamers[widget.index].role
-                    //       ?.roleId ??
-                    //       0,
-                    //   nightNumber:
-                    //   BlocProvider
-                    //       .of<GameBloc>(context)
-                    //       .state
-                    //       .game
-                    //       .nightNumber,
-                    // );
                   } else if (!isDay) {
                     _handleHitting();
-                  } else if (!widget.isGameCouldStart && !widget.isGameStarted){
+                  } else if (!widget.isGameCouldStart &&
+                      !widget.isGameStarted) {
                     DialogBuilder().showAddUserModal(
                       context,
                       widget.gamers[widget.index].id ?? 0,
-                      widget.roles.roles[13],
+                      const Mirniy.empty(),
                     );
                   }
                 },
@@ -346,9 +343,10 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                             widget.gamers[widget.index].role != null
                                 ? '${widget.gamers[widget.index].role?.name}'
                                 : widget.roles.roles[13].name,
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

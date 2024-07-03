@@ -83,11 +83,18 @@ class _GameTableScreenState extends State<GameTableScreen> {
           return Scaffold(
             appBar: DefaultAppBar(
               title: AppStrings.title,
-              showBackButton: true,
+              showGameMenu: true,
               actionCallback: () {
                 BlocProvider.of<GameBloc>(context).add(
-                  const CleanGamers(gamers: <Gamer>[]),
+                  const EmptyGame(),
                 );
+              },
+              onExit: () {
+                BlocProvider.of<GameBloc>(context).add(
+                  const EmptyGame(),
+                );
+                Navigator.of(context)
+                    .popUntil((Route<dynamic> route) => route.isFirst);
               },
             ),
             resizeToAvoidBottomInset: false,
@@ -125,6 +132,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                           action: () {
                             if (isGameStarted) {
                               if (isDiscussionStarted) {
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const ChangeRoleIndex(
+                                    roleIndex: 0,
+                                  ),
+                                );
                                 BlocProvider.of<GameBloc>(context).add(
                                   const EndDiscussion(
                                     isDiscussionStarted: false,
@@ -167,9 +179,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   BlocProvider.of<GameBloc>(context).add(
                                     const AddDayNumber(),
                                   );
-                                  // print('dayNumber: $dayNumber, '
-                                  //     'topGamers[0].role!.roleId: '
-                                  //     '${topGamers[0].role!.roleId}');
                                   if (dayNumber == 1 &&
                                       topGamers[0].role!.roleId == 8) {
                                     Gamer leftGamer = const Gamer.empty();
@@ -198,20 +207,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   showPickNumber(
                                     context,
                                     topGamers,
-                                    () {
-                                      // showLastResults(
-                                      //   mafiaCount,
-                                      //   civilianCount,
-                                      //   gamers,
-                                      //   gameName,
-                                      //   gameStartTime,
-                                      //   context,
-                                      // );
-                                    },
+                                    () {},
                                   );
                                 }
                                 BlocProvider.of<GameBloc>(context).add(
-                                  const ResetVoter(),
+                                  const ResetVoters(),
                                 );
                               } else if (!isDay) {
                                 BlocProvider.of<GameBloc>(context).add(
@@ -249,7 +249,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                               }
                             } else {
                               BlocProvider.of<GameBloc>(context).add(
-                                SendGameToFirebase(
+                                SaveGame(
                                   gameState: state.game.copyWith(
                                     gameName: gameName,
                                     numberOfGamers: numberOfGamers,
@@ -296,6 +296,12 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         ),
                       ),
                     if (isGameCouldStart && !isGameStarted)
+                      Positioned(
+                        left: screenWidth / 3,
+                        bottom: screenHeight / 3.3,
+                        child: const RolesChanger(),
+                      ),
+                    if (!isDay)
                       Positioned(
                         left: screenWidth / 3,
                         bottom: screenHeight / 3.3,

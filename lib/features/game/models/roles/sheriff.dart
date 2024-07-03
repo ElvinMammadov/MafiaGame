@@ -2,12 +2,10 @@ part of game;
 
 @JsonSerializable()
 class Sheriff extends Role with EquatableMixin {
-  final Map<String, int>? points;
-
   const Sheriff({
     required super.name,
     required super.roleId,
-    this.points,
+    required super.points,
   });
 
   const Sheriff.empty()
@@ -15,13 +13,13 @@ class Sheriff extends Role with EquatableMixin {
           name: 'Sheriff',
           roleId: 4,
           points: const <String, int>{
-            AppStrings.totalPoints: 0,
-            AppStrings.alivePoints: 0,
-            AppStrings.votesForMafia: 0,
-            AppStrings.votesForCitizen: 0,
+            AppStrings.votedAgainstMafia: 0,
+            AppStrings.votedAgainstMainCharacters: 0,
             AppStrings.cityKillsMafia: 0,
             AppStrings.killedMafias: 0,
             AppStrings.entersToMafia: 0,
+            AppStrings.alivePoints: 0,
+            AppStrings.totalPoints: 0,
           },
         );
 

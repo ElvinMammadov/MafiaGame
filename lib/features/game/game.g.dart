@@ -37,6 +37,10 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       canTarget: json['canTarget'] as bool? ?? true,
       killSecurity: json['killSecurity'] as bool? ?? false,
       isAnimated: json['isAnimated'] as bool? ?? true,
+      playsAsCitizen: json['playsAsCitizen'] as bool? ?? true,
+      beforeChange: json['beforeChange'] as bool? ?? true,
+      healCount: (json['healCount'] as num?)?.toInt() ?? 2,
+      wasVoted: json['wasVoted'] as bool? ?? false,
       roleCounts: (json['roleCounts'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, (e as num).toInt()),
           ) ??
@@ -86,16 +90,24 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'killSecurity': instance.killSecurity,
       'roleCounts': instance.roleCounts,
       'isAnimated': instance.isAnimated,
+      'playsAsCitizen': instance.playsAsCitizen,
+      'beforeChange': instance.beforeChange,
+      'healCount': instance.healCount,
+      'wasVoted': instance.wasVoted,
     };
 
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(
       name: json['name'] as String? ?? '',
       roleId: (json['roleId'] as num?)?.toInt() ?? 0,
+      points: (json['points'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toInt()),
+      ),
     );
 
 Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
       'name': instance.name,
       'roleId': instance.roleId,
+      'points': instance.points,
     };
 
 Roles _$RolesFromJson(Map<String, dynamic> json) => Roles(
@@ -124,7 +136,6 @@ Map<String, dynamic> _$GamersStateToJson(GamersState instance) =>
 Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
       name: json['name'] as String? ?? '',
       roleId: (json['roleId'] as num?)?.toInt() ?? 0,
-      healCount: (json['healCount'] as num).toInt(),
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
@@ -133,7 +144,6 @@ Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
 Map<String, dynamic> _$DoctorToJson(Doctor instance) => <String, dynamic>{
       'name': instance.name,
       'roleId': instance.roleId,
-      'healCount': instance.healCount,
       'points': instance.points,
     };
 
@@ -294,11 +304,15 @@ Map<String, dynamic> _$MediumToJson(Medium instance) => <String, dynamic>{
 Chameleon _$ChameleonFromJson(Map<String, dynamic> json) => Chameleon(
       name: json['name'] as String? ?? '',
       roleId: (json['roleId'] as num?)?.toInt() ?? 0,
+      points: (json['points'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toInt()),
+      ),
     );
 
 Map<String, dynamic> _$ChameleonToJson(Chameleon instance) => <String, dynamic>{
       'name': instance.name,
       'roleId': instance.roleId,
+      'points': instance.points,
     };
 
 Boomerang _$BoomerangFromJson(Map<String, dynamic> json) => Boomerang(

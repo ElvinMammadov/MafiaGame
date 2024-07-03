@@ -24,7 +24,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             name: AppStrings.gamer,
             id: i + 1,
             positionOnTable: i + 1,
-            role: roles.roles[13],
+            role: const Mirniy.empty(),
           ),
         ),
       );
@@ -46,12 +46,13 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
           role: Role(
             roleId: gamerRoles.roles[roleIndex].roleId,
             name: gamerRoles.roles[roleIndex].name,
+            points: gamerRoles.roles[roleIndex].points,
           ),
           isRoleGiven: true,
         ),
       ),
     );
-    if (roleIndex < gamerRoles.roles.length - 2 && roleIndex != 2) {
+    if (gamerRoles.roles[roleIndex].roleId != 2) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeRoleIndex(
           roleIndex: roleIndex + 1,

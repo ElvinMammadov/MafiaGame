@@ -10,6 +10,7 @@ class UpdateGameDetails extends GameEvent {
   final String typeOfController;
   final int numberOfGamers;
   final String gameId;
+  final List<Role> roles;
 
   const UpdateGameDetails({
     required this.gameName,
@@ -17,6 +18,7 @@ class UpdateGameDetails extends GameEvent {
     required this.typeOfController,
     required this.numberOfGamers,
     required this.gameId,
+    required this.roles,
   });
 
   @override
@@ -26,7 +28,15 @@ class UpdateGameDetails extends GameEvent {
         typeOfController,
         numberOfGamers,
         gameId,
+        roles,
       ];
+}
+
+class EmptyGame extends GameEvent {
+  const EmptyGame();
+
+  @override
+  List<Object?> get props => <Object?>[];
 }
 
 class ChangeGameStartValue extends GameEvent {
@@ -51,6 +61,19 @@ class SendGameToFirebase extends GameEvent {
   List<Object?> get props => <Object?>[
     gameState,
       ];
+}
+
+class SaveGame extends GameEvent {
+  final GameState gameState;
+
+  const SaveGame({
+    required this.gameState,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+    gameState,
+  ];
 }
 
 class GetGames extends GameEvent {
@@ -298,11 +321,12 @@ class ChangeVotingTime extends GameEvent {
 
 class AddVoteToGamer extends GameEvent {
   final Gamer gamer;
+  final Gamer voter;
 
-  const AddVoteToGamer({required this.gamer});
+  const AddVoteToGamer({required this.gamer, required this.voter});
 
   @override
-  List<Object?> get props => <Object?>[gamer];
+  List<Object?> get props => <Object?>[gamer, voter];
 }
 
 class RemoveVote extends GameEvent {
@@ -401,6 +425,13 @@ class SetVoter extends GameEvent {
 
   @override
   List<Object?> get props => <Object?>[voter];
+}
+
+class ResetVoters extends GameEvent {
+  const ResetVoters();
+
+  @override
+  List<Object?> get props => <Object?>[];
 }
 
 class ResetVoter extends GameEvent {

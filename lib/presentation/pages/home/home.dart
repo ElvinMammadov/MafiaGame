@@ -1,11 +1,11 @@
 library home;
 
 import 'dart:async';
+import 'dart:developer' as logger;
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
@@ -21,10 +21,9 @@ import 'package:mafia_game/utils/app_strings.dart';
 import 'package:mafia_game/utils/dimensions.dart';
 import 'package:mafia_game/utils/navigator.dart';
 import 'package:mafia_game/utils/page_status.dart';
-import 'package:mafia_game/utils/services/cloud_firestore_service.dart';
 import 'package:mafia_game/utils/theme/theme.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'dart:developer' as logger;
+
 
 part 'home_container.dart';
 part 'home_screen.dart';

@@ -94,7 +94,7 @@ class _SignupPageState extends State<SignupPage> {
         );
 
         // Navigate to the next screen upon successful signup
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NextScreen()));
+        Navigator.pop(context);
       } on FirebaseAuthException catch (e) {
         print("Error during signup: $e");
 
