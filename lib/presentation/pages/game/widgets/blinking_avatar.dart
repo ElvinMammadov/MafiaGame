@@ -11,6 +11,7 @@ class BlinkingAvatar extends StatefulWidget {
   final Function(Gamer)? changeRole;
   final bool isGameStarted;
   final bool isVotingStarted;
+  final bool isDay;
 
   const BlinkingAvatar({
     required this.showRoles,
@@ -23,6 +24,7 @@ class BlinkingAvatar extends StatefulWidget {
     this.changeRole,
     required this.isGameStarted,
     required this.isVotingStarted,
+    required this.isDay,
     super.key,
   });
 
@@ -54,6 +56,31 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
+  void animateGamer(Gamer gamer) {
+    final int roleIndex =
+        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+    final int roleId = widget.roles.roles[roleIndex].roleId;
+    final int gamerRoleIndex = widget.gamers[widget.index].role?.roleId ?? 0;
+    // print('roleId: $roleId, gamerRoleIndex: $gamerRoleIndex');
+    if (roleId == gamerRoleIndex) {
+      BlocProvider.of<GameBloc>(context).add(
+        ChangeAnimation(
+          gamerId: widget.gamers[widget.index].gamerId ?? '',
+          animate: true,
+        ),
+      );
+      _controller.repeat(reverse: true);
+    } else {
+      BlocProvider.of<GameBloc>(context).add(
+        ChangeAnimation(
+          gamerId: widget.gamers[widget.index].gamerId ?? '',
+          animate: false,
+        ),
+      );
+      _controller.stop();
+    }
+  }
+
   void _handleTap() {
     _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
     if (_currentVoter!.name!.isNotEmpty &&
@@ -65,7 +92,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
         ),
       );
       BlocProvider.of<GameBloc>(context).add(
-        ChangeAnimation(gamerId: _currentVoter?.gamerId ?? ''),
+        ChangeAnimation(gamerId: _currentVoter?.gamerId ?? '', animate: false),
       );
       BlocProvider.of<GameBloc>(context).add(
         const ResetVoter(),
@@ -93,12 +120,12 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   void toggleAnimation() {
     setState(() {
-      print('isAnimating 2: ${widget.gamers[widget.index].isAnimated}');
       if (widget.gamers[widget.index].isAnimated) {
         _controller.stop();
         BlocProvider.of<GameBloc>(context).add(
           ChangeAnimation(
             gamerId: widget.gamers[widget.index].gamerId ?? '',
+            animate: false,
           ),
         );
       } else {
@@ -107,13 +134,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     });
   }
 
-  void killGamerByMafia(String gamerName) {
+  void killGamerByMafia(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           KillGamerByMafia(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -121,13 +148,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void killGamerByKiller(String gamerName) {
+  void killGamerByKiller(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           KillGamerByKiller(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -135,13 +162,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void killGamerBySheriff(String gamerName) {
+  void killGamerBySheriff(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           KillGamerBySheriff(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -149,13 +176,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void healGamer(String gamerName) {
+  void healGamer(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           HealGamer(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -163,13 +190,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void giveAlibi(String gamerName) {
+  void giveAlibi(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           GiveAlibi(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -177,13 +204,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void secureGamer(String gamerName) {
+  void secureGamer(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           SecureGamer(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -191,13 +218,13 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void takeAbilityFromGamer(String gamerName) {
+  void takeAbilityFromGamer(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           TakeAbilityFromGamer(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
           ),
         );
         break;
@@ -205,13 +232,27 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void boomerangGamer(String gamerName) {
+  void boomerangGamer(String gamerName, int gamerId) {
     for (final Gamer gamer in widget.gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           BoomerangGamer(
             targetedGamer: gamer,
-            gamerId: widget.gamers[widget.index].id ?? 0,
+            gamerId: gamerId,
+          ),
+        );
+        break;
+      }
+    }
+  }
+
+  void infectGamer(String gamerName, int gamerId) {
+    for (final Gamer gamer in widget.gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          InfectGamer(
+            targetedGamer: gamer,
+            infect: true,
           ),
         );
         break;
@@ -220,46 +261,61 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
   }
 
   void _handleHitting() {
-    _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
-    print('currentVoter hitter: ${_currentVoter?.role?.roleId}');
-    if (_currentVoter!.name!.isNotEmpty &&
-        _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
-      switch (_currentVoter!.role?.roleId) {
-        case 1:
-          healGamer(widget.gamers[widget.index].name!);
-          break;
-        case 2:
-        case 3:
-          killGamerByMafia(widget.gamers[widget.index].name!);
-          break;
-        case 4:
-          killGamerBySheriff(widget.gamers[widget.index].name!);
-          break;
-        case 5:
-          takeAbilityFromGamer(widget.gamers[widget.index].name!);
-          break;
-        case 6:
-          killGamerByKiller(widget.gamers[widget.index].name!);
-          break;
-        case 9:
-          giveAlibi(widget.gamers[widget.index].name!);
-          break;
-        case 10:
-          secureGamer(widget.gamers[widget.index].name!);
-          break;
-        case 14:
-          boomerangGamer(widget.gamers[widget.index].name!);
-          break;
-        default:
-          break;
-      }
+    final int roleIndex =
+        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+    final int roleId = widget.roles.roles[roleIndex].roleId;
+
+    final Gamer gamer =
+        widget.gamers.firstWhere((Gamer gamer) => gamer.role?.roleId == roleId);
+    print('roleId: $roleId');
+    switch (roleId) {
+      case 1:
+        healGamer(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      case 2:
+      case 3:
+        killGamerByMafia(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      case 4:
+        killGamerBySheriff(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      case 5:
+        takeAbilityFromGamer(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      case 6:
+        killGamerByKiller(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      case 8:
+        if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
+          infectGamer(widget.gamers[widget.index].name!, gamer.id!);
+          BlocProvider.of<GameBloc>(context).add(
+            InfectedCount(
+              infectedCount:
+                  BlocProvider.of<GameBloc>(context).state.game.infectedCount -
+                      1,
+            ),
+          );
+        }
+
+        break;
+      case 9:
+        giveAlibi(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+
+      case 10:
+        secureGamer(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      case 14:
+        boomerangGamer(widget.gamers[widget.index].name!, gamer.id!);
+        break;
+      default:
+        break;
+    }
+
+    if (roleId != 8) {
       BlocProvider.of<GameBloc>(context).add(
-        const ResetVoter(),
-      );
-    } else {
-      BlocProvider.of<GameBloc>(context).add(
-        SetVoter(
-          voter: widget.gamers[widget.index],
+        ChangeRoleIndex(
+          roleIndex: roleIndex + 1,
         ),
       );
     }
@@ -273,13 +329,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   @override
   Widget build(BuildContext context) {
-    // print('isAnimating: ${widget.gamers[widget.index].isAnimated}');
-    // print('isGameStarted: ${widget.isGameStarted},'
-    //     ' isGameCouldStart: ${widget.isGameCouldStart} '
-    //     'is Voting Started: ${widget.isVotingStarted}');
-    // print(
-    //     'is condition: ${!widget.isGameStarted && widget.isGameCouldStart && widget.gamers[widget.index].isAnimated}');
-    // // _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
     if ((!widget.isGameStarted &&
             widget.isGameCouldStart &&
             widget.gamers[widget.index].isAnimated) ||
@@ -292,6 +341,10 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
       builder: (BuildContext context, AppState state) {
         final bool isDay = state.game.isDay;
         final bool isDiscussionStarted = state.game.isDiscussionStarted;
+        // print('is animating 3: ${widget.gamers[widget.index].isAnimated}');
+        if (!isDay) {
+          animateGamer(widget.gamers[widget.index]);
+        }
         return AnimatedBuilder(
           animation: _animation,
           builder: (BuildContext context, Widget? child) => DecoratedBox(
@@ -301,7 +354,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                 color: (!widget.isGameCouldStart && !widget.isGameStarted) ||
                         !widget.gamers[widget.index].isAnimated ||
                         isDiscussionStarted ||
-                        !isDay
+                        (!isDay && !widget.gamers[widget.index].isAnimated)
                     ? Colors.transparent
                     : _animation.value!,
                 width: _controller.value * 10,

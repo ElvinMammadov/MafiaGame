@@ -18,6 +18,7 @@ class Virus extends Role with EquatableMixin {
             AppStrings.infectedCitizens: 0,
             AppStrings.infectedMafia: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

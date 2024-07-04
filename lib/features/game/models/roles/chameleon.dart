@@ -24,6 +24,7 @@ class Chameleon extends Role with EquatableMixin {
             AppStrings.playsForAdvocat: 0,
             AppStrings.playsForMadam: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

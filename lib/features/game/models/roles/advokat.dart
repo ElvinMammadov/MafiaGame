@@ -20,6 +20,7 @@ class Advokat extends Role with EquatableMixin {
             AppStrings.citizenAlibiWorked: 0,
             AppStrings.mafiaAlibiWorked: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

@@ -18,6 +18,7 @@ class Killer extends Role with EquatableMixin {
             AppStrings.killedCitizens: 0,
             AppStrings.killedMafias: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

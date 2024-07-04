@@ -18,6 +18,7 @@ class Mirniy extends Role with EquatableMixin {
             AppStrings.votesForDon: 0,
             AppStrings.pointIfDeadByWin: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

@@ -19,6 +19,7 @@ class Sheriff extends Role with EquatableMixin {
             AppStrings.killedMafias: 0,
             AppStrings.entersToMafia: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

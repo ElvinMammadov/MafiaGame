@@ -24,6 +24,7 @@ class Werewolf extends Role with EquatableMixin {
             AppStrings.killedKillerBeforeChange: 0,
             AppStrings.pointsIfWonGame: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

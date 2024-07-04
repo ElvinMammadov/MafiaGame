@@ -188,12 +188,14 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                                   const Icon(
                                                     Icons.check_box_outlined,
                                                     color: Colors.white,
+                                                    size: 32,
                                                   )
                                                 else
                                                   const Icon(
                                                     Icons
                                                         .check_box_outline_blank,
                                                     color: Colors.white,
+                                                    size: 32,
                                                   ),
                                               ],
                                             ),
@@ -236,7 +238,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                             ),
                             dropdownStyleData: DropdownStyleData(
                               offset: const Offset(0, 0),
-                              width: 480,
+                              width: 470,
                               maxHeight: 250,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -245,6 +247,12 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                   color: MafiaTheme
                                       .themeData.colorScheme.secondary,
                                 ),
+                              ),
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.grey,
                               ),
                             ),
                             menuItemStyleData: const MenuItemStyleData(

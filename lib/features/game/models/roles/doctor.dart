@@ -15,10 +15,10 @@ class Doctor extends Role with EquatableMixin {
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
             AppStrings.votedAgainstMainCharacters: 0,
-            AppStrings.pointsIfCheckerDead: 0,
             AppStrings.healedCitizen: 0,
             AppStrings.healedMafia: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

@@ -17,6 +17,7 @@ class Medium extends Role with EquatableMixin {
             AppStrings.votedAgainstMainCharacters: 0,
             AppStrings.pointsIfCheckerDead: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );

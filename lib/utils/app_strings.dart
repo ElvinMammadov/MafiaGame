@@ -95,6 +95,7 @@ class AppStrings {
   static const String notFound ='Игрок не найден';
   static const String totalPoints = 'Общие очки';
   static const String alivePoints = 'Дожил до конца';
+  static const String pointsFromPresenter = 'Очки от ведущей';
   static const String votesForCitizen = 'Голосовал(а) за мирного';
   static const String votesForMafia = 'Голосовал(а) за мафию';
   static const String votesForDon = 'Голосовал(а) за Дона';
