@@ -92,4 +92,7 @@ class AppStrings {
   static const String other = 'Другой';
   static const String search = 'Поиск';
   static const String notFound ='Игрок не найден';
+  static const String victory ='Победы';
+  static const String defeat ='Поражение';
+  static const String point ='Балов';
 }

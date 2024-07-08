@@ -5,56 +5,44 @@ class IndicatorItem extends StatelessWidget {
   const IndicatorItem({
     super.key,
     required this.foregroundColor,
-    required this.title,
     required this.value,
   });
 
   final Color foregroundColor;
-  final String title;
   final double value;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
-        ),
-        Expanded(
-          child: buildLinearIndicator(
+    return Container(
+      color: Colors.blueAccent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          buildLinearIndicator(
             foregroundColor: foregroundColor,
             value: value,
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-          ),
-          margin: const EdgeInsets.only(left: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: MafiaTheme.themeData.highlightColor,
-          ),
-          child: const Align(
-            child: Text(
-              "5",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+            ),
+            margin: const EdgeInsets.only(left: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: MafiaTheme.themeData.highlightColor,
+            ),
+            child: Align(
+              child: Text(
+                value.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -63,8 +51,9 @@ Widget buildLinearIndicator({
   required double value,
   required Color foregroundColor,
 }) {
-  return SizedBox(
-    height: 30,
+  return Container(
+    width: 100,
+    height: 20,
     child: LinearProgressIndicator(
       valueColor: AlwaysStoppedAnimation<Color>(
         foregroundColor,
