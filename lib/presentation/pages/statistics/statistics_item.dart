@@ -197,8 +197,7 @@ class StatisticsItem extends StatelessWidget {
                                                 child: const Text(
                                                   AppStrings.victory,
                                                   style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 22,
                                                   ),
                                                 ),
@@ -211,8 +210,7 @@ class StatisticsItem extends StatelessWidget {
                                                 child: const Text(
                                                   AppStrings.defeat,
                                                   style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 22,
                                                   ),
                                                 ),
@@ -225,8 +223,7 @@ class StatisticsItem extends StatelessWidget {
                                                 child: const Text(
                                                   AppStrings.point,
                                                   style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 22,
                                                   ),
                                                 ),

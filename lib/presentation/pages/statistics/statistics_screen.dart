@@ -38,7 +38,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   child: LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                    if (state.pageList.isEmpty && state.pageStatus is! Initial) {
+                    if (state.pageList.isEmpty &&
+                        state.pageStatus is! Initial) {
                       return const Center(
                         child: Text(
                           AppStrings.notFound,
@@ -99,7 +100,7 @@ class SearchBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
             borderSide: BorderSide(
               color: MafiaTheme.themeData.colorScheme.secondary,
               width: 0.5,
