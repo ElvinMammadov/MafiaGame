@@ -128,5 +128,6 @@ class AppStrings {
   static const String killedKillerBeforeChange = 'Убил(а) убийцу до смены';
   static const String pointsIfWonGame = 'Очки если победил(а)';
   static const String pointIfDeadByWin = 'Очки если мертв при победе';
+  static const String experience = 'Стаж';
 
 }

@@ -12,47 +12,42 @@ class IndicatorItem extends StatelessWidget {
   final double value;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueAccent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          buildLinearIndicator(
+  Widget build(BuildContext context) => Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: buildLinearIndicator(
             foregroundColor: foregroundColor,
             value: value,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-            ),
-            margin: const EdgeInsets.only(left: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: MafiaTheme.themeData.highlightColor,
-            ),
-            child: Align(
-              child: Text(
-                value.toString(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+          ),
+          margin: const EdgeInsets.only(left: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: MafiaTheme.themeData.highlightColor,
+          ),
+          child: Align(
+            child: Text(
+              value.toString(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
-  }
 }
 
 Widget buildLinearIndicator({
   required double value,
   required Color foregroundColor,
-}) {
-  return Container(
-    width: 100,
+}) => SizedBox(
     height: 20,
     child: LinearProgressIndicator(
       valueColor: AlwaysStoppedAnimation<Color>(
@@ -63,4 +58,3 @@ Widget buildLinearIndicator({
       borderRadius: BorderRadius.circular(16),
     ),
   );
-}

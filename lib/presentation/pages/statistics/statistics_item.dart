@@ -79,7 +79,7 @@ class StatisticsItem extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Container(
-                                color: Colors.greenAccent,
+                                margin: const EdgeInsets.only(right: 8),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,78 +89,83 @@ class StatisticsItem extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 16,
-                                              ),
-                                              child: const Text(
-                                                AppStrings.mafia,
-                                                style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  fontSize: 22,
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  right: 16,
+                                                ),
+                                                child: const Text(
+                                                  AppStrings.mafia,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 22,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 16,
-                                              ),
-                                              child: const Text(
-                                                AppStrings.citizen,
-                                                style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  fontSize: 22,
+                                              const SizedBox(height: 8),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  right: 16,
+                                                ),
+                                                child: const Text(
+                                                  AppStrings.citizen,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 22,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 16),
-                                              child: const Text(
-                                                AppStrings.other,
-                                                style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  fontSize: 22,
+                                              const SizedBox(height: 8),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    right: 16),
+                                                child: const Text(
+                                                  AppStrings.other,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 22,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                        Column(
-                                          children: [
-                                            IndicatorItem(
-                                              foregroundColor: MafiaTheme
-                                                  .themeData
-                                                  .colorScheme
-                                                  .secondary,
-                                              value: 0.43,
-                                            ),
-                                            const SizedBox(height: 8),
-                                            IndicatorItem(
-                                              foregroundColor: MafiaTheme
-                                                  .themeData
-                                                  .colorScheme
-                                                  .primary,
-                                              value: 0.64,
-                                            ),
-                                            const SizedBox(height: 8),
-                                            IndicatorItem(
-                                              foregroundColor: MafiaTheme
-                                                  .themeData
-                                                  .colorScheme
-                                                  .surface,
-                                              value: 0.75,
-                                            ),
-                                          ],
+                                        Expanded(
+                                          flex: 2,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              IndicatorItem(
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .secondary,
+                                                value: 0.43,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              IndicatorItem(
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .primary,
+                                                value: 0.64,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              IndicatorItem(
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .surface,
+                                                value: 0.75,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -170,102 +175,94 @@ class StatisticsItem extends StatelessWidget {
                             ),
                             Expanded(
                               child: Container(
-                                margin: const EdgeInsets.only(left: 16),
-                                color: Colors.redAccent,
-                                child: Row(
+                                margin: const EdgeInsets.only(left: 8),
+                                child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
+                                    Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.only(
-                                                    right: 16,
-                                                  ),
-                                                  child: const Text(
-                                                    AppStrings.victory,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 22,
-                                                    ),
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  right: 16,
+                                                ),
+                                                child: const Text(
+                                                  AppStrings.victory,
+                                                  style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    fontSize: 22,
                                                   ),
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.only(
-                                                    right: 16,
-                                                  ),
-                                                  child: const Text(
-                                                    AppStrings.defeat,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 22,
-                                                    ),
-                                                  ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  right: 16,
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.only(
-                                                    right: 16,
-                                                  ),
-                                                  child: const Text(
-                                                    AppStrings.point,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 22,
-                                                    ),
+                                                child: const Text(
+                                                  AppStrings.defeat,
+                                                  style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    fontSize: 22,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                IndicatorItem(
-                                                  foregroundColor:
-                                                      MafiaTheme
-                                                          .themeData
-                                                          .colorScheme
-                                                          .secondary,
-                                                  value: 0.43,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  right: 16,
                                                 ),
-                                                const SizedBox(height: 8),
-                                                IndicatorItem(
-                                                  foregroundColor:
-                                                      MafiaTheme
-                                                          .themeData
-                                                          .colorScheme
-                                                          .primary,
-                                                  value: 0.64,
+                                                child: const Text(
+                                                  AppStrings.point,
+                                                  style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    fontSize: 22,
+                                                  ),
                                                 ),
-                                                const SizedBox(height: 8),
-                                                IndicatorItem(
-                                                  foregroundColor:
-                                                      MafiaTheme
-                                                          .themeData
-                                                          .colorScheme
-                                                          .surface,
-                                                  value: 0.75,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Column(
+                                            children: [
+                                              IndicatorItem(
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .secondary,
+                                                value: 0.43,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              IndicatorItem(
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .primary,
+                                                value: 0.64,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              IndicatorItem(
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .surface,
+                                                value: 0.75,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -307,7 +304,7 @@ class StatisticsItem extends StatelessWidget {
                               ),
                             ),
                             const Text(
-                              "Stag",
+                              AppStrings.experience,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
