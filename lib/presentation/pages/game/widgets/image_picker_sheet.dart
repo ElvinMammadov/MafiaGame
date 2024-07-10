@@ -131,7 +131,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                 decorationBuilder: (BuildContext context, Widget child) =>
                     Material(
                   color: MafiaTheme.themeData.colorScheme.secondary
-                      .withOpacity(0.8),
+                      .withOpacity(0.6),
                   type: MaterialType.card,
                   elevation: 4,
                   borderRadius: BorderRadius.circular(10),
@@ -198,9 +198,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   return null;
                 },
                 onChanged: (Role? value) {
-                  // widget.onChange!(
-                  //   typeOfGame: value!,
-                  // );
                   selectedRole = value;
                   widget.onRoleChanged(selectedRole);
                 },
@@ -225,9 +222,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     ),
                   ),
                 ),
-                // menuItemStyleData: const MenuItemStyleData(
-                //   padding: EdgeInsets.symmetric(horizontal: 16),
-                // ),
               ).padding(top: Dimensions.padding16),
             ],
           ).padding(

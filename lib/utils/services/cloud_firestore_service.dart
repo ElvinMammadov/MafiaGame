@@ -13,17 +13,6 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('game');
   final FirebaseStorage storage = FirebaseStorage.instance;
 
-  // Stream<List<Gamer>> getGamers() =>
-  //     _gamersCollection.snapshots().map((QuerySnapshot<Object?> snapshot) =>
-  //         snapshot.docs.map((QueryDocumentSnapshot<Object?> doc) {
-  //           final Map<String, dynamic> data =
-  //               doc.data()! as Map<String, dynamic>;
-  //           return Gamer(
-  //             id: doc.id,
-  //             name: data['name'],
-  //           );
-  //         }).toList());
-
   Future<String> uploadImageToFirebaseStorage(
     File imageFile,
     String fileName,
@@ -38,6 +27,7 @@ class FirestoreService {
   Future<void> addGameToFirebase({
     required GameState gameState,
   }) async {
+    print('Game state: $gameState');
     await _gameCollection.doc(gameState.gameId).set(<String, Object>{
       'gameName': gameState.gameName,
       'numberOfGamers': gameState.numberOfGamers,
@@ -49,11 +39,13 @@ class FirestoreService {
               'name': gamer.name,
               'role': gamer.role?.name,
               'roleId': gamer.role?.roleId,
-              'id': gamer.id,
               'gamerId': gamer.gamerId,
               'gamerCreatedTime': gamer.gamerCreated,
               'imageUrl': gamer.imageUrl,
               'roleCount': gamer.roleCounts,
+              'points': gamer.role?.points?.map(
+                (String key, int value) => MapEntry<String, int>(key, value),
+              ),
             },
           )
           .toList(),
@@ -83,24 +75,20 @@ class FirestoreService {
           gamers: (data['gamers'] as List<dynamic>)
               .map(
                 (dynamic gamer) => Gamer(
-                  name: gamer['name'] as String,
-                  // role: Role(
-                  //   name: gamer['role']['name'] as String,
-                  //   roleId: gamer['role']['roleId'] as int,
-                  // ),
+                  name: gamer['name'] as String?? '',
                   role: gamer['role'] == null
                       ? null
                       : Role(
-                          name: gamer['role'] as String,
-                          roleId: gamer['roleId'] as int,
-                        ),
-                  id: gamer['id'] as int,
-                  gamerId: gamer['gamerId'] as String,
-                  gamerCreated: gamer['gamerCreatedTime'] as String,
-                  imageUrl: gamer['imageUrl'] as String,
-                  // roleCounts: Map<String, int>.from(
-                  //   gamer['roleCount'] as Map<dynamic, dynamic>,
-                  // )??<String, int>{} as Map<String, int>,
+                          name: gamer['role'] as String?? '',
+                          roleId: gamer['roleId'] as int?? 0,
+                    points: (gamer['points'] as Map<String, dynamic>?)?.map(
+                          (String key,  value) => MapEntry(key, value as int),
+                    ) ?? <String, int>{},
+                  ),
+                  gamerId: gamer['gamerId'] as String?? '',
+                  gamerCreated: gamer['gamerCreatedTime'] as String?? '',
+                  imageUrl: gamer['imageUrl'] as String?? '',
+
                 ),
               )
               .toList(),
@@ -109,7 +97,7 @@ class FirestoreService {
       // logger.log('Games from Firebase: $games');
       return games;
     } catch (error) {
-      print('Error fetching games: $error');
+      print('Error fetching games after: $error');
       return <GameState>[];
     }
   }
@@ -160,10 +148,9 @@ class FirestoreService {
         final Map<String, dynamic> data = doc.data();
         return Gamer(
           name: data['name'] as String,
-          id: data['id'] as int,
           imageUrl: data['imageUrl'] as String,
           gamerId: data['gamerId'] as String,
-          gamerCreated: data['gamerCreatedTime'] as String
+          gamerCreated: data['gamerCreatedTime'] as String,
         );
       }).toList();
 

@@ -98,8 +98,10 @@ class AppStrings {
   static const String point ='Балов';
   static const String totalPoints = 'Общие очки';
   static const String alivePoints = 'Дожил до конца';
-  static const String votesForCitizen = 'Голосов за мирного';
-  static const String votesForMafia = 'Голосов за мафию';
+  static const String pointsFromPresenter = 'Очки от ведущей';
+  static const String votesForCitizen = 'Голосовал(а) за мирного';
+  static const String votesForMafia = 'Голосовал(а) за мафию';
+  static const String votesForDon = 'Голосовал(а) за Дона';
   static const String pointsIfCheckerDead = 'Очки если проверяющий мертв';
   static const String gaveAlibiToCitizen = 'Дал алиби мирному';
   static const String gaveAlibiToMafia = 'Дал алиби мафии';
@@ -129,5 +131,18 @@ class AppStrings {
   static const String pointsIfWonGame = 'Очки если победил(а)';
   static const String pointIfDeadByWin = 'Очки если мертв при победе';
   static const String experience = 'Стаж';
-
+  static const String leaveGame = 'Покинуть игру';
+  static const String addGamer = 'Добавить игрока';
+  static const String loginSuccessfully = 'Вход успешьно выполнен';
+  static const String loginError= 'Ошибка во время входа, попробуйте еще раз';
+  static const String playsForMainCharacters = 'Играя за мирных';
+  static const String playsForMafia = 'Играя за мафию';
+  static const String playsForKiller = 'Играя за убийцу';
+  static const String playsForDoctor = 'Играя за доктора';
+  static const String playsForAdvocat = 'Играя за адвоката';
+  static const String playsForSheriff = 'Играя за шерифа';
+  static const String playsForMadam = 'Играя за мадам';
+  static const String gamerAlreadyVoted = 'Игрок уже проголосовал!';
+  static const String chooseRoles = 'Выберите роли';
+  static const String wakesUp = 'Просыпается ';
 }

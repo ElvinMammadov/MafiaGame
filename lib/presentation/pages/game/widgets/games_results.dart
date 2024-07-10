@@ -113,64 +113,102 @@ class GamesResults extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               color:
-              MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    '${AppStrings.nameOfGame}: $gameName',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '${AppStrings.date}: $gameStartTime',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                  MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
+              child: const Text(
+                AppStrings.mafia,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
               ).padding(
+                horizontal: 32,
                 vertical: 8,
               ),
             ).padding(
               vertical: 16,
               horizontal: 32,
             ),
-            SizedBox(
-              height: 200,
-              width: 700,
-              child: ListView.builder(
-                itemCount: mafia.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  final Gamer gamer = mafia[index];
-                  return Wrap(
-                    spacing: 16.0,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: <Widget>[
-                      GamerListItem(gamer: gamer).padding(
-                        horizontal: 16,
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
           ],
         ),
         // title: "Winners",
-        bodyWidget: const ResultsBody(
-          winners: AppStrings.mafia,
+        bodyWidget: SizedBox(
+          height: 600,
+          width: 700,
+          child: Accordion(
+            headerBackgroundColor: MafiaTheme.themeData.colorScheme.secondary,
+            contentBackgroundColor:
+                MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
+            contentBorderColor: Colors.black54,
+            contentBorderWidth: 1,
+            contentVerticalPadding: 30,
+            rightIcon: const Icon(
+              Icons.arrow_drop_down_outlined,
+              color: Colors.white,
+              size: 32,
+            ),
+            headerPadding: const EdgeInsets.all(16),
+            children: mafia
+                .map(
+                  (Gamer gamer) => AccordionSection(
+                    header: Text(
+                      gamer.name ?? "",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: SizedBox(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: gamer.role?.points?.length,
+                        itemBuilder: (
+                          BuildContext context,
+                          int index,
+                        ) {
+                          final String? key =
+                              gamer.role?.points?.keys.elementAt(index);
+                          final String? value = gamer.role?.points?.values
+                              .elementAt(index)
+                              .toString();
+                          return ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  key!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                               Text(
+                                  value!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
         ),
         decoration: const PageDecoration(
-          safeArea: 20,
-          bodyPadding: EdgeInsets.only(top: 16),
-          titlePadding: EdgeInsets.only(top: 16),
+          safeArea: 0,
         ),
       ),
     );
@@ -184,63 +222,100 @@ class GamesResults extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               color:
-              MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    '${AppStrings.nameOfGame}: $gameName',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '${AppStrings.date}: $gameStartTime',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                  MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
+              child: const Text(
+                AppStrings.civilians,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
               ).padding(
+                horizontal: 32,
                 vertical: 8,
               ),
             ).padding(
               vertical: 16,
               horizontal: 32,
             ),
-            SizedBox(
-              height: 200,
-              width: 700,
-              child: ListView.builder(
-                itemCount: citizens.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  final Gamer gamer = citizens[index];
-                  return Wrap(
-                    // Set the spacing between items (optional)
-                    spacing: 16.0,
-                    children: <Widget>[
-                      GamerListItem(gamer: gamer).padding(
-                        horizontal: 16,
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
           ],
         ),
-        bodyWidget: const ResultsBody(
-          winners: AppStrings.civilians,
+        bodyWidget: SizedBox(
+          height: 600,
+          width: 700,
+          child: Accordion(
+            headerBackgroundColor: MafiaTheme.themeData.colorScheme.secondary,
+            headerPadding: const EdgeInsets.all(16),
+            contentBackgroundColor:
+                MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
+            rightIcon: const Icon(
+              Icons.arrow_drop_down_outlined,
+              color: Colors.white,
+              size: 32,
+            ),
+            children: citizens
+                .map(
+                  (Gamer gamer) => AccordionSection(
+                    header: Text(
+                      gamer.name ?? "",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: SizedBox(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: gamer.role?.points?.length,
+                        itemBuilder: (
+                            BuildContext context,
+                            int index,
+                            ) {
+                          final String? key =
+                          gamer.role?.points?.keys.elementAt(index);
+                          final String? value = gamer.role?.points?.values
+                              .elementAt(index)
+                              .toString();
+                          return ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  key!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  value!,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
         ),
         decoration: const PageDecoration(
-          safeArea: 20,
+          safeArea: 0,
           bodyPadding: EdgeInsets.only(top: 16),
-          titlePadding: EdgeInsets.only(top: 16),
+          titlePadding: EdgeInsets.zero,
         ),
       ),
     );
@@ -378,7 +453,7 @@ class ResultsBody extends StatelessWidget {
           ).padding(
             horizontal: 48,
           ),
-           Divider(
+          Divider(
             height: 16.0,
             thickness: 1.0,
             color: theme.colorScheme.primary, // Subtle divider

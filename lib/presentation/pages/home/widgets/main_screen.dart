@@ -13,6 +13,7 @@ class _MainScreenState extends State<MainScreen> {
   String? typeOfController;
   int? numberOfGamers = 0;
   String? gameName = '';
+  List<Role>? roles = <Role>[];
   @override
   Widget build(BuildContext context) => SizedBox.expand(
       child: Column(
@@ -47,12 +48,14 @@ class _MainScreenState extends State<MainScreen> {
     String? typeOfController,
     int? numberOfGamers,
     String? gameName,
+    List<Role>? selectedRoles,
   }) {
     setState(() {
       this.typeOfGame = typeOfGame ?? this.typeOfGame;
       this.typeOfController = typeOfController ?? this.typeOfController;
       this.numberOfGamers = numberOfGamers ?? this.numberOfGamers;
       this.gameName = gameName ?? this.gameName;
+      roles = selectedRoles ?? roles;
     });
   }
 
@@ -65,6 +68,7 @@ class _MainScreenState extends State<MainScreen> {
         typeOfController: typeOfController ?? '',
         numberOfGamers: numberOfGamers ?? 0,
         gameId: gameId,
+        roles: roles ?? <Role>[],
       ),
     );
     AppNavigator.navigateToTablePage(context);

@@ -22,6 +22,9 @@ class Gamer extends Equatable {
   final bool wasKilledByKiller;
   final bool wasKilledByMafia;
   final bool wasKilledBySheriff;
+  final bool wasKilledByWerewolf;
+  final bool wasCheckedByMadam;
+  final bool wasCheckedBySheriff;
   final bool wasBoomeranged;
   final bool wasSecured;
   final int? targetId;
@@ -29,6 +32,11 @@ class Gamer extends Equatable {
   final bool killSecurity;
   final Map<String, int> roleCounts;
   final bool isAnimated;
+  final bool playsAsCitizen;
+  final bool beforeChange;
+  final int healCount;
+  final bool wasVoted;
+  final bool wasInfected;
 
   const Gamer({
     this.name = '',
@@ -51,12 +59,20 @@ class Gamer extends Equatable {
     this.wasKilledByKiller = false,
     this.wasKilledByMafia = false,
     this.wasKilledBySheriff = false,
+    this.wasKilledByWerewolf = false,
+    this.wasCheckedByMadam = false,
+    this.wasCheckedBySheriff = false,
     this.wasBoomeranged = false,
     this.wasSecured = false,
     this.targetId = 0,
     this.canTarget = true,
     this.killSecurity = false,
     this.isAnimated = true,
+    this.playsAsCitizen = true,
+    this.beforeChange = true,
+    this.healCount = 2,
+    this.wasVoted = false,
+    this.wasInfected = false,
     this.roleCounts = const <String, int>{
       '1': 0,
       '2': 0,
@@ -96,12 +112,20 @@ class Gamer extends Equatable {
         wasKilledByKiller = false,
         wasKilledByMafia = false,
         wasKilledBySheriff = false,
+        wasKilledByWerewolf = false,
+        wasCheckedByMadam = false,
+        wasCheckedBySheriff = false,
         wasBoomeranged = false,
         wasSecured = false,
         targetId = 0,
         canTarget = true,
         killSecurity = false,
         isAnimated = true,
+        playsAsCitizen = true,
+        beforeChange = true,
+        healCount = 2,
+        wasVoted = false,
+        wasInfected = false,
         roleCounts = const <String, int>{
           '1': 0,
           '2': 0,
@@ -141,6 +165,9 @@ class Gamer extends Equatable {
     bool? wasKilledByKiller,
     bool? wasKilledByMafia,
     bool? wasKilledBySheriff,
+    bool? wasKilledByWerewolf,
+    bool? wasCheckedByMadam,
+    bool? wasCheckedBySheriff,
     bool? wasBoomeranged,
     bool? wasSecured,
     int? targetId,
@@ -148,6 +175,11 @@ class Gamer extends Equatable {
     bool? killSecurity,
     Map<String, int>? roleCounts,
     bool? isAnimated,
+    bool? playsAsCitizen,
+    bool? beforeChange,
+    int? healCount,
+    bool? wasVoted,
+    bool? wasInfected,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -169,6 +201,9 @@ class Gamer extends Equatable {
         wasKilledByKiller: wasKilledByKiller ?? this.wasKilledByKiller,
         wasKilledByMafia: wasKilledByMafia ?? this.wasKilledByMafia,
         wasKilledBySheriff: wasKilledBySheriff ?? this.wasKilledBySheriff,
+        wasKilledByWerewolf: wasKilledByWerewolf ?? this.wasKilledByWerewolf,
+        wasCheckedByMadam: wasCheckedByMadam ?? this.wasCheckedByMadam,
+        wasCheckedBySheriff: wasCheckedBySheriff ?? this.wasCheckedBySheriff,
         wasBoomeranged: wasBoomeranged ?? this.wasBoomeranged,
         wasSecured: wasSecured ?? this.wasSecured,
         targetId: targetId ?? this.targetId,
@@ -177,6 +212,11 @@ class Gamer extends Equatable {
         roleCounts: roleCounts ?? this.roleCounts,
         isRoleGiven: isRoleGiven ?? this.isRoleGiven,
         isAnimated: isAnimated ?? this.isAnimated,
+        playsAsCitizen: playsAsCitizen ?? this.playsAsCitizen,
+        beforeChange: beforeChange ?? this.beforeChange,
+        healCount: healCount ?? this.healCount,
+        wasVoted: wasVoted ?? this.wasVoted,
+        wasInfected: wasInfected ?? this.wasInfected,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -204,6 +244,9 @@ class Gamer extends Equatable {
         wasKilledByKiller,
         wasKilledByMafia,
         wasKilledBySheriff,
+        wasKilledByWerewolf,
+        wasCheckedByMadam,
+        wasCheckedBySheriff,
         wasBoomeranged,
         wasSecured,
         targetId,
@@ -212,12 +255,16 @@ class Gamer extends Equatable {
         roleCounts,
         isRoleGiven,
         isAnimated,
+        playsAsCitizen,
+        beforeChange,
+        healCount,
+        wasVoted,
+        wasInfected,
       ];
 
   @override
   String toString() => 'Gamer'
       '{name: $name, role: $role,'
-      // ' imageUrl: $imageUrl,'
       ' id: $id, documentId: $documentId'
       ' gamerId: $gamerId,gamerCreated: $gamerCreated, '
       'isNameChanged: $isNameChanged,'
@@ -228,9 +275,13 @@ class Gamer extends Equatable {
       ' wasHealed: $wasHealed, hasAlibi: $hasAlibi'
       ' wasKilledByKiller: $wasKilledByKiller,'
       ' wasKilledByMafia: $wasKilledByMafia, '
-      'wasKilledBySheriff: $wasKilledBySheriff,'
+      'wasKilledBySheriff: $wasKilledBySheriff, wasKilledByWerewolf:'
+      ' $wasKilledByWerewolf, wasCheckedByMadam: $wasCheckedByMadam,'
+      ' wasCheckedBySheriff: $wasCheckedBySheriff,'
       ' wasBumeranged: $wasBoomeranged, wasSecured: $wasSecured, '
       'targetId: $targetId, canTarget: $canTarget, killSecurity: $killSecurity'
       ' roleCounts: $roleCounts, isRoleGiven: '
-      '$isRoleGiven, isAnimated: $isAnimated}';
+      '$isRoleGiven, isAnimated: $isAnimated, playsAsCitizen: $playsAsCitizen,'
+      ' beforeChange: $beforeChange, '
+      'healCount: $healCount, wasVoted: $wasVoted, wasInfected: $wasInfected}';
 }

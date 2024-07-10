@@ -2,12 +2,10 @@ part of game;
 
 @JsonSerializable()
 class Medium extends Role with EquatableMixin {
-  final Map<String, int>? points;
-
   const Medium({
     required super.name,
     required super.roleId,
-    this.points,
+    required super.points,
   });
 
   const Medium.empty()
@@ -15,11 +13,12 @@ class Medium extends Role with EquatableMixin {
           name: 'Medium',
           roleId: 12,
           points: const <String, int>{
-            AppStrings.totalPoints: 0,
-            AppStrings.alivePoints: 0,
-            AppStrings.votesForMafia: 0,
-            AppStrings.votesForCitizen: 0,
+            AppStrings.votedAgainstMafia: 0,
+            AppStrings.votedAgainstMainCharacters: 0,
             AppStrings.pointsIfCheckerDead: 0,
+            AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
+            AppStrings.totalPoints: 0,
           },
         );
 

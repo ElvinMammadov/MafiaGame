@@ -1,7 +1,6 @@
 part of game;
 
 class RolesChanger extends StatefulWidget {
-
   const RolesChanger();
 
   @override
@@ -20,12 +19,18 @@ class _RolesChangerState extends State<RolesChanger> {
           final Roles roles = state.gamersState.roles;
           final int roleIndex =
               BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+          final bool isDay = state.game.isDay;
           return Center(
             child: Column(
               children: <Widget>[
                 Text(
-                  AppStrings.chooseRole + roles.roles[roleIndex].name,
-                  style: MafiaTheme.themeData.textTheme.headlineMedium,
+                  !isDay
+                      ? AppStrings.wakesUp + roles.roles[roleIndex].name
+                      : AppStrings.chooseRole + roles.roles[roleIndex].name,
+                  style:
+                      MafiaTheme.themeData.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ).padding(bottom: 20.0),
                 Row(
                   children: <Widget>[

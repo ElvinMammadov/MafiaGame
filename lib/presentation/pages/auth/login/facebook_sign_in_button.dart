@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FacebookSignInButton extends StatelessWidget {
-  const FacebookSignInButton({Key? key, required this.onSignIn})
-      : super(key: key);
+  const FacebookSignInButton({super.key, required this.onSignIn});
 
   final VoidCallback onSignIn;
 
@@ -26,4 +25,6 @@ class FacebookSignInButton extends StatelessWidget {
     ),
   );
 }
+
+
 

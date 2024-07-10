@@ -16,6 +16,7 @@ List<Widget> gamersAvatars({
   final double screenWidth = MediaQuery.of(context).size.width;
   final double screenHeight = MediaQuery.of(context).size.height;
   final List<Widget> positionedAvatars = <Widget>[];
+  final bool isDay = BlocProvider.of<GameBloc>(context).state.game.isDay;
 
   final double ovalRadius;
   double minAvatarRadius;
@@ -79,6 +80,7 @@ List<Widget> gamersAvatars({
                           changeRole: changeRole,
                           isGameStarted: isGameStarted,
                           isVotingStarted: isVotingStarted,
+                          isDay: isDay,
                         ),
                       ),
                       if (gamers[i].foulCount >= 1)

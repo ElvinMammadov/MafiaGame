@@ -2,26 +2,25 @@ part of game;
 
 @JsonSerializable()
 class Mafia extends Role with EquatableMixin {
-  final Map<String, int>? points;
-
   const Mafia({
     required super.name,
     required super.roleId,
-    this.points,
+    required super.points,
   });
 
   const Mafia.empty()
       : this(
           name: 'Mafia',
           roleId: 2,
-    points: const <String, int>{
-      AppStrings.totalPoints: 0,
-      AppStrings.alivePoints: 0,
-      AppStrings.votedAgainstMafia: 0,
-      AppStrings.votedAgainstMainCharacters: 0,
-      AppStrings.votedAgainstOthers: 0,
-      AppStrings.deadMafiaPoints: 0,
-    },
+          points: const <String, int>{
+            AppStrings.votedAgainstMafia: 0,
+            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstOthers: 0,
+            AppStrings.deadMafiaPoints: 0,
+            AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
+            AppStrings.totalPoints: 0,
+          },
         );
 
   @override

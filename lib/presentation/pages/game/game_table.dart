@@ -16,8 +16,13 @@ class _GameTableScreenState extends State<GameTableScreen> {
     String gameName,
     DateTime? gameStartTime,
     BuildContext context,
+    GameState game,
   ) {
-    print('mafiaCount: $mafiaCount, civilianCount: $civilianCount');
+    // print('mafiaCount: $mafiaCount, civilianCount: $civilianCount');
+    final bool isWerewolfAlive = gamers.any(
+      (Gamer gamer) => gamer.role!.roleId == 7 && !gamer.wasKilled,
+    );
+    print('isWerewolfAlive: $isWerewolfAlive');
     if (mafiaCount == civilianCount) {
       showResults(
         context,
@@ -26,13 +31,25 @@ class _GameTableScreenState extends State<GameTableScreen> {
         gameName: gameName,
         gameStartTime: DateFormat('yyyy-MM-dd').format(gameStartTime!),
       );
-    } else if (mafiaCount == 0) {
+      BlocProvider.of<GameBloc>(context).add(
+        SendGameToFirebase(
+          gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
+        ),
+      );
+      // AppNavigator.navigateToHomeScreen(context);
+    } else if (mafiaCount == 0 && !isWerewolfAlive) {
       showResults(
         context,
         gamers,
         gameName: gameName,
         gameStartTime: DateFormat('yyyy-MM-dd').format(gameStartTime!),
       );
+      BlocProvider.of<GameBloc>(context).add(
+        SendGameToFirebase(
+          gameState: game.copyWith(isMafiaWin: false,gamers: gamers),
+        ),
+      );
+      // AppNavigator.navigateToHomeScreen(context);
     }
   }
 
@@ -47,6 +64,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int mafiaCount = state.game.mafiaCount;
           final int civilianCount = state.game.civilianCount;
           final DateTime? gameStartTime = state.game.gameStartTime;
+          final GameState gameState = state.game;
           print('mafiaCount 1: $mafiaCount, '
               'civilianCount 1: $civilianCount');
           showLastResults(
@@ -54,8 +72,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
             civilianCount,
             gamers,
             gameName,
-            gameStartTime,
+            gameStartTime?? DateTime.now(),
             context,
+            gameState,
           );
         },
         builder: (BuildContext context, AppState state) {
@@ -77,17 +96,33 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int nightNumber = state.game.nightNumber;
           final List<Gamer> killedGamers = <Gamer>[];
 
+          if (gamers.isNotEmpty) {
+            // print(
+            //     'Gamers are ${gamers.map((Gamer gamer) => gamer.role?.points).toList()}');
+            print(
+                'Gamers wasinfected ${gamers.map((Gamer gamer) => gamer.wasInfected).toList()}');
+            print(
+                'Gamers animates ${gamers.map((Gamer gamer) => gamer.isAnimated).toList()}');
+          }
+
           const double buttonLeftPercentage = 0.07;
           const double buttonBottomPercentage = 0.02;
           const double roundButtonBottomPercentage = 0.05;
           return Scaffold(
             appBar: DefaultAppBar(
               title: AppStrings.title,
-              showBackButton: true,
+              showGameMenu: true,
               actionCallback: () {
                 BlocProvider.of<GameBloc>(context).add(
-                  const CleanGamers(gamers: <Gamer>[]),
+                  const EmptyGame(),
                 );
+              },
+              onExit: () {
+                BlocProvider.of<GameBloc>(context).add(
+                  const EmptyGame(),
+                );
+                Navigator.of(context)
+                    .popUntil((Route<dynamic> route) => route.isFirst);
               },
             ),
             resizeToAvoidBottomInset: false,
@@ -126,6 +161,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                             if (isGameStarted) {
                               if (isDiscussionStarted) {
                                 BlocProvider.of<GameBloc>(context).add(
+                                  const ChangeRoleIndex(
+                                    roleIndex: 0,
+                                  ),
+                                );
+                                BlocProvider.of<GameBloc>(context).add(
                                   const EndDiscussion(
                                     isDiscussionStarted: false,
                                   ),
@@ -144,79 +184,100 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     context,
                                     message: AppStrings.votesHaveNotAdded,
                                   );
-                                }
-                                final List<Gamer> topGamers = gamers
-                                    .where(
-                                      (Gamer gamer) =>
-                                          gamer.votesCount == maxVotes &&
-                                          maxVotes != 0,
-                                    )
-                                    .map((Gamer gamer) => gamer)
-                                    .toList();
+                                } else {
+                                  final List<Gamer> topGamers = gamers
+                                      .where(
+                                        (Gamer gamer) =>
+                                            gamer.votesCount == maxVotes &&
+                                            maxVotes != 0,
+                                      )
+                                      .map((Gamer gamer) => gamer)
+                                      .toList();
 
-                                if (topGamers.length == 1) {
+                                  if (topGamers.length == 1) {
+                                    BlocProvider.of<GameBloc>(context).add(
+                                      KillGamer(gamer: topGamers[0]),
+                                    );
+
+                                    BlocProvider.of<GameBloc>(context).add(
+                                      const EndVoting(
+                                        isVotingStarted: false,
+                                      ),
+                                    );
+                                    BlocProvider.of<GameBloc>(context).add(
+                                      const AddDayNumber(),
+                                    );
+                                    if (dayNumber == 1 &&
+                                        topGamers[0].role!.roleId == 8) {
+                                      Gamer leftGamer = const Gamer.empty();
+                                      Gamer rightGamer = const Gamer.empty();
+                                      print('topGamers[0].id:'
+                                          ' ${topGamers[0].id}');
+                                      if (topGamers[0].id == 1) {
+                                        leftGamer = gamers.last;
+                                      } else {
+                                        leftGamer =
+                                            gamers[topGamers[0].id! - 2];
+                                      }
+                                      rightGamer = gamers[topGamers[0].id!];
+
+                                      BlocProvider.of<GameBloc>(context).add(
+                                        KillGamer(gamer: leftGamer),
+                                      );
+                                      BlocProvider.of<GameBloc>(context).add(
+                                        KillGamer(gamer: rightGamer),
+                                      );
+                                    }
+                                    showKilledGamer(
+                                      context,
+                                      topGamers[0],
+                                    );
+                                  } else if (topGamers.length > 1) {
+                                    showPickNumber(
+                                      context,
+                                      topGamers,
+                                      () {},
+                                    );
+                                  }
+                                  if (dayNumber == 2) {
+                                    print('dayNumber: $dayNumber');
+                                    for (final Gamer gamer in gamers) {
+                                      BlocProvider.of<GameBloc>(context).add(
+                                        InfectGamer(
+                                          targetedGamer: gamer,
+                                          infect: false,
+                                        ),
+                                      );
+                                    }
+                                  }
                                   BlocProvider.of<GameBloc>(context).add(
-                                    KillGamer(gamer: topGamers[0]),
+                                    CleanGamersAfterDay(gamers: gamers),
                                   );
-
                                   BlocProvider.of<GameBloc>(context).add(
-                                    const EndVoting(
-                                      isVotingStarted: false,
+                                    const ResetVoters(),
+                                  );
+                                  BlocProvider.of<GameBloc>(context).add(
+                                    InfectedCount(
+                                      infectedCount: state.game.mafiaCount,
                                     ),
                                   );
                                   BlocProvider.of<GameBloc>(context).add(
-                                    const AddDayNumber(),
-                                  );
-                                  // print('dayNumber: $dayNumber, '
-                                  //     'topGamers[0].role!.roleId: '
-                                  //     '${topGamers[0].role!.roleId}');
-                                  if (dayNumber == 1 &&
-                                      topGamers[0].role!.roleId == 8) {
-                                    Gamer leftGamer = const Gamer.empty();
-                                    Gamer rightGamer = const Gamer.empty();
-                                    print('topGamers[0].id:'
-                                        ' ${topGamers[0].id}');
-                                    if (topGamers[0].id == 1) {
-                                      leftGamer = gamers.last;
-                                    } else {
-                                      leftGamer = gamers[topGamers[0].id! - 2];
-                                    }
-                                    rightGamer = gamers[topGamers[0].id!];
-
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      KillGamer(gamer: leftGamer),
-                                    );
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      KillGamer(gamer: rightGamer),
-                                    );
-                                  }
-                                  showKilledGamer(
-                                    context,
-                                    topGamers[0],
-                                  );
-                                } else if (topGamers.length > 1) {
-                                  showPickNumber(
-                                    context,
-                                    topGamers,
-                                    () {
-                                      // showLastResults(
-                                      //   mafiaCount,
-                                      //   civilianCount,
-                                      //   gamers,
-                                      //   gameName,
-                                      //   gameStartTime,
-                                      //   context,
-                                      // );
-                                    },
+                                    const UpdateAnimation(animate: false),
                                   );
                                 }
-                                BlocProvider.of<GameBloc>(context).add(
-                                  const ResetVoter(),
-                                );
                               } else if (!isDay) {
                                 BlocProvider.of<GameBloc>(context).add(
-                                  const UpdateAnimation(),
+                                  const AddNightNumber(),
                                 );
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const UpdateAnimation(animate: true),
+                                );
+                                //Madam give points
+                                //Boomerang give points
+                                // (checking whom boomerang killed)
+                                //Doctors points
+                                //Killer Points
+
                                 for (final Gamer gamer in gamers) {
                                   if (!gamer.wasKilled) {
                                     if (!gamer.wasSecured && !gamer.wasHealed) {
@@ -243,13 +304,10 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     }
                                   }
                                 }
-                                BlocProvider.of<GameBloc>(context).add(
-                                  const AddNightNumber(),
-                                );
                               }
                             } else {
                               BlocProvider.of<GameBloc>(context).add(
-                                SendGameToFirebase(
+                                SaveGame(
                                   gameState: state.game.copyWith(
                                     gameName: gameName,
                                     numberOfGamers: numberOfGamers,
@@ -262,7 +320,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                               );
 
                               BlocProvider.of<GameBloc>(context).add(
-                                const UpdateAnimation(),
+                                const UpdateAnimation(animate: true),
                               );
                             }
                           },
@@ -296,6 +354,12 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         ),
                       ),
                     if (isGameCouldStart && !isGameStarted)
+                      Positioned(
+                        left: screenWidth / 3,
+                        bottom: screenHeight / 3.3,
+                        child: const RolesChanger(),
+                      ),
+                    if (!isDay)
                       Positioned(
                         left: screenWidth / 3,
                         bottom: screenHeight / 3.3,
