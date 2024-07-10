@@ -93,6 +93,9 @@ class AppStrings {
   static const String other = 'Другой';
   static const String search = 'Поиск';
   static const String notFound ='Игрок не найден';
+  static const String victory ='Победы';
+  static const String defeat ='Поражение';
+  static const String point ='Балов';
   static const String totalPoints = 'Общие очки';
   static const String alivePoints = 'Дожил до конца';
   static const String pointsFromPresenter = 'Очки от ведущей';
@@ -127,6 +130,7 @@ class AppStrings {
   static const String killedKillerBeforeChange = 'Убил(а) убийцу до смены';
   static const String pointsIfWonGame = 'Очки если победил(а)';
   static const String pointIfDeadByWin = 'Очки если мертв при победе';
+  static const String experience = 'Стаж';
   static const String leaveGame = 'Покинуть игру';
   static const String addGamer = 'Добавить игрока';
   static const String loginSuccessfully = 'Вход успешьно выполнен';

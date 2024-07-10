@@ -5,30 +5,16 @@ class IndicatorItem extends StatelessWidget {
   const IndicatorItem({
     super.key,
     required this.foregroundColor,
-    required this.title,
     required this.value,
   });
 
   final Color foregroundColor;
-  final String title;
   final double value;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget build(BuildContext context) => Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
-        ),
         Expanded(
           child: buildLinearIndicator(
             foregroundColor: foregroundColor,
@@ -44,10 +30,10 @@ class IndicatorItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             color: MafiaTheme.themeData.highlightColor,
           ),
-          child: const Align(
+          child: Align(
             child: Text(
-              "5",
-              style: TextStyle(
+              value.toString(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
               ),
@@ -56,15 +42,13 @@ class IndicatorItem extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 Widget buildLinearIndicator({
   required double value,
   required Color foregroundColor,
-}) {
-  return SizedBox(
-    height: 30,
+}) => SizedBox(
+    height: 20,
     child: LinearProgressIndicator(
       valueColor: AlwaysStoppedAnimation<Color>(
         foregroundColor,
@@ -74,4 +58,3 @@ Widget buildLinearIndicator({
       borderRadius: BorderRadius.circular(16),
     ),
   );
-}
