@@ -56,7 +56,7 @@ class DialogBuilder {
                   final String imageUrl =
                   await firestoreService.uploadImageToFirebaseStorage(
                     imageFile == null
-                        ? await getImageFileFromAssets('mafioz.jpg')
+                        ? await getImageFileFromAssets('logo_m.png')
                         : imageFile!,
                     gamerId,
                   );

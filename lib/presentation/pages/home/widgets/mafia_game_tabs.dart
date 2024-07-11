@@ -26,7 +26,7 @@ class MafiaGameTabs extends StatelessWidget {
             color: MafiaTheme.themeData.colorScheme.surface,
           ).padding(
             top: 10.0,
-            bottom: 8.0,
+            bottom: 4.0,
           ), // Adjust as needed
         Text(
           label,

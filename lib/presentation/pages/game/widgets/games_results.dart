@@ -151,13 +151,26 @@ class GamesResults extends StatelessWidget {
             children: mafia
                 .map(
                   (Gamer gamer) => AccordionSection(
-                    header: Text(
-                      gamer.name ?? "",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    header: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          '${AppStrings.nameOfGamer}:  ${gamer.name!}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${AppStrings.roleOfGamer}:  ${gamer.role?.name}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                     content: SizedBox(
                       height: 300,
@@ -187,7 +200,7 @@ class GamesResults extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                               Text(
+                                Text(
                                   value!,
                                   style: const TextStyle(
                                     color: Colors.black,
@@ -197,7 +210,6 @@ class GamesResults extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                           );
                         },
                       ),
@@ -256,24 +268,37 @@ class GamesResults extends StatelessWidget {
             children: citizens
                 .map(
                   (Gamer gamer) => AccordionSection(
-                    header: Text(
-                      gamer.name ?? "",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    header: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          '${AppStrings.nameOfGamer}:  ${gamer.name!}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${AppStrings.roleOfGamer}:  ${gamer.role?.name}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                     content: SizedBox(
                       height: 300,
                       child: ListView.builder(
                         itemCount: gamer.role?.points?.length,
                         itemBuilder: (
-                            BuildContext context,
-                            int index,
-                            ) {
+                          BuildContext context,
+                          int index,
+                        ) {
                           final String? key =
-                          gamer.role?.points?.keys.elementAt(index);
+                              gamer.role?.points?.keys.elementAt(index);
                           final String? value = gamer.role?.points?.values
                               .elementAt(index)
                               .toString();
@@ -302,7 +327,6 @@ class GamesResults extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                           );
                         },
                       ),

@@ -28,6 +28,19 @@ class FirestoreService {
     required GameState gameState,
   }) async {
     print('Game state: $gameState');
+
+    // for (Gamer gamer in gameState.gamers) {
+    //   try {
+    //     await _gamersCollection.doc(gamer.gamerId).update(<String, dynamic>{
+    //       'role': gamer.role?.name,
+    //       'roleId': gamer.role?.roleId,
+    //       'points': gamer.role?.points,
+    //     });
+    //     print("Updated gamer: ${gamer.gamerId}");
+    //   } catch (error) {
+    //     print("Error updating gamer: ${gamer.gamerId}, error: $error");
+    //   }
+    // }
     await _gameCollection.doc(gameState.gameId).set(<String, Object>{
       'gameName': gameState.gameName,
       'numberOfGamers': gameState.numberOfGamers,
@@ -75,19 +88,19 @@ class FirestoreService {
           gamers: (data['gamers'] as List<dynamic>)
               .map(
                 (dynamic gamer) => Gamer(
-                  name: gamer['name'] as String?? '',
+                  name: gamer['name'] as String,
                   role: gamer['role'] == null
                       ? null
                       : Role(
-                          name: gamer['role'] as String?? '',
-                          roleId: gamer['roleId'] as int?? 0,
+                          name: gamer['role'] as String,
+                          roleId: gamer['roleId'] as int,
                     points: (gamer['points'] as Map<String, dynamic>?)?.map(
                           (String key,  value) => MapEntry(key, value as int),
                     ) ?? <String, int>{},
                   ),
-                  gamerId: gamer['gamerId'] as String?? '',
-                  gamerCreated: gamer['gamerCreatedTime'] as String?? '',
-                  imageUrl: gamer['imageUrl'] as String?? '',
+                  gamerId: gamer['gamerId'] as String,
+                  gamerCreated: gamer['gamerCreatedTime'] as String,
+                  imageUrl: gamer['imageUrl'] as String,
 
                 ),
               )

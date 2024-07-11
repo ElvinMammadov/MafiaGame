@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:825669646140:android:014513e6e8901d441f9039",
+        "android_client_info": {
+          "package_name": "com.example.mafia.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825669646140-vdhq2i1jkfbp0kg749i4h5sv60ht1ads.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqlFQNHr80SLYP_MpQsZPV6WuQtHT3z1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825669646140-vdhq2i1jkfbp0kg749i4h5sv60ht1ads.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:825669646140:android:cf0c103133b5b85c1f9039",
         "android_client_info": {
           "package_name": "com.example.mafia_game"

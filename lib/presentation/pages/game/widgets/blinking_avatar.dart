@@ -56,7 +56,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void animateGamer(Gamer gamer) {
+  void _animateGamer(Gamer gamer) {
     final int roleIndex =
         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
     final int roleId = widget.roles.roles[roleIndex].roleId;
@@ -134,193 +134,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     });
   }
 
-  void killGamerByMafia(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          KillGamerByMafia(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void killGamerByKiller(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          KillGamerByKiller(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void killGamerBySheriff(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          KillGamerBySheriff(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void healGamer(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          HealGamer(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void giveAlibi(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          GiveAlibi(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void secureGamer(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          SecureGamer(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void takeAbilityFromGamer(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          TakeAbilityFromGamer(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void boomerangGamer(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          BoomerangGamer(
-            targetedGamer: gamer,
-            gamerId: gamerId,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void infectGamer(String gamerName, int gamerId) {
-    for (final Gamer gamer in widget.gamers) {
-      if (gamer.name == gamerName) {
-        BlocProvider.of<GameBloc>(context).add(
-          InfectGamer(
-            targetedGamer: gamer,
-            infect: true,
-          ),
-        );
-        break;
-      }
-    }
-  }
-
-  void _handleHitting() {
-    final int roleIndex =
-        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-    final int roleId = widget.roles.roles[roleIndex].roleId;
-
-    final Gamer gamer =
-        widget.gamers.firstWhere((Gamer gamer) => gamer.role?.roleId == roleId);
-    print('roleId: $roleId');
-    switch (roleId) {
-      case 1:
-        healGamer(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      case 2:
-      case 3:
-        killGamerByMafia(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      case 4:
-        killGamerBySheriff(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      case 5:
-        takeAbilityFromGamer(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      case 6:
-        killGamerByKiller(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      case 8:
-        if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
-          infectGamer(widget.gamers[widget.index].name!, gamer.id!);
-          BlocProvider.of<GameBloc>(context).add(
-            InfectedCount(
-              infectedCount:
-                  BlocProvider.of<GameBloc>(context).state.game.infectedCount -
-                      1,
-            ),
-          );
-        }
-
-        break;
-      case 9:
-        giveAlibi(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-
-      case 10:
-        secureGamer(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      case 14:
-        boomerangGamer(widget.gamers[widget.index].name!, gamer.id!);
-        break;
-      default:
-        break;
-    }
-
-    if (roleId != 8) {
-      BlocProvider.of<GameBloc>(context).add(
-        ChangeRoleIndex(
-          roleIndex: roleIndex + 1,
-        ),
-      );
-    }
-  }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -343,7 +156,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
         final bool isDiscussionStarted = state.game.isDiscussionStarted;
         // print('is animating 3: ${widget.gamers[widget.index].isAnimated}');
         if (!isDay) {
-          animateGamer(widget.gamers[widget.index]);
+          _animateGamer(widget.gamers[widget.index]);
         }
         return AnimatedBuilder(
           animation: _animation,
@@ -378,7 +191,12 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                   } else if (widget.isVotingStarted && isDay) {
                     _handleTap();
                   } else if (!isDay) {
-                    _handleHitting();
+                    BlinkingFunctions()._handleHitting(
+                      context,
+                      widget.gamers,
+                      widget.roles,
+                      widget.index,
+                    );
                   } else if (!widget.isGameCouldStart &&
                       !widget.isGameStarted) {
                     DialogBuilder().showAddUserModal(

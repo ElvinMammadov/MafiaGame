@@ -97,8 +97,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final List<Gamer> killedGamers = <Gamer>[];
 
           if (gamers.isNotEmpty) {
-            // print(
-            //     'Gamers are ${gamers.map((Gamer gamer) => gamer.role?.points).toList()}');
+            logger.log(
+                'Gamers are ${gamers.map((Gamer gamer) => gamer.role?.points).toList()}');
             print(
                 'Gamers wasinfected ${gamers.map((Gamer gamer) => gamer.wasInfected).toList()}');
             print(

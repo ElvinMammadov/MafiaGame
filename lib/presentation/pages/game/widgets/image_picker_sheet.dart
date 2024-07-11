@@ -62,7 +62,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                       child: image == null
                           ? imageUrl.isEmpty
                               ? const Image(
-                                  image: AssetImage('assets/mafioz.jpg'),
+                                  image: AssetImage('assets/logo_m.png'),
                                   fit: BoxFit.fill,
                                   width: 192,
                                   height: 180,
