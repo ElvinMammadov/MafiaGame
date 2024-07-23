@@ -4,8 +4,11 @@ class DialogBuilder {
   void showAddUserModal(
     BuildContext context,
     int id,
-    Role? role,
-  ) {
+    Role? role, {
+    bool isPositionMode = false,
+    int numberOfGamers = 0,
+    int position = 0,
+  }) {
     final ValueNotifier<bool> isButtonEnabledNotifier =
         ValueNotifier<bool>(false);
     final TextEditingController textEditingController = TextEditingController();
@@ -16,6 +19,7 @@ class DialogBuilder {
     File? imageFile;
     Role? newRole = role;
     Gamer? chosenGamer;
+    int? positionOnTable;
     WoltModalSheet.show<void>(
       context: context,
       pageListBuilder: (BuildContext modalSheetContext) =>
@@ -32,7 +36,7 @@ class DialogBuilder {
               enabled: isEnabled,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
               action: () async {
-                if(chosenGamer != null) {
+                if (chosenGamer != null) {
                   BlocProvider.of<GameBloc>(context).add(
                     UpdateGamer(
                       isGamerExist: true,
@@ -41,6 +45,8 @@ class DialogBuilder {
                         id: id,
                         gamerId: chosenGamer!.gamerId,
                         imageUrl: chosenGamer!.imageUrl,
+                        positionOnTable:
+                            isPositionMode ? positionOnTable! : position,
                         isNameChanged: true,
                         role: newRole,
                         // roleCounts:  <String, int>{
@@ -51,10 +57,10 @@ class DialogBuilder {
                   );
                   Navigator.of(context).pop();
                   return;
-                }else{
+                } else {
                   final String gamerId = UniqueKey().toString();
                   final String imageUrl =
-                  await firestoreService.uploadImageToFirebaseStorage(
+                      await firestoreService.uploadImageToFirebaseStorage(
                     imageFile == null
                         ? await getImageFileFromAssets('logo_m.png')
                         : imageFile!,
@@ -68,6 +74,8 @@ class DialogBuilder {
                         id: id,
                         gamerId: gamerId,
                         imageUrl: imageUrl,
+                        positionOnTable:
+                        isPositionMode ? positionOnTable! : position,
                         isNameChanged: true,
                         role: newRole,
                       ),
@@ -103,9 +111,14 @@ class DialogBuilder {
             onRoleChanged: (Role? updatedRole) {
               newRole = updatedRole;
             },
-              gamerChosenFromFirebase: (Gamer? gamer) {
-                chosenGamer = gamer;
-              },
+            gamerChosenFromFirebase: (Gamer? gamer) {
+              chosenGamer = gamer;
+            },
+            onPositionChange: (int? position) {
+              positionOnTable = position;
+            },
+            isPositionMode: isPositionMode,
+            numberOfGamers: numberOfGamers,
           ),
         ),
       ],

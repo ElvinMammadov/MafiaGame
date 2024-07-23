@@ -59,7 +59,7 @@ class BlinkingFunctions {
       case 8:
         if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
           infectGamer(
-           gamers[index].name!,
+            gamers[index].name!,
             gamer.id!,
             context,
             gamers,
@@ -87,12 +87,20 @@ class BlinkingFunctions {
           gamers[index].name!,
           gamer.id!,
           context,
-         gamers,
+          gamers,
+        );
+        break;
+      case 12:
+        mediumChecked(
+          gamers[index].name!,
+          gamer.id!,
+          context,
+          gamers,
         );
         break;
       case 14:
         boomerangGamer(
-         gamers[index].name!,
+          gamers[index].name!,
           gamer.id!,
           context,
           gamers,
@@ -235,6 +243,25 @@ class BlinkingFunctions {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
           TakeAbilityFromGamer(
+            targetedGamer: gamer,
+            gamerId: gamerId,
+          ),
+        );
+        break;
+      }
+    }
+  }
+
+  void mediumChecked(
+    String gamerName,
+    int gamerId,
+    BuildContext context,
+    List<Gamer> gamers,
+  ) {
+    for (final Gamer gamer in gamers) {
+      if (gamer.name == gamerName) {
+        BlocProvider.of<GameBloc>(context).add(
+          MediumChecked(
             targetedGamer: gamer,
             gamerId: gamerId,
           ),

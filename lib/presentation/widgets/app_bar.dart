@@ -6,6 +6,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
   final VoidCallback? actionCallback;
+  final VoidCallback? onAddGamer;
   final VoidCallback? onExit;
   final bool showGameMenu;
 
@@ -14,6 +15,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.showBackButton = false,
     this.actionCallback,
+    this.onAddGamer,
     this.showGameMenu = false,
     this.onExit,
   });
@@ -23,6 +25,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       case 'addGamer':
         // ignore: avoid_print
         print('addGamer');
+        onAddGamer?.call();
         break;
       case 'exit':
         onExit?.call();

@@ -47,7 +47,7 @@ List<Widget> gamersAvatars({
     maxAvatarRadius,
   );
   final double angleStep = (2 * pi) / numberOfGamers;
-
+  print('gamers lenth is ${gamers.length}');
   for (int i = 0; i < numberOfGamers; i++) {
     final double angle = (3 * pi / 2) + i * angleStep;
     final double avatarX =
@@ -55,6 +55,8 @@ List<Widget> gamersAvatars({
     final double avatarY =
         constraints.maxHeight / 2 + (ovalRadius + radius) * sin(angle);
 
+
+  /*  print('i is $i and waskill is ${gamers[i].wasKilled}');*/
     positionedAvatars.add(
       Positioned(
         top: avatarY - radius,

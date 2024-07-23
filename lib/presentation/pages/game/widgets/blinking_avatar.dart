@@ -203,6 +203,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                       context,
                       widget.gamers[widget.index].id ?? 0,
                       const Mirniy.empty(),
+                      position: widget.gamers[widget.index].positionOnTable,
                     );
                   }
                 },

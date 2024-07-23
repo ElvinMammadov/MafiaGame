@@ -16,29 +16,11 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   bool allNamesChanged = false;
   int currentRoleIndex = 0;
 
-  void addGamers(Roles roles, int numberOfGamers) {
-    for (int i = 0; i < numberOfGamers; i++) {
-      BlocProvider.of<GameBloc>(context).add(
-        AddGamer(
-          gamer: Gamer(
-            name: AppStrings.gamer,
-            id: i + 1,
-            positionOnTable: i + 1,
-            role: const Mirniy.empty(),
-          ),
-        ),
-      );
-    }
-  }
-
   void changeRole(Gamer gamer) {
     final Roles gamerRoles =
         BlocProvider.of<GameBloc>(context).state.gamersState.roles;
     final int roleIndex =
         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-    // print('roleIndex: $roleIndex , length: ${gamerRoles.roles.length}');
-    // print('rolename: ${gamerRoles.roles[roleIndex].name}, '
-    //     'roleid: ${gamerRoles.roles[roleIndex].roleId}');
     BlocProvider.of<GameBloc>(context).add(
       AddRoleToGamer(
         targetedGamer: Gamer(
@@ -65,10 +47,6 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   @override
   void initState() {
     super.initState();
-    addGamers(
-      BlocProvider.of<GameBloc>(context).state.gamersState.roles,
-      BlocProvider.of<GameBloc>(context).state.game.numberOfGamers,
-    );
   }
 
   void isAllGamersNameChanged(List<Gamer> gamers) {
@@ -76,7 +54,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       allNamesChanged = gamers.every(
         (Gamer gamer) => gamer.isNameChanged == true,
       );
-      if (allNamesChanged) {
+      print('allNamesChanged is $allNamesChanged');
+      if (allNamesChanged &&
+          !BlocProvider.of<GameBloc>(context).state.game.isGameCouldStart) {
         BlocProvider.of<GameBloc>(context).add(
           const ChangeGameStartValue(
             isGameCouldStart: true,

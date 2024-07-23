@@ -13,6 +13,7 @@ class AppStrings {
   static const String open = 'Открытая';
   static const String close = 'Закрытая';
   static const String numberOfGamers = 'Количество игроков';
+  static const String positionOfGamer = 'Позиция игрока';
   static const String loginButton = 'Войти';
   static const String signUpButton = 'Зарегистрироваться';
   static const String noAccount = 'Нет аккаунта? Зарегистрируйтесь здесь.';
@@ -145,4 +146,7 @@ class AppStrings {
   static const String gamerAlreadyVoted = 'Игрок уже проголосовал!';
   static const String chooseRoles = 'Выберите роли';
   static const String wakesUp = 'Просыпается ';
+  static const String usageOfGamers = 'Использование игроков';
+  static const String savedGamers = 'Сохраненные';
+  static const String newGamers = 'Новые';
 }

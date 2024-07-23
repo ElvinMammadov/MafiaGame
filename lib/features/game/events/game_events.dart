@@ -268,6 +268,22 @@ class TakeAbilityFromGamer extends GameEvent {
       ];
 }
 
+class MediumChecked extends GameEvent {
+  final Gamer targetedGamer;
+  final int gamerId;
+
+  const MediumChecked({
+    required this.targetedGamer,
+    required this.gamerId,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        targetedGamer,
+        gamerId,
+      ];
+}
+
 class BoomerangGamer extends GameEvent {
   final Gamer targetedGamer;
   final int gamerId;
@@ -449,19 +465,21 @@ class AddGamer extends GameEvent {
 }
 
 class CleanGamers extends GameEvent {
-  final List<Gamer> gamers;
 
-  const CleanGamers({required this.gamers});
+  const CleanGamers();
 
   @override
-  List<Object?> get props => <Object?>[gamers];
+  List<Object?> get props => <Object?>[];
 }
 
 class UpdateGamer extends GameEvent {
   final Gamer gamer;
   final bool isGamerExist;
 
-  const UpdateGamer({required this.gamer, this.isGamerExist = false});
+  const UpdateGamer({
+    required this.gamer,
+    this.isGamerExist = false,
+  });
 
   @override
   List<Object?> get props => <Object?>[gamer, isGamerExist];

@@ -5,13 +5,19 @@ class ImagePickerSheet extends StatefulWidget {
   final ValueChanged<File?> onImageChanged;
   final ValueChanged<Role?> onRoleChanged;
   final ValueChanged<Gamer?>? gamerChosenFromFirebase;
+  final ValueChanged<int?> onPositionChange;
+  final int? numberOfGamers;
+  final bool? isPositionMode;
 
   const ImagePickerSheet({
     super.key,
     required this.textEditingController,
     required this.onImageChanged,
     required this.onRoleChanged,
+    required this.onPositionChange,
     this.gamerChosenFromFirebase,
+    this.numberOfGamers,
+    this.isPositionMode,
   });
 
   @override
@@ -23,6 +29,12 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
   Role? selectedRole;
   final ImagePicker picker = ImagePicker();
   late String imageUrl = '';
+  final GlobalKey<FormFieldState<int>> _positionFieldKey =
+      GlobalKey<FormFieldState<int>>();
+  int? selectedPosition;
+
+  List<int> get numberOfPositions =>
+      List<int>.generate(widget.numberOfGamers!, (int index) => index + 1);
 
   Future<void> getImageFromGallery() async {
     final XFile? pickedFile =
@@ -126,6 +138,11 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                         color: MafiaTheme.themeData.colorScheme.secondary,
                       ),
                     ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
                   ),
                 ),
                 decorationBuilder: (BuildContext context, Widget child) =>
@@ -157,72 +174,143 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   widget.gamerChosenFromFirebase!(gamer);
                 },
               ),
-              DropdownButtonFormField2<Role>(
-                isExpanded: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.padding8,
-                  ),
-                  labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
+              if (widget.isPositionMode != true)
+                DropdownButtonFormField2<Role>(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.padding8,
                     ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
-                    ),
-                  ),
-                ),
-                hint: Text(
-                  AppStrings.roleOfGamer,
-                  style: MafiaTheme.themeData.textTheme.headlineSmall,
-                ),
-                value: selectedRole,
-                items: roles.roles
-                    .map(
-                      (Role item) => DropdownMenuItem<Role>(
-                        value: item,
-                        child: Text(
-                          item.name,
-                          style: MafiaTheme.themeData.textTheme.headlineSmall,
-                        ),
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
                       ),
-                    )
-                    .toList(),
-                validator: (Role? value) {
-                  if (value == null) {
-                    return 'Please select gender.';
-                  }
-                  return null;
-                },
-                onChanged: (Role? value) {
-                  selectedRole = value;
-                  widget.onRoleChanged(selectedRole);
-                },
-                onSaved: (Role? value) {
-                  selectedRole = value;
-                },
-                iconStyleData: const IconStyleData(
-                  icon: Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.grey,
-                  ),
-                ),
-                dropdownStyleData: DropdownStyleData(
-                  offset: const Offset(5, 0),
-                  width: 370,
-                  maxHeight: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
                     ),
                   ),
+                  hint: Text(
+                    AppStrings.roleOfGamer,
+                    style: MafiaTheme.themeData.textTheme.headlineSmall,
+                  ),
+                  value: selectedRole,
+                  items: roles.roles
+                      .map(
+                        (Role item) => DropdownMenuItem<Role>(
+                          value: item,
+                          child: Text(
+                            item.name,
+                            style: MafiaTheme.themeData.textTheme.headlineSmall,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  validator: (Role? value) {
+                    if (value == null) {
+                      return 'Please select gender.';
+                    }
+                    return null;
+                  },
+                  onChanged: (Role? value) {
+                    selectedRole = value;
+                    widget.onRoleChanged(selectedRole);
+                  },
+                  onSaved: (Role? value) {
+                    selectedRole = value;
+                  },
+                  iconStyleData: const IconStyleData(
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  dropdownStyleData: DropdownStyleData(
+                    offset: const Offset(5, 0),
+                    width: 370,
+                    maxHeight: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ).padding(top: Dimensions.padding16)
+              else
+                DropdownButtonFormField2<int>(
+                  isExpanded: true,
+                  key: _positionFieldKey,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                  hint: Text(
+                    AppStrings.positionOfGamer,
+                    style: MafiaTheme.themeData.textTheme.headlineSmall,
+                  ),
+                  items: numberOfPositions
+                      .map<DropdownMenuItem<int>>(
+                        (int item) => DropdownMenuItem<int>(
+                          value: item,
+                          child: Text(
+                            item.toString(),
+                            style: MafiaTheme.themeData.textTheme.headlineSmall,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  validator: (int? value) {
+                    if (value == null) {
+                      return AppStrings.gamersNumberIsRequired;
+                    }
+                    return null;
+                  },
+                  value: selectedPosition,
+                  onChanged: (int? value) {
+                    print('value: $value');
+                    selectedPosition = value;
+                    widget.onPositionChange(selectedPosition);
+                  },
+                  onSaved: (int? value) {
+                    _positionFieldKey.currentState!.validate();
+                    selectedPosition = value;
+                  },
+                  iconStyleData: const IconStyleData(
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  dropdownStyleData: DropdownStyleData(
+                    offset: const Offset(300, 0),
+                    width: 70,
+                    maxHeight: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ).padding(
+                  top: Dimensions.padding16,
                 ),
-              ).padding(top: Dimensions.padding16),
             ],
           ).padding(
             bottom: 100,

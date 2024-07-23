@@ -2,7 +2,7 @@ part of home;
 
 class HomeScreenForm extends StatefulWidget {
   final void Function({
-    String typeOfGame,
+    String typeOfGamer,
     String typeOfController,
     int numberOfGamers,
     String gameName,
@@ -29,18 +29,14 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   late Map<Role, int> roleOriginalIndexMap;
 
   final FocusNode _gameNameFocusNode = FocusNode();
-  final List<String> typeOfGames = <String>[
-    AppStrings.open,
-    AppStrings.close,
-  ];
-  final List<String> typeOfController = <String>[
-    AppStrings.controller,
-    AppStrings.application,
+  final List<String> typeOfGamers = <String>[
+    AppStrings.savedGamers,
+    AppStrings.newGamers,
   ];
   final List<int> numberOfGamers =
       List<int>.generate(23, (int index) => index + 1);
 
-  String? selectedTypeofGames;
+  String? selectedTypeofGamers;
   String? selectedTypeOfController;
   int? selectedNumberOfGamers;
 
@@ -341,11 +337,85 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                     ).padding(
                       top: Dimensions.padding16,
                     ),
+                    DropdownButtonFormField2<String>(
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.padding8,
+                        ),
+                        labelStyle:
+                            MafiaTheme.themeData.textTheme.headlineSmall,
+                        icon: Icon(
+                          Icons.save,
+                          color: MafiaTheme.themeData.colorScheme.secondary,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: MafiaTheme.themeData.colorScheme.secondary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: MafiaTheme.themeData.colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                      hint: Text(
+                        AppStrings.usageOfGamers,
+                        style: MafiaTheme.themeData.textTheme.headlineSmall,
+                      ),
+                      value: selectedTypeofGamers,
+                      items: typeOfGamers
+                          .map(
+                            (String item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: MafiaTheme
+                                    .themeData.textTheme.headlineSmall,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      validator: (String? value) {
+                        if (value == null) {
+                          return 'Please select gender.';
+                        }
+                        return null;
+                      },
+                      onChanged: (String? value) {
+                        widget.onChange!(
+                          typeOfGamer: value!,
+                        );
+                        selectedTypeofGamers = value;
+                      },
+                      onSaved: (String? value) {
+                        selectedTypeofGamers = value.toString();
+                      },
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        offset: const Offset(35, 0),
+                        width: 480,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: MafiaTheme.themeData.colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                    ).padding(top: Dimensions.padding16),
                   ],
                 ),
               ).padding(
                 all: Dimensions.padding16,
               ),
+
             ),
           );
         },

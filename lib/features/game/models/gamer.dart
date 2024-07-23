@@ -25,6 +25,7 @@ class Gamer extends Equatable {
   final bool wasKilledByWerewolf;
   final bool wasCheckedByMadam;
   final bool wasCheckedBySheriff;
+  final bool wasCheckedByMedium;
   final bool wasBoomeranged;
   final bool wasSecured;
   final int? targetId;
@@ -63,6 +64,7 @@ class Gamer extends Equatable {
     this.wasCheckedByMadam = false,
     this.wasCheckedBySheriff = false,
     this.wasBoomeranged = false,
+    this.wasCheckedByMedium = false,
     this.wasSecured = false,
     this.targetId = 0,
     this.canTarget = true,
@@ -116,6 +118,7 @@ class Gamer extends Equatable {
         wasCheckedByMadam = false,
         wasCheckedBySheriff = false,
         wasBoomeranged = false,
+        wasCheckedByMedium = false,
         wasSecured = false,
         targetId = 0,
         canTarget = true,
@@ -170,6 +173,7 @@ class Gamer extends Equatable {
     bool? wasCheckedBySheriff,
     bool? wasBoomeranged,
     bool? wasSecured,
+    bool? wasCheckedByMedium,
     int? targetId,
     bool? canTarget,
     bool? killSecurity,
@@ -205,6 +209,7 @@ class Gamer extends Equatable {
         wasCheckedByMadam: wasCheckedByMadam ?? this.wasCheckedByMadam,
         wasCheckedBySheriff: wasCheckedBySheriff ?? this.wasCheckedBySheriff,
         wasBoomeranged: wasBoomeranged ?? this.wasBoomeranged,
+        wasCheckedByMedium: wasCheckedByMedium ?? this.wasCheckedByMedium,
         wasSecured: wasSecured ?? this.wasSecured,
         targetId: targetId ?? this.targetId,
         canTarget: canTarget ?? this.canTarget,
@@ -248,6 +253,7 @@ class Gamer extends Equatable {
         wasCheckedByMadam,
         wasCheckedBySheriff,
         wasBoomeranged,
+        wasCheckedByMedium,
         wasSecured,
         targetId,
         canTarget,
@@ -277,6 +283,7 @@ class Gamer extends Equatable {
       ' wasKilledByMafia: $wasKilledByMafia, '
       'wasKilledBySheriff: $wasKilledBySheriff, wasKilledByWerewolf:'
       ' $wasKilledByWerewolf, wasCheckedByMadam: $wasCheckedByMadam,'
+      ' wasCheckedByMedium: $wasCheckedByMedium,'
       ' wasCheckedBySheriff: $wasCheckedBySheriff,'
       ' wasBumeranged: $wasBoomeranged, wasSecured: $wasSecured, '
       'targetId: $targetId, canTarget: $canTarget, killSecurity: $killSecurity'

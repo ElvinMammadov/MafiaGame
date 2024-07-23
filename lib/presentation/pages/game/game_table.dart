@@ -46,7 +46,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
       );
       BlocProvider.of<GameBloc>(context).add(
         SendGameToFirebase(
-          gameState: game.copyWith(isMafiaWin: false,gamers: gamers),
+          gameState: game.copyWith(isMafiaWin: false, gamers: gamers),
         ),
       );
       // AppNavigator.navigateToHomeScreen(context);
@@ -72,7 +72,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
             civilianCount,
             gamers,
             gameName,
-            gameStartTime?? DateTime.now(),
+            gameStartTime ?? DateTime.now(),
             context,
             gameState,
           );
@@ -96,13 +96,20 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int nightNumber = state.game.nightNumber;
           final List<Gamer> killedGamers = <Gamer>[];
 
+          print('isGameStarted $isGameStarted, isGameCouldStart '
+              '$isGameCouldStart,'
+              ' isDiscussionStarted $isDiscussionStarted,'
+              ' isVotingStarted $isVotingStarted');
           if (gamers.isNotEmpty) {
-            logger.log(
-                'Gamers are ${gamers.map((Gamer gamer) => gamer.role?.points).toList()}');
-            print(
-                'Gamers wasinfected ${gamers.map((Gamer gamer) => gamer.wasInfected).toList()}');
-            print(
-                'Gamers animates ${gamers.map((Gamer gamer) => gamer.isAnimated).toList()}');
+            // logger.log('Gamers are ${gamers.map(
+            //       (Gamer gamer) => gamer.role?.points,
+            //     ).toList()}');
+            print('Gamers namesChanged ${gamers.map(
+                  (Gamer gamer) => gamer.isNameChanged,
+                ).toList()}');
+            print('Gamers animates ${gamers.map(
+                  (Gamer gamer) => gamer.isAnimated,
+                ).toList()}');
           }
 
           const double buttonLeftPercentage = 0.07;
@@ -123,6 +130,22 @@ class _GameTableScreenState extends State<GameTableScreen> {
                 );
                 Navigator.of(context)
                     .popUntil((Route<dynamic> route) => route.isFirst);
+              },
+              onAddGamer: () {
+                int? lastId = 0;
+                for (final Gamer gamer in gamers) {
+                  if (gamer.id! > lastId!) {
+                    lastId = gamer.id;
+                  }
+                }
+
+                DialogBuilder().showAddUserModal(
+                  context,
+                  lastId! + 1,
+                  const Mirniy.empty(),
+                  numberOfGamers: numberOfGamers,
+                  isPositionMode: true,
+                );
               },
             ),
             resizeToAvoidBottomInset: false,
@@ -211,8 +234,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                         topGamers[0].role!.roleId == 8) {
                                       Gamer leftGamer = const Gamer.empty();
                                       Gamer rightGamer = const Gamer.empty();
-                                      print('topGamers[0].id:'
-                                          ' ${topGamers[0].id}');
                                       if (topGamers[0].id == 1) {
                                         leftGamer = gamers.last;
                                       } else {
@@ -240,7 +261,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     );
                                   }
                                   if (dayNumber == 2) {
-                                    print('dayNumber: $dayNumber');
                                     for (final Gamer gamer in gamers) {
                                       BlocProvider.of<GameBloc>(context).add(
                                         InfectGamer(

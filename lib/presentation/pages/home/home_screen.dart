@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             child: Scaffold(
-              appBar: const DefaultAppBar(
+              appBar:  const DefaultAppBar(
                 title: AppStrings.title,
               ),
               backgroundColor: Colors.transparent,
