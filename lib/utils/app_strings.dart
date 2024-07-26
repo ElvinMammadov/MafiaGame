@@ -93,10 +93,10 @@ class AppStrings {
   static const String registrationDate = 'Дата регистрации';
   static const String other = 'Другой';
   static const String search = 'Поиск';
-  static const String notFound ='Игрок не найден';
-  static const String victory ='Победы';
-  static const String defeat ='Поражение';
-  static const String point ='Балов';
+  static const String notFound = 'Игрок не найден';
+  static const String victory = 'Победы';
+  static const String defeat = 'Поражение';
+  static const String point = 'Балов';
   static const String totalPoints = 'Общие очки';
   static const String alivePoints = 'Дожил до конца';
   static const String pointsFromPresenter = 'Очки от ведущей';
@@ -115,7 +115,8 @@ class AppStrings {
   static const String securedCitizen = 'Обезопасил(а) мирного';
   static const String securedMafia = 'Обезопасил(а) мафию';
   static const String tookAwayAbility = 'Забрал(а) способность';
-  static const String votedAgainstMainCharacters = 'Голосовал(а) против мирных';
+  static const String votedAgainstMainRoles = 'Голосовал(а) '
+      'против главных ролей';
   static const String votedAgainstOthers = 'Голосовал(а) против других';
   static const String votedAgainstMafia = 'Голосовал(а) против мафии';
   static const String deadMafiaPoints = 'Очки мафии после смерти';
@@ -135,7 +136,7 @@ class AppStrings {
   static const String leaveGame = 'Покинуть игру';
   static const String addGamer = 'Добавить игрока';
   static const String loginSuccessfully = 'Вход успешьно выполнен';
-  static const String loginError= 'Ошибка во время входа, попробуйте еще раз';
+  static const String loginError = 'Ошибка во время входа, попробуйте еще раз';
   static const String playsForMainCharacters = 'Играя за мирных';
   static const String playsForMafia = 'Играя за мафию';
   static const String playsForKiller = 'Играя за убийцу';
@@ -149,4 +150,5 @@ class AppStrings {
   static const String usageOfGamers = 'Использование игроков';
   static const String savedGamers = 'Сохраненные';
   static const String newGamers = 'Новые';
+  static const String chooseRoleForChameleon = 'Выберите роль для Хамелеона';
 }

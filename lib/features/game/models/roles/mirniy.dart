@@ -14,7 +14,7 @@ class Mirniy extends Role with EquatableMixin {
           roleId: 11,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.votesForDon: 0,
             AppStrings.pointIfDeadByWin: 0,
             AppStrings.alivePoints: 0,

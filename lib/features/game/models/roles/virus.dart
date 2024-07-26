@@ -14,7 +14,7 @@ class Virus extends Role with EquatableMixin {
           roleId: 8,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.infectedCitizens: 0,
             AppStrings.infectedMafia: 0,
             AppStrings.alivePoints: 0,

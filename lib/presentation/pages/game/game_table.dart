@@ -95,21 +95,24 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
           final List<Gamer> killedGamers = <Gamer>[];
+          int roleIndex =
+              BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+          print('roleIndex $roleIndex');
 
-          print('isGameStarted $isGameStarted, isGameCouldStart '
-              '$isGameCouldStart,'
-              ' isDiscussionStarted $isDiscussionStarted,'
-              ' isVotingStarted $isVotingStarted');
+          // print('isGameStarted $isGameStarted, isGameCouldStart '
+          //     '$isGameCouldStart,'
+          //     ' isDiscussionStarted $isDiscussionStarted,'
+          //     ' isVotingStarted $isVotingStarted');
           if (gamers.isNotEmpty) {
             // logger.log('Gamers are ${gamers.map(
             //       (Gamer gamer) => gamer.role?.points,
             //     ).toList()}');
-            print('Gamers namesChanged ${gamers.map(
-                  (Gamer gamer) => gamer.isNameChanged,
-                ).toList()}');
-            print('Gamers animates ${gamers.map(
-                  (Gamer gamer) => gamer.isAnimated,
-                ).toList()}');
+            // print('Gamers namesChanged ${gamers.map(
+            //       (Gamer gamer) => gamer.isNameChanged,
+            //     ).toList()}');
+            // print('Gamers animates ${gamers.map(
+            //       (Gamer gamer) => gamer.isAnimated,
+            //     ).toList()}');
           }
 
           const double buttonLeftPercentage = 0.07;
@@ -201,6 +204,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           ? gamer.votesCount
                                           : prev,
                                 );
+
+                                // To show Chameleon functionality
+                                if (roleIndex == 0) {
+                                  showAddFunctionality(
+                                    context,
+                                    isVotingStarted: true,
+                                    gamerId: 1,
+                                    roleId: 1,
+                                    nightNumber: 1,
+                                  );
+                                }
 
                                 if (maxVotes == 0) {
                                   SnackBarManager.showFailure(

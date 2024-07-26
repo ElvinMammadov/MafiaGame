@@ -54,7 +54,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       allNamesChanged = gamers.every(
         (Gamer gamer) => gamer.isNameChanged == true,
       );
-      print('allNamesChanged is $allNamesChanged');
+      // print('allNamesChanged is $allNamesChanged');
       if (allNamesChanged &&
           !BlocProvider.of<GameBloc>(context).state.game.isGameCouldStart) {
         BlocProvider.of<GameBloc>(context).add(

@@ -15,7 +15,7 @@ class Chameleon extends Role with EquatableMixin {
           roleId: 13,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.playsForMainCharacters: 0,
             AppStrings.playsForMafia: 0,
             AppStrings.playsForKiller: 0,

@@ -14,7 +14,7 @@ class Werewolf extends Role with EquatableMixin {
           roleId: 7,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.killedCitizens: 0,
             AppStrings.killedMafias: 0,
             AppStrings.aliveUntilChange: 0,

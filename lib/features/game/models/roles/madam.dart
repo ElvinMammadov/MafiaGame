@@ -14,7 +14,7 @@ class Madam extends Role with EquatableMixin {
           roleId: 5,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.entersToMafia: 0,
             AppStrings.entersToAnother: 0,
             AppStrings.alivePoints: 0,

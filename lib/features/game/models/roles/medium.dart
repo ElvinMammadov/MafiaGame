@@ -14,7 +14,7 @@ class Medium extends Role with EquatableMixin {
           roleId: 12,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.pointsIfCheckerDead: 0,
             AppStrings.alivePoints: 0,
             AppStrings.pointsFromPresenter: 0,

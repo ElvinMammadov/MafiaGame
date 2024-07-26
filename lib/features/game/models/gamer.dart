@@ -38,6 +38,7 @@ class Gamer extends Equatable {
   final int healCount;
   final bool wasVoted;
   final bool wasInfected;
+  final int chameleonId;
 
   const Gamer({
     this.name = '',
@@ -75,6 +76,7 @@ class Gamer extends Equatable {
     this.healCount = 2,
     this.wasVoted = false,
     this.wasInfected = false,
+    this.chameleonId = 0,
     this.roleCounts = const <String, int>{
       '1': 0,
       '2': 0,
@@ -129,6 +131,7 @@ class Gamer extends Equatable {
         healCount = 2,
         wasVoted = false,
         wasInfected = false,
+        chameleonId = 0,
         roleCounts = const <String, int>{
           '1': 0,
           '2': 0,
@@ -184,6 +187,7 @@ class Gamer extends Equatable {
     int? healCount,
     bool? wasVoted,
     bool? wasInfected,
+    int? chameleonId,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -222,6 +226,7 @@ class Gamer extends Equatable {
         healCount: healCount ?? this.healCount,
         wasVoted: wasVoted ?? this.wasVoted,
         wasInfected: wasInfected ?? this.wasInfected,
+        chameleonId: chameleonId ?? this.chameleonId,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -266,6 +271,7 @@ class Gamer extends Equatable {
         healCount,
         wasVoted,
         wasInfected,
+        chameleonId,
       ];
 
   @override
@@ -290,5 +296,6 @@ class Gamer extends Equatable {
       ' roleCounts: $roleCounts, isRoleGiven: '
       '$isRoleGiven, isAnimated: $isAnimated, playsAsCitizen: $playsAsCitizen,'
       ' beforeChange: $beforeChange, '
-      'healCount: $healCount, wasVoted: $wasVoted, wasInfected: $wasInfected}';
+      'healCount: $healCount, wasVoted: $wasVoted, wasInfected: $wasInfected,'
+      ' chameleonId: $chameleonId}';
 }

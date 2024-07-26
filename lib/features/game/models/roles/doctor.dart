@@ -14,7 +14,7 @@ class Doctor extends Role with EquatableMixin {
           roleId: 1,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.healedCitizen: 0,
             AppStrings.healedMafia: 0,
             AppStrings.alivePoints: 0,

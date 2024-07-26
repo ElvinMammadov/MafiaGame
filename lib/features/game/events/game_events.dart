@@ -114,17 +114,17 @@ class KillGamer extends GameEvent {
 
 class KillGamerByMafia extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer mafiaGamer;
 
   const KillGamerByMafia({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.mafiaGamer,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        mafiaGamer,
       ];
 }
 
@@ -162,17 +162,17 @@ class KillGamerByWerewolf extends GameEvent {
 
 class KillGamerBySheriff extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer sheriff;
 
   const KillGamerBySheriff({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.sheriff,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        sheriff,
       ];
 }
 
@@ -223,6 +223,19 @@ class AddRoleToGamer extends GameEvent {
       ];
 }
 
+class ChameleonChangeRole extends GameEvent {
+  final int chameleonId;
+
+  const ChameleonChangeRole({
+    required this.chameleonId,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        chameleonId,
+      ];
+}
+
 class ChangeRoleIndex extends GameEvent {
   final int roleIndex;
 
@@ -254,17 +267,17 @@ class SecureGamer extends GameEvent {
 
 class TakeAbilityFromGamer extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer madam;
 
   const TakeAbilityFromGamer({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.madam,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        madam,
       ];
 }
 
@@ -331,17 +344,17 @@ class InfectedCount extends GameEvent {
 
 class HealGamer extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer doctor;
 
   const HealGamer({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.doctor,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        doctor,
       ];
 }
 
@@ -465,7 +478,6 @@ class AddGamer extends GameEvent {
 }
 
 class CleanGamers extends GameEvent {
-
   const CleanGamers();
 
   @override

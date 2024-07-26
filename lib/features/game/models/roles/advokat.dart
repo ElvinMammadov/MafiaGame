@@ -14,7 +14,7 @@ class Advokat extends Role with EquatableMixin {
           roleId: 9,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.gaveAlibiToCitizen: 0,
             AppStrings.gaveAlibiToMafia: 0,
             AppStrings.citizenAlibiWorked: 0,

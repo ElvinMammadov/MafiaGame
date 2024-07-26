@@ -14,7 +14,7 @@ class Boomerang extends Role with EquatableMixin {
           roleId: 14,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.killedCitizens: 0,
             AppStrings.killedMafias: 0,
             AppStrings.alivePoints: 0,

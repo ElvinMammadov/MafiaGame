@@ -14,7 +14,7 @@ class Don extends Role with EquatableMixin {
           roleId: 3,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.votedAgainstOthers: 0,
             AppStrings.deadMafiaPoints: 0,
             AppStrings.alivePoints: 0,
