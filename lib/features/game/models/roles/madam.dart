@@ -17,6 +17,7 @@ class Madam extends Role with EquatableMixin {
             AppStrings.votedAgainstMainRoles: 0,
             AppStrings.entersToMafia: 0,
             AppStrings.entersToAnother: 0,
+            AppStrings.mafiaKilledAfterMadamChecked: 0,
             AppStrings.alivePoints: 0,
             AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,

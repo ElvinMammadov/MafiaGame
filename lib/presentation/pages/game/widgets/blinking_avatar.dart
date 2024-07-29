@@ -191,12 +191,19 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                   } else if (widget.isVotingStarted && isDay) {
                     _handleTap();
                   } else if (!isDay) {
-                    BlinkingFunctions()._handleHitting(
-                      context,
-                      widget.gamers,
-                      widget.roles,
-                      widget.index,
-                    );
+                    final int roleIndex =
+                        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+                    final int roleId = widget.roles.roles[roleIndex].roleId;
+                    final bool gamerExists = widget.gamers
+                        .any((Gamer gamer) => gamer.role?.roleId == roleId);
+                    if (gamerExists) {
+                      BlinkingFunctions()._handleHitting(
+                        context,
+                        widget.gamers,
+                        widget.roles,
+                        widget.index,
+                      );
+                    }
                   } else if (!widget.isGameCouldStart &&
                       !widget.isGameStarted) {
                     DialogBuilder().showAddUserModal(

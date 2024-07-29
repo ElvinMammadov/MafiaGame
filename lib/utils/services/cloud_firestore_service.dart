@@ -149,7 +149,7 @@ class FirestoreService {
             .limit(10)
             .get();
       } else {
-        final String endString = search + '\uf8ff';
+        final String endString = '$search\uf8ff';
         querySnapshot = await FirebaseFirestore.instance
             .collection('gamers')
             .where('name', isGreaterThanOrEqualTo: search)

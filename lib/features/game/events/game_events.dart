@@ -89,6 +89,19 @@ class GetGames extends GameEvent {
       ];
 }
 
+class CalculatePoints extends GameEvent {
+  final GameState gameState;
+
+  const CalculatePoints({
+    required this.gameState,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        gameState,
+      ];
+}
+
 class AddDayNumber extends GameEvent {
   const AddDayNumber();
 
@@ -130,34 +143,23 @@ class KillGamerByMafia extends GameEvent {
 
 class KillGamerByKiller extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer killer;
 
   const KillGamerByKiller({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.killer,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        killer,
       ];
 }
 
-class KillGamerByWerewolf extends GameEvent {
-  final Gamer targetedGamer;
-  final int gamerId;
-
-  const KillGamerByWerewolf({
-    required this.targetedGamer,
-    required this.gamerId,
-  });
-
+class ChangeWerewolf extends GameEvent {
   @override
-  List<Object?> get props => <Object?>[
-        targetedGamer,
-        gamerId,
-      ];
+  List<Object?> get props => <Object?>[];
 }
 
 class KillGamerBySheriff extends GameEvent {
@@ -178,17 +180,17 @@ class KillGamerBySheriff extends GameEvent {
 
 class GiveAlibi extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer advocate;
 
   const GiveAlibi({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.advocate,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        advocate,
       ];
 }
 
@@ -299,17 +301,17 @@ class MediumChecked extends GameEvent {
 
 class BoomerangGamer extends GameEvent {
   final Gamer targetedGamer;
-  final int gamerId;
+  final Gamer boomerang;
 
   const BoomerangGamer({
     required this.targetedGamer,
-    required this.gamerId,
+    required this.boomerang,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
-        gamerId,
+        boomerang,
       ];
 }
 

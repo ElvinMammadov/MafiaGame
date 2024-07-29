@@ -30,13 +30,20 @@ class BlinkingFunctions {
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case 6:
-        killGamerByKiller(gamers[index].name!, gamer.id!, context, gamers);
+        killGamerByKiller(gamers[index].name!, gamer, context, gamers);
         break;
+      case 7:
+        if (!gamer.beforeChange) {
+          killGamerByMafia(gamers[index].name!, gamer, context, gamers);
+          break;
+        } else {
+          break;
+        }
       case 8:
         if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
           infectGamer(
             gamers[index].name!,
-            gamer.id!,
+            gamer,
             context,
             gamers,
           );
@@ -50,9 +57,8 @@ class BlinkingFunctions {
         }
         break;
       case 9:
-        giveAlibi(gamers[index].name!, gamer.id!, context, gamers);
+        giveAlibi(gamers[index].name!, gamer, context, gamers);
         break;
-
       case 10:
         secureGamer(gamers[index].name!, gamer.id!, context, gamers);
         break;
@@ -63,7 +69,7 @@ class BlinkingFunctions {
         chameleonChanges(context, index, gamer, gamers);
         break;
       case 14:
-        boomerangGamer(gamers[index].name!, gamer.id!, context, gamers);
+        boomerangGamer(gamers[index].name!, gamer, context, gamers);
         break;
       default:
         break;
@@ -96,14 +102,14 @@ class BlinkingFunctions {
 
   void killGamerByKiller(
     String gamerName,
-    int gamerId,
+    Gamer killer,
     BuildContext context,
     List<Gamer> gamers,
   ) {
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          KillGamerByKiller(targetedGamer: gamer, gamerId: gamerId),
+          KillGamerByKiller(targetedGamer: gamer, killer: killer),
         );
         break;
       }
@@ -144,14 +150,14 @@ class BlinkingFunctions {
 
   void giveAlibi(
     String gamerName,
-    int gamerId,
+    Gamer advocate,
     BuildContext context,
     List<Gamer> gamers,
   ) {
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          GiveAlibi(targetedGamer: gamer, gamerId: gamerId),
+          GiveAlibi(targetedGamer: gamer, advocate: advocate),
         );
         break;
       }
@@ -208,14 +214,14 @@ class BlinkingFunctions {
 
   void boomerangGamer(
     String gamerName,
-    int gamerId,
+    Gamer boomerang,
     BuildContext context,
     List<Gamer> gamers,
   ) {
     for (final Gamer gamer in gamers) {
       if (gamer.name == gamerName) {
         BlocProvider.of<GameBloc>(context).add(
-          BoomerangGamer(targetedGamer: gamer, gamerId: gamerId),
+          BoomerangGamer(targetedGamer: gamer, boomerang: boomerang),
         );
         break;
       }
@@ -224,7 +230,7 @@ class BlinkingFunctions {
 
   void infectGamer(
     String gamerName,
-    int gamerId,
+    Gamer virus,
     BuildContext context,
     List<Gamer> gamers,
   ) {
@@ -261,32 +267,16 @@ class BlinkingFunctions {
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case 6:
-        killGamerByKiller(gamers[index].name!, gamer.id!, context, gamers);
+        killGamerByKiller(gamers[index].name!, gamer, context, gamers);
         break;
-      case 8:
-        if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
-          infectGamer(gamers[index].name!, gamer.id!, context, gamers);
-          BlocProvider.of<GameBloc>(context).add(
-            InfectedCount(
-              infectedCount:
-                  BlocProvider.of<GameBloc>(context).state.game.infectedCount -
-                      1,
-            ),
-          );
-        }
+      case 7:
+        killGamerByMafia(gamers[index].name!, gamer, context, gamers);
         break;
       case 9:
-        giveAlibi(gamers[index].name!, gamer.id!, context, gamers);
-        break;
-
-      case 10:
-        secureGamer(gamers[index].name!, gamer.id!, context, gamers);
+        giveAlibi(gamers[index].name!, gamer, context, gamers);
         break;
       case 12:
         mediumChecked(gamers[index].name!, gamer.id!, context, gamers);
-        break;
-      case 14:
-        boomerangGamer(gamers[index].name!, gamer.id!, context, gamers);
         break;
     }
     if (roleId != 2) {

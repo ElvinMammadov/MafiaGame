@@ -12,8 +12,19 @@ void showAddFunctionality(
   final Roles roles =
       BlocProvider.of<GameBloc>(context).state.gamersState.roles;
 
+  print('roles: ${roles.roles}');
   for (int i = 0; i < roles.roles.length; i++) {
-    if (i != 0 && i != 1 && i != 10) chosenRoles.add(roles.roles[i]);
+    /*   Chameleon can take role Mafia, Madam, Sheriff, Doctor,
+    Advocate, Medium,Killer*/
+    if (i == 2 ||
+        i == 3 ||
+        i == 4 ||
+        i == 5 ||
+        i == 6 ||
+        i == 7 ||
+        i == 10) {
+      chosenRoles.add(roles.roles[i]);
+    }
   }
 
   WoltModalSheet.show<void>(

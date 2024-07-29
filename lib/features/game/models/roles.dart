@@ -42,5 +42,8 @@ class Roles extends Equatable {
       );
 
   @override
+  String toString() => 'Roles { roles: $roles }';
+
+  @override
   List<Object?> get props => <Object?>[roles];
 }

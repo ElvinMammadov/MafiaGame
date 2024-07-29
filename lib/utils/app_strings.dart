@@ -121,15 +121,21 @@ class AppStrings {
   static const String votedAgainstMafia = 'Голосовал(а) против мафии';
   static const String deadMafiaPoints = 'Очки мафии после смерти';
   static const String entersToMafia = 'Зашел(ла) к мафию';
+  static const String mafiaKilledAfterMadamChecked =
+      'Мафию убили после проверки мадам';
   static const String entersToAnother = 'Зашел(ла) к другим';
   static const String cityKillsMafia = 'Город убивает мафию';
   static const String infectedCitizens = 'Заразил(а) мирных';
   static const String infectedMafia = 'Заразил(а) мафию';
   static const String aliveUntilChange = 'Дожил(а) до смены';
   static const String killedCitizensAfterChange = 'Убил(а) мирных после смены';
+  static const String killedMainCharactersAfterChange =
+      'Убил(а) главных ролей  после смены';
   static const String rolePoints = 'Очки роли';
-  static const String killedMafiasBeforeChange = 'Убил(а) мафию до смены';
-  static const String killedKillerBeforeChange = 'Убил(а) убийцу до смены';
+  static const String mafiaTriedToKillBeforeChange =
+      'Мафия пыталась убить до смены';
+  static const String killerTriedToKillBeforeChange =
+      'Убийца пытался убить до смены';
   static const String pointsIfWonGame = 'Очки если победил(а)';
   static const String pointIfDeadByWin = 'Очки если мертв при победе';
   static const String experience = 'Стаж';
@@ -139,11 +145,12 @@ class AppStrings {
   static const String loginError = 'Ошибка во время входа, попробуйте еще раз';
   static const String playsForMainCharacters = 'Играя за мирных';
   static const String playsForMafia = 'Играя за мафию';
-  static const String playsForKiller = 'Играя за убийцу';
+  static const String playsForMedium = 'Играя за медиума';
   static const String playsForDoctor = 'Играя за доктора';
-  static const String playsForAdvocat = 'Играя за адвоката';
+  static const String playsForAdvocate = 'Играя за адвоката';
   static const String playsForSheriff = 'Играя за шерифа';
   static const String playsForMadam = 'Играя за мадам';
+  static const String playsForKiller = 'Играя за убийцу';
   static const String gamerAlreadyVoted = 'Игрок уже проголосовал!';
   static const String chooseRoles = 'Выберите роли';
   static const String wakesUp = 'Просыпается ';

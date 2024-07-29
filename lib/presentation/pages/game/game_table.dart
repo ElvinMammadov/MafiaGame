@@ -22,8 +22,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
     final bool isWerewolfAlive = gamers.any(
       (Gamer gamer) => gamer.role!.roleId == 7 && !gamer.wasKilled,
     );
-    print('isWerewolfAlive: $isWerewolfAlive');
+    if (mafiaCount == 0 && isWerewolfAlive) {
+      BlocProvider.of<GameBloc>(context).add(
+        ChangeWerewolf(),
+      );
+    }
     if (mafiaCount == civilianCount) {
+      BlocProvider.of<GameBloc>(context).add(
+        CalculatePoints(
+          gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
+        ),
+      );
       showResults(
         context,
         gamers,
@@ -31,23 +40,18 @@ class _GameTableScreenState extends State<GameTableScreen> {
         gameName: gameName,
         gameStartTime: DateFormat('yyyy-MM-dd').format(gameStartTime!),
       );
-      BlocProvider.of<GameBloc>(context).add(
-        SendGameToFirebase(
-          gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
-        ),
-      );
       // AppNavigator.navigateToHomeScreen(context);
     } else if (mafiaCount == 0 && !isWerewolfAlive) {
+      BlocProvider.of<GameBloc>(context).add(
+        CalculatePoints(
+          gameState: game.copyWith(isMafiaWin: false, gamers: gamers),
+        ),
+      );
       showResults(
         context,
         gamers,
         gameName: gameName,
         gameStartTime: DateFormat('yyyy-MM-dd').format(gameStartTime!),
-      );
-      BlocProvider.of<GameBloc>(context).add(
-        SendGameToFirebase(
-          gameState: game.copyWith(isMafiaWin: false, gamers: gamers),
-        ),
       );
       // AppNavigator.navigateToHomeScreen(context);
     }
@@ -65,8 +69,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int civilianCount = state.game.civilianCount;
           final DateTime? gameStartTime = state.game.gameStartTime;
           final GameState gameState = state.game;
-          print('mafiaCount 1: $mafiaCount, '
-              'civilianCount 1: $civilianCount');
           showLastResults(
             mafiaCount,
             civilianCount,
@@ -95,9 +97,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
           final List<Gamer> killedGamers = <Gamer>[];
-          int roleIndex =
+          final int roleIndex =
               BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-          print('roleIndex $roleIndex');
 
           // print('isGameStarted $isGameStarted, isGameCouldStart '
           //     '$isGameCouldStart,'
@@ -301,25 +302,20 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                 }
                               } else if (!isDay) {
                                 BlocProvider.of<GameBloc>(context).add(
-                                  const AddNightNumber(),
-                                );
-                                BlocProvider.of<GameBloc>(context).add(
                                   const UpdateAnimation(animate: true),
                                 );
-                                //Madam give points
-                                //Boomerang give points
-                                // (checking whom boomerang killed)
-                                //Doctors points
-                                //Killer Points
 
                                 for (final Gamer gamer in gamers) {
                                   if (!gamer.wasKilled) {
-                                    if (!gamer.wasSecured && !gamer.wasHealed) {
+                                    if (!gamer.wasHealed) {
                                       if (gamer.wasKilledByMafia ||
                                           gamer.wasKilledByKiller ||
                                           gamer.wasKilledBySheriff ||
                                           gamer.wasBoomeranged) {
-                                        killedGamers.add(gamer);
+                                        if (gamer.role?.roleId != 14 &&
+                                            gamer.role?.roleId != 7) {
+                                          killedGamers.add(gamer);
+                                        }
                                       }
                                     }
                                   }
@@ -331,13 +327,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   );
 
                                   for (final Gamer gamer in killedGamers) {
-                                    if (gamer.role?.roleId != 14) {
+                                    if (gamer.role?.roleId != 14 &&
+                                        gamer.role?.roleId != 7) {
                                       BlocProvider.of<GameBloc>(context).add(
                                         KillGamer(gamer: gamer),
                                       );
                                     }
                                   }
                                 }
+                                BlocProvider.of<GameBloc>(context).add(
+                                  const AddNightNumber(),
+                                );
                               }
                             } else {
                               BlocProvider.of<GameBloc>(context).add(
