@@ -12,7 +12,7 @@ void showAddFunctionality(
   final Roles roles =
       BlocProvider.of<GameBloc>(context).state.gamersState.roles;
 
-  print('roles: ${roles.roles}');
+  // print('roles: ${roles.roles}');
   for (int i = 0; i < roles.roles.length; i++) {
     /*   Chameleon can take role Mafia, Madam, Sheriff, Doctor,
     Advocate, Medium,Killer*/

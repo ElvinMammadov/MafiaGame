@@ -89,6 +89,19 @@ class GetGames extends GameEvent {
       ];
 }
 
+class GameStatus extends GameEvent {
+  final bool isGameFinished;
+
+  const GameStatus({
+    required this.isGameFinished,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        isGameFinished,
+      ];
+}
+
 class CalculatePoints extends GameEvent {
   final GameState gameState;
 
@@ -114,6 +127,19 @@ class AddNightNumber extends GameEvent {
 
   @override
   List<Object?> get props => <Object?>[];
+}
+
+class ChangeGamerCounts extends GameEvent {
+  bool isMafia;
+
+  ChangeGamerCounts({
+    required this.isMafia,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        isMafia,
+      ];
 }
 
 class KillGamer extends GameEvent {

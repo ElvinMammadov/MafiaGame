@@ -25,6 +25,7 @@ class GameState extends Equatable {
   final Gamer currentVoter;
   final List<Gamer> votedGamers;
   final int infectedCount;
+  final bool isGameFinished;
 
   const GameState({
     this.gameId = '',
@@ -50,6 +51,7 @@ class GameState extends Equatable {
     this.currentVoter = const Gamer.empty(),
     this.votedGamers = const <Gamer>[],
     this.infectedCount = 0,
+    this.isGameFinished = false,
   });
 
   const GameState.empty()
@@ -75,7 +77,8 @@ class GameState extends Equatable {
         roleIndex = 0,
         infectedCount = 0,
         currentVoter = const Gamer.empty(),
-        votedGamers = const <Gamer>[];
+        votedGamers = const <Gamer>[],
+        isGameFinished = false;
 
   GameState copyWith({
     String? gameName,
@@ -101,6 +104,7 @@ class GameState extends Equatable {
     Gamer? currentVoter,
     List<Gamer>? votedGamers,
     int? infectedCount,
+    bool? isGameFinished,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -126,6 +130,7 @@ class GameState extends Equatable {
         currentVoter: currentVoter ?? this.currentVoter,
         votedGamers: votedGamers ?? this.votedGamers,
         infectedCount: infectedCount ?? this.infectedCount,
+        isGameFinished: isGameFinished ?? this.isGameFinished,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -157,6 +162,7 @@ class GameState extends Equatable {
         currentVoter,
         votedGamers,
         infectedCount,
+        isGameFinished,
       ];
 
   @override
@@ -171,5 +177,5 @@ class GameState extends Equatable {
       'isDay: $isDay, dayNumber: $dayNumber, nightNumber: $nightNumber, '
       'mafiaCount: $mafiaCount, civilianCount: $civilianCount}, '
       'isMafiaWin: $isMafiaWin, roleIndex: $roleIndex,'
-      ' infectedCount: $infectedCount}';
+      ' infectedCount: $infectedCount, isGameFinished: $isGameFinished}';
 }

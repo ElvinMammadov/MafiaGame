@@ -11,6 +11,7 @@ import 'package:mafia_game/features/game/game.dart';
 import 'package:mafia_game/features/statistics/bloc/bloc.dart';
 import 'package:mafia_game/features/statistics/repository/statistics_repository.dart';
 import 'package:mafia_game/presentation/pages/game/game.dart';
+import 'package:mafia_game/presentation/pages/results/result.dart';
 import 'package:mafia_game/presentation/pages/statistics/statistics_item.dart';
 import 'package:mafia_game/presentation/validators/validators.dart';
 import 'package:mafia_game/presentation/widgets/app_bar.dart';

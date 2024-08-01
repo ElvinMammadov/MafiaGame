@@ -48,6 +48,7 @@ class AppStrings {
   static const String vote = 'Голосовать';
   static const String mafia = 'Мафия';
   static const String citizen = 'Мирный';
+  static const String citizens = 'Мирные';
   static const String fol = 'Фол';
   static const String delete = 'Удалить игрока';
   static const String profile = 'Профиль';
@@ -158,4 +159,5 @@ class AppStrings {
   static const String savedGamers = 'Сохраненные';
   static const String newGamers = 'Новые';
   static const String chooseRoleForChameleon = 'Выберите роль для Хамелеона';
+  static const String results = 'Результаты';
 }

@@ -35,6 +35,7 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       wasCheckedByMadam: json['wasCheckedByMadam'] as bool? ?? false,
       wasCheckedBySheriff: json['wasCheckedBySheriff'] as bool? ?? false,
       wasBoomeranged: json['wasBoomeranged'] as bool? ?? false,
+      wasCheckedByMedium: json['wasCheckedByMedium'] as bool? ?? false,
       wasSecured: json['wasSecured'] as bool? ?? false,
       targetId: (json['targetId'] as num?)?.toInt() ?? 0,
       canTarget: json['canTarget'] as bool? ?? true,
@@ -44,6 +45,9 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       beforeChange: json['beforeChange'] as bool? ?? true,
       healCount: (json['healCount'] as num?)?.toInt() ?? 2,
       wasVoted: json['wasVoted'] as bool? ?? false,
+      wasInfected: json['wasInfected'] as bool? ?? false,
+      chameleonId: (json['chameleonId'] as num?)?.toInt() ?? 0,
+      werewolfChanged: json['werewolfChanged'] as bool? ?? false,
       roleCounts: (json['roleCounts'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, (e as num).toInt()),
           ) ??
@@ -89,6 +93,7 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'wasKilledByWerewolf': instance.wasKilledByWerewolf,
       'wasCheckedByMadam': instance.wasCheckedByMadam,
       'wasCheckedBySheriff': instance.wasCheckedBySheriff,
+      'wasCheckedByMedium': instance.wasCheckedByMedium,
       'wasBoomeranged': instance.wasBoomeranged,
       'wasSecured': instance.wasSecured,
       'targetId': instance.targetId,
@@ -100,6 +105,9 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'beforeChange': instance.beforeChange,
       'healCount': instance.healCount,
       'wasVoted': instance.wasVoted,
+      'wasInfected': instance.wasInfected,
+      'chameleonId': instance.chameleonId,
+      'werewolfChanged': instance.werewolfChanged,
     };
 
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(

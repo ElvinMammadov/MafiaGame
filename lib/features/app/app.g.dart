@@ -57,6 +57,8 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
               ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <Gamer>[],
+      infectedCount: (json['infectedCount'] as num?)?.toInt() ?? 0,
+      isGameFinished: json['isGameFinished'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -82,6 +84,8 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'roleIndex': instance.roleIndex,
       'currentVoter': instance.currentVoter,
       'votedGamers': instance.votedGamers,
+      'infectedCount': instance.infectedCount,
+      'isGameFinished': instance.isGameFinished,
     };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(

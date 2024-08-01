@@ -91,26 +91,42 @@ class _GamesScreenState extends State<GamesScreen> {
                   width: screenWidth * 0.9,
                   child: ListView.builder(
                     itemCount: games.length,
-                    itemBuilder: (BuildContext context, int index) => Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      color: MafiaTheme.themeData.colorScheme.secondary
-                          .withOpacity(0.5),
-                      child: SizedBox(
-                        height: 600,
-                        width: 900,
-                        child: GamesResults(
-                          gamers: games[index].gamers,
-                          isMafia: games[index].isMafiaWin,
-                          gameName: games[index].gameName,
-                          gameStartTime: DateFormat('yyyy-MM-dd')
-                              .format(games[index].gameStartTime!),
+                    itemBuilder: (BuildContext context, int index) =>
+                        GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => ResultScreen(
+                              gamers: games[index].gamers,
+                              isMafiaWinner: games[index].isMafiaWin,
+                              gameName: games[index].gameName,
+                              gameStartTime: DateFormat('yyyy-MM-dd')
+                                  .format(games[index].gameStartTime!),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
+                        color: MafiaTheme.themeData.colorScheme.secondary
+                            .withOpacity(0.4),
+                        child: SizedBox(
+                          // height: 600,
+                          // width: 900,
+                          child: GamesResults(
+                            gamers: games[index].gamers,
+                            isMafia: games[index].isMafiaWin,
+                            gameName: games[index].gameName,
+                            gameStartTime: DateFormat('yyyy-MM-dd')
+                                .format(games[index].gameStartTime!),
+                          ),
+                        ),
+                      ).padding(
+                        bottom: 16,
                       ),
-                    ).padding(
-                      bottom: 16,
                     ),
                   ),
                 ),

@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
+import 'package:mafia_game/utils/app_strings.dart';
 
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
@@ -27,41 +29,63 @@ class FirestoreService {
   Future<void> addGameToFirebase({
     required GameState gameState,
   }) async {
-    print('Game state: $gameState');
-
-    // for (Gamer gamer in gameState.gamers) {
-    //   try {
-    //     await _gamersCollection.doc(gamer.gamerId).update(<String, dynamic>{
-    //       'role': gamer.role?.name,
-    //       'roleId': gamer.role?.roleId,
-    //       'points': gamer.role?.points,
-    //     });
-    //     print("Updated gamer: ${gamer.gamerId}");
-    //   } catch (error) {
-    //     print("Error updating gamer: ${gamer.gamerId}, error: $error");
-    //   }
-    // }
+    print('addGameToFirebase called');
     await _gameCollection.doc(gameState.gameId).set(<String, Object>{
       'gameName': gameState.gameName,
       'numberOfGamers': gameState.numberOfGamers,
       'gameId': gameState.gameId,
       'isMafiaWin': gameState.isMafiaWin,
-      'gamers': gameState.gamers
-          .map(
-            (Gamer gamer) => <String, dynamic>{
-              'name': gamer.name,
-              'role': gamer.role?.name,
-              'roleId': gamer.role?.roleId,
-              'gamerId': gamer.gamerId,
-              'gamerCreatedTime': gamer.gamerCreated,
-              'imageUrl': gamer.imageUrl,
-              'roleCount': gamer.roleCounts,
-              'points': gamer.role?.points?.map(
-                (String key, int value) => MapEntry<String, int>(key, value),
+      'gamers': gameState.gamers.map(
+        (Gamer gamer) {
+          final Map<String, int> gamerPoints = Map<String, int>.from(
+            gamer.role!.points ?? <String, int>{},
+          );
+          final bool isGamerMafia =
+              gamer.role!.roleId == 2 || gamer.role!.roleId == 3;
+          final bool isGamerWerewolf = gamer.role!.roleId == 7;
+          final int totalPoints = gamerPoints[AppStrings.totalPoints] ?? 0;
+          final String uniqueId = UniqueKey().toString();
+          print('Total points: $totalPoints');
+          final Map<String, Object> newPointEntry = <String, Object>{
+            'id': uniqueId,
+            'points': totalPoints,
+            'timestamp': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          };
+          _gamersCollection.doc(gamer.name).update(
+            <Object, Object?>{
+              'totalPlayedGames': FieldValue.increment(1),
+              'won': FieldValue.increment(
+                (isGamerMafia && gameState.isMafiaWin)
+                    ? 1
+                    : (!isGamerMafia && !gameState.isMafiaWin)
+                        ? 1
+                        : 0,
               ),
+              'lost': FieldValue.increment(
+                (isGamerMafia && !gameState.isMafiaWin)
+                    ? 1
+                    : (!isGamerMafia && gameState.isMafiaWin)
+                        ? 1
+                        : 0,
+              ),
+              'totalPoints': FieldValue.increment(totalPoints),
+              'pointsHistory':
+                  FieldValue.arrayUnion(<Map<String, Object>>[newPointEntry]),
             },
-          )
-          .toList(),
+          );
+          return <String, dynamic>{
+            'name': gamer.name,
+            'role': gamer.role?.name,
+            'roleId': gamer.role?.roleId,
+            'gamerId': gamer.gamerId,
+            'gamerCreatedTime': gamer.gamerCreated,
+            'imageUrl': gamer.imageUrl,
+            'points': gamer.role?.points?.map(
+              (String key, int value) => MapEntry<String, int>(key, value),
+            ),
+          };
+        },
+      ).toList(),
       'gameStartTime': DateFormat('yyyy-MM-dd')
           .format(gameState.gameStartTime ?? DateTime.now()),
     });
@@ -94,14 +118,16 @@ class FirestoreService {
                       : Role(
                           name: gamer['role'] as String,
                           roleId: gamer['roleId'] as int,
-                    points: (gamer['points'] as Map<String, dynamic>?)?.map(
-                          (String key,  value) => MapEntry(key, value as int),
-                    ) ?? <String, int>{},
-                  ),
+                          points:
+                              (gamer['points'] as Map<String, dynamic>?)?.map(
+                                    (String key, value) =>
+                                        MapEntry(key, value as int),
+                                  ) ??
+                                  <String, int>{},
+                        ),
                   gamerId: gamer['gamerId'] as String,
                   gamerCreated: gamer['gamerCreatedTime'] as String,
                   imageUrl: gamer['imageUrl'] as String,
-
                 ),
               )
               .toList(),
@@ -116,16 +142,31 @@ class FirestoreService {
   }
 
   Future<Gamer> addGamer(Gamer gamer) async {
+    print('Trying to save');
     Gamer newGamer = const Gamer.empty();
     await _gamersCollection.doc(gamer.name).set(<String, dynamic>{
       'name': gamer.name,
       'gamerId': gamer.gamerId,
       'gamerCreatedTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
       "imageUrl": gamer.imageUrl,
+      'citizen': 0,
+      'mafia': 0,
+      'werewolf': 0,
+      'won': 0,
+      'lost': 0,
+      'totalPoints': 0,
+      'totalPlayedGames': 0,
+      'pointsHistory': <Map<String, Object>>[
+        <String, Object>{
+          'id': "",
+          'points': 0,
+          'timestamp': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        },
+      ],
     });
     final DocumentReference<Object?> docRef = _gamersCollection.doc(gamer.name);
     docRef.get().then(
-      (DocumentSnapshot doc) {
+      (DocumentSnapshot<dynamic> doc) {
         final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
         newGamer = Gamer(
           name: data['name'] as String,
@@ -134,7 +175,7 @@ class FirestoreService {
           // documentId: documentReference.id,
         );
       },
-      onError: (e) => print("Error getting document: $e"),
+      onError: (dynamic e) => print("Error getting document: $e"),
     );
 
     return newGamer;

@@ -42,7 +42,10 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: MafiaTheme.themeData.textTheme.headlineSmall,
+        style: MafiaTheme.themeData.textTheme.headlineSmall?.copyWith(
+          fontSize: 32,
+        ),
+
       ),
       automaticallyImplyLeading: showBackButton,
       centerTitle: true,

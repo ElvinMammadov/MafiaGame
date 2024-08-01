@@ -8,8 +8,9 @@ class GameTableScreen extends StatefulWidget {
 class _GameTableScreenState extends State<GameTableScreen> {
   bool showRoles = false;
   Gamer killedGamer = const Gamer.empty();
+  int count = 0;
 
-  void showLastResults(
+  void saveLastResults(
     int mafiaCount,
     int civilianCount,
     List<Gamer> gamers,
@@ -18,42 +19,43 @@ class _GameTableScreenState extends State<GameTableScreen> {
     BuildContext context,
     GameState game,
   ) {
-    // print('mafiaCount: $mafiaCount, civilianCount: $civilianCount');
-    final bool isWerewolfAlive = gamers.any(
-      (Gamer gamer) => gamer.role!.roleId == 7 && !gamer.wasKilled,
-    );
-    if (mafiaCount == 0 && isWerewolfAlive) {
+    print('Save result mafiaCount $mafiaCount, civilianCount $civilianCount');
+    final Gamer? werewolf =
+        gamers.where((Gamer gamer) => gamer.role?.roleId == 7).firstOrNull;
+    print('werewolf $werewolf');
+    final bool isWerewolfAlive = false;
+
+    if (mafiaCount == 0 && werewolf != null && !werewolf.wasKilled) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeWerewolf(),
       );
     }
-    if (mafiaCount == civilianCount) {
+    if (mafiaCount == civilianCount && count == 0) {
+      print('mafiaCount == civilianCount');
       BlocProvider.of<GameBloc>(context).add(
         CalculatePoints(
           gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
         ),
       );
-      showResults(
-        context,
-        gamers,
-        isMafia: true,
-        gameName: gameName,
-        gameStartTime: DateFormat('yyyy-MM-dd').format(gameStartTime!),
-      );
-      // AppNavigator.navigateToHomeScreen(context);
-    } else if (mafiaCount == 0 && !isWerewolfAlive) {
+      count++;
+    } else if (mafiaCount == 0 && werewolf == null && count == 0) {
+      print('mafiaCount == 0 && !isWerewolfAlive');
       BlocProvider.of<GameBloc>(context).add(
         CalculatePoints(
           gameState: game.copyWith(isMafiaWin: false, gamers: gamers),
         ),
       );
-      showResults(
-        context,
-        gamers,
-        gameName: gameName,
-        gameStartTime: DateFormat('yyyy-MM-dd').format(gameStartTime!),
+      count++;
+    } else if (mafiaCount == 0 &&
+        werewolf != null &&
+        werewolf.wasKilled &&
+        count == 0) {
+      BlocProvider.of<GameBloc>(context).add(
+        CalculatePoints(
+          gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
+        ),
       );
-      // AppNavigator.navigateToHomeScreen(context);
+      count++;
     }
   }
 
@@ -61,7 +63,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
   Widget build(BuildContext context) => BlocConsumer<GameBloc, AppState>(
         listenWhen: (AppState previous, AppState current) =>
             previous.game.mafiaCount != current.game.mafiaCount ||
-            previous.game.civilianCount != current.game.civilianCount,
+            previous.game.civilianCount != current.game.civilianCount ||
+            previous.game.isGameFinished != current.game.isGameFinished,
         listener: (BuildContext context, AppState state) {
           final List<Gamer> gamers = state.gamersState.gamers;
           final String gameName = state.game.gameName;
@@ -69,15 +72,35 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int civilianCount = state.game.civilianCount;
           final DateTime? gameStartTime = state.game.gameStartTime;
           final GameState gameState = state.game;
-          showLastResults(
-            mafiaCount,
-            civilianCount,
-            gamers,
-            gameName,
-            gameStartTime ?? DateTime.now(),
-            context,
-            gameState,
-          );
+          final bool isGameFinished = state.game.isGameFinished;
+          final bool isMafiaWin = state.game.isMafiaWin;
+          print('mafiacount $mafiaCount, civilianCount $civilianCount');
+          print('isGameFinished $isGameFinished, isMafiaWin $isMafiaWin');
+          if (isGameFinished) {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => ResultScreen(
+                  gamers: gamers,
+                  isMafiaWinner: isMafiaWin,
+                  gameName: gameName,
+                  gameStartTime:
+                      DateFormat('yyyy-MM-dd').format(gameStartTime!),
+                ),
+              ),
+            );
+          }
+
+          if (!isGameFinished) {
+            saveLastResults(
+              mafiaCount,
+              civilianCount,
+              gamers,
+              gameName,
+              gameStartTime ?? DateTime.now(),
+              context,
+              gameState,
+            );
+          }
         },
         builder: (BuildContext context, AppState state) {
           final int numberOfGamers = state.game.numberOfGamers;
@@ -187,6 +210,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                           action: () {
                             if (isGameStarted) {
                               if (isDiscussionStarted) {
+                                logger.log('Gamers are ${gamers.map(
+                                      (Gamer gamer) =>
+                                          'gamer name ${gamer.name}, '
+                                          'waskilled ${gamer.wasKilled}, ',
+                                    ).toList()}');
                                 BlocProvider.of<GameBloc>(context).add(
                                   const ChangeRoleIndex(
                                     roleIndex: 0,
@@ -206,16 +234,16 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           : prev,
                                 );
 
-                                // To show Chameleon functionality
-                                if (roleIndex == 0) {
-                                  showAddFunctionality(
-                                    context,
-                                    isVotingStarted: true,
-                                    gamerId: 1,
-                                    roleId: 1,
-                                    nightNumber: 1,
-                                  );
-                                }
+                                /// To show Chameleon functionality
+                                // if (roleIndex == 0) {
+                                //   showAddFunctionality(
+                                //     context,
+                                //     isVotingStarted: true,
+                                //     gamerId: 1,
+                                //     roleId: 1,
+                                //     nightNumber: 1,
+                                //   );
+                                // }
 
                                 if (maxVotes == 0) {
                                   SnackBarManager.showFailure(
@@ -302,6 +330,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                 }
                               } else if (!isDay) {
                                 BlocProvider.of<GameBloc>(context).add(
+                                  const AddNightNumber(),
+                                );
+                                BlocProvider.of<GameBloc>(context).add(
                                   const UpdateAnimation(animate: true),
                                 );
 
@@ -314,6 +345,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           gamer.wasBoomeranged) {
                                         if (gamer.role?.roleId != 14 &&
                                             gamer.role?.roleId != 7) {
+                                          print('gamer $gamer');
                                           killedGamers.add(gamer);
                                         }
                                       }
@@ -335,9 +367,10 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     }
                                   }
                                 }
-                                BlocProvider.of<GameBloc>(context).add(
-                                  const AddNightNumber(),
-                                );
+
+                                // BlocProvider.of<GameBloc>(context).add(
+                                //   CleanGamersAfterNight(gamers: gamers),
+                                // );
                               }
                             } else {
                               BlocProvider.of<GameBloc>(context).add(
