@@ -97,7 +97,8 @@ class AppStrings {
   static const String notFound = 'Игрок не найден';
   static const String victory = 'Победы';
   static const String defeat = 'Поражение';
-  static const String point = 'Балов';
+  static const String points = 'Очки';
+  static const String total = 'Всего';
   static const String totalPoints = 'Общие очки';
   static const String alivePoints = 'Дожил до конца';
   static const String pointsFromPresenter = 'Очки от ведущей';
@@ -160,4 +161,7 @@ class AppStrings {
   static const String newGamers = 'Новые';
   static const String chooseRoleForChameleon = 'Выберите роль для Хамелеона';
   static const String results = 'Результаты';
+  static const String days = 'Дня';
+  static const String years = 'Год';
+  static const String months = 'Месяц';
 }

@@ -48,6 +48,9 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       wasInfected: json['wasInfected'] as bool? ?? false,
       chameleonId: (json['chameleonId'] as num?)?.toInt() ?? 0,
       werewolfChanged: json['werewolfChanged'] as bool? ?? false,
+      gamerCounts: json['gamerCounts'] == null
+          ? const GamerCounts()
+          : GamerCounts.fromJson(json['gamerCounts'] as Map<String, dynamic>),
       roleCounts: (json['roleCounts'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, (e as num).toInt()),
           ) ??
@@ -108,6 +111,7 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'wasInfected': instance.wasInfected,
       'chameleonId': instance.chameleonId,
       'werewolfChanged': instance.werewolfChanged,
+      'gamerCounts': instance.gamerCounts,
     };
 
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(
@@ -341,4 +345,32 @@ Map<String, dynamic> _$BoomerangToJson(Boomerang instance) => <String, dynamic>{
       'name': instance.name,
       'roleId': instance.roleId,
       'points': instance.points,
+    };
+
+GamerCounts _$GamerCountsFromJson(Map<String, dynamic> json) => GamerCounts(
+      winnerCount: (json['winnerCount'] as num?)?.toInt() ?? 0,
+      citizenCount: (json['citizenCount'] as num?)?.toInt() ?? 0,
+      losingCount: (json['losingCount'] as num?)?.toInt() ?? 0,
+      mafiaCount: (json['mafiaCount'] as num?)?.toInt() ?? 0,
+      othersCount: (json['othersCount'] as num?)?.toInt() ?? 0,
+      totalPlayedGames: (json['totalPlayedGames'] as num?)?.toInt() ?? 0,
+      totalPoints: (json['totalPoints'] as num?)?.toInt() ?? 0,
+      pointsHistory: (json['pointsHistory'] as List<dynamic>?)
+              ?.map((e) => (e as Map<String, dynamic>).map(
+                    (k, e) => MapEntry(k, e as Object),
+                  ))
+              .toList() ??
+          const <Map<String, Object>>[],
+    );
+
+Map<String, dynamic> _$GamerCountsToJson(GamerCounts instance) =>
+    <String, dynamic>{
+      'winnerCount': instance.winnerCount,
+      'citizenCount': instance.citizenCount,
+      'losingCount': instance.losingCount,
+      'mafiaCount': instance.mafiaCount,
+      'othersCount': instance.othersCount,
+      'totalPlayedGames': instance.totalPlayedGames,
+      'totalPoints': instance.totalPoints,
+      'pointsHistory': instance.pointsHistory,
     };

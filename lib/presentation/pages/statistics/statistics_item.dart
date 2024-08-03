@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:mafia_game/features/game/game.dart';
-import 'package:mafia_game/presentation/pages/home/widgets/custom_image_view.dart';
-import 'package:mafia_game/presentation/pages/statistics/indicator_item.dart';
-import 'package:mafia_game/utils/app_strings.dart';
-import 'package:mafia_game/utils/theme/theme.dart';
+part of statistics;
 
 class StatisticsItem extends StatelessWidget {
   const StatisticsItem({
@@ -15,6 +10,31 @@ class StatisticsItem extends StatelessWidget {
   final double customImageWidth;
   final Gamer gamer;
 
+  String calculateExperience(String dateString) {
+    final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    final DateTime startDate = dateFormat.parse(dateString);
+    final DateTime currentDate = DateTime.now();
+    final Duration difference = currentDate.difference(startDate);
+
+    final int years = (difference.inDays / 365).floor();
+    final int remainingDaysAfterYears = difference.inDays % 365;
+    final int months = (remainingDaysAfterYears / 30).floor();
+    final int days = remainingDaysAfterYears % 30;
+
+    String experience = '';
+    if (years > 0) {
+      experience += '$years ${AppStrings.years}${years > 1 ? 'а' : ''} ';
+    }
+    if (months > 0) {
+      experience += '$months ${AppStrings.months}${months > 1 ? 'ов' : ''} ';
+    }
+    if (days > 0) {
+      experience += '$days ${days > 1 ? AppStrings.days : AppStrings.day}';
+    }
+
+    return experience.trim();
+  }
+
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(16),
@@ -24,13 +44,13 @@ class StatisticsItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
-          children: [
+          children: <Widget>[
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     CustomImageView(
                       imagePath: gamer.imageUrl!,
                       radius: BorderRadius.circular(100),
@@ -72,114 +92,18 @@ class StatisticsItem extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.only(left: 16),
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(right: 8),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                  right: 16,
-                                                ),
-                                                child: const Text(
-                                                  AppStrings.mafia,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                  right: 16,
-                                                ),
-                                                child: const Text(
-                                                  AppStrings.citizen,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    right: 16),
-                                                child: const Text(
-                                                  AppStrings.other,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              IndicatorItem(
-                                                foregroundColor: MafiaTheme
-                                                    .themeData
-                                                    .colorScheme
-                                                    .secondary,
-                                                value: 0.43,
-                                              ),
-                                              const SizedBox(height: 8),
-                                              IndicatorItem(
-                                                foregroundColor: MafiaTheme
-                                                    .themeData
-                                                    .colorScheme
-                                                    .primary,
-                                                value: 0.64,
-                                              ),
-                                              const SizedBox(height: 8),
-                                              IndicatorItem(
-                                                foregroundColor: MafiaTheme
-                                                    .themeData
-                                                    .colorScheme
-                                                    .surface,
-                                                value: 0.75,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          children: <Widget>[
                             Expanded(
                               child: Container(
                                 margin: const EdgeInsets.only(left: 8),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: <Widget>[
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -189,7 +113,7 @@ class StatisticsItem extends StatelessWidget {
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
+                                            children: <Widget>[
                                               Container(
                                                 margin: const EdgeInsets.only(
                                                   right: 16,
@@ -221,7 +145,7 @@ class StatisticsItem extends StatelessWidget {
                                                   right: 16,
                                                 ),
                                                 child: const Text(
-                                                  AppStrings.point,
+                                                  AppStrings.total,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 22,
@@ -234,29 +158,105 @@ class StatisticsItem extends StatelessWidget {
                                         Expanded(
                                           flex: 2,
                                           child: Column(
-                                            children: [
+                                            children: <Widget>[
                                               IndicatorItem(
+                                                totalPlayedGames: gamer
+                                                    .gamerCounts
+                                                    .totalPlayedGames,
                                                 foregroundColor: MafiaTheme
                                                     .themeData
                                                     .colorScheme
                                                     .secondary,
-                                                value: 0.43,
+                                                value: gamer
+                                                    .gamerCounts.winnerCount,
+                                                totalPoints: gamer.gamerCounts
+                                                    .totalPlayedGames,
                                               ),
                                               const SizedBox(height: 8),
                                               IndicatorItem(
+                                                totalPlayedGames: gamer
+                                                    .gamerCounts
+                                                    .totalPlayedGames,
                                                 foregroundColor: MafiaTheme
                                                     .themeData
                                                     .colorScheme
                                                     .primary,
-                                                value: 0.64,
+                                                value: gamer
+                                                    .gamerCounts.losingCount,
+                                                totalPoints: gamer.gamerCounts
+                                                    .totalPlayedGames,
                                               ),
                                               const SizedBox(height: 8),
                                               IndicatorItem(
+                                                totalPlayedGames: gamer
+                                                    .gamerCounts
+                                                    .totalPlayedGames,
                                                 foregroundColor: MafiaTheme
                                                     .themeData
                                                     .colorScheme
                                                     .surface,
-                                                value: 0.75,
+                                                value: gamer.gamerCounts
+                                                    .totalPlayedGames,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  right: 16,
+                                                  left: 16,
+                                                ),
+                                                child: const Text(
+                                                  AppStrings.points,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 22,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              IndicatorItem(
+                                                totalPlayedGames: gamer
+                                                    .gamerCounts
+                                                    .totalPlayedGames,
+                                                foregroundColor: MafiaTheme
+                                                    .themeData
+                                                    .colorScheme
+                                                    .surface,
+                                                value: gamer
+                                                    .gamerCounts.totalPoints,
                                               ),
                                             ],
                                           ),
@@ -268,14 +268,14 @@ class StatisticsItem extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ),
+                        ).padding(bottom: 16),
                         const Divider(
                           color: Colors.white,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             const Text(
                               AppStrings.registrationDate,
                               style: TextStyle(
@@ -293,7 +293,7 @@ class StatisticsItem extends StatelessWidget {
                                 color: MafiaTheme.themeData.highlightColor,
                               ),
                               child: Text(
-                                gamer.gamerCreated!,
+                                gamer.gamerCreated,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 22,
@@ -316,15 +316,17 @@ class StatisticsItem extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(16),
                                 color: MafiaTheme.themeData.highlightColor,
                               ),
-                              child: const Text(
-                                "2 il 5 ay",
-                                style: TextStyle(
+                              child: Text(
+                                calculateExperience(gamer.gamerCreated),
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 22,
                                 ),
                               ),
                             ),
                           ],
+                        ).padding(
+                          vertical: 16,
                         ),
                       ],
                     ),

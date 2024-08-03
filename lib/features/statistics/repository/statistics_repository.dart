@@ -7,9 +7,8 @@ abstract class StatisticsRepository {
 
 class StatisticsRepositoryImpl implements StatisticsRepository {
   FirestoreService firestoreService = FirestoreService();
-  @override
-  Future<List<Gamer>> getGamers(String searchQuery) {
-    return firestoreService.getGamers(searchQuery);
-  }
 
+  @override
+  Future<List<Gamer>> getGamers(String searchQuery) =>
+      firestoreService.getGamers(searchQuery);
 }

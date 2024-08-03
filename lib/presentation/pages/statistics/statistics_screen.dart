@@ -1,4 +1,4 @@
-part of home;
+part of statistics;
 
 class StatisticScreen extends StatefulWidget {
   const StatisticScreen({super.key});
@@ -36,64 +36,72 @@ class _StatisticScreenState extends State<StatisticScreen> {
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: LayoutBuilder(builder:
-                      (BuildContext context, BoxConstraints constraints) {
-                    if (state.pageList.isEmpty &&
-                        state.pageStatus is! Initial) {
-                      return const Center(
-                        child: Text(
-                          AppStrings.notFound,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      if (state.pageList.isEmpty &&
+                          state.pageStatus is! Initial) {
+                        return const Center(
+                          child: Text(
+                            AppStrings.notFound,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: state.pageList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final Gamer gamer = state.pageList[index];
-                          return StatisticsItem(
-                            customImageWidth: 96,
-                            gamer: gamer,
-                          );
-                        },
-                      );
-                    }
-                  }),
+                        );
+                      } else {
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: state.pageList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final Gamer gamer = state.pageList[index];
+                            return StatisticsItem(
+                              customImageWidth: 96,
+                              gamer: gamer,
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
       );
 }
 
-class SearchBar extends StatelessWidget {
-  SearchBar({
+class SearchBar extends StatefulWidget {
+  final TextEditingController searchController;
+  final BuildContext context;
+
+  const SearchBar({
     super.key,
     required this.searchController,
     required this.context,
   });
 
-  final TextEditingController searchController;
-  final BuildContext context;
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
   Timer? _debounce;
 
   @override
   Widget build(BuildContext context) => TextFormField(
-        controller: searchController,
+        controller: widget.searchController,
         decoration: InputDecoration(
           hintText: AppStrings.search,
           hintStyle: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: Colors.black,
+            color: Colors.white,
           ),
           filled: true,
           border: OutlineInputBorder(
@@ -108,7 +116,7 @@ class SearchBar extends StatelessWidget {
           ),
         ),
         style: const TextStyle(
-          color: Colors.black,
+          color: Colors.white,
         ),
         onChanged: (String value) => _onSearchChanged(value),
         onFieldSubmitted: (String query) => _onSearchChanged(query),
@@ -118,11 +126,11 @@ class SearchBar extends StatelessWidget {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 200), () {
       if (value.length >= 2) {
-        BlocProvider.of<StatisticsBloc>(context).add(
+        BlocProvider.of<StatisticsBloc>(widget.context).add(
           GetSearchData(searchQuery: value),
         );
       } else if (value.isEmpty || value == "") {
-        BlocProvider.of<StatisticsBloc>(context).add(
+        BlocProvider.of<StatisticsBloc>(widget.context).add(
           GetSearchData(searchQuery: ""),
         );
       }

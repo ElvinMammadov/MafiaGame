@@ -23,7 +23,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
     final Gamer? werewolf =
         gamers.where((Gamer gamer) => gamer.role?.roleId == 7).firstOrNull;
     print('werewolf $werewolf');
-    final bool isWerewolfAlive = false;
+    // final bool isWerewolfAlive = false;
 
     if (mafiaCount == 0 && werewolf != null && !werewolf.wasKilled) {
       BlocProvider.of<GameBloc>(context).add(
@@ -120,8 +120,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
           final List<Gamer> killedGamers = <Gamer>[];
-          final int roleIndex =
-              BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+          // final int roleIndex =
+          //     BlocProvider.of<GameBloc>(context).state.game.roleIndex;
 
           // print('isGameStarted $isGameStarted, isGameCouldStart '
           //     '$isGameCouldStart,'

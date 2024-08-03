@@ -78,7 +78,7 @@ class CustomImageView extends StatelessWidget {
 
   Widget _buildImageWithBorder() {
     if (border != null) {
-      return Container(
+      return DecoratedBox(
         decoration: BoxDecoration(
           border: border,
           borderRadius: radius,
@@ -100,7 +100,7 @@ class CustomImageView extends StatelessWidget {
   Widget _buildImageView() {
     switch (imagePath.imageType) {
       case ImageType.svg:
-        return Container(
+        return SizedBox(
           height: height,
           width: width,
           child: SvgPicture.asset(
@@ -131,7 +131,7 @@ class CustomImageView extends StatelessWidget {
           width: width,
           fit: fit,
           color: color,
-          placeholder: (BuildContext context, String url) => Container(
+          placeholder: (BuildContext context, String url) => SizedBox(
             height: 30,
             width: 30,
             child: LinearProgressIndicator(

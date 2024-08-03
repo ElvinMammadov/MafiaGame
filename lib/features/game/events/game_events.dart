@@ -130,9 +130,9 @@ class AddNightNumber extends GameEvent {
 }
 
 class ChangeGamerCounts extends GameEvent {
-  bool isMafia;
+  final bool isMafia;
 
-  ChangeGamerCounts({
+  const ChangeGamerCounts({
     required this.isMafia,
   });
 

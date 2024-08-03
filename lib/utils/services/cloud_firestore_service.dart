@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,7 +43,7 @@ class FirestoreService {
           );
           final bool isGamerMafia =
               gamer.role!.roleId == 2 || gamer.role!.roleId == 3;
-          final bool isGamerWerewolf = gamer.role!.roleId == 7;
+          // final bool isGamerWerewolf = gamer.role!.roleId == 7;
           final int totalPoints = gamerPoints[AppStrings.totalPoints] ?? 0;
           final String uniqueId = UniqueKey().toString();
           print('Total points: $totalPoints');
@@ -118,12 +119,12 @@ class FirestoreService {
                       : Role(
                           name: gamer['role'] as String,
                           roleId: gamer['roleId'] as int,
-                          points:
-                              (gamer['points'] as Map<String, dynamic>?)?.map(
-                                    (String key, value) =>
-                                        MapEntry(key, value as int),
-                                  ) ??
-                                  <String, int>{},
+                          points: (gamer['points'] as Map<String, dynamic>?)
+                                  ?.map(
+                                (String key, dynamic value) =>
+                                    MapEntry<String, int>(key, value as int),
+                              ) ??
+                              <String, int>{},
                         ),
                   gamerId: gamer['gamerId'] as String,
                   gamerCreated: gamer['gamerCreatedTime'] as String,
@@ -136,7 +137,7 @@ class FirestoreService {
       // logger.log('Games from Firebase: $games');
       return games;
     } catch (error) {
-      print('Error fetching games after: $error');
+      log('Error fetching games after: $error');
       return <GameState>[];
     }
   }
@@ -175,7 +176,7 @@ class FirestoreService {
           // documentId: documentReference.id,
         );
       },
-      onError: (dynamic e) => print("Error getting document: $e"),
+      onError: (dynamic e) => log("Error getting document: $e"),
     );
 
     return newGamer;
@@ -205,12 +206,21 @@ class FirestoreService {
           imageUrl: data['imageUrl'] as String,
           gamerId: data['gamerId'] as String,
           gamerCreated: data['gamerCreatedTime'] as String,
+          gamerCounts: GamerCounts(
+            citizenCount: data['citizen'] as int,
+            mafiaCount: data['mafia'] as int,
+            othersCount: data['others'] as int,
+            losingCount: data['lost'] as int,
+            winnerCount: data['won'] as int,
+            totalPlayedGames: data['totalPlayedGames'] as int,
+            totalPoints: data['totalPoints'] as int,
+          ),
         );
       }).toList();
 
       return gamers;
     } catch (error) {
-      print('Error fetching games: $error');
+      log('Error fetching gamers: $error');
       return <Gamer>[];
     }
   }

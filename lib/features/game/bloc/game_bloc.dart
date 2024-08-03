@@ -1127,8 +1127,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int? roleTargetedId = event.targetedGamer.role?.roleId;
       final bool isTargetedMafia = roleTargetedId == 2 || roleTargetedId == 3;
       final bool isTargetedCivilian = roleTargetedId == 11;
-      final bool isTargetedMainCharacter =
-          !isTargetedMafia || !isTargetedCivilian;
 
       if (targetedIndex != -1 && isTargetingSelf) {
         final List<Gamer> updatedGamers = state.gamersState.gamers.map((
