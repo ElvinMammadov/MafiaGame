@@ -34,16 +34,11 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
               ?.map((e) => Gamer.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <Gamer>[],
-      isGameCouldStart: json['isGameCouldStart'] as bool? ?? false,
-      isGameStarted: json['isGameStarted'] as bool? ?? false,
-      isDiscussionStarted: json['isDiscussionStarted'] as bool? ?? false,
-      isVotingStarted: json['isVotingStarted'] as bool? ?? false,
       discussionTime: (json['discussionTime'] as num?)?.toInt() ?? 30,
       votingTime: (json['votingTime'] as num?)?.toInt() ?? 30,
       gameStartTime: json['gameStartTime'] == null
           ? null
           : DateTime.parse(json['gameStartTime'] as String),
-      isDay: json['isDay'] as bool? ?? true,
       dayNumber: (json['dayNumber'] as num?)?.toInt() ?? 1,
       nightNumber: (json['nightNumber'] as num?)?.toInt() ?? 1,
       mafiaCount: (json['mafiaCount'] as num?)?.toInt() ?? 0,
@@ -58,7 +53,11 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
               .toList() ??
           const <Gamer>[],
       infectedCount: (json['infectedCount'] as num?)?.toInt() ?? 0,
-      isGameFinished: json['isGameFinished'] as bool? ?? false,
+      gamePhase: $enumDecodeNullable(_$GamePhaseEnumMap, json['gamePhase']) ??
+          GamePhase.IsReady,
+      gamePeriod:
+          $enumDecodeNullable(_$GamePeriodEnumMap, json['gamePeriod']) ??
+              GamePeriod.Day,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -68,14 +67,9 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'numberOfGamers': instance.numberOfGamers,
       'gameId': instance.gameId,
       'gamers': instance.gamers,
-      'isGameCouldStart': instance.isGameCouldStart,
-      'isGameStarted': instance.isGameStarted,
-      'isDiscussionStarted': instance.isDiscussionStarted,
-      'isVotingStarted': instance.isVotingStarted,
       'discussionTime': instance.discussionTime,
       'votingTime': instance.votingTime,
       'gameStartTime': instance.gameStartTime?.toIso8601String(),
-      'isDay': instance.isDay,
       'dayNumber': instance.dayNumber,
       'nightNumber': instance.nightNumber,
       'mafiaCount': instance.mafiaCount,
@@ -85,8 +79,23 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'currentVoter': instance.currentVoter,
       'votedGamers': instance.votedGamers,
       'infectedCount': instance.infectedCount,
-      'isGameFinished': instance.isGameFinished,
+      'gamePhase': _$GamePhaseEnumMap[instance.gamePhase]!,
+      'gamePeriod': _$GamePeriodEnumMap[instance.gamePeriod]!,
     };
+
+const _$GamePhaseEnumMap = {
+  GamePhase.Discussion: 'Discussion',
+  GamePhase.Voting: 'Voting',
+  GamePhase.CouldStart: 'CouldStart',
+  GamePhase.IsReady: 'IsReady',
+  GamePhase.Started: 'Started',
+  GamePhase.Finished: 'Finished',
+};
+
+const _$GamePeriodEnumMap = {
+  GamePeriod.Day: 'Day',
+  GamePeriod.Night: 'Night',
+};
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(
       id: json['id'] as String?,

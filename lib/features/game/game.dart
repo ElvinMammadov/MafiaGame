@@ -25,7 +25,7 @@ part 'models/roles/madam.dart';
 part 'models/roles/killer.dart';
 part 'models/roles/werewolf.dart';
 part 'models/roles/virus.dart';
-part 'models/roles/advokat.dart';
+part 'models/roles/advocate.dart';
 part 'models/roles/security.dart';
 part 'models/roles/mirniy.dart';
 part 'models/roles/medium.dart';

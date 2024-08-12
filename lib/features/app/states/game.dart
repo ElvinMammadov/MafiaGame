@@ -8,14 +8,9 @@ class GameState extends Equatable {
   final int numberOfGamers;
   final String gameId;
   final List<Gamer> gamers;
-  final bool isGameCouldStart;
-  final bool isGameStarted;
-  final bool isDiscussionStarted;
-  final bool isVotingStarted;
   final int discussionTime;
   final int votingTime;
   final DateTime? gameStartTime;
-  final bool isDay;
   final int dayNumber;
   final int nightNumber;
   final int mafiaCount;
@@ -25,7 +20,8 @@ class GameState extends Equatable {
   final Gamer currentVoter;
   final List<Gamer> votedGamers;
   final int infectedCount;
-  final bool isGameFinished;
+  final GamePhase gamePhase;
+  final GamePeriod gamePeriod;
 
   const GameState({
     this.gameId = '',
@@ -34,14 +30,9 @@ class GameState extends Equatable {
     this.typeOfController = '',
     this.numberOfGamers = 0,
     this.gamers = const <Gamer>[],
-    this.isGameCouldStart = false,
-    this.isGameStarted = false,
-    this.isDiscussionStarted = false,
-    this.isVotingStarted = false,
     this.discussionTime = 30,
     this.votingTime = 30,
     this.gameStartTime,
-    this.isDay = true,
     this.dayNumber = 1,
     this.nightNumber = 1,
     this.mafiaCount = 0,
@@ -51,7 +42,8 @@ class GameState extends Equatable {
     this.currentVoter = const Gamer.empty(),
     this.votedGamers = const <Gamer>[],
     this.infectedCount = 0,
-    this.isGameFinished = false,
+    this.gamePhase = GamePhase.IsReady,
+    this.gamePeriod = GamePeriod.Day,
   });
 
   const GameState.empty()
@@ -61,14 +53,9 @@ class GameState extends Equatable {
         numberOfGamers = 0,
         gameId = '',
         gamers = const <Gamer>[],
-        isGameCouldStart = false,
-        isDiscussionStarted = false,
-        isGameStarted = false,
-        isVotingStarted = false,
         discussionTime = 30,
         votingTime = 30,
         gameStartTime = null,
-        isDay = true,
         dayNumber = 1,
         nightNumber = 1,
         mafiaCount = 0,
@@ -78,7 +65,8 @@ class GameState extends Equatable {
         infectedCount = 0,
         currentVoter = const Gamer.empty(),
         votedGamers = const <Gamer>[],
-        isGameFinished = false;
+        gamePhase = GamePhase.IsReady,
+        gamePeriod = GamePeriod.Day;
 
   GameState copyWith({
     String? gameName,
@@ -87,14 +75,9 @@ class GameState extends Equatable {
     int? numberOfGamers,
     String? gameId,
     List<Gamer>? gamers,
-    bool? isGameCouldStart,
-    bool? isGameStarted,
-    bool? isDiscussionStarted,
-    bool? isVotingStarted,
     int? discussionTime,
     int? votingTime,
     DateTime? gameStartTime,
-    bool? isDay,
     int? dayNumber,
     int? nightNumber,
     int? mafiaCount,
@@ -104,7 +87,8 @@ class GameState extends Equatable {
     Gamer? currentVoter,
     List<Gamer>? votedGamers,
     int? infectedCount,
-    bool? isGameFinished,
+    GamePhase? gamePhase,
+    GamePeriod? gamePeriod,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -113,14 +97,9 @@ class GameState extends Equatable {
         numberOfGamers: numberOfGamers ?? this.numberOfGamers,
         gameId: gameId ?? this.gameId,
         gamers: gamers ?? this.gamers,
-        isGameCouldStart: isGameCouldStart ?? this.isGameCouldStart,
-        isGameStarted: isGameStarted ?? this.isGameStarted,
-        isDiscussionStarted: isDiscussionStarted ?? this.isDiscussionStarted,
-        isVotingStarted: isVotingStarted ?? this.isVotingStarted,
         discussionTime: discussionTime ?? this.discussionTime,
         votingTime: votingTime ?? this.votingTime,
         gameStartTime: gameStartTime ?? this.gameStartTime,
-        isDay: isDay ?? this.isDay,
         dayNumber: dayNumber ?? this.dayNumber,
         nightNumber: nightNumber ?? this.nightNumber,
         mafiaCount: mafiaCount ?? this.mafiaCount,
@@ -130,7 +109,8 @@ class GameState extends Equatable {
         currentVoter: currentVoter ?? this.currentVoter,
         votedGamers: votedGamers ?? this.votedGamers,
         infectedCount: infectedCount ?? this.infectedCount,
-        isGameFinished: isGameFinished ?? this.isGameFinished,
+        gamePhase: gamePhase ?? this.gamePhase,
+        gamePeriod: gamePeriod ?? this.gamePeriod,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -146,14 +126,9 @@ class GameState extends Equatable {
         numberOfGamers,
         gameId,
         gamers,
-        isGameCouldStart,
-        isGameStarted,
-        isDiscussionStarted,
-        isVotingStarted,
         discussionTime,
         votingTime,
         gameStartTime,
-        isDay,
         dayNumber,
         nightNumber,
         mafiaCount,
@@ -162,20 +137,33 @@ class GameState extends Equatable {
         currentVoter,
         votedGamers,
         infectedCount,
-        isGameFinished,
+        gamePhase,
+        gamePeriod,
       ];
 
   @override
   String toString() => 'GameState'
       '{gameName: $gameName, typeOfGame: $typeOfGame,'
       ' typeOfController: $typeOfController, numberOfGamers: $numberOfGamers,'
-      ' gamerId: $gameId, gamers: $gamers, isGameStarted: $isGameCouldStart'
-      ' isGameStarted: $isGameStarted,'
-      ' isDiscussionStarted: $isDiscussionStarted, '
-      'isVotingStarted: $isVotingStarted, discussionTime: $discussionTime,'
+      ' gamerId: $gameId, gamers: $gamers, discussionTime: $discussionTime,'
       ' votingTime: $votingTime, gameStartTime: $gameStartTime, '
-      'isDay: $isDay, dayNumber: $dayNumber, nightNumber: $nightNumber, '
+      'dayNumber: $dayNumber, nightNumber: $nightNumber, '
       'mafiaCount: $mafiaCount, civilianCount: $civilianCount}, '
       'isMafiaWin: $isMafiaWin, roleIndex: $roleIndex,'
-      ' infectedCount: $infectedCount, isGameFinished: $isGameFinished}';
+      ' infectedCount: $infectedCount, '
+      'gamePhase: $gamePhase, gamePeriod: $gamePeriod}';
+}
+
+enum GamePhase {
+  Discussion,
+  Voting,
+  CouldStart,
+  IsReady,
+  Started,
+  Finished,
+}
+
+enum GamePeriod {
+  Day,
+  Night,
 }

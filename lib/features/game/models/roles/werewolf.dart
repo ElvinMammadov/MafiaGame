@@ -4,14 +4,14 @@ part of game;
 class Werewolf extends Role with EquatableMixin {
   const Werewolf({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
   const Werewolf.empty()
       : this(
           name: 'Werewolf',
-          roleId: 7,
+          roleType: RoleType.Werewolf,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
             AppStrings.votedAgainstMainRoles: 0,
@@ -30,13 +30,13 @@ class Werewolf extends Role with EquatableMixin {
   @override
   Werewolf copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
       Werewolf(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
   factory Werewolf.fromJson(Map<String, dynamic> json) =>
@@ -48,8 +48,8 @@ class Werewolf extends Role with EquatableMixin {
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override

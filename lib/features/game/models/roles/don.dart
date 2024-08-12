@@ -4,14 +4,14 @@ part of game;
 class Don extends Role with EquatableMixin {
   const Don({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
   const Don.empty()
       : this(
           name: 'Don',
-          roleId: 3,
+          roleType: RoleType.Don,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
             AppStrings.votedAgainstMainRoles: 0,
@@ -26,13 +26,13 @@ class Don extends Role with EquatableMixin {
   @override
   Don copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
       Don(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
   factory Don.fromJson(Map<String, dynamic> json) => _$DonFromJson(json);
@@ -43,8 +43,8 @@ class Don extends Role with EquatableMixin {
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override

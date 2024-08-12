@@ -164,4 +164,10 @@ class AppStrings {
   static const String days = 'Дня';
   static const String years = 'Год';
   static const String months = 'Месяц';
+  static const String mafiaDoesNotExist = 'Mafia не добавлена в список. '
+      'Пожалуйста, добавьте их.';
+  static const String allGamersCitizens = 'Все игроки мирные.'
+      ' Пожалуйста, добавьте роли для игроков.';
+  static const String chooseGamerPosition =
+      'Пожалуйста, выберите позицию для игрока.';
 }

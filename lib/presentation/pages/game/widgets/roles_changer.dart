@@ -19,12 +19,12 @@ class _RolesChangerState extends State<RolesChanger> {
           final Roles roles = state.gamersState.roles;
           final int roleIndex =
               BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-          final bool isDay = state.game.isDay;
+          final GamePeriod gamePeriod = state.game.gamePeriod;
           return Center(
             child: Column(
               children: <Widget>[
                 Text(
-                  !isDay
+                  gamePeriod == GamePeriod.Night
                       ? AppStrings.wakesUp + roles.roles[roleIndex].name
                       : AppStrings.chooseRole + roles.roles[roleIndex].name,
                   style:

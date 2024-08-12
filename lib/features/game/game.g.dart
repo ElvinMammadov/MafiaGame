@@ -46,7 +46,9 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       healCount: (json['healCount'] as num?)?.toInt() ?? 2,
       wasVoted: json['wasVoted'] as bool? ?? false,
       wasInfected: json['wasInfected'] as bool? ?? false,
-      chameleonId: (json['chameleonId'] as num?)?.toInt() ?? 0,
+      chameleonRoleType:
+          $enumDecodeNullable(_$RoleTypeEnumMap, json['chameleonRoleType']) ??
+              RoleType.Civilian,
       werewolfChanged: json['werewolfChanged'] as bool? ?? false,
       gamerCounts: json['gamerCounts'] == null
           ? const GamerCounts()
@@ -109,23 +111,41 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'healCount': instance.healCount,
       'wasVoted': instance.wasVoted,
       'wasInfected': instance.wasInfected,
-      'chameleonId': instance.chameleonId,
+      'chameleonRoleType': _$RoleTypeEnumMap[instance.chameleonRoleType]!,
       'werewolfChanged': instance.werewolfChanged,
       'gamerCounts': instance.gamerCounts,
     };
 
+const _$RoleTypeEnumMap = {
+  RoleType.Chameleon: 'Chameleon',
+  RoleType.Don: 'Don',
+  RoleType.Mafia: 'Mafia',
+  RoleType.Madam: 'Madam',
+  RoleType.Sheriff: 'Sheriff',
+  RoleType.Doctor: 'Doctor',
+  RoleType.Advocate: 'Advocate',
+  RoleType.Killer: 'Killer',
+  RoleType.Boomerang: 'Boomerang',
+  RoleType.Werewolf: 'Werewolf',
+  RoleType.Medium: 'Medium',
+  RoleType.Security: 'Security',
+  RoleType.Virus: 'Virus',
+  RoleType.Civilian: 'Civilian',
+};
+
 Role _$RoleFromJson(Map<String, dynamic> json) => Role(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Roles _$RolesFromJson(Map<String, dynamic> json) => Roles(
@@ -153,198 +173,212 @@ Map<String, dynamic> _$GamersStateToJson(GamersState instance) =>
 
 Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$DoctorToJson(Doctor instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Mafia _$MafiaFromJson(Map<String, dynamic> json) => Mafia(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$MafiaToJson(Mafia instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Don _$DonFromJson(Map<String, dynamic> json) => Don(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$DonToJson(Don instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Sheriff _$SheriffFromJson(Map<String, dynamic> json) => Sheriff(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$SheriffToJson(Sheriff instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Madam _$MadamFromJson(Map<String, dynamic> json) => Madam(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$MadamToJson(Madam instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Killer _$KillerFromJson(Map<String, dynamic> json) => Killer(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$KillerToJson(Killer instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Werewolf _$WerewolfFromJson(Map<String, dynamic> json) => Werewolf(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$WerewolfToJson(Werewolf instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Virus _$VirusFromJson(Map<String, dynamic> json) => Virus(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$VirusToJson(Virus instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
-Advokat _$AdvokatFromJson(Map<String, dynamic> json) => Advokat(
+Advocate _$AdvocateFromJson(Map<String, dynamic> json) => Advocate(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
-Map<String, dynamic> _$AdvokatToJson(Advokat instance) => <String, dynamic>{
+Map<String, dynamic> _$AdvocateToJson(Advocate instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Security _$SecurityFromJson(Map<String, dynamic> json) => Security(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$SecurityToJson(Security instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Mirniy _$MirniyFromJson(Map<String, dynamic> json) => Mirniy(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$MirniyToJson(Mirniy instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Medium _$MediumFromJson(Map<String, dynamic> json) => Medium(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$MediumToJson(Medium instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Chameleon _$ChameleonFromJson(Map<String, dynamic> json) => Chameleon(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$ChameleonToJson(Chameleon instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 Boomerang _$BoomerangFromJson(Map<String, dynamic> json) => Boomerang(
       name: json['name'] as String? ?? '',
-      roleId: (json['roleId'] as num?)?.toInt() ?? 0,
       points: (json['points'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
+      roleType: $enumDecodeNullable(_$RoleTypeEnumMap, json['roleType']) ??
+          RoleType.Civilian,
     );
 
 Map<String, dynamic> _$BoomerangToJson(Boomerang instance) => <String, dynamic>{
       'name': instance.name,
-      'roleId': instance.roleId,
       'points': instance.points,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
     };
 
 GamerCounts _$GamerCountsFromJson(Map<String, dynamic> json) => GamerCounts(

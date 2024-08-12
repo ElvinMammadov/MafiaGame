@@ -7,11 +7,9 @@ class BlinkingAvatar extends StatefulWidget {
   final Roles roles;
   final double iconSize;
   final double sizeBoxSize;
-  final bool isGameCouldStart;
   final Function(Gamer)? changeRole;
-  final bool isGameStarted;
-  final bool isVotingStarted;
-  final bool isDay;
+  final GamePeriod gamePeriod;
+  final GamePhase gamePhase;
 
   const BlinkingAvatar({
     required this.showRoles,
@@ -20,11 +18,9 @@ class BlinkingAvatar extends StatefulWidget {
     required this.roles,
     required this.iconSize,
     required this.sizeBoxSize,
-    required this.isGameCouldStart,
     this.changeRole,
-    required this.isGameStarted,
-    required this.isVotingStarted,
-    required this.isDay,
+    required this.gamePeriod,
+    required this.gamePhase,
     super.key,
   });
 
@@ -51,7 +47,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
       end: Colors.green,
     ).animate(_controller);
 
-    if (!widget.isGameStarted && widget.isGameCouldStart) {
+    if (widget.gamePhase != GamePhase.Started) {
       _controller.repeat(reverse: true);
     }
   }
@@ -59,10 +55,10 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
   void _animateGamer(Gamer gamer) {
     final int roleIndex =
         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-    final int roleId = widget.roles.roles[roleIndex].roleId;
-    final int gamerRoleIndex = widget.gamers[widget.index].role?.roleId ?? 0;
+    final RoleType roleType = widget.roles.roles[roleIndex].roleType;
+    final RoleType gamerRoleType = widget.gamers[widget.index].role.roleType;
     // print('roleId: $roleId, gamerRoleIndex: $gamerRoleIndex');
-    if (roleId == gamerRoleIndex) {
+    if (roleType == gamerRoleType) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeAnimation(
           gamerId: widget.gamers[widget.index].gamerId ?? '',
@@ -104,7 +100,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
             backgroundColor: Colors.red,
             content: Text(
               AppStrings.gamerAlreadyVoted,
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+              style: TextStyle(color: Colors.white, fontSize: 24.0),
             ),
           ),
         );
@@ -142,20 +138,19 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   @override
   Widget build(BuildContext context) {
-    if ((!widget.isGameStarted &&
-            widget.isGameCouldStart &&
+    if ((widget.gamePhase != GamePhase.Started &&
             widget.gamers[widget.index].isAnimated) ||
-        widget.isVotingStarted) {
+        widget.gamePhase == GamePhase.Voting) {
       _controller.repeat(reverse: true);
     } else {
       _controller.stop();
     }
     return BlocBuilder<GameBloc, AppState>(
       builder: (BuildContext context, AppState state) {
-        final bool isDay = state.game.isDay;
-        final bool isDiscussionStarted = state.game.isDiscussionStarted;
+        final GamePeriod gamePeriod = state.game.gamePeriod;
+        final GamePhase gamePhase = state.game.gamePhase;
         // print('is animating 3: ${widget.gamers[widget.index].isAnimated}');
-        if (!isDay) {
+        if (gamePeriod == GamePeriod.Night) {
           _animateGamer(widget.gamers[widget.index]);
         }
         return AnimatedBuilder(
@@ -164,10 +159,11 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: (!widget.isGameCouldStart && !widget.isGameStarted) ||
+                color: (widget.gamePhase == GamePhase.IsReady) ||
                         !widget.gamers[widget.index].isAnimated ||
-                        isDiscussionStarted ||
-                        (!isDay && !widget.gamers[widget.index].isAnimated)
+                        gamePhase == GamePhase.Discussion ||
+                        (gamePeriod == GamePeriod.Night &&
+                            !widget.gamers[widget.index].isAnimated)
                     ? Colors.transparent
                     : _animation.value!,
                 width: _controller.value * 10,
@@ -185,17 +181,19 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               color: Colors.transparent,
               child: GestureDetector(
                 onTap: () {
-                  if (widget.isGameCouldStart && !widget.isGameStarted) {
+                  if (widget.gamePhase == GamePhase.CouldStart) {
                     toggleAnimation();
                     widget.changeRole!(widget.gamers[widget.index]);
-                  } else if (widget.isVotingStarted && isDay) {
+                  } else if (widget.gamePhase == GamePhase.Voting &&
+                      gamePeriod == GamePeriod.Day) {
                     _handleTap();
-                  } else if (!isDay) {
+                  } else if (gamePeriod == GamePeriod.Night) {
                     final int roleIndex =
                         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-                    final int roleId = widget.roles.roles[roleIndex].roleId;
+                    final RoleType roleType =
+                        widget.roles.roles[roleIndex].roleType;
                     final bool gamerExists = widget.gamers
-                        .any((Gamer gamer) => gamer.role?.roleId == roleId);
+                        .any((Gamer gamer) => gamer.role.roleType == roleType);
                     if (gamerExists) {
                       BlinkingFunctions()._handleHitting(
                         context,
@@ -204,8 +202,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                         widget.index,
                       );
                     }
-                  } else if (!widget.isGameCouldStart &&
-                      !widget.isGameStarted) {
+                  } else if (widget.gamePhase == GamePhase.IsReady) {
                     DialogBuilder().showAddUserModal(
                       context,
                       widget.gamers[widget.index].id ?? 0,
@@ -219,9 +216,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                   child: widget.showRoles
                       ? Center(
                           child: Text(
-                            widget.gamers[widget.index].role != null
-                                ? '${widget.gamers[widget.index].role?.name}'
-                                : widget.roles.roles[13].name,
+                            widget.gamers[widget.index].role.name,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,

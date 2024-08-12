@@ -415,7 +415,6 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
               ).padding(
                 all: Dimensions.padding16,
               ),
-
             ),
           );
         },

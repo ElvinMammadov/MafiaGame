@@ -4,7 +4,7 @@ class DialogBuilder {
   void showAddUserModal(
     BuildContext context,
     int id,
-    Role? role, {
+    Role role, {
     bool isPositionMode = false,
     int numberOfGamers = 0,
     int position = 0,
@@ -17,7 +17,7 @@ class DialogBuilder {
     });
     final FirestoreService firestoreService = FirestoreService();
     File? imageFile;
-    Role? newRole = role;
+    Role newRole = role;
     Gamer? chosenGamer;
     int? positionOnTable;
     WoltModalSheet.show<void>(
@@ -36,7 +36,20 @@ class DialogBuilder {
               enabled: isEnabled,
               textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
               action: () async {
-                if (chosenGamer != null) {
+                if (isPositionMode && positionOnTable == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        AppStrings.chooseGamerPosition,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24.0,
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (chosenGamer != null) {
                   BlocProvider.of<GameBloc>(context).add(
                     UpdateGamer(
                       isGamerExist: true,
@@ -75,7 +88,7 @@ class DialogBuilder {
                         gamerId: gamerId,
                         imageUrl: imageUrl,
                         positionOnTable:
-                        isPositionMode ? positionOnTable! : position,
+                            isPositionMode ? positionOnTable! : position,
                         isNameChanged: true,
                         role: newRole,
                       ),
@@ -109,7 +122,7 @@ class DialogBuilder {
               imageFile = file;
             },
             onRoleChanged: (Role? updatedRole) {
-              newRole = updatedRole;
+              newRole = updatedRole ?? role;
             },
             gamerChosenFromFirebase: (Gamer? gamer) {
               chosenGamer = gamer;

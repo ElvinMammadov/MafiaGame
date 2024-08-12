@@ -29,12 +29,16 @@ class _ResultScreenState extends State<ResultScreen>
   Widget build(BuildContext context) {
     final List<Gamer> mafia = widget.gamers
         .where(
-          (Gamer gamer) => gamer.role?.roleId == 2 || gamer.role?.roleId == 3,
+          (Gamer gamer) =>
+              gamer.role.roleType == RoleType.Mafia ||
+              gamer.role.roleType == RoleType.Don,
         )
         .toList();
     final List<Gamer> citizens = widget.gamers
         .where(
-          (Gamer gamer) => gamer.role?.roleId != 2 && gamer.role?.roleId != 3,
+          (Gamer gamer) =>
+              gamer.role.roleType != RoleType.Mafia &&
+              gamer.role.roleType != RoleType.Don,
         )
         .toList();
     return OrientationBuilder(
@@ -171,7 +175,7 @@ class AccordionBody extends StatelessWidget {
                           ),
                         ).padding(horizontal: 8),
                         Text(
-                          '${gamer.role?.name}',
+                          gamer.role.name,
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 24,
@@ -179,7 +183,7 @@ class AccordionBody extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${gamer.role?.points?[AppStrings.totalPoints]}',
+                          '${gamer.role.points?[AppStrings.totalPoints]}',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 24,
@@ -191,11 +195,11 @@ class AccordionBody extends StatelessWidget {
                     content: SizedBox(
                       height: 400,
                       child: ListView.builder(
-                        itemCount: gamer.role?.points?.length,
+                        itemCount: gamer.role.points?.length,
                         itemBuilder: (BuildContext context, int index) {
                           final String? key =
-                              gamer.role?.points?.keys.elementAt(index);
-                          final String? value = gamer.role?.points?.values
+                              gamer.role.points?.keys.elementAt(index);
+                          final String? value = gamer.role.points?.values
                               .elementAt(index)
                               .toString();
                           return ListTile(

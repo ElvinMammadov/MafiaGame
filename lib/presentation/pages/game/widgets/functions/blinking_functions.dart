@@ -9,37 +9,37 @@ class BlinkingFunctions {
   ) {
     final int roleIndex =
         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-    final int roleId = roles.roles[roleIndex].roleId;
+    final RoleType roleType = roles.roles[roleIndex].roleType;
 
     final Gamer gamer =
-        gamers.firstWhere((Gamer gamer) => gamer.role?.roleId == roleId);
+        gamers.firstWhere((Gamer gamer) => gamer.role.roleType == roleType);
     print('index: $index, gamer.id: ${gamer.id}');
-    print('roleId: $roleId');
-    switch (roleId) {
-      case 1:
+    print('roleType: $roleType');
+    switch (roleType) {
+      case RoleType.Doctor:
         healGamer(gamers[index].name!, gamer, context, gamers);
         break;
-      case 2:
-      case 3:
+      case RoleType.Mafia:
+      case RoleType.Don:
         killGamerByMafia(gamers[index].name!, gamer, context, gamers);
         break;
-      case 4:
+      case RoleType.Sheriff:
         killGamerBySheriff(gamers[index].name!, gamer, context, gamers);
         break;
-      case 5:
+      case RoleType.Madam:
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
-      case 6:
+      case RoleType.Killer:
         killGamerByKiller(gamers[index].name!, gamer, context, gamers);
         break;
-      case 7:
+      case RoleType.Werewolf:
         if (!gamer.beforeChange) {
           killGamerByMafia(gamers[index].name!, gamer, context, gamers);
           break;
         } else {
           break;
         }
-      case 8:
+      case RoleType.Virus:
         if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
           infectGamer(
             gamers[index].name!,
@@ -56,26 +56,26 @@ class BlinkingFunctions {
           );
         }
         break;
-      case 9:
+      case RoleType.Advocate:
         giveAlibi(gamers[index].name!, gamer, context, gamers);
         break;
-      case 10:
+      case RoleType.Security:
         secureGamer(gamers[index].name!, gamer.id!, context, gamers);
         break;
-      case 12:
+      case RoleType.Medium:
         mediumChecked(gamers[index].name!, gamer.id!, context, gamers);
         break;
-      case 13:
+      case RoleType.Chameleon:
         chameleonChanges(context, index, gamer, gamers);
         break;
-      case 14:
+      case RoleType.Boomerang:
         boomerangGamer(gamers[index].name!, gamer, context, gamers);
         break;
       default:
         break;
     }
 
-    if (roleId != 8) {
+    if (roleType != RoleType.Virus) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeRoleIndex(
           roleIndex: roleIndex + 1,
@@ -250,38 +250,40 @@ class BlinkingFunctions {
     Gamer gamer,
     List<Gamer> gamers,
   ) {
-    final int roleId = gamer.chameleonId;
-    print('roleId: $roleId, gamerId: ${gamer.id}');
-    switch (roleId) {
-      case 1:
+    final RoleType roleType = gamer.chameleonRoleType;
+    print('roleType: $roleType, gamerId: ${gamer.id}');
+    switch (roleType) {
+      case RoleType.Doctor:
         healGamer(gamers[index].name!, gamer, context, gamers);
         break;
-      case 2:
-      case 3:
+      case RoleType.Mafia:
+      case RoleType.Don:
         killGamerByMafia(gamers[index].name!, gamer, context, gamers);
         break;
-      case 4:
+      case RoleType.Sheriff:
         killGamerBySheriff(gamers[index].name!, gamer, context, gamers);
         break;
-      case 5:
+      case RoleType.Madam:
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
-      case 6:
+      case RoleType.Killer:
         killGamerByKiller(gamers[index].name!, gamer, context, gamers);
         break;
-      case 7:
+      case RoleType.Werewolf:
         killGamerByMafia(gamers[index].name!, gamer, context, gamers);
         break;
-      case 9:
+      case RoleType.Advocate:
         giveAlibi(gamers[index].name!, gamer, context, gamers);
         break;
-      case 12:
+      case RoleType.Medium:
         mediumChecked(gamers[index].name!, gamer.id!, context, gamers);
         break;
+      default:
+        break;
     }
-    if (roleId != 2) {
+    if (roleType != RoleType.Mafia) {
       BlocProvider.of<GameBloc>(context).add(
-        const ChameleonChangeRole(chameleonId: 0),
+        const ChameleonChangeRole(chameleonRoleType: RoleType.Civilian),
       );
     }
   }

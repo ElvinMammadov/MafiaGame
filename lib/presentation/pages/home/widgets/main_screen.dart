@@ -8,7 +8,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String? typeOfGamer;
+  String typeOfGamer = AppStrings.savedGamers;
   String? typeOfController;
   int? numberOfGamers = 0;
   String? gameName = '';
@@ -61,13 +61,14 @@ class _MainScreenState extends State<MainScreen> {
   void addGamers(int numberOfGamers) {
     final GameBloc gameBloc = BlocProvider.of<GameBloc>(context);
     final List<Gamer> existingGamers = gameBloc.state.gamersState.gamers;
-
     final bool useSavedGamers = typeOfGamer == AppStrings.savedGamers;
+    print('useSavedGamers is $useSavedGamers');
 
     final List<Gamer> newGamers = <Gamer>[];
     for (int i = 0; i < numberOfGamers; i++) {
       if (useSavedGamers && i < existingGamers.length) {
 
+        print('saved gamers');
         final Gamer gamer = existingGamers[i];
         newGamers.add(
           Gamer(
@@ -81,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         );
       } else {
+        print('new gamers');
         newGamers.add(
           Gamer(
             name: AppStrings.gamer,
@@ -99,6 +101,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _startButtonPressed(BuildContext context) {
+    addGamers(numberOfGamers ?? 0);
     final String gameId = UniqueKey().toString();
     BlocProvider.of<GameBloc>(context).add(
       UpdateGameDetails(
@@ -110,7 +113,6 @@ class _MainScreenState extends State<MainScreen> {
         roles: roles ?? <Role>[],
       ),
     );
-    addGamers(numberOfGamers ?? 0);
     AppNavigator.navigateToTablePage(context);
   }
 }

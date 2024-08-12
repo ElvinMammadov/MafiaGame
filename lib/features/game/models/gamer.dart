@@ -3,7 +3,7 @@ part of game;
 @JsonSerializable()
 class Gamer extends Equatable {
   final String? name;
-  final Role? role;
+  final Role role;
   final String? imageUrl;
   final int? id;
   final String? documentId;
@@ -38,7 +38,7 @@ class Gamer extends Equatable {
   final int healCount;
   final bool wasVoted;
   final bool wasInfected;
-  final int chameleonId;
+  final RoleType chameleonRoleType;
   final bool werewolfChanged;
   final GamerCounts gamerCounts;
 
@@ -78,7 +78,7 @@ class Gamer extends Equatable {
     this.healCount = 2,
     this.wasVoted = false,
     this.wasInfected = false,
-    this.chameleonId = 0,
+    this.chameleonRoleType = RoleType.Civilian,
     this.werewolfChanged = false,
     this.gamerCounts = const GamerCounts(),
     this.roleCounts = const <String, int>{
@@ -135,7 +135,7 @@ class Gamer extends Equatable {
         healCount = 2,
         wasVoted = false,
         wasInfected = false,
-        chameleonId = 0,
+        chameleonRoleType = RoleType.Civilian,
         werewolfChanged = false,
         gamerCounts = const GamerCounts(),
         roleCounts = const <String, int>{
@@ -193,7 +193,7 @@ class Gamer extends Equatable {
     int? healCount,
     bool? wasVoted,
     bool? wasInfected,
-    int? chameleonId,
+    RoleType? chameleonRoleType,
     bool? werewolfChanged,
     GamerCounts? gamerCounts,
   }) =>
@@ -234,7 +234,7 @@ class Gamer extends Equatable {
         healCount: healCount ?? this.healCount,
         wasVoted: wasVoted ?? this.wasVoted,
         wasInfected: wasInfected ?? this.wasInfected,
-        chameleonId: chameleonId ?? this.chameleonId,
+        chameleonRoleType: chameleonRoleType ?? this.chameleonRoleType,
         werewolfChanged: werewolfChanged ?? this.werewolfChanged,
         gamerCounts: gamerCounts ?? this.gamerCounts,
       );
@@ -281,7 +281,7 @@ class Gamer extends Equatable {
         healCount,
         wasVoted,
         wasInfected,
-        chameleonId,
+        chameleonRoleType,
         werewolfChanged,
         gamerCounts,
       ];
@@ -309,5 +309,5 @@ class Gamer extends Equatable {
       '$isRoleGiven, isAnimated: $isAnimated, playsAsCitizen: $playsAsCitizen,'
       ' beforeChange: $beforeChange, '
       'healCount: $healCount, wasVoted: $wasVoted, wasInfected: $wasInfected,'
-      ' chameleonId: $chameleonId, werewolfChanged: $werewolfChanged}';
+      ' chameleonId: $chameleonRoleType, werewolfChanged: $werewolfChanged}';
 }

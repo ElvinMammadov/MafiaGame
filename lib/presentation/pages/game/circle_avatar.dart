@@ -26,7 +26,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
         targetedGamer: Gamer(
           gamerId: gamer.gamerId,
           role: Role(
-            roleId: gamerRoles.roles[roleIndex].roleId,
+            roleType: gamerRoles.roles[roleIndex].roleType,
             name: gamerRoles.roles[roleIndex].name,
             points: gamerRoles.roles[roleIndex].points,
           ),
@@ -34,7 +34,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
         ),
       ),
     );
-    if (gamerRoles.roles[roleIndex].roleId != 2 &&
+    if (gamerRoles.roles[roleIndex].roleType != RoleType.Mafia &&
         roleIndex < gamerRoles.roles.length - 2) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeRoleIndex(
@@ -54,9 +54,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       allNamesChanged = gamers.every(
         (Gamer gamer) => gamer.isNameChanged == true,
       );
-      // print('allNamesChanged is $allNamesChanged');
       if (allNamesChanged &&
-          !BlocProvider.of<GameBloc>(context).state.game.isGameCouldStart) {
+          BlocProvider.of<GameBloc>(context).state.game.gamePhase !=
+              GamePhase.CouldStart) {
         BlocProvider.of<GameBloc>(context).add(
           const ChangeGameStartValue(
             isGameCouldStart: true,
@@ -74,10 +74,10 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             final Roles roles = state.gamersState.roles;
             final List<Gamer> gamers = state.gamersState.gamers;
             final int numberOfGamers = state.game.numberOfGamers;
-            final bool isGameStarted = state.game.isGameStarted;
-            final bool isVotingStarted = state.game.isVotingStarted;
-            final bool isGameCouldStart = state.game.isGameCouldStart;
-            isAllGamersNameChanged(gamers);
+            final GamePhase gamePhase = state.game.gamePhase;
+            if(gamePhase == GamePhase.IsReady) {
+              isAllGamersNameChanged(gamers);
+            }
             if (gamers.isNotEmpty) {
               return SizedBox.expand(
                 child: LayoutBuilder(
@@ -87,14 +87,12 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                       constraints: constraints,
                       roles: roles,
                       showRoles: widget.showRoles,
-                      isGameStarted: isGameStarted,
                       numberOfGamers: numberOfGamers,
                       gamers: gamers,
                       context: context,
-                      isVotingStarted: isVotingStarted,
                       orientation: orientation,
-                      isGameCouldStart: isGameCouldStart,
                       changeRole: changeRole,
+                      gamePhase: gamePhase,
                     ),
                   ),
                 ),

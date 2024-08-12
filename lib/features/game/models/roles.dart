@@ -15,7 +15,7 @@ class Roles extends Equatable {
             Madam.empty(),
             Sheriff.empty(),
             Doctor.empty(),
-            Advokat.empty(),
+            Advocate.empty(),
             Killer.empty(),
             Boomerang.empty(),
             Werewolf.empty(),

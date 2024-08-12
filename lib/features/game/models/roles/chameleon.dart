@@ -5,14 +5,14 @@ class Chameleon extends Role with EquatableMixin {
 
   const Chameleon({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
   const Chameleon.empty()
       : this(
           name: 'Chameleon',
-          roleId: 13,
+          roleType: RoleType.Chameleon,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
             AppStrings.votedAgainstMainRoles: 0,
@@ -32,13 +32,13 @@ class Chameleon extends Role with EquatableMixin {
   @override
   Chameleon copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
       Chameleon(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
   factory Chameleon.fromJson(Map<String, dynamic> json) =>
@@ -50,8 +50,8 @@ class Chameleon extends Role with EquatableMixin {
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override

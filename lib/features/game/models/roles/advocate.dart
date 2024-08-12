@@ -1,17 +1,17 @@
 part of game;
 
 @JsonSerializable()
-class Advokat extends Role with EquatableMixin {
-  const Advokat({
+class Advocate extends Role with EquatableMixin {
+  const Advocate({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
-  const Advokat.empty()
+  const Advocate.empty()
       : this(
           name: 'Advokat',
-          roleId: 9,
+          roleType: RoleType.Advocate,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
             AppStrings.votedAgainstMainRoles: 0,
@@ -26,28 +26,28 @@ class Advokat extends Role with EquatableMixin {
         );
 
   @override
-  Advokat copyWith({
+  Advocate copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
-      Advokat(
+      Advocate(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
-  factory Advokat.fromJson(Map<String, dynamic> json) =>
-      _$AdvokatFromJson(json);
+  factory Advocate.fromJson(Map<String, dynamic> json) =>
+      _$AdvocateFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$AdvokatToJson(this);
+  Map<String, dynamic> toJson() => _$AdvocateToJson(this);
 
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override

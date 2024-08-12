@@ -252,15 +252,15 @@ class AddRoleToGamer extends GameEvent {
 }
 
 class ChameleonChangeRole extends GameEvent {
-  final int chameleonId;
+  final RoleType chameleonRoleType;
 
   const ChameleonChangeRole({
-    required this.chameleonId,
+    required this.chameleonRoleType,
   });
 
   @override
   List<Object?> get props => <Object?>[
-        chameleonId,
+        chameleonRoleType,
       ];
 }
 

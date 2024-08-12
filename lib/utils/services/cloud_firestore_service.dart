@@ -30,7 +30,7 @@ class FirestoreService {
   Future<void> addGameToFirebase({
     required GameState gameState,
   }) async {
-    print('addGameToFirebase called');
+    log('addGameToFirebase called');
     await _gameCollection.doc(gameState.gameId).set(<String, Object>{
       'gameName': gameState.gameName,
       'numberOfGamers': gameState.numberOfGamers,
@@ -39,14 +39,14 @@ class FirestoreService {
       'gamers': gameState.gamers.map(
         (Gamer gamer) {
           final Map<String, int> gamerPoints = Map<String, int>.from(
-            gamer.role!.points ?? <String, int>{},
+            gamer.role.points ?? <String, int>{},
           );
-          final bool isGamerMafia =
-              gamer.role!.roleId == 2 || gamer.role!.roleId == 3;
+          final bool isGamerMafia = gamer.role.roleType == RoleType.Mafia ||
+              gamer.role.roleType == RoleType.Don;
           // final bool isGamerWerewolf = gamer.role!.roleId == 7;
           final int totalPoints = gamerPoints[AppStrings.totalPoints] ?? 0;
           final String uniqueId = UniqueKey().toString();
-          print('Total points: $totalPoints');
+          log('Total points: $totalPoints');
           final Map<String, Object> newPointEntry = <String, Object>{
             'id': uniqueId,
             'points': totalPoints,
@@ -76,12 +76,12 @@ class FirestoreService {
           );
           return <String, dynamic>{
             'name': gamer.name,
-            'role': gamer.role?.name,
-            'roleId': gamer.role?.roleId,
+            'role': gamer.role.name,
+            'roleType': gamer.role.roleType.toString(),
             'gamerId': gamer.gamerId,
             'gamerCreatedTime': gamer.gamerCreated,
             'imageUrl': gamer.imageUrl,
-            'points': gamer.role?.points?.map(
+            'points': gamer.role.points?.map(
               (String key, int value) => MapEntry<String, int>(key, value),
             ),
           };
@@ -114,18 +114,10 @@ class FirestoreService {
               .map(
                 (dynamic gamer) => Gamer(
                   name: gamer['name'] as String,
-                  role: gamer['role'] == null
-                      ? null
-                      : Role(
-                          name: gamer['role'] as String,
-                          roleId: gamer['roleId'] as int,
-                          points: (gamer['points'] as Map<String, dynamic>?)
-                                  ?.map(
-                                (String key, dynamic value) =>
-                                    MapEntry<String, int>(key, value as int),
-                              ) ??
-                              <String, int>{},
-                        ),
+                  role: Role(
+                    name: gamer['role'] as String,
+                    points: gamer['points'] as Map<String, int>,
+                  ),
                   gamerId: gamer['gamerId'] as String,
                   gamerCreated: gamer['gamerCreatedTime'] as String,
                   imageUrl: gamer['imageUrl'] as String,

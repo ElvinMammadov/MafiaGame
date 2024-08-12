@@ -4,14 +4,14 @@ part of game;
 class Boomerang extends Role with EquatableMixin {
   const Boomerang({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
   const Boomerang.empty()
       : this(
           name: 'Boomerang',
-          roleId: 14,
+          roleType: RoleType.Boomerang,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
             AppStrings.votedAgainstMainRoles: 0,
@@ -26,13 +26,13 @@ class Boomerang extends Role with EquatableMixin {
   @override
   Boomerang copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
       Boomerang(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
   factory Boomerang.fromJson(Map<String, dynamic> json) =>
@@ -44,8 +44,8 @@ class Boomerang extends Role with EquatableMixin {
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override

@@ -4,19 +4,18 @@ List<Widget> gamersAvatars({
   required BoxConstraints constraints,
   required Roles roles,
   required bool showRoles,
-  required bool isGameStarted,
   required int numberOfGamers,
   required List<Gamer> gamers,
   required BuildContext context,
-  required bool isVotingStarted,
   required Orientation orientation,
-  required bool isGameCouldStart,
+  required GamePhase gamePhase,
   Function(Gamer)? changeRole,
 }) {
   final double screenWidth = MediaQuery.of(context).size.width;
   final double screenHeight = MediaQuery.of(context).size.height;
   final List<Widget> positionedAvatars = <Widget>[];
-  final bool isDay = BlocProvider.of<GameBloc>(context).state.game.isDay;
+  final GamePeriod gamePeriod =
+      BlocProvider.of<GameBloc>(context).state.game.gamePeriod;
 
   final double ovalRadius;
   double minAvatarRadius;
@@ -54,7 +53,6 @@ List<Widget> gamersAvatars({
     final double avatarY =
         constraints.maxHeight / 2 + (ovalRadius + radius) * sin(angle);
 
-
     positionedAvatars.add(
       Positioned(
         top: avatarY - radius,
@@ -76,11 +74,9 @@ List<Widget> gamersAvatars({
                           iconSize: iconSize,
                           sizeBoxSize: sizeBoxSize,
                           roles: roles,
-                          isGameCouldStart: isGameCouldStart,
                           changeRole: changeRole,
-                          isGameStarted: isGameStarted,
-                          isVotingStarted: isVotingStarted,
-                          isDay: isDay,
+                          gamePeriod: gamePeriod,
+                          gamePhase: gamePhase,
                         ),
                       ),
                       if (gamers[i].foulCount >= 1)
