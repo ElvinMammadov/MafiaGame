@@ -62,13 +62,13 @@ class _MainScreenState extends State<MainScreen> {
     final GameBloc gameBloc = BlocProvider.of<GameBloc>(context);
     final List<Gamer> existingGamers = gameBloc.state.gamersState.gamers;
     final bool useSavedGamers = typeOfGamer == AppStrings.savedGamers;
-    print('useSavedGamers is $useSavedGamers');
+   /* print('useSavedGamers is $useSavedGamers');*/
 
     final List<Gamer> newGamers = <Gamer>[];
     for (int i = 0; i < numberOfGamers; i++) {
       if (useSavedGamers && i < existingGamers.length) {
 
-        print('saved gamers');
+     /*   print('saved gamers');*/
         final Gamer gamer = existingGamers[i];
         newGamers.add(
           Gamer(
@@ -82,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         );
       } else {
-        print('new gamers');
+/*        print('new gamers');*/
         newGamers.add(
           Gamer(
             name: AppStrings.gamer,

@@ -5,6 +5,7 @@ class ResultScreen extends StatefulWidget {
   final bool isMafiaWinner;
   final String gameName;
   final String gameStartTime;
+  final String gameId;
 
   const ResultScreen({
     super.key,
@@ -12,6 +13,7 @@ class ResultScreen extends StatefulWidget {
     required this.isMafiaWinner,
     required this.gameName,
     required this.gameStartTime,
+    required this.gameId,
   });
 
   @override
@@ -105,11 +107,18 @@ class _ResultScreenState extends State<ResultScreen>
                     const Divider(
                       color: Colors.grey,
                     ),
-                    AccordionBody(title: AppStrings.mafia, gamers: mafia)
-                        .padding(
+                    AccordionBody(
+                      title: AppStrings.mafia,
+                      gamers: mafia,
+                      gameId: widget.gameId,
+                    ).padding(
                       top: 8,
                     ),
-                    AccordionBody(title: AppStrings.citizens, gamers: citizens),
+                    AccordionBody(
+                      title: AppStrings.citizens,
+                      gamers: citizens,
+                      gameId: widget.gameId,
+                    ),
                   ],
                 ),
               ).padding(
@@ -124,22 +133,55 @@ class _ResultScreenState extends State<ResultScreen>
   }
 }
 
-class AccordionBody extends StatelessWidget {
+class AccordionBody extends StatefulWidget {
   final String title;
   final List<Gamer> gamers;
+  final String gameId;
 
   const AccordionBody({
     super.key,
     required this.title,
     required this.gamers,
+    required this.gameId,
   });
+
+  @override
+  State<AccordionBody> createState() => _AccordionBodyState();
+}
+
+class _AccordionBodyState extends State<AccordionBody> {
+  final Map<String, Map<String, TextEditingController>> _controllers =
+      <String, Map<String, TextEditingController>>{};
+
+  @override
+  void initState() {
+    super.initState();
+    for (final Gamer gamer in widget.gamers) {
+      _controllers[gamer.name!] = <String, TextEditingController>{};
+      gamer.role.points?.forEach((String key, int value) {
+        _controllers[gamer.name!]![key] =
+            TextEditingController(text: value.toString());
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controllers
+        .forEach((_, Map<String, TextEditingController> gamerControllers) {
+      gamerControllers.forEach((_, TextEditingController controller) {
+        controller.dispose();
+      });
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Column(
         children: <Widget>[
           Center(
             child: Text(
-              title,
+              widget.title,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 30,
@@ -160,7 +202,7 @@ class AccordionBody extends StatelessWidget {
               color: Colors.white,
               size: 32,
             ),
-            children: gamers
+            children: widget.gamers
                 .map(
                   (Gamer gamer) => AccordionSection(
                     header: Row(
@@ -192,44 +234,125 @@ class AccordionBody extends StatelessWidget {
                         ).padding(horizontal: 16),
                       ],
                     ),
-                    content: SizedBox(
-                      height: 400,
-                      child: ListView.builder(
-                        itemCount: gamer.role.points?.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final String? key =
-                              gamer.role.points?.keys.elementAt(index);
-                          final String? value = gamer.role.points?.values
-                              .elementAt(index)
-                              .toString();
-                          return ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  key!,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
+                    content: Column(
+                      children: <Widget>[
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: gamer.role.points?.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final String? key =
+                                gamer.role.points?.keys.elementAt(index);
+                            final String? value = gamer.role.points?.values
+                                .elementAt(index)
+                                .toString();
+                            // Get the controller for this gamer and key
+                            final TextEditingController controller =
+                                _controllers[gamer.name!]![key]!;
+                            return ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              title: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        key!,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 70,
+                                        height: 40,
+                                        child: TextField(
+                                          controller: controller,
+                                          keyboardType: TextInputType.number,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          onChanged: (String value) {
+                                            final int points =
+                                                int.tryParse(value) ?? 0;
+                                            gamer.role.points![key] = points;
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Text(
-                                  value!,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
+                                  const Divider(
+                                    color: Colors.grey,
+                                  ).padding(
+                                    vertical: 4,
                                   ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: 250,
+                          child: BaseButton(
+                            label: AppStrings.save,
+                            backgroundColor: Colors.transparent,
+                            textStyle:
+                                MafiaTheme.themeData.textTheme.headlineSmall,
+                            action: () {
+                              final Map<String, int> points = <String, int>{};
+                              _controllers[gamer.name!]!.forEach((
+                                String key,
+                                TextEditingController controller,
+                              ) {
+                                final int value =
+                                    int.tryParse(controller.text) ?? 0;
+                                points[key] = value;
+                              });
+                              final int totalPoints = points.entries
+                                  .where(
+                                    (MapEntry<String, int> entry) =>
+                                        entry.key != AppStrings.totalPoints,
+                                  )
+                                  .fold<int>(
+                                    0,
+                                    (int sum, MapEntry<String, int> entry) =>
+                                        sum + entry.value,
+                                  );
+
+                              points[AppStrings.totalPoints] = totalPoints;
+                              print('points: $points');
+
+                              // Optionally, call setState to rebuild the widget
+                              setState(() {
+                                // Update controller values
+                                _controllers[gamer.name!]!.forEach((
+                                  String key,
+                                  TextEditingController controller,
+                                ) {
+                                  controller.text = points[key].toString();
+                                });
+                              });
+                              BlocProvider.of<GameBloc>(context).add(
+                                UpdateGamerPoints(
+                                  gameId: widget.gameId,
+                                  gamerId: gamer.gamerId ?? '',
+                                  points: points,
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                              );
+                            },
+                          ).padding(
+                            top: 8,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 )

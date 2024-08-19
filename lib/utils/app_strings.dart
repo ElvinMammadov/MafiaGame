@@ -99,6 +99,9 @@ class AppStrings {
   static const String defeat = 'Поражение';
   static const String points = 'Очки';
   static const String total = 'Всего';
+  static const String month = 'Месяц';
+  static const String threeMonths = '3 месяца';
+  static const String year = 'Год';
   static const String totalPoints = 'Общие очки';
   static const String alivePoints = 'Дожил до конца';
   static const String pointsFromPresenter = 'Очки от ведущей';
@@ -170,4 +173,6 @@ class AppStrings {
       ' Пожалуйста, добавьте роли для игроков.';
   static const String chooseGamerPosition =
       'Пожалуйста, выберите позицию для игрока.';
+  static const String save =
+      'Сохранить';
 }

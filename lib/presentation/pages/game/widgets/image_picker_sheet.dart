@@ -129,10 +129,16 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   controller: widget.textEditingController,
                   focusNode: focusNode,
                   autofocus: true,
+                  style: MafiaTheme.themeData.textTheme.headlineSmall
+                      ?.copyWith(height: 1),
                   decoration: InputDecoration(
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 8,
                     ),
+                    hintStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: MafiaTheme.themeData.colorScheme.secondary,
@@ -162,7 +168,11 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     return Container();
                   }
                   return ListTile(
-                    title: Text(gamer?.name ?? '1'),
+                    title: Text(
+                      gamer?.name ?? '1',
+                      style: MafiaTheme.themeData.textTheme.headlineSmall
+                          ?.copyWith(height: 1),
+                    ),
                     textColor: Colors.white,
                   );
                 },
@@ -181,7 +191,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: Dimensions.padding8,
                     ),
-                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: MafiaTheme.themeData.colorScheme.secondary,
@@ -195,7 +206,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   ),
                   hint: Text(
                     AppStrings.roleOfGamer,
-                    style: MafiaTheme.themeData.textTheme.headlineSmall,
+                    style: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                   ),
                   value: selectedRole,
                   items: roles.roles
@@ -204,7 +216,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                           value: item,
                           child: Text(
                             item.name,
-                            style: MafiaTheme.themeData.textTheme.headlineSmall,
+                            style: MafiaTheme.themeData.textTheme.headlineSmall
+                                ?.copyWith(height: 1),
                           ),
                         ),
                       )
@@ -247,7 +260,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   key: _positionFieldKey,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: MafiaTheme.themeData.colorScheme.secondary,
@@ -261,7 +275,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   ),
                   hint: Text(
                     AppStrings.positionOfGamer,
-                    style: MafiaTheme.themeData.textTheme.headlineSmall,
+                    style: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                   ),
                   items: numberOfPositions
                       .map<DropdownMenuItem<int>>(
@@ -269,7 +284,8 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                           value: item,
                           child: Text(
                             item.toString(),
-                            style: MafiaTheme.themeData.textTheme.headlineSmall,
+                            style: MafiaTheme.themeData.textTheme.headlineSmall
+                                ?.copyWith(height: 1),
                           ),
                         ),
                       )

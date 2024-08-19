@@ -80,7 +80,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
             previous.game.mafiaCount != current.game.mafiaCount ||
             previous.game.civilianCount != current.game.civilianCount ||
             previous.game.gamePhase != current.game.gamePhase,
-        // previous.game.isGameFinished != current.game.isGameFinished,
         listener: (BuildContext context, AppState state) {
           final List<Gamer> gamers = state.gamersState.gamers;
           final String gameName = state.game.gameName;
@@ -88,9 +87,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int civilianCount = state.game.civilianCount;
           final DateTime? gameStartTime = state.game.gameStartTime;
           final GameState gameState = state.game;
-          // final bool isGameFinished = state.game.isGameFinished;
           final GamePhase gamePhase = state.game.gamePhase;
           final bool isMafiaWin = state.game.isMafiaWin;
+          final String gameId = state.game.gameId;
           print('mafiacount $mafiaCount, civilianCount $civilianCount');
           print('gamePhase $gamePhase');
           if (gamePhase == GamePhase.Finished) {
@@ -104,6 +103,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                   gameName: gameName,
                   gameStartTime:
                       DateFormat('yyyy-MM-dd').format(gameStartTime!),
+                  gameId: gameId,
                 ),
               ),
             );
@@ -143,13 +143,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
           bool isAllGamersCitizen = false;
           bool isMafiaExist = false;
           print('game phase is $gamePhase');
-          // final int roleIndex =
-          //     BlocProvider.of<GameBloc>(context).state.game.roleIndex;
 
-          // print('isGameStarted $isGameStarted, isGameCouldStart '
-          //     '$isGameCouldStart,'
-          //     ' isDiscussionStarted $isDiscussionStarted,'
-          //     ' isVotingStarted $isVotingStarted');
           if (gamers.isNotEmpty) {
             // logger.log('Gamers are ${gamers.map(
             //       (Gamer gamer) => gamer.name,
@@ -225,12 +219,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                           textStyle:
                               MafiaTheme.themeData.textTheme.headlineSmall,
                           action: () {
-                            print('presssing button');
-                            print('game phase 2 is $gamePhase');
                             if (gamePeriod != GamePeriod.Day) {
-                              BlocProvider.of<GameBloc>(context).add(
-                                const AddNightNumber(),
-                              );
                               BlocProvider.of<GameBloc>(context).add(
                                 const UpdateAnimation(animate: true),
                               );
@@ -241,7 +230,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     if (gamer.wasKilledByMafia ||
                                         gamer.wasKilledByKiller ||
                                         gamer.wasKilledBySheriff ||
-                                        gamer.wasBoomeranged) {
+                                        gamer.wasBoomeranged ||
+                                        gamer.killSecurity) {
                                       if (gamer.role.roleType !=
                                               RoleType.Boomerang &&
                                           gamer.role.roleType !=
@@ -254,11 +244,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                 }
                               }
                               if (killedGamers.isNotEmpty) {
-                                showKilledGamersAtNight(
-                                  context,
-                                  killedGamers,
-                                );
-
+                                final List<Gamer> newKilledGamers = killedGamers
+                                    .where(
+                                      (Gamer gamer) => !gamer.wasSecured,
+                                    )
+                                    .toList();
+                                if (newKilledGamers.isNotEmpty) {
+                                  showKilledGamersAtNight(
+                                    context,
+                                    newKilledGamers,
+                                  );
+                                }
                                 for (final Gamer gamer in killedGamers) {
                                   if (gamer.role.roleType !=
                                           RoleType.Boomerang &&
@@ -270,12 +266,12 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   }
                                 }
                               }
+                              BlocProvider.of<GameBloc>(context).add(
+                                const AddNightNumber(),
+                              );
                             } else {
                               switch (gamePhase) {
-                                case GamePhase.IsReady:
-                                  break;
                                 case GamePhase.CouldStart:
-                                  print('Start game');
                                   isAllGamersCitizen = gamers.every(
                                     (Gamer gamer) =>
                                         gamer.role.roleType ==
@@ -384,9 +380,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                       );
 
                                       BlocProvider.of<GameBloc>(context).add(
-                                        const EndVoting(
-                                          isVotingStarted: false,
-                                        ),
+                                        const EndVoting(),
                                       );
                                       BlocProvider.of<GameBloc>(context).add(
                                         const AddDayNumber(),
@@ -411,10 +405,13 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           KillGamer(gamer: rightGamer),
                                         );
                                       }
-                                      showKilledGamer(
-                                        context,
-                                        topGamers[0],
-                                      );
+                                      if (!topGamers[0].hasAlibi &&
+                                          !topGamers[0].wasSecured) {
+                                        showKilledGamer(
+                                          context,
+                                          topGamers[0],
+                                        );
+                                      }
                                     } else if (topGamers.length > 1) {
                                       showPickNumber(
                                         context,
@@ -433,7 +430,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                       }
                                     }
                                     BlocProvider.of<GameBloc>(context).add(
-                                      CleanGamersAfterDay(gamers: gamers),
+                                      const CleanGamersAfterDay(),
                                     );
                                     BlocProvider.of<GameBloc>(context).add(
                                       const ResetVoters(),
@@ -448,9 +445,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                     );
                                   }
                                   break;
-                                case GamePhase.Started:
-                                  break;
-                                case GamePhase.Finished:
+                                default:
                                   break;
                               }
                             }
@@ -458,7 +453,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                         ),
                       ),
                     ),
-                    if (gamePhase == GamePhase.Discussion)
+                    if (gamePhase == GamePhase.Discussion &&
+                        gamePeriod == GamePeriod.Day)
                       Center(
                         child: CountDownTimer(
                           durationTime: discussionTime,

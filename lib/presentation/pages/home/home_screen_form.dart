@@ -265,8 +265,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         // labelText: 'Choose',
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
-                        labelStyle:
-                            MafiaTheme.themeData.textTheme.headlineSmall,
+                        labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                            ?.copyWith(height: 1),
                         icon: Icon(
                           Icons.pin,
                           color: MafiaTheme.themeData.colorScheme.secondary,
@@ -284,7 +284,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                       ),
                       hint: Text(
                         AppStrings.numberOfGamers,
-                        style: MafiaTheme.themeData.textTheme.headlineSmall,
+                        style: MafiaTheme.themeData.textTheme.headlineSmall
+                            ?.copyWith(height: 1),
                       ),
                       items: numberOfGamers
                           .map<DropdownMenuItem<int>>(
@@ -293,7 +294,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                               child: Text(
                                 item.toString(),
                                 style: MafiaTheme
-                                    .themeData.textTheme.headlineSmall,
+                                    .themeData.textTheme.headlineSmall
+                                    ?.copyWith(height: 1),
                               ),
                             ),
                           )
@@ -343,8 +345,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: Dimensions.padding8,
                         ),
-                        labelStyle:
-                            MafiaTheme.themeData.textTheme.headlineSmall,
+                        labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                            ?.copyWith(height: 1),
                         icon: Icon(
                           Icons.save,
                           color: MafiaTheme.themeData.colorScheme.secondary,
@@ -362,7 +364,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                       ),
                       hint: Text(
                         AppStrings.usageOfGamers,
-                        style: MafiaTheme.themeData.textTheme.headlineSmall,
+                        style: MafiaTheme.themeData.textTheme.headlineSmall
+                            ?.copyWith(height: 1),
                       ),
                       value: selectedTypeofGamers,
                       items: typeOfGamers
@@ -372,7 +375,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                               child: Text(
                                 item,
                                 style: MafiaTheme
-                                    .themeData.textTheme.headlineSmall,
+                                    .themeData.textTheme.headlineSmall
+                                    ?.copyWith(height: 1),
                               ),
                             ),
                           )

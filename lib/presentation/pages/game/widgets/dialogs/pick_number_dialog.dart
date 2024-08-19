@@ -1,17 +1,17 @@
 part of game;
 
 void showPickNumber(
-    BuildContext context,
-    List<Gamer> gamers,
-    Function() closeDialog,
-    ) {
+  BuildContext context,
+  List<Gamer> gamers,
+  Function() closeDialog,
+) {
   WoltModalSheet.show<void>(
     context: context,
     maxDialogWidth: 1000,
     minDialogWidth: 700,
     maxPageHeight: 600,
     pageListBuilder: (BuildContext modalSheetContext) =>
-    <SliverWoltModalSheetPage>[
+        <SliverWoltModalSheetPage>[
       WoltModalSheetPage(
         hasSabGradient: false,
         isTopBarLayerAlwaysVisible: true,
@@ -37,11 +37,12 @@ void showPickNumber(
             );
             closeDialog();
             Navigator.of(context).pop();
-            showKilledGamer(context, gamer);
+            if (!gamer.wasSecured && !gamer.hasAlibi) {
+              showKilledGamer(context, gamer);
+            }
+
             BlocProvider.of<GameBloc>(context).add(
-              const EndVoting(
-                isVotingStarted: false,
-              ),
+              const EndVoting(),
             );
             BlocProvider.of<GameBloc>(context).add(
               const AddDayNumber(),

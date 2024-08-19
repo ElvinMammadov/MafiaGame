@@ -31,6 +31,103 @@ class _StatisticScreenState extends State<StatisticScreen> {
                       context: context,
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () async {
+                          // Calculate start and end dates for the last 30 days
+                          final DateTime endDate = DateTime.now();
+                          final DateTime startDate =
+                              endDate.subtract(const Duration(days: 30));
+
+                          // Call getTop3Gamers with the start and end dates
+                          BlocProvider.of<StatisticsBloc>(context).add(
+                            GetGamersForDate(
+                              startDate: startDate,
+                              endDate: endDate,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 100,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 3,
+                            horizontal: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: MafiaTheme.themeData.highlightColor,
+                            border: Border.all(
+                              width: 0.8,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: const Align(
+                            child: Text(
+                              AppStrings.month,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 150,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3,
+                          horizontal: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: MafiaTheme.themeData.highlightColor,
+                          border: Border.all(
+                            width: 0.8,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: const Align(
+                          child: Text(
+                            AppStrings.threeMonths,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3,
+                          horizontal: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: MafiaTheme.themeData.highlightColor,
+                          border: Border.all(
+                            width: 0.8,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: const Align(
+                          child: Text(
+                            AppStrings.year,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ).padding(
+                    top: 8,
+                    horizontal: 16,
+                    bottom: 16,
+                  ),
                 ],
               ),
               Expanded(
@@ -95,6 +192,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) => TextFormField(
         controller: widget.searchController,
         decoration: InputDecoration(
+          fillColor: Colors.transparent,
           hintText: AppStrings.search,
           hintStyle: const TextStyle(
             color: Colors.white,
@@ -131,7 +229,7 @@ class _SearchBarState extends State<SearchBar> {
         );
       } else if (value.isEmpty || value == "") {
         BlocProvider.of<StatisticsBloc>(widget.context).add(
-          GetSearchData(searchQuery: ""),
+          const GetSearchData(searchQuery: ""),
         );
       }
     });

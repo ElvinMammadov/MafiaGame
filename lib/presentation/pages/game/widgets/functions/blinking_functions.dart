@@ -13,7 +13,9 @@ class BlinkingFunctions {
 
     final Gamer gamer =
         gamers.firstWhere((Gamer gamer) => gamer.role.roleType == roleType);
-    print('index: $index, gamer.id: ${gamer.id}');
+    print(
+        'gamers[index].name!: ${gamers[index].name!}, '
+            'gamer.name: ${gamer.name}');
     print('roleType: $roleType');
     switch (roleType) {
       case RoleType.Doctor:

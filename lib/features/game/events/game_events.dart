@@ -89,6 +89,25 @@ class GetGames extends GameEvent {
       ];
 }
 
+class UpdateGamerPoints extends GameEvent {
+  final String gamerId;
+  final String gameId;
+  final Map<String, int> points;
+
+  const UpdateGamerPoints({
+    required this.gamerId,
+    required this.gameId,
+    required this.points,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        gamerId,
+        gameId,
+        points,
+      ];
+}
+
 class GameStatus extends GameEvent {
   final bool isGameFinished;
 
@@ -230,12 +249,11 @@ class CleanGamersAfterNight extends GameEvent {
 }
 
 class CleanGamersAfterDay extends GameEvent {
-  final List<Gamer> gamers;
 
-  const CleanGamersAfterDay({required this.gamers});
+  const CleanGamersAfterDay();
 
   @override
-  List<Object?> get props => <Object?>[gamers];
+  List<Object?> get props => <Object?>[];
 }
 
 class AddRoleToGamer extends GameEvent {
@@ -398,14 +416,10 @@ class EndDiscussion extends GameEvent {
 }
 
 class EndVoting extends GameEvent {
-  final bool isVotingStarted;
-
-  const EndVoting({
-    required this.isVotingStarted,
-  });
+  const EndVoting();
 
   @override
-  List<Object?> get props => <Object?>[isVotingStarted];
+  List<Object?> get props => <Object?>[];
 }
 
 class CheckGamerBySheriff extends GameEvent {

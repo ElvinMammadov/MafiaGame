@@ -11,4 +11,6 @@ import 'package:mafia_game/utils/app_strings.dart';
 import 'package:mafia_game/utils/theme/theme.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import '../../widgets/base_button.dart';
+
 part 'result_screen.dart';

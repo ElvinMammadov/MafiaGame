@@ -60,8 +60,7 @@ class StatisticsItem extends StatelessWidget {
                         width: 6,
                         color: Colors.white,
                       ),
-                    ),
-                    const SizedBox(height: 16),
+                    ).padding(bottom: 16),
                     Container(
                       width: customImageWidth + 20,
                       padding: const EdgeInsets.symmetric(
@@ -129,7 +128,7 @@ class StatisticsItem extends StatelessWidget {
                                               const SizedBox(height: 8),
                                               Container(
                                                 margin: const EdgeInsets.only(
-                                                  right: 16,
+                                                  right: 14,
                                                 ),
                                                 child: const Text(
                                                   AppStrings.defeat,
@@ -171,8 +170,7 @@ class StatisticsItem extends StatelessWidget {
                                                     .gamerCounts.winnerCount,
                                                 totalPoints: gamer.gamerCounts
                                                     .totalPlayedGames,
-                                              ),
-                                              const SizedBox(height: 8),
+                                              ).padding(bottom: 8),
                                               IndicatorItem(
                                                 totalPlayedGames: gamer
                                                     .gamerCounts
@@ -185,8 +183,7 @@ class StatisticsItem extends StatelessWidget {
                                                     .gamerCounts.losingCount,
                                                 totalPoints: gamer.gamerCounts
                                                     .totalPlayedGames,
-                                              ),
-                                              const SizedBox(height: 8),
+                                              ).padding(bottom: 8),
                                               IndicatorItem(
                                                 totalPlayedGames: gamer
                                                     .gamerCounts

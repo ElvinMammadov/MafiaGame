@@ -29,20 +29,20 @@ class BaseButton extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     return FilledButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color?>(
+        backgroundColor: WidgetStateProperty.all<Color?>(
           enabled
               ? backgroundColor ?? theme.colorScheme.secondary.withOpacity(0.5)
               : disabledColor ?? theme.disabledColor,
         ),
-        minimumSize: MaterialStateProperty.all(
+        minimumSize: WidgetStateProperty.all(
           const Size.fromHeight(48),
         ),
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
           ),
         ),
-        elevation: MaterialStateProperty.all(2),
+        elevation: WidgetStateProperty.all(2),
       ),
       onPressed: enabled ? action : null,
       child: Text(

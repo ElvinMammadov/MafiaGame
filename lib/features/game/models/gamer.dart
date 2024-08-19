@@ -31,7 +31,7 @@ class Gamer extends Equatable {
   final int? targetId;
   final bool canTarget;
   final bool killSecurity;
-  final Map<String, int> roleCounts;
+  final String pointsId;
   final bool isAnimated;
   final bool playsAsCitizen;
   final bool beforeChange;
@@ -81,22 +81,7 @@ class Gamer extends Equatable {
     this.chameleonRoleType = RoleType.Civilian,
     this.werewolfChanged = false,
     this.gamerCounts = const GamerCounts(),
-    this.roleCounts = const <String, int>{
-      '1': 0,
-      '2': 0,
-      '3': 0,
-      '4': 0,
-      '5': 0,
-      '6': 0,
-      '7': 0,
-      '8': 0,
-      '9': 0,
-      '10': 0,
-      '11': 0,
-      '12': 0,
-      '13': 0,
-      '14': 0,
-    },
+    this.pointsId = '',
   });
 
   const Gamer.empty()
@@ -138,22 +123,7 @@ class Gamer extends Equatable {
         chameleonRoleType = RoleType.Civilian,
         werewolfChanged = false,
         gamerCounts = const GamerCounts(),
-        roleCounts = const <String, int>{
-          '1': 0,
-          '2': 0,
-          '3': 0,
-          '4': 0,
-          '5': 0,
-          '6': 0,
-          '7': 0,
-          '8': 0,
-          '9': 0,
-          '10': 0,
-          '11': 0,
-          '12': 0,
-          '13': 0,
-          '14': 0,
-        };
+        pointsId = '';
 
   Gamer copyWith({
     String? name,
@@ -186,7 +156,7 @@ class Gamer extends Equatable {
     int? targetId,
     bool? canTarget,
     bool? killSecurity,
-    Map<String, int>? roleCounts,
+    String? pointsId,
     bool? isAnimated,
     bool? playsAsCitizen,
     bool? beforeChange,
@@ -226,7 +196,7 @@ class Gamer extends Equatable {
         targetId: targetId ?? this.targetId,
         canTarget: canTarget ?? this.canTarget,
         killSecurity: killSecurity ?? this.killSecurity,
-        roleCounts: roleCounts ?? this.roleCounts,
+        pointsId: pointsId ?? this.pointsId,
         isRoleGiven: isRoleGiven ?? this.isRoleGiven,
         isAnimated: isAnimated ?? this.isAnimated,
         playsAsCitizen: playsAsCitizen ?? this.playsAsCitizen,
@@ -273,7 +243,7 @@ class Gamer extends Equatable {
         targetId,
         canTarget,
         killSecurity,
-        roleCounts,
+        pointsId,
         isRoleGiven,
         isAnimated,
         playsAsCitizen,
@@ -305,7 +275,7 @@ class Gamer extends Equatable {
       ' wasCheckedBySheriff: $wasCheckedBySheriff,'
       ' wasBumeranged: $wasBoomeranged, wasSecured: $wasSecured, '
       'targetId: $targetId, canTarget: $canTarget, killSecurity: $killSecurity'
-      ' roleCounts: $roleCounts, isRoleGiven: '
+      ' pointsId: $pointsId, isRoleGiven: '
       '$isRoleGiven, isAnimated: $isAnimated, playsAsCitizen: $playsAsCitizen,'
       ' beforeChange: $beforeChange, '
       'healCount: $healCount, wasVoted: $wasVoted, wasInfected: $wasInfected,'

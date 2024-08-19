@@ -21,7 +21,7 @@ class MafiaTheme {
         hintColor: Colors.white,
         primaryColor: const Color(0xFFA9001B),
         secondaryHeaderColor: const Color(0xFFEAD08A),
-        highlightColor: Color.fromARGB(255, 122, 112, 90),
+        highlightColor: const Color.fromARGB(255, 122, 112, 90),
         popupMenuTheme:  PopupMenuThemeData(
           color: const Color(0xFFEAD08A).withOpacity(0.5),
         ),

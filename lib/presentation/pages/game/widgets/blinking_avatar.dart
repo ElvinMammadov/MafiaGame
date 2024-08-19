@@ -47,7 +47,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
       end: Colors.green,
     ).animate(_controller);
 
-    if (widget.gamePhase != GamePhase.Started) {
+    if (widget.gamePhase != GamePhase.IsReady) {
       _controller.repeat(reverse: true);
     }
   }
@@ -57,7 +57,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
         BlocProvider.of<GameBloc>(context).state.game.roleIndex;
     final RoleType roleType = widget.roles.roles[roleIndex].roleType;
     final RoleType gamerRoleType = widget.gamers[widget.index].role.roleType;
-    // print('roleId: $roleId, gamerRoleIndex: $gamerRoleIndex');
     if (roleType == gamerRoleType) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeAnimation(
@@ -138,7 +137,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   @override
   Widget build(BuildContext context) {
-    if ((widget.gamePhase != GamePhase.Started &&
+    if ((widget.gamePhase != GamePhase.IsReady &&
             widget.gamers[widget.index].isAnimated) ||
         widget.gamePhase == GamePhase.Voting) {
       _controller.repeat(reverse: true);
@@ -149,7 +148,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
       builder: (BuildContext context, AppState state) {
         final GamePeriod gamePeriod = state.game.gamePeriod;
         final GamePhase gamePhase = state.game.gamePhase;
-        // print('is animating 3: ${widget.gamers[widget.index].isAnimated}');
         if (gamePeriod == GamePeriod.Night) {
           _animateGamer(widget.gamers[widget.index]);
         }
@@ -161,7 +159,8 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               border: Border.all(
                 color: (widget.gamePhase == GamePhase.IsReady) ||
                         !widget.gamers[widget.index].isAnimated ||
-                        gamePhase == GamePhase.Discussion ||
+                        gamePhase == GamePhase.Discussion &&
+                            gamePeriod == GamePeriod.Day ||
                         (gamePeriod == GamePeriod.Night &&
                             !widget.gamers[widget.index].isAnimated)
                     ? Colors.transparent

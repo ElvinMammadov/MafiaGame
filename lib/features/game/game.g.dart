@@ -53,25 +53,7 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
       gamerCounts: json['gamerCounts'] == null
           ? const GamerCounts()
           : GamerCounts.fromJson(json['gamerCounts'] as Map<String, dynamic>),
-      roleCounts: (json['roleCounts'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, (e as num).toInt()),
-          ) ??
-          const <String, int>{
-            '1': 0,
-            '2': 0,
-            '3': 0,
-            '4': 0,
-            '5': 0,
-            '6': 0,
-            '7': 0,
-            '8': 0,
-            '9': 0,
-            '10': 0,
-            '11': 0,
-            '12': 0,
-            '13': 0,
-            '14': 0
-          },
+      pointsId: json['pointsId'] as String? ?? '',
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -104,7 +86,7 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'targetId': instance.targetId,
       'canTarget': instance.canTarget,
       'killSecurity': instance.killSecurity,
-      'roleCounts': instance.roleCounts,
+      'pointsId': instance.pointsId,
       'isAnimated': instance.isAnimated,
       'playsAsCitizen': instance.playsAsCitizen,
       'beforeChange': instance.beforeChange,

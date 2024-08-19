@@ -23,7 +23,7 @@ class _GamesScreenState extends State<GamesScreen> {
       builder: (BuildContext context, Widget? child) => Theme(
         data: MafiaTheme.themeData.copyWith(
           colorScheme: MafiaTheme.themeData.colorScheme.copyWith(
-            primary: MafiaTheme.themeData.colorScheme.surface,
+            primary: MafiaTheme.themeData.colorScheme.secondary,
             // header background color
             onPrimary: MafiaTheme.themeData.colorScheme.primary,
             // header text color
@@ -34,6 +34,15 @@ class _GamesScreenState extends State<GamesScreen> {
             style: TextButton.styleFrom(
               foregroundColor: MafiaTheme
                   .themeData.colorScheme.primary, // ok , cancel    buttons
+            ),
+          ),
+          textTheme: MafiaTheme.themeData.textTheme.copyWith(
+            headlineSmall:
+                MafiaTheme.themeData.textTheme.headlineSmall?.copyWith(
+              color: MafiaTheme.themeData.colorScheme.primary,
+            ),
+            bodySmall: MafiaTheme.themeData.textTheme.bodySmall?.copyWith(
+              color: MafiaTheme.themeData.colorScheme.secondary,
             ),
           ),
           dialogBackgroundColor: MafiaTheme.themeData.colorScheme.secondary,
@@ -52,20 +61,25 @@ class _GamesScreenState extends State<GamesScreen> {
   }
 
   @override
+  void initState() {
+    BlocProvider.of<GameBloc>(context).add(
+      GetGames(dateTime: selectedDate),
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     const double buttonLeftPercentage = 0.06;
     // const double buttonBottomPercentage = 0.02;
     const double roundButtonBottomPercentage = 0.03;
+    print('GamesScreen build');
 
     return BlocBuilder<GameBloc, AppState>(
       builder: (BuildContext context, AppState state) {
-        // BlocProvider.of<GameBloc>(context).add(
-        //   GetGames(dateTime: DateTime.now()),
-        // );
         final List<GameState> games = state.games;
-        // logger.log('games from state: ${state.games}, ');
         return Stack(
           children: <Widget>[
             Positioned(
@@ -85,7 +99,7 @@ class _GamesScreenState extends State<GamesScreen> {
             if (games.isNotEmpty)
               Positioned(
                 right: screenWidth * 0.05,
-                top: screenHeight * 0.12,
+                top: screenHeight * 0.10,
                 child: SizedBox(
                   height: screenHeight * 0.8,
                   width: screenWidth * 0.9,
@@ -102,6 +116,7 @@ class _GamesScreenState extends State<GamesScreen> {
                               gameName: games[index].gameName,
                               gameStartTime: DateFormat('yyyy-MM-dd')
                                   .format(games[index].gameStartTime!),
+                              gameId: games[index].gameId,
                             ),
                           ),
                         );

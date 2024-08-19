@@ -29,8 +29,8 @@ class _RolesChangerState extends State<RolesChanger> {
                       : AppStrings.chooseRole + roles.roles[roleIndex].name,
                   style:
                       MafiaTheme.themeData.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ).padding(bottom: 20.0),
                 Row(
                   children: <Widget>[
