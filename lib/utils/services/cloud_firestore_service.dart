@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
 
@@ -8,13 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
+import 'package:mafia_game/mains/config.dart';
 import 'package:mafia_game/utils/app_strings.dart';
 
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
-      FirebaseFirestore.instance.collection('gamers');
+      FirebaseFirestore.instance.collection(AppConfig.shared.gamerFirebase);
   final CollectionReference<Object?> _gameCollection =
-      FirebaseFirestore.instance.collection('game');
+      FirebaseFirestore.instance.collection(AppConfig.shared.gameFirebase);
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<String> uploadImageToFirebaseStorage(
@@ -102,7 +102,7 @@ class FirestoreService {
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
-              .collection('game')
+              .collection(AppConfig.shared.gameFirebase)
               .where('gameStartTime', isEqualTo: formattedDate)
               .get();
 
@@ -158,7 +158,6 @@ class FirestoreService {
   }
 
   Future<Gamer> addGamer(Gamer gamer) async {
-    print('Trying to save');
     Gamer newGamer = const Gamer.empty();
     await _gamersCollection.doc(gamer.name).set(<String, dynamic>{
       'name': gamer.name,
@@ -202,13 +201,13 @@ class FirestoreService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot;
       if (search.isEmpty) {
         querySnapshot = await FirebaseFirestore.instance
-            .collection('gamers')
+            .collection(AppConfig.shared.gamerFirebase)
             .limit(10)
             .get();
       } else {
         final String endString = '$search\uf8ff';
         querySnapshot = await FirebaseFirestore.instance
-            .collection('gamers')
+            .collection(AppConfig.shared.gamerFirebase)
             .where('name', isGreaterThanOrEqualTo: search)
             .where('name', isLessThanOrEqualTo: endString)
             .get();
@@ -281,7 +280,6 @@ class FirestoreService {
                 gamerSnapshot.data()! as Map<String, dynamic>;
             final List<dynamic> pointsHistory = gamerData['pointsHistory'];
             final int oldTotalPoints = gamerData['totalPoints'] ?? 0;
-            print('Old total points: $oldTotalPoints');
 
             if (pointsHistory.isNotEmpty) {
               // Find the existing points entry and update its values
@@ -306,8 +304,6 @@ class FirestoreService {
 
             // Calculate the difference in total points
             final int pointsDifference = totalPoints - oldTotalPoints;
-
-            print('New total points: $pointsDifference');
 
             // Update total points only if there's a difference
             if (pointsDifference != 0) {
@@ -336,15 +332,14 @@ class FirestoreService {
     required DateTime startDate,
     required DateTime endDate,
   }) async {
-    print('Start date: ${DateFormat('yyyy-MM-dd').format(startDate)}, End date: ${DateFormat('yyyy-MM-dd').format(endDate)}');
     try {
-      final QuerySnapshot gamersSnapshot = await _gamersCollection.get();
-
-      print('Gamers snapshot: ${gamersSnapshot.docs}');
+      final QuerySnapshot<Object?> gamersSnapshot =
+          await _gamersCollection.get();
 
       final List<Map<String, dynamic>> gamersWithPoints =
           <Map<String, dynamic>>[];
-      for (final QueryDocumentSnapshot gamerDoc in gamersSnapshot.docs) {
+      for (final QueryDocumentSnapshot<Object?> gamerDoc
+          in gamersSnapshot.docs) {
         final Map<String, dynamic> gamerData =
             gamerDoc.data()! as Map<String, dynamic>;
 
@@ -362,6 +357,14 @@ class FirestoreService {
         gamersWithPoints.add(<String, dynamic>{
           'name': gamerData['name'],
           'totalPoints': totalPoints,
+          'imageUrl': gamerData['imageUrl'],
+          'gamerId': gamerData['gamerId'],
+          'gamerCreatedTime': gamerData['gamerCreatedTime'],
+          'citizen': gamerData['citizen'],
+          'mafia': gamerData['mafia'],
+          'lost': gamerData['lost'],
+          'won': gamerData['won'],
+          'totalPlayedGames': gamerData['totalPlayedGames'],
         });
       }
 
@@ -370,7 +373,6 @@ class FirestoreService {
             b['totalPoints'] - a['totalPoints'],
       );
 
-      // Convert to List<Gamer>
       final List<Gamer> topGamers = gamersWithPoints
           .sublist(0, 3)
           .map(
@@ -380,8 +382,6 @@ class FirestoreService {
               gamerId: gamerData['gamerId'] as String,
               gamerCreated: gamerData['gamerCreatedTime'] as String,
               gamerCounts: GamerCounts(
-                citizenCount: gamerData['citizen'] as int,
-                mafiaCount: gamerData['mafia'] as int,
                 losingCount: gamerData['lost'] as int,
                 winnerCount: gamerData['won'] as int,
                 totalPlayedGames: gamerData['totalPlayedGames'] as int,

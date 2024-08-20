@@ -17,7 +17,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         event.startDate,
         event.endDate,
       );
-      print('Top 3 gamers: $gamers');
       emit(
         state.copyWith(
           pageList: gamers,

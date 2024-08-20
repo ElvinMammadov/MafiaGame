@@ -74,50 +74,80 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        width: 150,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: MafiaTheme.themeData.highlightColor,
-                          border: Border.all(
-                            width: 0.8,
-                            color: Colors.white,
+                      GestureDetector(
+                        onTap: () async {
+                          // Calculate start and end dates for the last 90 days
+                          final DateTime endDate = DateTime.now();
+                          final DateTime startDate =
+                          endDate.subtract(const Duration(days: 90));
+
+                          BlocProvider.of<StatisticsBloc>(context).add(
+                            GetGamersForDate(
+                              startDate: startDate,
+                              endDate: endDate,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 150,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 3,
+                            horizontal: 6,
                           ),
-                        ),
-                        child: const Align(
-                          child: Text(
-                            AppStrings.threeMonths,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: MafiaTheme.themeData.highlightColor,
+                            border: Border.all(
+                              width: 0.8,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: const Align(
+                            child: Text(
+                              AppStrings.threeMonths,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      Container(
-                        width: 100,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: MafiaTheme.themeData.highlightColor,
-                          border: Border.all(
-                            width: 0.8,
-                            color: Colors.white,
+                      GestureDetector(
+                        onTap: () async {
+                          // Calculate start and end dates for the last 365 days
+                          final DateTime endDate = DateTime.now();
+                          final DateTime startDate =
+                          endDate.subtract(const Duration(days: 365));
+
+                          BlocProvider.of<StatisticsBloc>(context).add(
+                            GetGamersForDate(
+                              startDate: startDate,
+                              endDate: endDate,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 100,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 3,
+                            horizontal: 6,
                           ),
-                        ),
-                        child: const Align(
-                          child: Text(
-                            AppStrings.year,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: MafiaTheme.themeData.highlightColor,
+                            border: Border.all(
+                              width: 0.8,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: const Align(
+                            child: Text(
+                              AppStrings.year,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                              ),
                             ),
                           ),
                         ),
