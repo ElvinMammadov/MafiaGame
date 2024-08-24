@@ -178,7 +178,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                 ),
               ),
               color: Colors.transparent,
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () {
                   if (widget.gamePhase == GamePhase.CouldStart) {
                     toggleAnimation();

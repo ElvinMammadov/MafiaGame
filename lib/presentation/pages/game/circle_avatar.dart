@@ -54,13 +54,9 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       allNamesChanged = gamers.every(
         (Gamer gamer) => gamer.isNameChanged == true,
       );
-      if (allNamesChanged &&
-          BlocProvider.of<GameBloc>(context).state.game.gamePhase !=
-              GamePhase.CouldStart) {
+      if (allNamesChanged) {
         BlocProvider.of<GameBloc>(context).add(
-          const ChangeGameStartValue(
-            isGameCouldStart: true,
-          ),
+          const ChangeGameStartValue(),
         );
       }
     }
@@ -75,7 +71,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             final List<Gamer> gamers = state.gamersState.gamers;
             final int numberOfGamers = state.game.numberOfGamers;
             final GamePhase gamePhase = state.game.gamePhase;
-            if(gamePhase == GamePhase.IsReady) {
+            if (gamePhase == GamePhase.IsReady) {
               isAllGamersNameChanged(gamers);
             }
             if (gamers.isNotEmpty) {

@@ -6,6 +6,8 @@ class ResultScreen extends StatefulWidget {
   final String gameName;
   final String gameStartTime;
   final String gameId;
+  final bool victoryByWerewolf;
+  final bool werewolfWasDead;
 
   const ResultScreen({
     super.key,
@@ -14,6 +16,8 @@ class ResultScreen extends StatefulWidget {
     required this.gameName,
     required this.gameStartTime,
     required this.gameId,
+    this.victoryByWerewolf = false,
+    this.werewolfWasDead = false,
   });
 
   @override
@@ -29,6 +33,9 @@ class _ResultScreenState extends State<ResultScreen>
 
   @override
   Widget build(BuildContext context) {
+    final Gamer? wereWolf = widget.gamers
+        .where((Gamer gamer) => gamer.role.roleType == RoleType.Werewolf)
+        .firstOrNull;
     final List<Gamer> mafia = widget.gamers
         .where(
           (Gamer gamer) =>
@@ -36,6 +43,7 @@ class _ResultScreenState extends State<ResultScreen>
               gamer.role.roleType == RoleType.Don,
         )
         .toList();
+
     final List<Gamer> citizens = widget.gamers
         .where(
           (Gamer gamer) =>
@@ -43,6 +51,15 @@ class _ResultScreenState extends State<ResultScreen>
               gamer.role.roleType != RoleType.Don,
         )
         .toList();
+    if (widget.victoryByWerewolf && wereWolf != null) {
+      mafia.add(wereWolf);
+      citizens.remove(wereWolf);
+    } else if (!widget.isMafiaWinner &&
+        !widget.werewolfWasDead &&
+        wereWolf != null) {
+      mafia.add(wereWolf);
+      citizens.remove(wereWolf);
+    }
     return OrientationBuilder(
       builder: (BuildContext context, Orientation orientation) =>
           BlocBuilder<GameBloc, AppState>(
@@ -242,10 +259,6 @@ class _AccordionBodyState extends State<AccordionBody> {
                           itemBuilder: (BuildContext context, int index) {
                             final String? key =
                                 gamer.role.points?.keys.elementAt(index);
-                            final String? value = gamer.role.points?.values
-                                .elementAt(index)
-                                .toString();
-                            // Get the controller for this gamer and key
                             final TextEditingController controller =
                                 _controllers[gamer.name!]![key]!;
                             return ListTile(

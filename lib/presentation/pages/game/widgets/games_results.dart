@@ -46,9 +46,6 @@ class GamesResults extends StatelessWidget {
             color: Colors.grey,
           ),
           ResultsBody(
-            contentText: isMafia
-                ? AppStrings.mafiaWonExplanation
-                : AppStrings.citizensWonExplanation,
             winners: isMafia ? AppStrings.mafiaWon : AppStrings.citizensWon,
           ),
         ],

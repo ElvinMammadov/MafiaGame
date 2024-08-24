@@ -36,6 +36,8 @@ class FirestoreService {
       'numberOfGamers': gameState.numberOfGamers,
       'gameId': gameState.gameId,
       'isMafiaWin': gameState.isMafiaWin,
+      'victoryByWerewolf': gameState.victoryByWerewolf,
+      'werewolfWasDead': gameState.werewolfWasDead,
       'gamers': gameState.gamers.map(
         (Gamer gamer) {
           final Map<String, int> gamerPoints = Map<String, int>.from(
@@ -115,6 +117,8 @@ class FirestoreService {
           numberOfGamers: data['numberOfGamers'] as int,
           gameId: data['gameId'] as String,
           isMafiaWin: data['isMafiaWin'] as bool,
+          victoryByWerewolf: data['victoryByWerewolf'] ?? false,
+          werewolfWasDead: data['werewolfWasDead'] ?? false,
           gameStartTime: DateTime.parse(data['gameStartTime'] as String),
           gamers: (data['gamers'] as List<dynamic>).map((dynamic gamerData) {
             final Map<String, dynamic> gamer =

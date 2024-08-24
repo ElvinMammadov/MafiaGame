@@ -22,6 +22,8 @@ class GameState extends Equatable {
   final int infectedCount;
   final GamePhase gamePhase;
   final GamePeriod gamePeriod;
+  final bool victoryByWerewolf;
+  final bool werewolfWasDead;
 
   const GameState({
     this.gameId = '',
@@ -44,6 +46,8 @@ class GameState extends Equatable {
     this.infectedCount = 0,
     this.gamePhase = GamePhase.IsReady,
     this.gamePeriod = GamePeriod.Day,
+    this.victoryByWerewolf = false,
+    this.werewolfWasDead = false,
   });
 
   const GameState.empty()
@@ -66,7 +70,9 @@ class GameState extends Equatable {
         currentVoter = const Gamer.empty(),
         votedGamers = const <Gamer>[],
         gamePhase = GamePhase.IsReady,
-        gamePeriod = GamePeriod.Day;
+        gamePeriod = GamePeriod.Day,
+        victoryByWerewolf = false,
+        werewolfWasDead = false;
 
   GameState copyWith({
     String? gameName,
@@ -89,6 +95,8 @@ class GameState extends Equatable {
     int? infectedCount,
     GamePhase? gamePhase,
     GamePeriod? gamePeriod,
+    bool? victoryByWerewolf,
+    bool? werewolfWasDead,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -111,6 +119,8 @@ class GameState extends Equatable {
         infectedCount: infectedCount ?? this.infectedCount,
         gamePhase: gamePhase ?? this.gamePhase,
         gamePeriod: gamePeriod ?? this.gamePeriod,
+        victoryByWerewolf: victoryByWerewolf ?? this.victoryByWerewolf,
+        werewolfWasDead: werewolfWasDead ?? this.werewolfWasDead,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -139,6 +149,8 @@ class GameState extends Equatable {
         infectedCount,
         gamePhase,
         gamePeriod,
+        victoryByWerewolf,
+        werewolfWasDead,
       ];
 
   @override

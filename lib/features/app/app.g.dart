@@ -58,6 +58,8 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       gamePeriod:
           $enumDecodeNullable(_$GamePeriodEnumMap, json['gamePeriod']) ??
               GamePeriod.Day,
+      victoryByWerewolf: json['victoryByWerewolf'] as bool? ?? false,
+      werewolfWasDead: json['werewolfWasDead'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -81,6 +83,8 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'infectedCount': instance.infectedCount,
       'gamePhase': _$GamePhaseEnumMap[instance.gamePhase]!,
       'gamePeriod': _$GamePeriodEnumMap[instance.gamePeriod]!,
+      'victoryByWerewolf': instance.victoryByWerewolf,
+      'werewolfWasDead': instance.werewolfWasDead,
     };
 
 const _$GamePhaseEnumMap = {

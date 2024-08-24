@@ -28,7 +28,7 @@ class StatisticsItem extends StatelessWidget {
     if (months > 0) {
       experience += '$months ${AppStrings.months}${months > 1 ? 'ов' : ''} ';
     }
-    if (days > 0) {
+    if (days >= 0) {
       experience += '$days ${days > 1 ? AppStrings.days : AppStrings.day}';
     }
 

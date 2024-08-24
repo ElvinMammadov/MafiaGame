@@ -40,14 +40,11 @@ class EmptyGame extends GameEvent {
 }
 
 class ChangeGameStartValue extends GameEvent {
-  final bool isGameCouldStart;
 
-  const ChangeGameStartValue({
-    required this.isGameCouldStart,
-  });
+  const ChangeGameStartValue();
 
   @override
-  List<Object?> get props => <Object?>[isGameCouldStart];
+  List<Object?> get props => <Object?>[];
 }
 
 class SendGameToFirebase extends GameEvent {
@@ -161,6 +158,38 @@ class ChangeGamerCounts extends GameEvent {
       ];
 }
 
+class NightAction extends GameEvent {
+  final Function(List<Gamer> newKilledGamers) showKilledGamers;
+
+  const NightAction({
+    required this.showKilledGamers,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        showKilledGamers,
+      ];
+}
+
+class VotingAction extends GameEvent {
+  final Function(Gamer killedGamer) showKilledGamers;
+  final Function(List<Gamer> pickedGamers)? showPickedNumber;
+  final VoidCallback? showFailureInfo;
+
+  const VotingAction({
+    required this.showKilledGamers,
+    this.showPickedNumber,
+    this.showFailureInfo,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        showKilledGamers,
+        showPickedNumber,
+        showFailureInfo,
+      ];
+}
+
 class KillGamer extends GameEvent {
   final Gamer gamer;
 
@@ -168,6 +197,15 @@ class KillGamer extends GameEvent {
 
   @override
   List<Object?> get props => <Object?>[gamer];
+}
+
+class KillInfectedGamers extends GameEvent {
+  final List<Gamer> infectedGamers;
+
+  const KillInfectedGamers({required this.infectedGamers});
+
+  @override
+  List<Object?> get props => <Object?>[infectedGamers];
 }
 
 class KillGamerByMafia extends GameEvent {
@@ -240,16 +278,13 @@ class GiveAlibi extends GameEvent {
 }
 
 class CleanGamersAfterNight extends GameEvent {
-  final List<Gamer> gamers;
-
-  const CleanGamersAfterNight({required this.gamers});
+  const CleanGamersAfterNight();
 
   @override
-  List<Object?> get props => <Object?>[gamers];
+  List<Object?> get props => <Object?>[];
 }
 
 class CleanGamersAfterDay extends GameEvent {
-
   const CleanGamersAfterDay();
 
   @override

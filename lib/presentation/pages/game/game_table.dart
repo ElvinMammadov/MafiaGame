@@ -37,8 +37,12 @@ class _GameTableScreenState extends State<GameTableScreen> {
     final Gamer? werewolf = gamers
         .where((Gamer gamer) => gamer.role.roleType == RoleType.Werewolf)
         .firstOrNull;
-    print('werewolf $werewolf');
-    // final bool isWerewolfAlive = false;
+    final bool victoryByWerewolf = werewolf != null && !werewolf.beforeChange;
+
+    final bool werewolfWasDead =
+        werewolf != null && werewolf.wasKilled && werewolf.beforeChange;
+    print('werewolf $werewolf, victoryByWerewolf $victoryByWerewolf, '
+        'werewolfWasDead $werewolfWasDead');
 
     if (mafiaCount == 0 && werewolf != null && !werewolf.wasKilled) {
       BlocProvider.of<GameBloc>(context).add(
@@ -46,15 +50,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
       );
     }
     if (mafiaCount == civilianCount && count == 0) {
-      print('mafiaCount == civilianCount');
       BlocProvider.of<GameBloc>(context).add(
         CalculatePoints(
-          gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
+          gameState: game.copyWith(
+            isMafiaWin: true,
+            gamers: gamers,
+            victoryByWerewolf: victoryByWerewolf,
+          ),
         ),
       );
       count++;
     } else if (mafiaCount == 0 && werewolf == null && count == 0) {
-      print('mafiaCount == 0 && !isWerewolfAlive');
       BlocProvider.of<GameBloc>(context).add(
         CalculatePoints(
           gameState: game.copyWith(isMafiaWin: false, gamers: gamers),
@@ -67,7 +73,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
         count == 0) {
       BlocProvider.of<GameBloc>(context).add(
         CalculatePoints(
-          gameState: game.copyWith(isMafiaWin: true, gamers: gamers),
+          gameState: game.copyWith(
+            isMafiaWin: false,
+            gamers: gamers,
+            werewolfWasDead: werewolfWasDead,
+          ),
         ),
       );
       count++;
@@ -88,29 +98,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final DateTime? gameStartTime = state.game.gameStartTime;
           final GameState gameState = state.game;
           final GamePhase gamePhase = state.game.gamePhase;
-          final bool isMafiaWin = state.game.isMafiaWin;
-          final String gameId = state.game.gameId;
           print('mafiacount $mafiaCount, civilianCount $civilianCount');
-          print('gamePhase $gamePhase');
-          if (gamePhase == GamePhase.Finished) {
-            Navigator.of(context)
-                .popUntil((Route<dynamic> route) => route.isFirst);
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (BuildContext context) => ResultScreen(
-                  gamers: gamers,
-                  isMafiaWinner: isMafiaWin,
-                  gameName: gameName,
-                  gameStartTime:
-                      DateFormat('yyyy-MM-dd').format(gameStartTime!),
-                  gameId: gameId,
-                ),
-              ),
-            );
-            BlocProvider.of<GameBloc>(context).add(
-              const EmptyGame(),
-            );
-          }
+          /*  print('gamePhase $gamePhase');*/
 
           if (gamePhase == GamePhase.Discussion ||
               gamePhase == GamePhase.Voting) {
@@ -139,22 +128,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final GamePeriod gamePeriod = state.game.gamePeriod;
           final int dayNumber = state.game.dayNumber;
           final int nightNumber = state.game.nightNumber;
-          final List<Gamer> killedGamers = <Gamer>[];
           bool isAllGamersCitizen = false;
           bool isMafiaExist = false;
           print('game phase is $gamePhase');
-
-          if (gamers.isNotEmpty) {
-            // logger.log('Gamers are ${gamers.map(
-            //       (Gamer gamer) => gamer.name,
-            //     ).toList()}');
-            // print('Gamers namesChanged ${gamers.map(
-            //       (Gamer gamer) => gamer.isNameChanged,
-            //     ).toList()}');
-            // print('Gamers animates ${gamers.map(
-            //       (Gamer gamer) => gamer.isAnimated,
-            //     ).toList()}');
-          }
 
           const double buttonLeftPercentage = 0.07;
           const double buttonBottomPercentage = 0.02;
@@ -169,11 +145,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                 );
               },
               onExit: () {
+                Navigator.of(context)
+                    .popUntil((Route<dynamic> route) => route.isFirst);
                 BlocProvider.of<GameBloc>(context).add(
                   const EmptyGame(),
                 );
-                Navigator.of(context)
-                    .popUntil((Route<dynamic> route) => route.isFirst);
               },
               onAddGamer: () {
                 int? lastId = 0;
@@ -220,54 +196,19 @@ class _GameTableScreenState extends State<GameTableScreen> {
                               MafiaTheme.themeData.textTheme.headlineSmall,
                           action: () {
                             if (gamePeriod != GamePeriod.Day) {
+                              print('Night was called');
                               BlocProvider.of<GameBloc>(context).add(
-                                const UpdateAnimation(animate: true),
-                              );
-
-                              for (final Gamer gamer in gamers) {
-                                if (!gamer.wasKilled) {
-                                  if (!gamer.wasHealed) {
-                                    if (gamer.wasKilledByMafia ||
-                                        gamer.wasKilledByKiller ||
-                                        gamer.wasKilledBySheriff ||
-                                        gamer.wasBoomeranged ||
-                                        gamer.killSecurity) {
-                                      if (gamer.role.roleType !=
-                                              RoleType.Boomerang &&
-                                          gamer.role.roleType !=
-                                              RoleType.Werewolf) {
-                                        print('gamer $gamer');
-                                        killedGamers.add(gamer);
-                                      }
+                                NightAction(
+                                  showKilledGamers:
+                                      (List<Gamer> newKilledGamers) {
+                                    if (newKilledGamers.isNotEmpty) {
+                                      showKilledGamersAtNight(
+                                        context,
+                                        newKilledGamers,
+                                      );
                                     }
-                                  }
-                                }
-                              }
-                              if (killedGamers.isNotEmpty) {
-                                final List<Gamer> newKilledGamers = killedGamers
-                                    .where(
-                                      (Gamer gamer) => !gamer.wasSecured,
-                                    )
-                                    .toList();
-                                if (newKilledGamers.isNotEmpty) {
-                                  showKilledGamersAtNight(
-                                    context,
-                                    newKilledGamers,
-                                  );
-                                }
-                                for (final Gamer gamer in killedGamers) {
-                                  if (gamer.role.roleType !=
-                                          RoleType.Boomerang &&
-                                      gamer.role.roleType !=
-                                          RoleType.Werewolf) {
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      KillGamer(gamer: gamer),
-                                    );
-                                  }
-                                }
-                              }
-                              BlocProvider.of<GameBloc>(context).add(
-                                const AddNightNumber(),
+                                  },
+                                ),
                               );
                             } else {
                               switch (gamePhase) {
@@ -328,6 +269,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   }
                                   break;
                                 case GamePhase.Discussion:
+                                  print('Discussion was called');
                                   BlocProvider.of<GameBloc>(context).add(
                                     const ChangeRoleIndex(
                                       roleIndex: 0,
@@ -340,110 +282,28 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                   );
                                   break;
                                 case GamePhase.Voting:
-                                  final int maxVotes = gamers.fold(
-                                    0,
-                                    (int prev, Gamer gamer) =>
-                                        gamer.votesCount > prev
-                                            ? gamer.votesCount
-                                            : prev,
-                                  );
-
-                                  /// To show Chameleon functionality
-                                  // if (roleIndex == 0) {
-                                  //   showAddFunctionality(
-                                  //     context,
-                                  //     isVotingStarted: true,
-                                  //     gamerId: 1,
-                                  //     roleId: 1,
-                                  //     nightNumber: 1,
-                                  //   );
-                                  // }
-
-                                  if (maxVotes == 0) {
-                                    SnackBarManager.showFailure(
-                                      context,
-                                      message: AppStrings.votesHaveNotAdded,
-                                    );
-                                  } else {
-                                    final List<Gamer> topGamers = gamers
-                                        .where(
-                                          (Gamer gamer) =>
-                                              gamer.votesCount == maxVotes &&
-                                              maxVotes != 0,
-                                        )
-                                        .map((Gamer gamer) => gamer)
-                                        .toList();
-
-                                    if (topGamers.length == 1) {
-                                      BlocProvider.of<GameBloc>(context).add(
-                                        KillGamer(gamer: topGamers[0]),
-                                      );
-
-                                      BlocProvider.of<GameBloc>(context).add(
-                                        const EndVoting(),
-                                      );
-                                      BlocProvider.of<GameBloc>(context).add(
-                                        const AddDayNumber(),
-                                      );
-                                      if (dayNumber == 1 &&
-                                          topGamers[0].role.roleType ==
-                                              RoleType.Virus) {
-                                        Gamer leftGamer = const Gamer.empty();
-                                        Gamer rightGamer = const Gamer.empty();
-                                        if (topGamers[0].id == 1) {
-                                          leftGamer = gamers.last;
-                                        } else {
-                                          leftGamer =
-                                              gamers[topGamers[0].id! - 2];
-                                        }
-                                        rightGamer = gamers[topGamers[0].id!];
-
-                                        BlocProvider.of<GameBloc>(context).add(
-                                          KillGamer(gamer: leftGamer),
-                                        );
-                                        BlocProvider.of<GameBloc>(context).add(
-                                          KillGamer(gamer: rightGamer),
-                                        );
-                                      }
-                                      if (!topGamers[0].hasAlibi &&
-                                          !topGamers[0].wasSecured) {
-                                        showKilledGamer(
+                                  print('Voting was called');
+                                  BlocProvider.of<GameBloc>(context).add(
+                                    VotingAction(
+                                      showFailureInfo: () {
+                                        SnackBarManager.showFailure(
                                           context,
-                                          topGamers[0],
+                                          message: AppStrings.votesHaveNotAdded,
                                         );
-                                      }
-                                    } else if (topGamers.length > 1) {
-                                      showPickNumber(
-                                        context,
-                                        topGamers,
-                                        () {},
-                                      );
-                                    }
-                                    if (dayNumber == 2) {
-                                      for (final Gamer gamer in gamers) {
-                                        BlocProvider.of<GameBloc>(context).add(
-                                          InfectGamer(
-                                            targetedGamer: gamer,
-                                            infect: false,
-                                          ),
+                                      },
+                                      showKilledGamers: (Gamer killedGamer) {
+                                        showKilledGamer(context, killedGamer);
+                                      },
+                                      showPickedNumber:
+                                          (List<Gamer> topGamers) {
+                                        showPickNumber(
+                                          context,
+                                          topGamers,
+                                          () {},
                                         );
-                                      }
-                                    }
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      const CleanGamersAfterDay(),
-                                    );
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      const ResetVoters(),
-                                    );
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      InfectedCount(
-                                        infectedCount: state.game.mafiaCount,
-                                      ),
-                                    );
-                                    BlocProvider.of<GameBloc>(context).add(
-                                      const UpdateAnimation(animate: false),
-                                    );
-                                  }
+                                      },
+                                    ),
+                                  );
                                   break;
                                 default:
                                   break;

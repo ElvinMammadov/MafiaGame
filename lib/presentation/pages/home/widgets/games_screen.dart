@@ -75,7 +75,6 @@ class _GamesScreenState extends State<GamesScreen> {
     const double buttonLeftPercentage = 0.06;
     // const double buttonBottomPercentage = 0.02;
     const double roundButtonBottomPercentage = 0.03;
-    print('GamesScreen build');
 
     return BlocBuilder<GameBloc, AppState>(
       builder: (BuildContext context, AppState state) {
@@ -114,9 +113,11 @@ class _GamesScreenState extends State<GamesScreen> {
                               gamers: games[index].gamers,
                               isMafiaWinner: games[index].isMafiaWin,
                               gameName: games[index].gameName,
+                              victoryByWerewolf: games[index].victoryByWerewolf,
                               gameStartTime: DateFormat('yyyy-MM-dd')
                                   .format(games[index].gameStartTime!),
                               gameId: games[index].gameId,
+                              werewolfWasDead: games[index].werewolfWasDead,
                             ),
                           ),
                         );
