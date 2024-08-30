@@ -38,7 +38,7 @@ void showPickNumber(
             closeDialog();
             Navigator.of(context).pop();
             if (!gamer.wasSecured && !gamer.hasAlibi) {
-              showKilledGamer(context, gamer);
+              showKilledGamer(context, gamer, closeDialog);
             }
 
             BlocProvider.of<GameBloc>(context).add(

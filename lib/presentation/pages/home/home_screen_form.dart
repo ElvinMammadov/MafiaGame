@@ -89,7 +89,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   children: <Widget>[
                     TextFormField(
                       controller: _gameNameController,
-                      style: MafiaTheme.themeData.textTheme.headlineSmall,
+                      style: MafiaTheme.themeData.textTheme.titleMedium,
                       keyboardType: TextInputType.emailAddress,
                       autofocus: true,
                       key: _gameNameFieldKey,
@@ -99,7 +99,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                             const EdgeInsets.symmetric(horizontal: 8),
                         labelText: AppStrings.nameOfGame,
                         labelStyle:
-                            MafiaTheme.themeData.textTheme.headlineSmall,
+                            MafiaTheme.themeData.textTheme.titleMedium,
                         icon: Icon(
                           Icons.border_color,
                           color: MafiaTheme.themeData.colorScheme.secondary,
@@ -146,7 +146,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                             hint: Text(
                               AppStrings.chooseRoles,
                               style:
-                                  MafiaTheme.themeData.textTheme.headlineSmall,
+                                  MafiaTheme.themeData.textTheme.titleMedium,
                             ),
                             items: roles.roles
                                 .map(
@@ -265,7 +265,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         // labelText: 'Choose',
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
-                        labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        labelStyle: MafiaTheme.themeData.textTheme.titleMedium
                             ?.copyWith(height: 1),
                         icon: Icon(
                           Icons.pin,
@@ -284,7 +284,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                       ),
                       hint: Text(
                         AppStrings.numberOfGamers,
-                        style: MafiaTheme.themeData.textTheme.headlineSmall
+                        style: MafiaTheme.themeData.textTheme.titleMedium
                             ?.copyWith(height: 1),
                       ),
                       items: numberOfGamers
@@ -294,7 +294,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                               child: Text(
                                 item.toString(),
                                 style: MafiaTheme
-                                    .themeData.textTheme.headlineSmall
+                                    .themeData.textTheme.titleMedium
                                     ?.copyWith(height: 1),
                               ),
                             ),
@@ -345,7 +345,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: Dimensions.padding8,
                         ),
-                        labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        labelStyle: MafiaTheme.themeData.textTheme.titleMedium
                             ?.copyWith(height: 1),
                         icon: Icon(
                           Icons.save,
@@ -364,7 +364,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                       ),
                       hint: Text(
                         AppStrings.usageOfGamers,
-                        style: MafiaTheme.themeData.textTheme.headlineSmall
+                        style: MafiaTheme.themeData.textTheme.titleMedium
                             ?.copyWith(height: 1),
                       ),
                       value: selectedTypeofGamers,
@@ -375,7 +375,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                               child: Text(
                                 item,
                                 style: MafiaTheme
-                                    .themeData.textTheme.headlineSmall
+                                    .themeData.textTheme.titleMedium
                                     ?.copyWith(height: 1),
                               ),
                             ),

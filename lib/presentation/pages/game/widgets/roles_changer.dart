@@ -28,17 +28,17 @@ class _RolesChangerState extends State<RolesChanger> {
                       ? AppStrings.wakesUp + roles.roles[roleIndex].name
                       : AppStrings.chooseRole + roles.roles[roleIndex].name,
                   style:
-                      MafiaTheme.themeData.textTheme.headlineMedium?.copyWith(
+                      MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ).padding(bottom: 20.0),
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: 200.0,
+                      width: 120.0,
                       child: BaseButton(
                         label: AppStrings.back,
-                        textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                        textStyle: MafiaTheme.themeData.textTheme.titleMedium,
                         enabled: roleIndex >= 1,
                         action: () {
                           BlocProvider.of<GameBloc>(context).add(
@@ -50,10 +50,10 @@ class _RolesChangerState extends State<RolesChanger> {
                       ),
                     ),
                     SizedBox(
-                      width: 200.0,
+                      width: 120.0,
                       child: BaseButton(
                         label: AppStrings.next,
-                        textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                        textStyle: MafiaTheme.themeData.textTheme.titleMedium,
                         enabled: roleIndex < roles.roles.length - 2,
                         action: () {
                           BlocProvider.of<GameBloc>(context).add(
@@ -63,7 +63,7 @@ class _RolesChangerState extends State<RolesChanger> {
                           );
                         },
                       ),
-                    ),
+                    ).padding(horizontal: 16.0),
                   ],
                 ),
               ],

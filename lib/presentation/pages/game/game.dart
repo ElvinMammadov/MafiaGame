@@ -42,6 +42,7 @@ part 'widgets/dialogs/killed_gamer_dialog.dart';
 part 'widgets/dialogs/killed_gamers_at_night_bottom_sheet.dart';
 part 'widgets/dialogs/pick_number_dialog.dart';
 part 'widgets/dialogs/show_results.dart';
+part 'widgets/dialogs/continue_game_dialog.dart';
 part 'widgets/functional_drop_down_button.dart';
 part 'widgets/functions/blinking_functions.dart';
 part 'widgets/gamers_avatars.dart';

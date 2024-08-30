@@ -173,6 +173,14 @@ class AppStrings {
       ' Пожалуйста, добавьте роли для игроков.';
   static const String chooseGamerPosition =
       'Пожалуйста, выберите позицию для игрока.';
-  static const String save =
-      'Сохранить';
+  static const String save = 'Сохранить';
+  static const String gamerAlreadyExistInGame = 'Игрок уже существует в игре';
+  static const String gamerExist = 'Игрок уже существует в системе. '
+      'Выберите имя игрока из списка.';
+  static const String nobodyWasKilled = 'За ночь никто не был убит.';
+  static const String continueGame = 'В игре остаются 2 мирных и 1 мафия.'
+      ' Хотите продолжить? Если нет, игра закончится и победит мафия. Если да,'
+      ' игра продолжится.';
+  static const String continueGameLabel = 'Продолжить';
+  static const String endGameLabel = 'Завершить';
 }

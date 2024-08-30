@@ -16,6 +16,8 @@ List<Widget> gamersAvatars({
   final List<Widget> positionedAvatars = <Widget>[];
   final GamePeriod gamePeriod =
       BlocProvider.of<GameBloc>(context).state.game.gamePeriod;
+  final GamePhase gamePhase =
+      BlocProvider.of<GameBloc>(context).state.game.gamePhase;
 
   final double ovalRadius;
   double minAvatarRadius;
@@ -140,11 +142,14 @@ List<Widget> gamersAvatars({
                       ),
                     ),
                     onPressed: () {
-                      BlocProvider.of<GameBloc>(context).add(
-                        RearrangeGamersPosition(
-                          newPosition: gamers[i].id ?? 0,
-                        ),
-                      );
+                      if (gamePhase == GamePhase.IsReady ||
+                          gamePhase == GamePhase.CouldStart) {
+                        BlocProvider.of<GameBloc>(context).add(
+                          RearrangeGamersPosition(
+                            newPosition: gamers[i].id ?? 0,
+                          ),
+                        );
+                      }
                     },
                     child: Text(
                       gamers.isNotEmpty

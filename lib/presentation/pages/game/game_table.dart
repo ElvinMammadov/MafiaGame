@@ -9,6 +9,13 @@ class _GameTableScreenState extends State<GameTableScreen> {
   bool showRoles = false;
   Gamer killedGamer = const Gamer.empty();
   int count = 0;
+  int civilianCount = 0;
+  int mafiaCount = 0;
+  GameState gameState = const GameState.empty();
+  GamePhase gamePhase = GamePhase.IsReady;
+  bool victoryByWerewolf = false;
+  bool werewolfWasDead = false;
+  bool isMafiaWin = false;
 
   String buttonTitle(GamePhase gamePhase) {
     switch (gamePhase) {
@@ -41,8 +48,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
 
     final bool werewolfWasDead =
         werewolf != null && werewolf.wasKilled && werewolf.beforeChange;
-    print('werewolf $werewolf, victoryByWerewolf $victoryByWerewolf, '
-        'werewolfWasDead $werewolfWasDead');
 
     if (mafiaCount == 0 && werewolf != null && !werewolf.wasKilled) {
       BlocProvider.of<GameBloc>(context).add(
@@ -93,12 +98,15 @@ class _GameTableScreenState extends State<GameTableScreen> {
         listener: (BuildContext context, AppState state) {
           final List<Gamer> gamers = state.gamersState.gamers;
           final String gameName = state.game.gameName;
-          final int mafiaCount = state.game.mafiaCount;
-          final int civilianCount = state.game.civilianCount;
+          mafiaCount = state.game.mafiaCount;
+          civilianCount = state.game.civilianCount;
           final DateTime? gameStartTime = state.game.gameStartTime;
-          final GameState gameState = state.game;
-          final GamePhase gamePhase = state.game.gamePhase;
+          gameState = state.game;
+          gamePhase = state.game.gamePhase;
           print('mafiacount $mafiaCount, civilianCount $civilianCount');
+          victoryByWerewolf = state.game.victoryByWerewolf;
+          werewolfWasDead = state.game.werewolfWasDead;
+          isMafiaWin = state.game.isMafiaWin;
           /*  print('gamePhase $gamePhase');*/
 
           if (gamePhase == GamePhase.Discussion ||
@@ -117,7 +125,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
         builder: (BuildContext context, AppState state) {
           final int numberOfGamers = state.game.numberOfGamers;
           final List<Gamer> gamers = state.gamersState.gamers;
-          final GamePhase gamePhase = state.game.gamePhase;
+          // final GamePhase gamePhase = state.game.gamePhase;
           final double screenWidth = MediaQuery.of(context).size.width;
           final double screenHeight = MediaQuery.of(context).size.height;
           final String gameName = state.game.gameName;
@@ -130,7 +138,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
           final int nightNumber = state.game.nightNumber;
           bool isAllGamersCitizen = false;
           bool isMafiaExist = false;
-          print('game phase is $gamePhase');
+          // print('game phase is $gamePhase');
 
           const double buttonLeftPercentage = 0.07;
           const double buttonBottomPercentage = 0.02;
@@ -186,14 +194,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
                       right: screenWidth * buttonLeftPercentage,
                       bottom: screenHeight * buttonBottomPercentage,
                       child: SizedBox(
-                        width: 400,
+                        width: 300,
                         child: BaseButton(
                           label: gamePeriod == GamePeriod.Day
                               ? buttonTitle(gamePhase)
                               : AppStrings.endNight,
                           enabled: gamePhase != GamePhase.IsReady,
                           textStyle:
-                              MafiaTheme.themeData.textTheme.headlineSmall,
+                              MafiaTheme.themeData.textTheme.titleMedium,
                           action: () {
                             if (gamePeriod != GamePeriod.Day) {
                               print('Night was called');
@@ -205,6 +213,77 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                       showKilledGamersAtNight(
                                         context,
                                         newKilledGamers,
+                                        () {
+                                          // if (mafiaCount == civilianCount - 1) {
+                                            // showContinueGameDialog(
+                                            //   context,
+                                            //   accepted: () {
+                                            //     BlocProvider.of<GameBloc>(
+                                            //       context,
+                                            //     ).add(
+                                            //       CalculatePoints(
+                                            //         gameState:
+                                            //             gameState.copyWith(
+                                            //           isMafiaWin: true,
+                                            //           gamers: gamers,
+                                            //         ),
+                                            //       ),
+                                            //     );
+                                                // if (gamePhase ==
+                                                //     GamePhase.Finished) {
+                                                //   Navigator.of(context)
+                                                //       .popUntil(
+                                                //     (Route<dynamic> route) =>
+                                                //         route.isFirst,
+                                                //   );
+                                                //   Navigator.of(context).push(
+                                                //     MaterialPageRoute<void>(
+                                                //       builder: (
+                                                //         BuildContext context,
+                                                //       ) =>
+                                                //           ResultScreen(
+                                                //         gamers: gamers,
+                                                //         isMafiaWinner:
+                                                //             isMafiaWin,
+                                                //         gameName: gameName,
+                                                //         gameStartTime:
+                                                //             DateFormat(
+                                                //           'yyyy-MM-dd',
+                                                //         ).format(
+                                                //           gameStartTime!,
+                                                //         ),
+                                                //         gameId: gameId,
+                                                //         victoryByWerewolf:
+                                                //             victoryByWerewolf,
+                                                //         werewolfWasDead:
+                                                //             werewolfWasDead,
+                                                //       ),
+                                                //     ),
+                                                //   );
+                                                //   BlocProvider.of<GameBloc>(
+                                                //     context,
+                                                //   ).add(
+                                                //     const EmptyGame(),
+                                                //   );
+                                                // }
+                                              // },
+                                            // );
+                                          // }
+                                        },
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.green,
+                                          content: Text(
+                                            AppStrings.nobodyWasKilled,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                        ),
                                       );
                                     }
                                   },
@@ -231,7 +310,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           AppStrings.allGamersCitizens,
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 24.0,
+                                            fontSize: 16.0,
                                           ),
                                         ),
                                       ),
@@ -244,7 +323,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           AppStrings.mafiaDoesNotExist,
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 24.0,
+                                            fontSize: 16.0,
                                           ),
                                         ),
                                       ),
@@ -292,14 +371,123 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                         );
                                       },
                                       showKilledGamers: (Gamer killedGamer) {
-                                        showKilledGamer(context, killedGamer);
+                                        showKilledGamer(context, killedGamer,
+                                            () {
+                                          print('Killed gamer was shown, '
+                                              'mafiaCount $mafiaCount, '
+                                              'civilianCount $civilianCount');
+                                          // if (mafiaCount == civilianCount - 1) {
+                                          //   showContinueGameDialog(
+                                          //     context,
+                                          //     accepted: () {
+                                          //       BlocProvider.of<GameBloc>(
+                                          //         context,
+                                          //       ).add(
+                                          //         CalculatePoints(
+                                          //           gameState:
+                                          //               gameState.copyWith(
+                                          //             isMafiaWin: true,
+                                          //             gamers: gamers,
+                                          //           ),
+                                          //         ),
+                                          //       );
+                                          //     },
+                                          //   );
+                                          // }
+                                          // if (gamePhase == GamePhase.Finished) {
+                                          //   Navigator.of(context).popUntil(
+                                          //     (Route<dynamic> route) =>
+                                          //         route.isFirst,
+                                          //   );
+                                          //   Navigator.of(context).push(
+                                          //     MaterialPageRoute<void>(
+                                          //       builder:
+                                          //           (BuildContext context) =>
+                                          //               ResultScreen(
+                                          //         gamers: gamers,
+                                          //         isMafiaWinner: isMafiaWin,
+                                          //         gameName: gameName,
+                                          //         gameStartTime: DateFormat(
+                                          //                 'yyyy-MM-dd')
+                                          //             .format(gameStartTime!),
+                                          //         gameId: gameId,
+                                          //         victoryByWerewolf:
+                                          //             victoryByWerewolf,
+                                          //         werewolfWasDead:
+                                          //             werewolfWasDead,
+                                          //       ),
+                                          //     ),
+                                          //   );
+                                          //   BlocProvider.of<GameBloc>(context)
+                                          //       .add(
+                                          //     const EmptyGame(),
+                                          //   );
+                                          // }
+                                        });
                                       },
                                       showPickedNumber:
                                           (List<Gamer> topGamers) {
                                         showPickNumber(
                                           context,
                                           topGamers,
-                                          () {},
+                                          () {
+                                            // if (mafiaCount ==
+                                            //     civilianCount - 1) {
+                                            //   showContinueGameDialog(
+                                            //     context,
+                                            //     accepted: () {
+                                                  // BlocProvider.of<GameBloc>(
+                                                  //   context,
+                                                  // ).add(
+                                                  //   CalculatePoints(
+                                                  //     gameState:
+                                                  //         gameState.copyWith(
+                                                  //       isMafiaWin: true,
+                                                  //       gamers: gamers,
+                                                  //     ),
+                                                  //   ),
+                                                  // );
+                                                  // if (gamePhase ==
+                                                  //     GamePhase.Finished) {
+                                                  //   Navigator.of(context)
+                                                  //       .popUntil(
+                                                  //     (Route<dynamic> route) =>
+                                                  //         route.isFirst,
+                                                  //   );
+                                                  //   Navigator.of(context).push(
+                                                  //     MaterialPageRoute<void>(
+                                                  //       builder: (
+                                                  //         BuildContext context,
+                                                  //       ) =>
+                                                  //           ResultScreen(
+                                                  //         gamers: gamers,
+                                                  //         isMafiaWinner:
+                                                  //             isMafiaWin,
+                                                  //         gameName: gameName,
+                                                  //         gameStartTime:
+                                                  //             DateFormat(
+                                                  //           'yyyy-MM-dd',
+                                                  //         ).format(
+                                                  //           gameStartTime!,
+                                                  //         ),
+                                                  //         gameId: gameId,
+                                                  //         victoryByWerewolf:
+                                                  //             victoryByWerewolf,
+                                                  //         werewolfWasDead:
+                                                  //             werewolfWasDead,
+                                                  //       ),
+                                                  //     ),
+                                                  //   );
+                                                  //   BlocProvider.of<GameBloc>(
+                                                  //           context)
+                                                  //       .add(
+                                                  //     const EmptyGame(),
+                                                  //   );
+                                                  // }
+                                              //   },
+                                              // );
+                                            // }
+                                          },
                                         );
                                       },
                                     ),
@@ -342,13 +530,13 @@ class _GameTableScreenState extends State<GameTableScreen> {
                       ),
                     if (gamePhase == GamePhase.CouldStart)
                       Positioned(
-                        left: screenWidth / 3,
+                        left: screenWidth / 2.5,
                         bottom: screenHeight / 3.3,
                         child: const RolesChanger(),
                       ),
                     if (gamePeriod == GamePeriod.Night)
                       Positioned(
-                        left: screenWidth / 3,
+                        left: screenWidth / 2.5,
                         bottom: screenHeight / 3.3,
                         child: const RolesChanger(),
                       ),
@@ -356,14 +544,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
                       left: screenWidth * buttonLeftPercentage,
                       top: screenHeight * roundButtonBottomPercentage,
                       child: SizedBox(
-                        width: 200,
+                        width: 120,
                         child: BaseButton(
                           label: gamePeriod == GamePeriod.Day
                               ? "$dayNumber ${AppStrings.day}"
                               : "$nightNumber ${AppStrings.night}",
                           enabled: false,
                           textStyle:
-                              MafiaTheme.themeData.textTheme.headlineSmall,
+                              MafiaTheme.themeData.textTheme.titleMedium,
                         ),
                       ),
                     ),

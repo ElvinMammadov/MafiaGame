@@ -3,6 +3,7 @@ part of game;
 void showKilledGamersAtNight(
   BuildContext context,
   List<Gamer> killedGamers,
+  VoidCallback closeDialog,
 ) {
   WoltModalSheet.show<void>(
     context: context,
@@ -12,16 +13,17 @@ void showKilledGamersAtNight(
       SliverWoltModalSheetPage(
         hasSabGradient: false,
         isTopBarLayerAlwaysVisible: true,
+        enableDrag: false,
         hasTopBarLayer: true,
         topBarTitle: Text(
           AppStrings.killOfGamer,
           style: MafiaTheme.themeData.textTheme.headlineSmall,
         ),
-        trailingNavBarWidget: const Padding(
-          padding: EdgeInsets.only(
+        trailingNavBarWidget: Padding(
+          padding: const EdgeInsets.only(
             right: 16,
           ),
-          child: CloseKilledGamersAtNightDialogButton(),
+          child: CloseKilledGamersAtNightDialogButton(closeDialog: closeDialog),
         ),
         mainContentSlivers: <Widget>[
           SliverList(
@@ -45,7 +47,10 @@ void showKilledGamersAtNight(
 }
 
 class CloseKilledGamersAtNightDialogButton extends StatefulWidget {
+  final VoidCallback closeDialog;
+
   const CloseKilledGamersAtNightDialogButton({
+    required this.closeDialog,
     super.key,
   });
 
@@ -91,6 +96,7 @@ class _CloseKilledGamersAtNightDialogButtonState
                 );
               } else {
                 Navigator.of(context).pop();
+                widget.closeDialog();
               }
             },
             icon: const Icon(

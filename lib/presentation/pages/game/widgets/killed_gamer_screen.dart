@@ -23,7 +23,7 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
             elevation: 8.0,
             shape: const CircleBorder(),
             child: CircleAvatar(
-              radius: 100.0,
+              radius: 70.0,
               child: ClipOval(
                 child: Image.network(
                   widget.killedGamer.imageUrl!,
@@ -48,12 +48,12 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 32,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const Divider(
-                  height: 16.0,
+                  height: 8.0,
                   thickness: 1.0,
                   color: Colors.white24, // Subtle divider
                 ),
@@ -62,16 +62,16 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
                   widget.killedGamer.name ?? '',
                 ),
                 const Divider(
-                  height: 16.0,
+                  height: 8.0,
                   thickness: 1.0,
                   color: Colors.white24, // Subtle divider
                 ),
                 _buildTextRow(
                   AppStrings.roleOfGamer,
-                  widget.killedGamer.role?.name ?? '',
+                  widget.killedGamer.role.name,
                 ),
                 const Divider(
-                  height: 16.0,
+                  height: 8.0,
                   thickness: 1.0,
                   color: Colors.white24, // Subtle divider
                 ),
@@ -86,13 +86,13 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
                   ),
               ],
             ).padding(
-              vertical: 16,
+              vertical: 8,
               horizontal: 16,
             ),
           ).padding(
-            top: 16,
+            top: 8,
             horizontal: 32,
-            bottom: 32,
+            bottom: 16,
           ),
         ],
       );
@@ -103,7 +103,7 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
             '$labelText:  ',
             style: const TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -111,13 +111,13 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
             text,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
         ],
       ).padding(
-        vertical: 16,
+        vertical: 8,
         horizontal: 16,
       );
 }

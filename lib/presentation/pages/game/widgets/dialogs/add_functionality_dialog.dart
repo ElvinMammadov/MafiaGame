@@ -16,13 +16,7 @@ void showAddFunctionality(
   for (int i = 0; i < roles.roles.length; i++) {
     /*   Chameleon can take role Mafia, Madam, Sheriff, Doctor,
     Advocate, Medium,Killer*/
-    if (i == 2 ||
-        i == 3 ||
-        i == 4 ||
-        i == 5 ||
-        i == 6 ||
-        i == 7 ||
-        i == 10) {
+    if (i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 10) {
       chosenRoles.add(roles.roles[i]);
     }
   }
@@ -77,7 +71,7 @@ void showAddFunctionality(
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

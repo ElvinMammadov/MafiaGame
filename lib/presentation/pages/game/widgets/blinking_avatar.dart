@@ -99,7 +99,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
             backgroundColor: Colors.red,
             content: Text(
               AppStrings.gamerAlreadyVoted,
-              style: TextStyle(color: Colors.white, fontSize: 24.0),
+              style: TextStyle(color: Colors.white, fontSize: 16.0),
             ),
           ),
         );

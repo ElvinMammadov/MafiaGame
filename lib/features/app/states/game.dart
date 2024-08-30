@@ -24,6 +24,7 @@ class GameState extends Equatable {
   final GamePeriod gamePeriod;
   final bool victoryByWerewolf;
   final bool werewolfWasDead;
+  final FirebaseSaveStatus saveStatus;
 
   const GameState({
     this.gameId = '',
@@ -48,6 +49,7 @@ class GameState extends Equatable {
     this.gamePeriod = GamePeriod.Day,
     this.victoryByWerewolf = false,
     this.werewolfWasDead = false,
+    this.saveStatus = FirebaseSaveStatus.Initial,
   });
 
   const GameState.empty()
@@ -72,7 +74,8 @@ class GameState extends Equatable {
         gamePhase = GamePhase.IsReady,
         gamePeriod = GamePeriod.Day,
         victoryByWerewolf = false,
-        werewolfWasDead = false;
+        werewolfWasDead = false,
+        saveStatus = FirebaseSaveStatus.Initial;
 
   GameState copyWith({
     String? gameName,
@@ -97,6 +100,7 @@ class GameState extends Equatable {
     GamePeriod? gamePeriod,
     bool? victoryByWerewolf,
     bool? werewolfWasDead,
+    FirebaseSaveStatus? saveStatus,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -121,6 +125,7 @@ class GameState extends Equatable {
         gamePeriod: gamePeriod ?? this.gamePeriod,
         victoryByWerewolf: victoryByWerewolf ?? this.victoryByWerewolf,
         werewolfWasDead: werewolfWasDead ?? this.werewolfWasDead,
+        saveStatus: saveStatus ?? this.saveStatus,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -151,6 +156,7 @@ class GameState extends Equatable {
         gamePeriod,
         victoryByWerewolf,
         werewolfWasDead,
+        saveStatus,
       ];
 
   @override
@@ -178,4 +184,11 @@ enum GamePhase {
 enum GamePeriod {
   Day,
   Night,
+}
+
+enum FirebaseSaveStatus {
+  Initial,
+  Saving,
+  Saved,
+  Error,
 }

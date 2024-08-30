@@ -161,43 +161,35 @@ class FirestoreService {
     }
   }
 
-  Future<Gamer> addGamer(Gamer gamer) async {
-    Gamer newGamer = const Gamer.empty();
-    await _gamersCollection.doc(gamer.name).set(<String, dynamic>{
-      'name': gamer.name,
-      'gamerId': gamer.gamerId,
-      'gamerCreatedTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      "imageUrl": gamer.imageUrl,
-      'citizen': 0,
-      'mafia': 0,
-      'werewolf': 0,
-      'won': 0,
-      'lost': 0,
-      'totalPoints': 0,
-      'totalPlayedGames': 0,
-      'pointsHistory': <Map<String, Object>>[
-        <String, Object>{
-          'pointsId': "",
-          'points': 0,
-          'timestamp': DateFormat('yyyy-MM-dd').format(DateTime.now()),
-        },
-      ],
-    });
-    final DocumentReference<Object?> docRef = _gamersCollection.doc(gamer.name);
-    docRef.get().then(
-      (DocumentSnapshot<dynamic> doc) {
-        final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
-        newGamer = Gamer(
-          name: data['name'] as String,
-          gamerId: data['gamerId'] as String,
-          gamerCreated: data['gamerCreatedTime'] as String,
-          // documentId: documentReference.id,
-        );
-      },
-      onError: (dynamic e) => log("Error getting document: $e"),
-    );
+  Future<bool> addGamer(Gamer gamer) async {
+    try {
+      final DocumentSnapshot<Object?> documentSnapshot =
+          await _gamersCollection.doc(gamer.name).get();
 
-    return newGamer;
+      if (documentSnapshot.exists) {
+        log('Gamer already exists in Firebase');
+        return false;
+      } else {
+        await _gamersCollection.doc(gamer.name).set(<String, dynamic>{
+          'name': gamer.name,
+          'gamerId': gamer.gamerId,
+          'gamerCreatedTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          'imageUrl': gamer.imageUrl,
+          'citizen': 0,
+          'mafia': 0,
+          'werewolf': 0,
+          'won': 0,
+          'lost': 0,
+          'totalPoints': 0,
+          'totalPlayedGames': 0,
+          'pointsHistory': <Map<String, Object>>[],
+        });
+        return true;
+      }
+    } catch (error) {
+      log('Error adding gamer: $error');
+      return false;
+    }
   }
 
   Future<List<Gamer>> getGamers(String search) async {

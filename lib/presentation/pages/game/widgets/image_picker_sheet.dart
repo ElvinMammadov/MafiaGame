@@ -3,7 +3,6 @@ part of game;
 class ImagePickerSheet extends StatefulWidget {
   final TextEditingController textEditingController;
   final ValueChanged<File?> onImageChanged;
-  final ValueChanged<Role?> onRoleChanged;
   final ValueChanged<Gamer?>? gamerChosenFromFirebase;
   final ValueChanged<int?> onPositionChange;
   final int? numberOfGamers;
@@ -13,7 +12,6 @@ class ImagePickerSheet extends StatefulWidget {
     super.key,
     required this.textEditingController,
     required this.onImageChanged,
-    required this.onRoleChanged,
     required this.onPositionChange,
     this.gamerChosenFromFirebase,
     this.numberOfGamers,
@@ -62,14 +60,12 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-        builder: (BuildContext context, AppState state) {
-          final Roles roles = state.gamersState.roles;
-          return Column(
+        builder: (BuildContext context, AppState state) => Column(
             children: <Widget>[
               Stack(
                 children: <Widget>[
                   CircleAvatar(
-                    radius: 90,
+                    radius: 70,
                     child: ClipOval(
                       child: image == null
                           ? imageUrl.isEmpty
@@ -95,7 +91,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   ),
                   Positioned(
                     bottom: -10,
-                    left: 120,
+                    left: 100,
                     child: IconButton(
                       onPressed: () {
                         showImagePickerSheet(context);
@@ -115,11 +111,16 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
               TypeAheadField<Gamer>(
                 controller: widget.textEditingController,
                 suggestionsCallback: (String search) async {
-                  final List<Gamer> gamers =
-                      await FirestoreService().getGamers(search);
-                  return gamers;
+                  if (search.isNotEmpty) {
+                    final List<Gamer> gamers =
+                        await FirestoreService().getGamers(search);
+                    return gamers;
+                  } else {
+                    return <Gamer>[];
+                  }
                 },
                 hideOnEmpty: true,
+                hideOnLoading: true,
                 builder: (
                   BuildContext context,
                   TextEditingController controller,
@@ -184,77 +185,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   widget.gamerChosenFromFirebase!(gamer);
                 },
               ),
-              if (widget.isPositionMode != true)
-                DropdownButtonFormField2<Role>(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.padding8,
-                    ),
-                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
-                        ?.copyWith(height: 1),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: MafiaTheme.themeData.colorScheme.secondary,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: MafiaTheme.themeData.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                  hint: Text(
-                    AppStrings.roleOfGamer,
-                    style: MafiaTheme.themeData.textTheme.headlineSmall
-                        ?.copyWith(height: 1),
-                  ),
-                  value: selectedRole,
-                  items: roles.roles
-                      .map(
-                        (Role item) => DropdownMenuItem<Role>(
-                          value: item,
-                          child: Text(
-                            item.name,
-                            style: MafiaTheme.themeData.textTheme.headlineSmall
-                                ?.copyWith(height: 1),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  validator: (Role? value) {
-                    if (value == null) {
-                      return 'Please select gender.';
-                    }
-                    return null;
-                  },
-                  onChanged: (Role? value) {
-                    selectedRole = value;
-                    widget.onRoleChanged(selectedRole);
-                  },
-                  onSaved: (Role? value) {
-                    selectedRole = value;
-                  },
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  dropdownStyleData: DropdownStyleData(
-                    offset: const Offset(5, 0),
-                    width: 370,
-                    maxHeight: 250,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: MafiaTheme.themeData.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ).padding(top: Dimensions.padding16)
-              else
+              if (widget.isPositionMode == true)
                 DropdownButtonFormField2<int>(
                   isExpanded: true,
                   key: _positionFieldKey,
@@ -331,8 +262,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
           ).padding(
             bottom: 100,
             horizontal: 16,
-          );
-        },
+          ),
       );
 
   void showImagePickerSheet(BuildContext context) {

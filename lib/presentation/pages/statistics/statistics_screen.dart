@@ -14,14 +14,14 @@ class _StatisticScreenState extends State<StatisticScreen> {
   Widget build(BuildContext context) => BlocProvider<StatisticsBloc>(
         create: (BuildContext context) =>
             StatisticsBloc(StatisticsRepositoryImpl())
-              ..add(GetSearchData(searchQuery: "")),
+              ..add(const GetSearchData(searchQuery: "")),
         child: BlocBuilder<StatisticsBloc, StatisticsState>(
           builder: (BuildContext context, StatisticsState state) => Column(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.all(16.0),
+                    margin: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.transparent,
@@ -68,7 +68,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                               AppStrings.month,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -107,7 +107,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                               AppStrings.threeMonths,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -146,7 +146,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                               AppStrings.year,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -156,7 +156,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                   ).padding(
                     top: 8,
                     horizontal: 16,
-                    bottom: 16,
+                    bottom: 8,
                   ),
                 ],
               ),
@@ -185,7 +185,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             final Gamer gamer = state.pageList[index];
                             return StatisticsItem(
-                              customImageWidth: 96,
+                              customImageWidth: 70,
                               gamer: gamer,
                             );
                           },

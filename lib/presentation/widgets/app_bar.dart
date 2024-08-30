@@ -23,16 +23,13 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _onMenuSelected(String value) {
     switch (value) {
       case 'addGamer':
-        // ignore: avoid_print
-        print('addGamer');
         onAddGamer?.call();
         break;
       case 'exit':
         onExit?.call();
         break;
       default:
-        // ignore: avoid_print
-        print('default');
+        break;
     }
   }
 
@@ -43,7 +40,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: MafiaTheme.themeData.textTheme.headlineSmall?.copyWith(
-          fontSize: 32,
+          fontSize: 24,
         ),
 
       ),

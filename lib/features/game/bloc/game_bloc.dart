@@ -131,8 +131,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     on<AddVoteToGamer>((AddVoteToGamer event, Emitter<AppState> emit) {
       final RoleType roleGamer = event.gamer.role.roleType;
 
-      final bool isGamerMafia =
-          roleGamer == RoleType.Mafia || roleGamer == RoleType.Don;
+      final bool isGamerMafia = roleGamer == RoleType.Mafia ||
+          roleGamer == RoleType.Don ||
+          (roleGamer == RoleType.Werewolf && !event.gamer.beforeChange);
       final bool isGamerCivilian = roleGamer == RoleType.Civilian;
       final bool isGamerMainCharacter = !isGamerMafia && !isGamerCivilian;
       final bool isTargetedMainCharacter = roleGamer == RoleType.Sheriff ||
@@ -801,7 +802,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<ChangeGamerCounts>((ChangeGamerCounts event, Emitter<AppState> emit) {
-      print('Change gamer counts: called');
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           mafiaCount:
@@ -817,7 +817,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     on<KillGamer>((KillGamer event, Emitter<AppState> emit) {
       final GamePeriod gamePeriod = state.game.gamePeriod;
       final bool isKilledMafia = event.gamer.role.roleType == RoleType.Mafia ||
-          event.gamer.role.roleType == RoleType.Don;
+          event.gamer.role.roleType == RoleType.Don ||
+          (event.gamer.role.roleType == RoleType.Werewolf &&
+              !event.gamer.beforeChange);
       final bool mafiaKilled =
           isKilledMafia && !event.gamer.hasAlibi && !event.gamer.wasSecured;
       final bool wasCheckedByMadam = event.gamer.wasCheckedByMadam;
@@ -827,17 +829,15 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           gamers: state.gamersState.copyWith(
             gamers: state.gamersState.gamers.map((Gamer gamer) {
               if (gamer.id == event.gamer.id) {
-                log('Killed gamer 2: ${gamer.role.name},'
-                    ' roleType is ${gamer.role.roleType}, '
-                    'wasSecured: ${gamer.wasSecured}, '
-                    'hasAlibi: ${gamer.hasAlibi}');
                 if (gamePeriod == GamePeriod.Day && gamer.hasAlibi) {
                   return gamer;
                 } else if (gamePeriod == GamePeriod.Night && gamer.wasSecured) {
                   return gamer;
                 } else {
                   event.gamer.role.roleType == RoleType.Mafia ||
-                          event.gamer.role.roleType == RoleType.Don
+                          event.gamer.role.roleType == RoleType.Don ||
+                          (event.gamer.role.roleType == RoleType.Werewolf &&
+                              !event.gamer.beforeChange)
                       ? add(const ChangeGamerCounts(isMafia: true))
                       : add(const ChangeGamerCounts(isMafia: false));
                   return gamer.copyWith(wasKilled: true);
@@ -985,7 +985,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
       final bool isTargetedMafia =
           event.targetedGamer.role.roleType == RoleType.Mafia ||
-              event.targetedGamer.role.roleType == RoleType.Don;
+              event.targetedGamer.role.roleType == RoleType.Don ||
+              (event.targetedGamer.role.roleType == RoleType.Werewolf &&
+                  !event.targetedGamer.beforeChange);
       final int healCount = event.doctor.healCount;
       if (targetedIndex != -1 && (healCount != 0 && event.doctor.canTarget)) {
         final List<Gamer> updatedGamers =
@@ -1158,7 +1160,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                 (Gamer gamer) => gamer.copyWith(
                   wasKilledByMafia: false,
                   wasHealed: false,
-                  wasKilledBySheriff: false,
                   wasKilledByKiller: false,
                   wasBoomeranged: false,
                   wasSecured: false,
@@ -1182,7 +1183,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                   hasAlibi: false,
                   canTarget: true,
                   wasCheckedByMadam: false,
-                  wasCheckedBySheriff: false,
                   wasCheckedByMedium: false,
                   wasSecured: false,
                 ),
@@ -1199,8 +1199,10 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int targetedIndex = state.gamersState.gamers
           .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
       final RoleType roleTargeted = event.targetedGamer.role.roleType;
-      final bool isTargetedMafia =
-          roleTargeted == RoleType.Mafia || roleTargeted == RoleType.Don;
+      final bool isTargetedMafia = roleTargeted == RoleType.Mafia ||
+          roleTargeted == RoleType.Don ||
+          (roleTargeted == RoleType.Werewolf &&
+              !event.targetedGamer.beforeChange);
       final bool isTargetedCivilian = roleTargeted == RoleType.Civilian;
 
       if (targetedIndex != -1 && !isTargetingSelf) {
@@ -1271,13 +1273,17 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     on<KillGamerBySheriff>((KillGamerBySheriff event, Emitter<AppState> emit) {
       final RoleType roleTargeted = event.targetedGamer.role.roleType;
 
-      final bool isTargetedMafia =
-          roleTargeted == RoleType.Mafia || roleTargeted == RoleType.Don;
+      final bool isTargetedMafia = roleTargeted == RoleType.Mafia ||
+          roleTargeted == RoleType.Don ||
+          (roleTargeted == RoleType.Werewolf &&
+              !event.targetedGamer.beforeChange);
 
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(
           gamers: state.gamersState.gamers.map((Gamer gamer) {
             if (gamer.id == event.targetedGamer.id) {
+              print('gamer.id: ${gamer.name}, gamer.wasCheckedBySheriff:'
+                  ' ${gamer.wasCheckedBySheriff}');
               if (isTargetedMafia) {
                 if (gamer.wasCheckedBySheriff == false) {
                   return gamer.copyWith(wasCheckedBySheriff: true);
@@ -1297,6 +1303,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                       Map<String, int>.from(
                     event.sheriff.role.points ?? <String, int>{},
                   );
+
                   updatedPointsChameleon[AppStrings.playsForSheriff] =
                       (updatedPointsChameleon[AppStrings.playsForSheriff] ??
                               0) +
@@ -1312,8 +1319,10 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                 final Map<String, int> updatedPoints = Map<String, int>.from(
                   event.sheriff.role.points ?? <String, int>{},
                 );
-                updatedPoints[AppStrings.entersToMafia] =
-                    (updatedPoints[AppStrings.entersToMafia] ?? 0) + 1;
+                if (event.targetedGamer.wasCheckedBySheriff == false) {
+                  updatedPoints[AppStrings.entersToMafia] =
+                      (updatedPoints[AppStrings.entersToMafia] ?? 0) + 1;
+                }
                 log('updatedPoints sheriff: $updatedPoints');
                 return gamer.copyWith(
                   role: gamer.role.copyWith(points: updatedPoints),
@@ -1570,7 +1579,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                 if (gamer.id == event.targetedGamer.id &&
                     event.targetedGamer.role.roleType != RoleType.Werewolf &&
                     event.targetedGamer.wasCheckedByMadam == false &&
-                    event.targetedGamer.role.roleType != RoleType.Virus) {
+                    event.targetedGamer.role.roleType != RoleType.Virus &&
+                    event.targetedGamer.role.roleType != RoleType.Madam) {
                   if (gamer.targetId != null) {
                     removeTargetId(gamer.targetId!, gamer.role.roleType);
                   }
@@ -1622,6 +1632,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     on<NightAction>((NightAction event, Emitter<AppState> emit) {
       final List<Gamer> gamers = state.gamersState.gamers;
       final List<Gamer> killedGamers = <Gamer>[];
+      List<Gamer> newKilledGamers = <Gamer>[];
 
       add(const UpdateAnimation(animate: true));
 
@@ -1643,7 +1654,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         }
       }
       if (killedGamers.isNotEmpty) {
-        final List<Gamer> newKilledGamers = killedGamers
+        newKilledGamers = killedGamers
             .where(
               (Gamer gamer) => !gamer.wasSecured,
             )
@@ -1701,9 +1712,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             }
           }
         }
-
-        event.showKilledGamers(newKilledGamers);
       }
+      event.showKilledGamers(newKilledGamers);
       add(
         const AddNightNumber(),
       );
@@ -1717,10 +1727,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int dayNumber = state.game.dayNumber;
       final int maxVotes = gamers.fold(
         0,
-            (int prev, Gamer gamer) =>
-        gamer.votesCount > prev
-            ? gamer.votesCount
-            : prev,
+        (int prev, Gamer gamer) =>
+            gamer.votesCount > prev ? gamer.votesCount : prev,
       );
 
       /// To show Chameleon functionality
@@ -1736,14 +1744,11 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
       if (maxVotes == 0) {
         event.showFailureInfo!();
-
       } else {
         final List<Gamer> topGamers = gamers
             .where(
-              (Gamer gamer) =>
-          gamer.votesCount == maxVotes &&
-              maxVotes != 0,
-        )
+              (Gamer gamer) => gamer.votesCount == maxVotes && maxVotes != 0,
+            )
             .map((Gamer gamer) => gamer)
             .toList();
 
@@ -1758,16 +1763,13 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           add(
             const AddDayNumber(),
           );
-          if (dayNumber == 1 &&
-              topGamers[0].role.roleType ==
-                  RoleType.Virus) {
+          if (dayNumber == 1 && topGamers[0].role.roleType == RoleType.Virus) {
             Gamer leftGamer = const Gamer.empty();
             Gamer rightGamer = const Gamer.empty();
             if (topGamers[0].id == 1) {
               leftGamer = gamers.last;
             } else {
-              leftGamer =
-              gamers[topGamers[0].id! - 2];
+              leftGamer = gamers[topGamers[0].id! - 2];
             }
             rightGamer = gamers[topGamers[0].id!];
 
@@ -1778,8 +1780,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
               KillGamer(gamer: rightGamer),
             );
           }
-          if (!topGamers[0].hasAlibi &&
-              !topGamers[0].wasSecured) {
+          if (!topGamers[0].hasAlibi && !topGamers[0].wasSecured) {
             event.showKilledGamers(
               topGamers[0],
             );
@@ -1815,7 +1816,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         );
       }
     });
-
 
     on<AddRoleToGamer>((AddRoleToGamer event, Emitter<AppState> emit) {
       final AppState appState = state.copyWith(
@@ -1867,7 +1867,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final int index = state.gamersState.gamers.indexWhere(
         (Gamer gamer) => gamer.id == event.gamer.id,
       );
-      // final Gamer gamer = event.gamer;
       if (index != -1) {
         final List<Gamer> updatedGamersList =
             List<Gamer>.from(state.gamersState.gamers);
@@ -1881,18 +1880,39 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
         try {
           if (!event.isGamerExist) {
-            log('Adding mafiaGamer to Firebase: ${event.gamer}');
-            await gameRepository.addGamer(updatedGamersList[index]);
+            emit(
+              state.copyWith(
+                game: state.game.copyWith(
+                  saveStatus: FirebaseSaveStatus.Saving,
+                ),
+              ),
+            );
+            final bool response =
+                await gameRepository.addGamer(updatedGamersList[index]);
+            if (response) {
+              emit(
+                state.copyWith(
+                  game: state.game.copyWith(
+                    saveStatus: FirebaseSaveStatus.Saved,
+                  ),
+                  gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+                ),
+              );
+              event.updated!();
+            } else {
+              event.showErrorMessage!(AppStrings.gamerExist);
+            }
+          } else {
+            emit(
+              state.copyWith(
+                gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+              ),
+            );
           }
         } catch (e) {
           log('Error updating mafiaGamer name: $e');
+          event.showErrorMessage!(AppStrings.gamerExist);
         }
-
-        final GamersState updatedGamersState =
-            state.gamersState.copyWith(gamers: updatedGamersList);
-        final AppState updatedAppState =
-            state.copyWith(gamers: updatedGamersState);
-        emit(updatedAppState);
       } else {
         final List<Gamer> updatedGamersList =
             List<Gamer>.from(state.gamersState.gamers);
@@ -1913,21 +1933,52 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
         try {
           if (!event.isGamerExist) {
-            log('Adding mafiaGamer to Firebase: ${event.gamer}');
-            await gameRepository.addGamer(newGamer);
+            emit(
+              state.copyWith(
+                game: state.game.copyWith(
+                  saveStatus: FirebaseSaveStatus.Saving,
+                ),
+              ),
+            );
+            final bool response = await gameRepository.addGamer(newGamer);
+            if (response) {
+              emit(
+                state.copyWith(
+                  gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+                  game: state.game.copyWith(
+                    numberOfGamers: numberOfGamers + 1,
+                    saveStatus: FirebaseSaveStatus.Saved,
+                  ),
+                ),
+              );
+              event.updated!();
+            } else {
+              event.showErrorMessage!(AppStrings.gamerExist);
+            }
+          } else {
+            emit(
+              state.copyWith(
+                gamers: state.gamersState.copyWith(gamers: updatedGamersList),
+                game: state.game.copyWith(
+                  numberOfGamers: numberOfGamers + 1,
+                ),
+              ),
+            );
           }
         } catch (e) {
           log('Error adding mafiaGamer: $e');
+          event.showErrorMessage!(AppStrings.gamerExist);
         }
-        emit(
-          state.copyWith(
-            gamers: state.gamersState.copyWith(gamers: updatedGamersList),
-            game: state.game.copyWith(
-              numberOfGamers: numberOfGamers + 1,
-            ),
-          ),
-        );
       }
+    });
+
+    on<ChangeSaveStatus>((ChangeSaveStatus event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          saveStatus: event.saveStatus,
+        ),
+      );
+      emit(appState);
     });
 
     on<ChangeAnimation>((ChangeAnimation event, Emitter<AppState> emit) {

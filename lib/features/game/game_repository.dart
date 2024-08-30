@@ -21,11 +21,11 @@ class GamerRepository implements GameRepository {
       );
 
   @override
-  Future<Gamer?> addGamer(Gamer gamer) async {
+  Future<bool> addGamer(Gamer gamer) async {
     try {
       return await firestoreService.addGamer(gamer);
     } catch (e) {
-      return Future<Gamer?>.error(e);
+      return Future<bool>.error(e);
     }
   }
 
@@ -70,7 +70,7 @@ class GamerRepository implements GameRepository {
 }
 
 abstract class GameRepository {
-  Future<Gamer?> addGamer(Gamer gamer);
+  Future<bool> addGamer(Gamer gamer);
 
   Future<void> addGameToFirebase({
     required GameState gameState,

@@ -93,7 +93,7 @@ class _ResultScreenState extends State<ResultScreen>
                           '${AppStrings.nameOfGame}: ${widget.gameName}',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 26,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -101,16 +101,17 @@ class _ResultScreenState extends State<ResultScreen>
                           '${AppStrings.date}: ${widget.gameStartTime}',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 26,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ).padding(
-                      vertical: 8,
+                      vertical: 4,
                       horizontal: 16,
                     ),
                     const Divider(
+                      thickness: 1,
                       color: Colors.grey,
                     ),
                     ResultsBody(
@@ -201,7 +202,7 @@ class _AccordionBodyState extends State<AccordionBody> {
               widget.title,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 30,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -211,13 +212,16 @@ class _AccordionBodyState extends State<AccordionBody> {
                 MafiaTheme.themeData.colorScheme.secondary.withOpacity(
               0.6,
             ),
-            headerPadding: const EdgeInsets.all(6),
+            paddingListTop: 4,
+            paddingListBottom: 4,
+            headerPadding: const EdgeInsets.all(2),
             contentBackgroundColor:
                 MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.8),
+            contentVerticalPadding: 2,
             rightIcon: const Icon(
               Icons.arrow_drop_down_outlined,
               color: Colors.white,
-              size: 32,
+              size: 24,
             ),
             children: widget.gamers
                 .map(
@@ -229,7 +233,7 @@ class _AccordionBodyState extends State<AccordionBody> {
                           ' ${gamer.name!}',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 24,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ).padding(horizontal: 8),
@@ -237,7 +241,7 @@ class _AccordionBodyState extends State<AccordionBody> {
                           gamer.role.name,
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 24,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -245,13 +249,14 @@ class _AccordionBodyState extends State<AccordionBody> {
                           '${gamer.role.points?[AppStrings.totalPoints]}',
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 24,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ).padding(horizontal: 16),
                       ],
                     ),
                     content: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListView.builder(
                           shrinkWrap: true,
@@ -261,64 +266,74 @@ class _AccordionBodyState extends State<AccordionBody> {
                                 gamer.role.points?.keys.elementAt(index);
                             final TextEditingController controller =
                                 _controllers[gamer.name!]![key]!;
-                            return ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              title: Column(
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        key!,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 70,
-                                        height: 40,
-                                        child: TextField(
-                                          controller: controller,
-                                          keyboardType: TextInputType.number,
-                                          decoration: const InputDecoration(
-                                            border: OutlineInputBorder(),
-                                          ),
+                            return SizedBox(
+                              height: 36,
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                title: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          key!,
                                           style: const TextStyle(
                                             color: Colors.black,
-                                            fontSize: 24,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
-                                          onChanged: (String value) {
-                                            final int points =
-                                                int.tryParse(value) ?? 0;
-                                            gamer.role.points![key] = points;
-                                          },
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    color: Colors.grey,
-                                  ).padding(
-                                    vertical: 4,
-                                  ),
-                                ],
+                                        SizedBox(
+                                          width: 50,
+                                          height: 30,
+                                          child: TextField(
+                                            controller: controller,
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                vertical: 5,
+                                                horizontal: 10,
+                                              ),
+                                            ),
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            onChanged: (String value) {
+                                              final int points =
+                                                  int.tryParse(value) ?? 0;
+                                              gamer.role.points![key] = points;
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                    ).padding(
+                                      vertical: 2,
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
                         ),
                         SizedBox(
-                          width: 250,
+                          width: 200,
                           child: BaseButton(
                             label: AppStrings.save,
                             backgroundColor: Colors.transparent,
-                            textStyle:
-                                MafiaTheme.themeData.textTheme.headlineSmall,
+                            textStyle: MafiaTheme
+                                .themeData.textTheme.headlineSmall
+                                ?.copyWith(fontSize: 16),
+                            height: 30,
                             action: () {
                               final Map<String, int> points = <String, int>{};
                               _controllers[gamer.name!]!.forEach((
@@ -361,8 +376,6 @@ class _AccordionBodyState extends State<AccordionBody> {
                                 ),
                               );
                             },
-                          ).padding(
-                            top: 8,
                           ),
                         ),
                       ],

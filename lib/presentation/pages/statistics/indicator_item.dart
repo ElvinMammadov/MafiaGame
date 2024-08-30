@@ -26,7 +26,7 @@ class IndicatorItem extends StatelessWidget {
           if (totalPoints != null)
             Expanded(
               child: SizedBox(
-                height: 20,
+                height: 12,
                 child: LinearProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     foregroundColor,
@@ -58,7 +58,7 @@ class IndicatorItem extends StatelessWidget {
                 value.toString(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: 16,
                 ),
               ),
             ),

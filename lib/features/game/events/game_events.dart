@@ -40,7 +40,6 @@ class EmptyGame extends GameEvent {
 }
 
 class ChangeGameStartValue extends GameEvent {
-
   const ChangeGameStartValue();
 
   @override
@@ -564,14 +563,34 @@ class CleanGamers extends GameEvent {
 class UpdateGamer extends GameEvent {
   final Gamer gamer;
   final bool isGamerExist;
+  final Function(String)? showErrorMessage;
+  final VoidCallback? updated;
 
   const UpdateGamer({
     required this.gamer,
     this.isGamerExist = false,
+    this.showErrorMessage,
+    this.updated,
   });
 
   @override
-  List<Object?> get props => <Object?>[gamer, isGamerExist];
+  List<Object?> get props => <Object?>[
+        gamer,
+        isGamerExist,
+        showErrorMessage,
+        updated,
+      ];
+}
+
+class ChangeSaveStatus extends GameEvent {
+  final FirebaseSaveStatus saveStatus;
+
+  const ChangeSaveStatus({
+    required this.saveStatus,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[saveStatus];
 }
 
 class ChangeAnimation extends GameEvent {

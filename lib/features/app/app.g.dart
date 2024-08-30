@@ -60,6 +60,9 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
               GamePeriod.Day,
       victoryByWerewolf: json['victoryByWerewolf'] as bool? ?? false,
       werewolfWasDead: json['werewolfWasDead'] as bool? ?? false,
+      saveStatus: $enumDecodeNullable(
+              _$FirebaseSaveStatusEnumMap, json['saveStatus']) ??
+          FirebaseSaveStatus.Initial,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -85,6 +88,7 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'gamePeriod': _$GamePeriodEnumMap[instance.gamePeriod]!,
       'victoryByWerewolf': instance.victoryByWerewolf,
       'werewolfWasDead': instance.werewolfWasDead,
+      'saveStatus': _$FirebaseSaveStatusEnumMap[instance.saveStatus]!,
     };
 
 const _$GamePhaseEnumMap = {
@@ -99,6 +103,13 @@ const _$GamePhaseEnumMap = {
 const _$GamePeriodEnumMap = {
   GamePeriod.Day: 'Day',
   GamePeriod.Night: 'Night',
+};
+
+const _$FirebaseSaveStatusEnumMap = {
+  FirebaseSaveStatus.Initial: 'Initial',
+  FirebaseSaveStatus.Saving: 'Saving',
+  FirebaseSaveStatus.Saved: 'Saved',
+  FirebaseSaveStatus.Error: 'Error',
 };
 
 UserState _$UserStateFromJson(Map<String, dynamic> json) => UserState(

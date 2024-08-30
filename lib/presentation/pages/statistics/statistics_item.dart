@@ -37,7 +37,7 @@ class StatisticsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.2),
@@ -80,7 +80,7 @@ class StatisticsItem extends StatelessWidget {
                           gamer.name!,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -121,7 +121,7 @@ class StatisticsItem extends StatelessWidget {
                                                   AppStrings.victory,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                               ),
@@ -134,7 +134,7 @@ class StatisticsItem extends StatelessWidget {
                                                   AppStrings.defeat,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                               ),
@@ -147,7 +147,7 @@ class StatisticsItem extends StatelessWidget {
                                                   AppStrings.total,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                               ),
@@ -230,7 +230,7 @@ class StatisticsItem extends StatelessWidget {
                                                   AppStrings.points,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 22,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                               ),
@@ -265,7 +265,7 @@ class StatisticsItem extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ).padding(bottom: 16),
+                        ).padding(bottom: 8),
                         const Divider(
                           color: Colors.white,
                         ),
@@ -277,7 +277,7 @@ class StatisticsItem extends StatelessWidget {
                               AppStrings.registrationDate,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                                fontSize: 16,
                               ),
                             ),
                             Container(
@@ -293,7 +293,7 @@ class StatisticsItem extends StatelessWidget {
                                 gamer.gamerCreated,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 22,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -301,7 +301,7 @@ class StatisticsItem extends StatelessWidget {
                               AppStrings.experience,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                                fontSize: 16,
                               ),
                             ),
                             Container(
@@ -317,13 +317,13 @@ class StatisticsItem extends StatelessWidget {
                                 calculateExperience(gamer.gamerCreated),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 22,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
                           ],
                         ).padding(
-                          vertical: 16,
+                          vertical: 8,
                         ),
                       ],
                     ),

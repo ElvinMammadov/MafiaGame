@@ -102,7 +102,7 @@ class _GamesScreenState extends State<GamesScreen> {
                 child: SizedBox(
                   height: screenHeight * 0.8,
                   width: screenWidth * 0.9,
-                  child: ListView.builder(
+                  child: GridView.builder(
                     itemCount: games.length,
                     itemBuilder: (BuildContext context, int index) =>
                         GestureDetector(
@@ -129,20 +129,24 @@ class _GamesScreenState extends State<GamesScreen> {
                         ),
                         color: MafiaTheme.themeData.colorScheme.secondary
                             .withOpacity(0.4),
-                        child: SizedBox(
-                          // height: 600,
-                          // width: 900,
-                          child: GamesResults(
-                            gamers: games[index].gamers,
-                            isMafia: games[index].isMafiaWin,
-                            gameName: games[index].gameName,
-                            gameStartTime: DateFormat('yyyy-MM-dd')
-                                .format(games[index].gameStartTime!),
-                          ),
+                        child: GamesResults(
+                          gamers: games[index].gamers,
+                          isMafia: games[index].isMafiaWin,
+                          gameName: games[index].gameName,
+                          gameStartTime: DateFormat('yyyy-MM-dd')
+                              .format(games[index].gameStartTime!),
                         ),
-                      ).padding(
-                        bottom: 16,
                       ),
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      // Number of columns
+                      crossAxisSpacing: 10.0,
+                      // Horizontal spacing between items
+                      mainAxisSpacing: 5.0,
+                      // Vertical spacing between items
+                      childAspectRatio: 4, // Aspect ratio of each item
                     ),
                   ),
                 ),

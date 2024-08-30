@@ -25,7 +25,7 @@ class GamesResults extends StatelessWidget {
                 '${AppStrings.nameOfGame}: $gameName',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 26,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -33,13 +33,12 @@ class GamesResults extends StatelessWidget {
                 '${AppStrings.date}: $gameStartTime',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 26,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ).padding(
-            vertical: 8,
             horizontal: 16,
           ),
           const Divider(
@@ -77,16 +76,15 @@ class ResultsBody extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 30,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ).padding(
             horizontal: 48,
           ),
           Divider(
-            height: 16.0,
             thickness: 1.0,
-            color: theme.colorScheme.primary, // Subtle divider
+            color: theme.colorScheme.primary,
           ),
           if (contentText != null)
             Text(
@@ -94,17 +92,17 @@ class ResultsBody extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
         ],
       ).padding(
-        vertical: 16,
+        vertical: 8,
         horizontal: 16,
       ),
     ).padding(
-      vertical: 16,
+      vertical: 8,
       horizontal: 8,
     );
   }
