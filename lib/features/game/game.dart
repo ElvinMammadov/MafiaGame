@@ -34,3 +34,4 @@ part 'models/roles/medium.dart';
 part 'models/roles/chameleon.dart';
 part 'models/roles/boomerang.dart';
 part 'models/gamer_counts.dart';
+part 'models/upload_result.dart';

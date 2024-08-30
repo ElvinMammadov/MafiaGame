@@ -10,6 +10,8 @@ import 'package:mafia_game/features/game/game.dart';
 import 'package:mafia_game/mains/config.dart';
 import 'package:mafia_game/utils/app_strings.dart';
 
+import '../unique_key_generator.dart';
+
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =
       FirebaseFirestore.instance.collection(AppConfig.shared.gamerFirebase);
@@ -17,15 +19,29 @@ class FirestoreService {
       FirebaseFirestore.instance.collection(AppConfig.shared.gameFirebase);
   final FirebaseStorage storage = FirebaseStorage.instance;
 
-  Future<String> uploadImageToFirebaseStorage(
+  Future<UploadResult> uploadImageToFirebaseStorage(
     File imageFile,
     String fileName,
   ) async {
-    final Reference ref = storage.ref().child('images/$fileName');
-    final UploadTask uploadTask = ref.putFile(imageFile);
-    final TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-    final String imageUrl = await taskSnapshot.ref.getDownloadURL();
-    return imageUrl;
+    try {
+      final Reference ref =
+          FirebaseStorage.instance.ref().child('images/$fileName');
+      final UploadTask uploadTask = ref.putFile(imageFile);
+
+      // Await the upload task to complete
+      final TaskSnapshot taskSnapshot =
+          await uploadTask.whenComplete(() => null);
+
+      // Get the download URL
+      final String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+      // If the download URL is retrieved, return true and the URL
+      return UploadResult(success: true, imageUrl: imageUrl);
+    } catch (e) {
+      // If any exception occurs, return false and null as the URL
+      print('Upload failed: $e');
+      return UploadResult(success: false, imageUrl: "");
+    }
   }
 
   Future<void> addGameToFirebase({
@@ -54,7 +70,7 @@ class FirestoreService {
           final bool isGamerMafia = gamer.role.roleType == RoleType.Mafia ||
               gamer.role.roleType == RoleType.Don;
           final int totalPoints = gamerPoints[AppStrings.totalPoints] ?? 0;
-          final String uniqueId = UniqueKey().toString();
+          final String uniqueId = idGenerator();
           final Map<String, Object> newPointEntry = <String, Object>{
             'pointsId': uniqueId,
             'points': totalPoints,

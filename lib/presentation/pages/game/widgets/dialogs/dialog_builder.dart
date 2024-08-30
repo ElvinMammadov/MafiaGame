@@ -126,6 +126,7 @@ class SaveButton extends StatefulWidget {
 
   @override
   _SaveButtonState createState() => _SaveButtonState();
+
 }
 
 class _SaveButtonState extends State<SaveButton> {
@@ -226,57 +227,70 @@ class _SaveButtonState extends State<SaveButton> {
                       ),
                     );
                   } else {
-                    final String gamerId = UniqueKey().toString();
-                    final String imageUrl =
-                        await firestoreService.uploadImageToFirebaseStorage(
-                      widget.imageFile == null
+                    final String gamerId = idGenerator();
+                      final File imageFile = widget.imageFile == null
                           ? await getImageFileFromAssets('logo_m.png')
-                          : widget.imageFile!,
-                      gamerId,
-                    );
+                          : widget.imageFile!;
+                      final String fileName = gamerId;
 
-                    BlocProvider.of<GameBloc>(context).add(
-                      UpdateGamer(
-                        gamer: Gamer(
-                          name: widget.textEditingController.text,
-                          id: widget.id,
-                          gamerId: gamerId,
-                          imageUrl: imageUrl,
-                          positionOnTable: widget.isPositionMode
-                              ? widget.positionOnTableNotifier.value!
-                              : widget.position,
-                          isNameChanged: true,
+                      BlocProvider.of<GameBloc>(context).add(
+                        const ChangeSaveStatus(
+                          saveStatus: FirebaseSaveStatus.Saving,
                         ),
-                        updated: () {
-                          BlocProvider.of<GameBloc>(context).add(
-                            const ChangeSaveStatus(
-                              saveStatus: FirebaseSaveStatus.Initial,
+                      );
+                      final UploadResult result =
+                          await firestoreService.uploadImageToFirebaseStorage(
+                        imageFile,
+                        fileName,
+                      );
+
+                      if (result.success) {
+                        print(
+                            'Upload successful! Image URL: ${result.imageUrl}');
+                        BlocProvider.of<GameBloc>(context).add(
+                          UpdateGamer(
+                            gamer: Gamer(
+                              name: widget.textEditingController.text,
+                              id: widget.id,
+                              gamerId: gamerId,
+                              imageUrl: result.imageUrl,
+                              positionOnTable: widget.isPositionMode
+                                  ? widget.positionOnTableNotifier.value!
+                                  : widget.position,
+                              isNameChanged: true,
                             ),
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        showErrorMessage: (String errorMessage) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                errorMessage,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24.0,
+                            updated: () {
+                              BlocProvider.of<GameBloc>(context).add(
+                                const ChangeSaveStatus(
+                                  saveStatus: FirebaseSaveStatus.Initial,
                                 ),
-                              ),
-                            ),
-                          );
-                          BlocProvider.of<GameBloc>(context).add(
-                            const ChangeSaveStatus(
-                              saveStatus: FirebaseSaveStatus.Initial,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                    // Navigator.of(context).pop();
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            showErrorMessage: (String errorMessage) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: Text(
+                                    errorMessage,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24.0,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              BlocProvider.of<GameBloc>(context).add(
+                                const ChangeSaveStatus(
+                                  saveStatus: FirebaseSaveStatus.Initial,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        print('Upload failed.');
+                      }
                   }
                 }
               },

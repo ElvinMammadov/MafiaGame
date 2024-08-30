@@ -104,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void _startButtonPressed(BuildContext context) {
     addGamers(numberOfGamers ?? 0);
-    final String gameId = UniqueKey().toString();
+    final String gameId = idGenerator();
     BlocProvider.of<GameBloc>(context).add(
       UpdateGameDetails(
         gameName: gameName ?? '',
