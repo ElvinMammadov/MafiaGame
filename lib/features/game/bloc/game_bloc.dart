@@ -696,14 +696,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           }
         },
       ).toList();
-      emit(
-        state.copyWith(
-          game: state.game.copyWith(
-            isMafiaWin: event.gameState.isMafiaWin,
-          ),
-          gamers: state.gamersState.copyWith(gamers: updatedGamers),
-        ),
-      );
       add(
         SendGameToFirebase(
           gameState: state.game.copyWith(
@@ -714,6 +706,15 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           ),
         ),
       );
+      emit(
+        state.copyWith(
+          game: state.game.copyWith(
+            isMafiaWin: event.gameState.isMafiaWin,
+          ),
+          gamers: state.gamersState.copyWith(gamers: updatedGamers),
+        ),
+      );
+      event.finished();
     });
 
     on<GameStatus>((GameStatus event, Emitter<AppState> emit) {

@@ -8,6 +8,7 @@ class ResultScreen extends StatefulWidget {
   final String gameId;
   final bool victoryByWerewolf;
   final bool werewolfWasDead;
+  final bool saveGame;
 
   const ResultScreen({
     super.key,
@@ -18,6 +19,7 @@ class ResultScreen extends StatefulWidget {
     required this.gameId,
     this.victoryByWerewolf = false,
     this.werewolfWasDead = false,
+    this.saveGame = false,
   });
 
   @override
@@ -33,6 +35,13 @@ class _ResultScreenState extends State<ResultScreen>
 
   @override
   Widget build(BuildContext context) {
+    print('isMafiaWinner: ${widget.isMafiaWinner}, gamers points:'
+        ' ${widget.gamers.map((Gamer gamer) => gamer.role.points)}');
+    if (widget.saveGame) {
+      BlocProvider.of<GameBloc>(context).add(
+        const EmptyGame(),
+      );
+    }
     final Gamer? wereWolf = widget.gamers
         .where((Gamer gamer) => gamer.role.roleType == RoleType.Werewolf)
         .firstOrNull;

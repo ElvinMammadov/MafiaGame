@@ -28,8 +28,6 @@ class DialogBuilder {
 
     WoltModalSheet.show<void>(
       context: context,
-      maxDialogWidth: 400,
-      minDialogWidth: 400,
       pageListBuilder: (BuildContext modalSheetContext) =>
           <SliverWoltModalSheetPage>[
         WoltModalSheetPage(
@@ -126,7 +124,6 @@ class SaveButton extends StatefulWidget {
 
   @override
   _SaveButtonState createState() => _SaveButtonState();
-
 }
 
 class _SaveButtonState extends State<SaveButton> {
@@ -136,29 +133,41 @@ class _SaveButtonState extends State<SaveButton> {
           final FirestoreService firestoreService = FirestoreService();
           final FirebaseSaveStatus saveStatus =
               BlocProvider.of<GameBloc>(context).state.game.saveStatus;
-          return SizedBox(
-            width: 250,
-            child: BaseButton(
-              label: AppStrings.add,
-              enabled: widget.isEnabled,
-              isLoading: saveStatus == FirebaseSaveStatus.Saving,
-              textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-              action: () async {
-                bool isNameExist(String name) =>
-                    BlocProvider.of<GameBloc>(context)
-                        .state
-                        .gamersState
-                        .gamers
-                        .any(
-                          (Gamer gamer) => gamer.name == name,
-                        );
-                if (widget.isPositionMode &&
-                    widget.positionOnTableNotifier.value == null) {
+          return BaseButton(
+            label: AppStrings.add,
+            enabled: widget.isEnabled,
+            isLoading: saveStatus == FirebaseSaveStatus.Saving,
+            textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+            action: () async {
+              bool isNameExist(String name) =>
+                  BlocProvider.of<GameBloc>(context)
+                      .state
+                      .gamersState
+                      .gamers
+                      .any(
+                        (Gamer gamer) => gamer.name == name,
+                      );
+              if (widget.isPositionMode &&
+                  widget.positionOnTableNotifier.value == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text(
+                      AppStrings.chooseGamerPosition,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                );
+              } else if (widget.chosenGamer != null) {
+                if (isNameExist(widget.chosenGamer?.name ?? '')) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       backgroundColor: Colors.red,
                       content: Text(
-                        AppStrings.chooseGamerPosition,
+                        AppStrings.gamerAlreadyExistInGame,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.0,
@@ -166,34 +175,93 @@ class _SaveButtonState extends State<SaveButton> {
                       ),
                     ),
                   );
-                } else if (widget.chosenGamer != null) {
-                  if (isNameExist(widget.chosenGamer?.name ?? '')) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text(
-                          AppStrings.gamerAlreadyExistInGame,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
+                } else {
+                  BlocProvider.of<GameBloc>(context).add(
+                    UpdateGamer(
+                      isGamerExist: true,
+                      gamer: Gamer(
+                        name: widget.chosenGamer!.name,
+                        id: widget.id,
+                        gamerId: widget.chosenGamer!.gamerId,
+                        imageUrl: widget.chosenGamer!.imageUrl,
+                        positionOnTable: widget.isPositionMode
+                            ? widget.positionOnTableNotifier.value!
+                            : widget.position,
+                        isNameChanged: true,
+                        role: const Mirniy.empty(),
+                      ),
+                      showErrorMessage: (String errorMessage) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              errorMessage,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                              ),
+                            ),
                           ),
+                        );
+                      },
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                }
+              } else {
+                if (isNameExist(widget.textEditingController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        AppStrings.gamerAlreadyExistInGame,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
                         ),
                       ),
-                    );
-                  } else {
+                    ),
+                  );
+                } else {
+                  final String gamerId = idGenerator();
+                  final File imageFile = widget.imageFile == null
+                      ? await getImageFileFromAssets('logo_m.png')
+                      : widget.imageFile!;
+                  final String fileName = gamerId;
+
+                  BlocProvider.of<GameBloc>(context).add(
+                    const ChangeSaveStatus(
+                      saveStatus: FirebaseSaveStatus.Saving,
+                    ),
+                  );
+                  final UploadResult result =
+                      await firestoreService.uploadImageToFirebaseStorage(
+                    imageFile,
+                    fileName,
+                  );
+
+                  if (result.success) {
                     BlocProvider.of<GameBloc>(context).add(
                       UpdateGamer(
-                        isGamerExist: true,
                         gamer: Gamer(
-                          name: widget.chosenGamer!.name,
+                          name: widget.textEditingController.text,
                           id: widget.id,
-                          gamerId: widget.chosenGamer!.gamerId,
-                          imageUrl: widget.chosenGamer!.imageUrl,
+                          gamerId: gamerId,
+                          imageUrl: result.imageUrl,
                           positionOnTable: widget.isPositionMode
                               ? widget.positionOnTableNotifier.value!
                               : widget.position,
                           isNameChanged: true,
+                          role: const Mirniy.empty(),
                         ),
+                        updated: () {
+                          BlocProvider.of<GameBloc>(context).add(
+                            const ChangeSaveStatus(
+                              saveStatus: FirebaseSaveStatus.Initial,
+                            ),
+                          );
+                          Navigator.of(context).pop();
+                        },
                         showErrorMessage: (String errorMessage) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -207,97 +275,21 @@ class _SaveButtonState extends State<SaveButton> {
                               ),
                             ),
                           );
+                          BlocProvider.of<GameBloc>(context).add(
+                            const ChangeSaveStatus(
+                              saveStatus: FirebaseSaveStatus.Initial,
+                            ),
+                          );
                         },
                       ),
                     );
-                    Navigator.of(context).pop();
-                  }
-                } else {
-                  if (isNameExist(widget.textEditingController.text)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text(
-                          AppStrings.gamerAlreadyExistInGame,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    final String gamerId = idGenerator();
-                      final File imageFile = widget.imageFile == null
-                          ? await getImageFileFromAssets('logo_m.png')
-                          : widget.imageFile!;
-                      final String fileName = gamerId;
-
-                      BlocProvider.of<GameBloc>(context).add(
-                        const ChangeSaveStatus(
-                          saveStatus: FirebaseSaveStatus.Saving,
-                        ),
-                      );
-                      final UploadResult result =
-                          await firestoreService.uploadImageToFirebaseStorage(
-                        imageFile,
-                        fileName,
-                      );
-
-                      if (result.success) {
-                        print(
-                            'Upload successful! Image URL: ${result.imageUrl}');
-                        BlocProvider.of<GameBloc>(context).add(
-                          UpdateGamer(
-                            gamer: Gamer(
-                              name: widget.textEditingController.text,
-                              id: widget.id,
-                              gamerId: gamerId,
-                              imageUrl: result.imageUrl,
-                              positionOnTable: widget.isPositionMode
-                                  ? widget.positionOnTableNotifier.value!
-                                  : widget.position,
-                              isNameChanged: true,
-                            ),
-                            updated: () {
-                              BlocProvider.of<GameBloc>(context).add(
-                                const ChangeSaveStatus(
-                                  saveStatus: FirebaseSaveStatus.Initial,
-                                ),
-                              );
-                              Navigator.of(context).pop();
-                            },
-                            showErrorMessage: (String errorMessage) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.red,
-                                  content: Text(
-                                    errorMessage,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24.0,
-                                    ),
-                                  ),
-                                ),
-                              );
-                              BlocProvider.of<GameBloc>(context).add(
-                                const ChangeSaveStatus(
-                                  saveStatus: FirebaseSaveStatus.Initial,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        print('Upload failed.');
-                      }
                   }
                 }
-              },
-            ).padding(
-              vertical: 16.0,
-              horizontal: 16.0,
-            ),
+              }
+            },
+          ).padding(
+            vertical: 16.0,
+            horizontal: 36.0,
           );
         },
       );

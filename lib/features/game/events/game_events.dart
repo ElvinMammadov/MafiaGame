@@ -119,14 +119,17 @@ class GameStatus extends GameEvent {
 
 class CalculatePoints extends GameEvent {
   final GameState gameState;
+  final VoidCallback finished;
 
   const CalculatePoints({
     required this.gameState,
+    required this.finished,
   });
 
   @override
   List<Object?> get props => <Object?>[
         gameState,
+        finished,
       ];
 }
 
