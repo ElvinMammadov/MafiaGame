@@ -98,8 +98,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
                         labelText: AppStrings.nameOfGame,
-                        labelStyle:
-                            MafiaTheme.themeData.textTheme.titleMedium,
+                        labelStyle: MafiaTheme.themeData.textTheme.titleMedium,
                         icon: Icon(
                           Icons.border_color,
                           color: MafiaTheme.themeData.colorScheme.secondary,
@@ -145,8 +144,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                             isExpanded: true,
                             hint: Text(
                               AppStrings.chooseRoles,
-                              style:
-                                  MafiaTheme.themeData.textTheme.titleMedium,
+                              style: MafiaTheme.themeData.textTheme.titleMedium,
                             ),
                             items: roles.roles
                                 .map(
@@ -164,7 +162,9 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                           onTap: () {
                                             _toggleRole(role);
                                             setState(() {});
-                                            menuSetState(() {});
+                                            menuSetState(
+                                              () {},
+                                            );
                                           },
                                           child: SizedBox(
                                             height: 50,

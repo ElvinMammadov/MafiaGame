@@ -390,6 +390,20 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             )
             .toList()
             .length;
+        final List<Role> roles = event.gameState.gamers
+            .map(
+              (Gamer gamer) => gamer.role,
+            )
+            .toList();
+        final List<Role> mainRoles = state.gamersState.roles.roles;
+        final List<Role> filteredMainRoles = mainRoles
+            .where(
+              (Role mainRole) =>
+                  roles.any((Role role) => role.name == mainRole.name) &&
+                  mainRole.roleType != RoleType.Werewolf &&
+                  mainRole.roleType != RoleType.Don,
+            )
+            .toList();
         final int civilianCount = event.gameState.gamers.length - mafiaCount;
         emit(
           state.copyWith(
@@ -397,6 +411,11 @@ class GameBloc extends Bloc<GameEvent, AppState> {
               gamePhase: GamePhase.Discussion,
               mafiaCount: mafiaCount,
               civilianCount: civilianCount,
+            ),
+            gamers: state.gamersState.copyWith(
+              roles: state.gamersState.roles.copyWith(
+                roles: filteredMainRoles,
+              ),
             ),
           ),
         );
@@ -1135,9 +1154,14 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           return gamer;
         }
       }).toList();
+      final List<Role> roles = state.gamersState.roles.roles;
+      roles.insert(0, const Werewolf.empty());
       emit(
         state.copyWith(
-          gamers: state.gamersState.copyWith(gamers: updatedGamers),
+          gamers: state.gamersState.copyWith(
+            gamers: updatedGamers,
+            roles: state.gamersState.roles.copyWith(roles: roles),
+          ),
           game: state.game.copyWith(
             mafiaCount: state.game.mafiaCount + 1,
             civilianCount: state.game.civilianCount - 1,
@@ -1635,8 +1659,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final List<Gamer> killedGamers = <Gamer>[];
       List<Gamer> newKilledGamers = <Gamer>[];
 
-      add(const UpdateAnimation(animate: true));
-
       for (final Gamer gamer in gamers) {
         if (!gamer.wasKilled) {
           if (!gamer.wasHealed) {
@@ -1720,6 +1742,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       );
       add(
         const CleanGamersAfterNight(),
+      );
+      add(
+        const UpdateAnimation(animate: false),
       );
     });
 
@@ -1806,6 +1831,12 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         );
         add(
           const ResetVoters(),
+        );
+        add(
+          const ResetVoter(),
+        );
+        add(
+          const SetVotingDirection(votingDirection: VoteDirection.NotSet),
         );
         add(
           InfectedCount(
@@ -2038,6 +2069,24 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final AppState appState = state.copyWith(
         game: state.game.copyWith(
           currentVoter: const Gamer.empty(),
+        ),
+      );
+      emit(appState);
+    });
+
+    on<SetVotingDirection>((SetVotingDirection event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          voteDirection: event.votingDirection,
+        ),
+      );
+      emit(appState);
+    });
+
+    on<SetStarterId>((SetStarterId event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        game: state.game.copyWith(
+          starterId: event.starterId,
         ),
       );
       emit(appState);

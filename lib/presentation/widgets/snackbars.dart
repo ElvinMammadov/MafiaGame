@@ -1,58 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:mafia_game/utils/theme/theme.dart';
 
-// ignore_for_file: avoid_classes_with_only_static_members
-
-class SnackBarManager {
-  static void showSuccess(
-    BuildContext context, {
-    required Object message,
-  }) =>
-      ScaffoldMessenger.of(context).showSnackBar(
-        SuccessSnackBar(
-          context: context,
-          text: message.toString(),
-        ),
-      );
-
-  static void showFailure(
-    BuildContext context, {
-    required Object message,
-  }) =>
-      ScaffoldMessenger.of(context).showSnackBar(
-        FailSnackBar(
-          context: context,
-          text: message.toString(),
-        ),
-      );
+void showSuccessSnackBar({
+  required BuildContext context,
+  required String message,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.green,
+      duration: const Duration(seconds: 2),
+    ),
+  );
 }
 
-class FailSnackBar extends SnackBar {
-  FailSnackBar({
-    required String text,
-    required BuildContext context,
-  }) : super(
-          content: Text(
-            text,
-            style: MafiaTheme.themeData.textTheme.titleMedium,
-          ),
-          backgroundColor: MafiaTheme.themeData.colorScheme.error,
-          behavior: SnackBarBehavior.floating,
-          width: 400,
-        );
-}
-
-class SuccessSnackBar extends SnackBar {
-  SuccessSnackBar({
-    required String text,
-    required BuildContext context,
-  }) : super(
-          content: Text(
-            text,
-            style: MafiaTheme.themeData.textTheme.titleMedium,
-          ),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-          width: 400,
-        );
+void showErrorSnackBar({
+  required BuildContext context,
+  required String message,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: MafiaTheme.themeData.colorScheme.error,
+      duration: const Duration(seconds: 2),
+    ),
+  );
 }

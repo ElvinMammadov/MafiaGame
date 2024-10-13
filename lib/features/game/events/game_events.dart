@@ -618,6 +618,17 @@ class UpdateAnimation extends GameEvent {
   List<Object?> get props => <Object?>[animate];
 }
 
+class SetStarterId extends GameEvent {
+  final String starterId;
+
+  const SetStarterId({
+    required this.starterId,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[starterId];
+}
+
 class SetVoter extends GameEvent {
   final Gamer voter;
 
@@ -641,4 +652,15 @@ class ResetVoter extends GameEvent {
 
   @override
   List<Object?> get props => <Object?>[];
+}
+
+class SetVotingDirection extends GameEvent {
+  final VoteDirection votingDirection;
+
+  const SetVotingDirection({
+    required this.votingDirection,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[votingDirection];
 }

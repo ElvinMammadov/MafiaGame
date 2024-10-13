@@ -27,8 +27,7 @@ class _RolesChangerState extends State<RolesChanger> {
                   gamePeriod == GamePeriod.Night
                       ? AppStrings.wakesUp + roles.roles[roleIndex].name
                       : AppStrings.chooseRole + roles.roles[roleIndex].name,
-                  style:
-                      MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
+                  style: MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ).padding(bottom: 20.0),
@@ -54,7 +53,7 @@ class _RolesChangerState extends State<RolesChanger> {
                       child: BaseButton(
                         label: AppStrings.next,
                         textStyle: MafiaTheme.themeData.textTheme.titleMedium,
-                        enabled: roleIndex < roles.roles.length - 2,
+                        enabled: roleIndex < roles.roles.length - 1,
                         action: () {
                           BlocProvider.of<GameBloc>(context).add(
                             ChangeRoleIndex(

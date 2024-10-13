@@ -25,6 +25,8 @@ class GameState extends Equatable {
   final bool victoryByWerewolf;
   final bool werewolfWasDead;
   final FirebaseSaveStatus saveStatus;
+  final VoteDirection voteDirection;
+  final String starterId;
 
   const GameState({
     this.gameId = '',
@@ -50,6 +52,8 @@ class GameState extends Equatable {
     this.victoryByWerewolf = false,
     this.werewolfWasDead = false,
     this.saveStatus = FirebaseSaveStatus.Initial,
+    this.voteDirection = VoteDirection.NotSet,
+    this.starterId = '',
   });
 
   const GameState.empty()
@@ -75,7 +79,9 @@ class GameState extends Equatable {
         gamePeriod = GamePeriod.Day,
         victoryByWerewolf = false,
         werewolfWasDead = false,
-        saveStatus = FirebaseSaveStatus.Initial;
+        saveStatus = FirebaseSaveStatus.Initial,
+        voteDirection = VoteDirection.NotSet,
+        starterId = '';
 
   GameState copyWith({
     String? gameName,
@@ -101,6 +107,8 @@ class GameState extends Equatable {
     bool? victoryByWerewolf,
     bool? werewolfWasDead,
     FirebaseSaveStatus? saveStatus,
+    VoteDirection? voteDirection,
+    String? starterId,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -126,6 +134,8 @@ class GameState extends Equatable {
         victoryByWerewolf: victoryByWerewolf ?? this.victoryByWerewolf,
         werewolfWasDead: werewolfWasDead ?? this.werewolfWasDead,
         saveStatus: saveStatus ?? this.saveStatus,
+        voteDirection: voteDirection ?? this.voteDirection,
+        starterId: starterId ?? this.starterId,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -157,6 +167,8 @@ class GameState extends Equatable {
         victoryByWerewolf,
         werewolfWasDead,
         saveStatus,
+        voteDirection,
+        starterId,
       ];
 
   @override
@@ -169,7 +181,14 @@ class GameState extends Equatable {
       'mafiaCount: $mafiaCount, civilianCount: $civilianCount}, '
       'isMafiaWin: $isMafiaWin, roleIndex: $roleIndex,'
       ' infectedCount: $infectedCount, '
-      'gamePhase: $gamePhase, gamePeriod: $gamePeriod}';
+      'gamePhase: $gamePhase, gamePeriod: $gamePeriod, '
+      'voteDirection: $voteDirection,}';
+}
+
+enum VoteDirection {
+  NotSet,
+  Left,
+  Right,
 }
 
 enum GamePhase {

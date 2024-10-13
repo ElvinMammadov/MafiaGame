@@ -14,37 +14,40 @@ class AppNavigator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case loginPage:
-        return MaterialPageRoute(
+        return MaterialPageRoute<dynamic>(
           builder: (_) => const LoginPage(),
           settings: const RouteSettings(name: loginPage),
         );
       case signupPage:
-        return MaterialPageRoute(
+        return MaterialPageRoute<dynamic>(
           builder: (_) => const SignupPage(),
           settings: const RouteSettings(name: signupPage),
         );
       case homeScreen:
-        return MaterialPageRoute(
+        return MaterialPageRoute<dynamic>(
           builder: (_) => const HomeScreen(),
           settings: const RouteSettings(name: homeScreen),
         );
 
       case tableScreen:
-        return MaterialPageRoute(
+        return MaterialPageRoute<dynamic>(
           builder: (_) => GameTableScreen(),
           settings: const RouteSettings(name: tableScreen),
         );
       default:
-        return MaterialPageRoute(
+        return MaterialPageRoute<dynamic>(
           builder: (_) => const LoginPage(),
           settings: const RouteSettings(name: loginPage),
         );
     }
   }
 
-  static void navigateToLoginPage(BuildContext context) {
+  void navigateToLoginPage(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
-        context, loginPage, (Route route) => false);
+      context,
+      loginPage,
+      (Route<dynamic> route) => false,
+    );
   }
 
   static void navigateToTablePage(BuildContext context) {
@@ -60,11 +63,16 @@ class AppNavigator {
 
   static void navigateToHomeScreen(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
-        context, homeScreen, (Route route) => false);
+      context,
+      homeScreen,
+      (Route<dynamic> route) => false,
+    );
   }
 
-  static void navigateBasedOnAuthenticationState(
-      BuildContext context, AuthenticationState state) {
+  void navigateBasedOnAuthenticationState(
+    BuildContext context,
+    AuthenticationState state,
+  ) {
     if (state is AuthenticatedState) {
       navigateToHomeScreen(context);
     } else {

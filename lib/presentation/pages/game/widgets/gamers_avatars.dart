@@ -18,6 +18,8 @@ List<Widget> gamersAvatars({
       BlocProvider.of<GameBloc>(context).state.game.gamePeriod;
   final GamePhase gamePhase =
       BlocProvider.of<GameBloc>(context).state.game.gamePhase;
+  final String starterId =
+      BlocProvider.of<GameBloc>(context).state.game.starterId;
 
   final double ovalRadius;
   double minAvatarRadius;
@@ -81,25 +83,19 @@ List<Widget> gamersAvatars({
                           gamePhase: gamePhase,
                         ),
                       ),
-                      if (gamers[i].foulCount >= 1)
-                        Positioned(
+                      if ((gamers[i].gamerId == starterId &&
+                              starterId.isNotEmpty) &&
+                          gamePhase == GamePhase.Voting)
+                        const Positioned(
                           top: 0,
                           left: 0,
-                          child: Container(
+                          child: SizedBox(
                             width: 20,
                             height: 20,
-                            decoration: BoxDecoration(
-                              color: MafiaTheme.themeData.colorScheme.secondary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                gamers[i].foulCount.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                shape: BoxShape.circle,
                               ),
                             ),
                           ),

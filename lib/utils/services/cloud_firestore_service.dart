@@ -3,14 +3,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:mafia_game/features/app/app.dart';
 import 'package:mafia_game/features/game/game.dart';
 import 'package:mafia_game/mains/config.dart';
 import 'package:mafia_game/utils/app_strings.dart';
 
-import '../unique_key_generator.dart';
+import 'package:mafia_game/utils/unique_key_generator.dart';
 
 class FirestoreService {
   final CollectionReference<Object?> _gamersCollection =

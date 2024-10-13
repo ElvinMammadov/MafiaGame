@@ -33,6 +33,9 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
   late AnimationController _controller;
   late Animation<Color?> _animation;
   Gamer? _currentVoter;
+  VoteDirection? _voteDirection;
+  int? _starterIndex;
+  int? newIndex;
 
   @override
   void initState() {
@@ -52,83 +55,6 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     }
   }
 
-  void _animateGamer(Gamer gamer) {
-    final int roleIndex =
-        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
-    final RoleType roleType = widget.roles.roles[roleIndex].roleType;
-    final RoleType gamerRoleType = widget.gamers[widget.index].role.roleType;
-    if (roleType == gamerRoleType) {
-      BlocProvider.of<GameBloc>(context).add(
-        ChangeAnimation(
-          gamerId: widget.gamers[widget.index].gamerId ?? '',
-          animate: true,
-        ),
-      );
-      _controller.repeat(reverse: true);
-    } else {
-      BlocProvider.of<GameBloc>(context).add(
-        ChangeAnimation(
-          gamerId: widget.gamers[widget.index].gamerId ?? '',
-          animate: false,
-        ),
-      );
-      _controller.stop();
-    }
-  }
-
-  void _handleTap() {
-    _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
-    if (_currentVoter!.name!.isNotEmpty &&
-        _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
-      BlocProvider.of<GameBloc>(context).add(
-        AddVoteToGamer(
-          gamer: widget.gamers[widget.index],
-          voter: _currentVoter!,
-        ),
-      );
-      BlocProvider.of<GameBloc>(context).add(
-        ChangeAnimation(gamerId: _currentVoter?.gamerId ?? '', animate: false),
-      );
-      BlocProvider.of<GameBloc>(context).add(
-        const ResetVoter(),
-      );
-    } else {
-      if (widget.gamers[widget.index].wasVoted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              AppStrings.gamerAlreadyVoted,
-              style: TextStyle(color: Colors.white, fontSize: 16.0),
-            ),
-          ),
-        );
-      } else {
-        BlocProvider.of<GameBloc>(context).add(
-          SetVoter(
-            voter: widget.gamers[widget.index],
-          ),
-        );
-      }
-    }
-  }
-
-  void toggleAnimation() {
-    setState(() {
-      if (widget.gamers[widget.index].isAnimated) {
-        _controller.stop();
-        BlocProvider.of<GameBloc>(context).add(
-          ChangeAnimation(
-            gamerId: widget.gamers[widget.index].gamerId ?? '',
-            animate: false,
-          ),
-        );
-      } else {
-        _controller.repeat(reverse: true);
-      }
-    });
-  }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -137,9 +63,10 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
 
   @override
   Widget build(BuildContext context) {
-    if ((widget.gamePhase != GamePhase.IsReady &&
-            widget.gamers[widget.index].isAnimated) ||
-        widget.gamePhase == GamePhase.Voting) {
+    print('gamer animated: ${widget.gamers[widget.index].isAnimated}, '
+        'index: ${widget.index}');
+    if (widget.gamePhase != GamePhase.IsReady &&
+        widget.gamers[widget.index].isAnimated) {
       _controller.repeat(reverse: true);
     } else {
       _controller.stop();
@@ -162,6 +89,8 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                         gamePhase == GamePhase.Discussion &&
                             gamePeriod == GamePeriod.Day ||
                         (gamePeriod == GamePeriod.Night &&
+                            !widget.gamers[widget.index].isAnimated) ||
+                        (gamePhase == GamePhase.Voting &&
                             !widget.gamers[widget.index].isAnimated)
                     ? Colors.transparent
                     : _animation.value!,
@@ -181,7 +110,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               child: InkWell(
                 onTap: () {
                   if (widget.gamePhase == GamePhase.CouldStart) {
-                    toggleAnimation();
+                    _toggleAnimation();
                     widget.changeRole!(widget.gamers[widget.index]);
                   } else if (widget.gamePhase == GamePhase.Voting &&
                       gamePeriod == GamePeriod.Day) {
@@ -242,6 +171,138 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
           ),
         );
       },
+    );
+  }
+
+  void _animateGamer(Gamer gamer) {
+    final int roleIndex =
+        BlocProvider.of<GameBloc>(context).state.game.roleIndex;
+    final RoleType roleType = widget.roles.roles[roleIndex].roleType;
+    final RoleType gamerRoleType = widget.gamers[widget.index].role.roleType;
+    if (roleType == gamerRoleType) {
+      _changeAnimation(true, widget.gamers[widget.index].gamerId ?? '');
+      _controller.repeat(reverse: true);
+    } else {
+      _changeAnimation(false, widget.gamers[widget.index].gamerId ?? '');
+      _controller.stop();
+    }
+  }
+
+  void _handleTap() {
+    _currentVoter = BlocProvider.of<GameBloc>(context).state.game.currentVoter;
+    _voteDirection =
+        BlocProvider.of<GameBloc>(context).state.game.voteDirection;
+    final bool allVoted = widget.gamers.every(
+      (Gamer gamer) => gamer.wasVoted && !gamer.wasKilled,
+    );
+
+    if (_currentVoter!.name!.isNotEmpty &&
+        _currentVoter!.gamerId != widget.gamers[widget.index].gamerId) {
+      _starterIndex = widget.gamers.indexWhere(
+        (Gamer gamer) =>
+            gamer.gamerId ==
+            BlocProvider.of<GameBloc>(context).state.game.starterId,
+      );
+      print('starterIndex: $_starterIndex');
+      if (_voteDirection == VoteDirection.NotSet) {
+        _showSnackBar(AppStrings.pleaseChooseDirection);
+        return;
+      }
+      if (allVoted) {
+        showSuccessSnackBar(
+          context: context,
+          message: AppStrings.allGamersVoted,
+        );
+        return;
+      }
+      BlocProvider.of<GameBloc>(context).add(
+        AddVoteToGamer(
+          gamer: widget.gamers[widget.index],
+          voter: _currentVoter!,
+        ),
+      );
+      _changeAnimation(false, _currentVoter?.gamerId ?? '');
+      final int currentVoterIndex = widget.gamers
+          .indexWhere((Gamer gamer) => gamer.gamerId == _currentVoter!.gamerId);
+
+      if (_voteDirection == VoteDirection.Right) {
+        newIndex = (currentVoterIndex - 1 + widget.gamers.length) %
+            widget.gamers.length;
+        while (widget.gamers[newIndex!].wasKilled) {
+          newIndex =
+              (newIndex! - 1 + widget.gamers.length) % widget.gamers.length;
+        }
+        if (newIndex == _starterIndex) {
+          showSuccessSnackBar(
+            context: context,
+            message: AppStrings.allGamersVoted,
+          );
+          return;
+        }
+        _setVoter(newIndex!);
+      } else if (_voteDirection == VoteDirection.Left) {
+        newIndex = (currentVoterIndex + 1) % widget.gamers.length;
+        while (widget.gamers[newIndex!].wasKilled) {
+          newIndex = (newIndex! + 1) % widget.gamers.length;
+        }
+        if (newIndex == _starterIndex) {
+          showSuccessSnackBar(
+            context: context,
+            message: AppStrings.allGamersVoted,
+          );
+          return;
+        }
+        _setVoter(newIndex!);
+      }
+    } else if (_currentVoter!.name!.isNotEmpty &&
+        _currentVoter!.gamerId == widget.gamers[widget.index].gamerId) {
+      _showSnackBar(AppStrings.gamerCannotVoteForYourself);
+    } else {
+      _setVoter(widget.index);
+      BlocProvider.of<GameBloc>(context).add(
+        SetStarterId(starterId: widget.gamers[widget.index].gamerId!),
+      );
+    }
+  }
+
+  void _setVoter(int newIndex) {
+    BlocProvider.of<GameBloc>(context).add(
+      SetVoter(
+        voter: widget.gamers[newIndex],
+      ),
+    );
+    _changeAnimation(true, widget.gamers[newIndex].gamerId ?? '');
+  }
+
+  void _changeAnimation(bool animate, String gamerId) {
+    BlocProvider.of<GameBloc>(context).add(
+      ChangeAnimation(
+        gamerId: gamerId,
+        animate: animate,
+      ),
+    );
+  }
+
+  void _toggleAnimation() {
+    setState(() {
+      if (widget.gamers[widget.index].isAnimated) {
+        _controller.stop();
+        BlocProvider.of<GameBloc>(context).add(
+          ChangeAnimation(
+            gamerId: widget.gamers[widget.index].gamerId ?? '',
+            animate: false,
+          ),
+        );
+      } else {
+        _controller.repeat(reverse: true);
+      }
+    });
+  }
+
+  void _showSnackBar(String message) {
+    showErrorSnackBar(
+      context: context,
+      message: message,
     );
   }
 }

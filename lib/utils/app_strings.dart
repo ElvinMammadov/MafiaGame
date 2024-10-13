@@ -183,4 +183,12 @@ class AppStrings {
       ' игра продолжится.';
   static const String continueGameLabel = 'Продолжить';
   static const String endGameLabel = 'Завершить';
+  static const String chooseDirection = 'Выберите направлению';
+  static const String pleaseChooseDirection =
+      'Пожалуйста, выберите направление';
+  static const String chooseGamerForVoting = 'Выберите игрока чтобы начать '
+      'голосование';
+  static const String allGamersVoted = 'Все игроки проголосовали';
+  static const String gamerCannotVoteForYourself = 'Игрок не может голосовать '
+      'за себя';
 }
