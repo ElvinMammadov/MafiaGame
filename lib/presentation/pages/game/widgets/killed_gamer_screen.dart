@@ -52,37 +52,21 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Divider(
-                  height: 8.0,
-                  thickness: 1.0,
-                  color: Colors.white24, // Subtle divider
-                ),
+                _divider(),
                 _buildTextRow(
                   AppStrings.nameOfGamer,
                   widget.killedGamer.name ?? '',
                 ),
-                const Divider(
-                  height: 8.0,
-                  thickness: 1.0,
-                  color: Colors.white24, // Subtle divider
-                ),
+                _divider(),
                 _buildTextRow(
                   AppStrings.roleOfGamer,
                   widget.killedGamer.role.name,
                 ),
-                const Divider(
-                  height: 8.0,
-                  thickness: 1.0,
-                  color: Colors.white24, // Subtle divider
-                ),
+                _divider(),
                 if (widget.isKillerExist)
                   _buildTextRow(
                     AppStrings.roleOfKiller,
-                    widget.killedGamer.wasKilledByMafia
-                        ? const Mafia.empty().name
-                        : widget.killedGamer.wasKilledByKiller
-                        ? const Killer.empty().name
-                        : const Sheriff.empty().name,
+                    _rolesOfKiller,
                   ),
               ],
             ).padding(
@@ -95,6 +79,12 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
             bottom: 16,
           ),
         ],
+      );
+
+  Widget _divider() => const Divider(
+        height: 8.0,
+        thickness: 1.0,
+        color: Colors.white24, // Subtle divider
       );
 
   Widget _buildTextRow(String labelText, String text) => Row(
@@ -120,4 +110,29 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
         vertical: 8,
         horizontal: 16,
       );
+
+  String get _rolesOfKiller {
+    late String rolesOfKiller = '';
+    if (widget.killedGamer.wasKilledByMafia &&
+        widget.killedGamer.wasKilledByKiller) {
+      rolesOfKiller +=
+          '${const Mafia.empty().name} ${const Killer.empty().name}';
+    } else if (widget.killedGamer.wasKilledByMafia) {
+      rolesOfKiller += const Mafia.empty().name;
+    } else if (widget.killedGamer.wasKilledByKiller) {
+      rolesOfKiller += const Killer.empty().name;
+    } else if (widget.killedGamer.wasKilledBySheriff) {
+      return rolesOfKiller + const Sheriff.empty().name;
+    } else if (!widget.killedGamer.wasKilledByKiller &&
+        !widget.killedGamer.wasKilledByMafia &&
+        !widget.killedGamer.wasBoomeranged &&
+        widget.killedGamer.role.roleType == RoleType.Security) {
+      return rolesOfKiller + AppStrings.securitySacrificedHimself;
+    } else if (widget.killedGamer.wasKilledByWerewolf) {
+      return rolesOfKiller + const Werewolf.empty().name;
+    } else if (widget.killedGamer.wasBoomeranged) {
+      return rolesOfKiller + AppStrings.gamerBoomeranged;
+    }
+    return rolesOfKiller;
+  }
 }

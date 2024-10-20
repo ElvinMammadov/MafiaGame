@@ -185,10 +185,19 @@ class AppStrings {
   static const String endGameLabel = 'Завершить';
   static const String chooseDirection = 'Выберите направлению';
   static const String pleaseChooseDirection =
-      'Пожалуйста, выберите направление';
+      'Пожалуйста, выберите направлению';
   static const String chooseGamerForVoting = 'Выберите игрока чтобы начать '
       'голосование';
   static const String allGamersVoted = 'Все игроки проголосовали';
   static const String gamerCannotVoteForYourself = 'Игрок не может голосовать '
       'за себя';
+  static const String chooseFirstGamer = 'Выберите первого игрока';
+  static const String mafiaCantKillThemself = 'Мафия не может убить себя';
+  static const String securitySacrificedHimself = 'Security пожертвовала собой';
+  static const String gamerBoomeranged = 'Геймер был убит Бумерангом.';
+  static const String cantDoSomethingAgainstYourself =
+      'Игрок не можете сделать что-то против себя';
 }
+
+String gamerHasAlibi(String name) =>
+    "У игрока $name есть алиби, во время голосования его не убили.";

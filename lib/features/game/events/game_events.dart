@@ -176,12 +176,14 @@ class NightAction extends GameEvent {
 class VotingAction extends GameEvent {
   final Function(Gamer killedGamer) showKilledGamers;
   final Function(List<Gamer> pickedGamers)? showPickedNumber;
+  final Function(Gamer killedGamer)? gamerHasAlibi;
   final VoidCallback? showFailureInfo;
 
   const VotingAction({
     required this.showKilledGamers,
     this.showPickedNumber,
     this.showFailureInfo,
+    this.gamerHasAlibi,
   });
 
   @override
@@ -189,6 +191,7 @@ class VotingAction extends GameEvent {
         showKilledGamers,
         showPickedNumber,
         showFailureInfo,
+        gamerHasAlibi,
       ];
 }
 

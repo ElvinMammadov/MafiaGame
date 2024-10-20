@@ -67,6 +67,9 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
           $enumDecodeNullable(_$VoteDirectionEnumMap, json['voteDirection']) ??
               VoteDirection.NotSet,
       starterId: json['starterId'] as String? ?? '',
+      gameRoles: json['gameRoles'] == null
+          ? const Roles.empty()
+          : Roles.fromJson(json['gameRoles'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -95,6 +98,7 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'saveStatus': _$FirebaseSaveStatusEnumMap[instance.saveStatus]!,
       'voteDirection': _$VoteDirectionEnumMap[instance.voteDirection]!,
       'starterId': instance.starterId,
+      'gameRoles': instance.gameRoles,
     };
 
 const _$GamePhaseEnumMap = {

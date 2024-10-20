@@ -10,6 +10,7 @@ void showPickNumber(
     maxDialogWidth: 1000,
     minDialogWidth: 700,
     maxPageHeight: 600,
+    barrierDismissible: false,
     pageListBuilder: (BuildContext modalSheetContext) =>
         <SliverWoltModalSheetPage>[
       WoltModalSheetPage(
@@ -32,13 +33,18 @@ void showPickNumber(
         child: NumberPicker(
           gamers: gamers,
           deletedGamer: (Gamer gamer) {
-            BlocProvider.of<GameBloc>(context).add(
-              KillGamer(gamer: gamer),
-            );
             closeDialog();
             Navigator.of(context).pop();
             if (!gamer.wasSecured && !gamer.hasAlibi) {
+              BlocProvider.of<GameBloc>(context).add(
+                KillGamer(gamer: gamer),
+              );
               showKilledGamer(context, gamer, closeDialog);
+            } else if (gamer.hasAlibi) {
+              showSuccessSnackBar(
+                message: gamerHasAlibi(gamer.name ?? ''),
+                context: context,
+              );
             }
 
             BlocProvider.of<GameBloc>(context).add(

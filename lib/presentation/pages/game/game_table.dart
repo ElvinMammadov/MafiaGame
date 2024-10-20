@@ -134,11 +134,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
             final DateTime? gameStartTime = state.game.gameStartTime;
             gameState = state.game;
             gamePhase = state.game.gamePhase;
-            print('mafiacount $mafiaCount, civilianCount $civilianCount');
             victoryByWerewolf = state.game.victoryByWerewolf;
             werewolfWasDead = state.game.werewolfWasDead;
             isMafiaWin = state.game.isMafiaWin;
-            /*  print('gamePhase $gamePhase');*/
 
             if (gamePhase == GamePhase.Discussion ||
                 gamePhase == GamePhase.Voting) {
@@ -169,7 +167,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
             bool isAllGamersCitizen = false;
             bool isMafiaExist = false;
             isMafiaWin = state.game.isMafiaWin;
-            print('game phase is $gamePhase');
             final VoteDirection voteDirection = state.game.voteDirection;
 
             const double buttonLeftPercentage = 0.07;
@@ -178,7 +175,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
             final double directionButtonBottomPercentage =
                 orientation == Orientation.portrait ? 3 : 3;
             final double directionButtonRightPercentage =
-                orientation == Orientation.portrait ? 2.7 : 2.5;
+                orientation == Orientation.portrait ? 2.8 : 2.7;
             return Scaffold(
               appBar: DefaultAppBar(
                 title: AppStrings.title,
@@ -240,7 +237,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                 MafiaTheme.themeData.textTheme.titleMedium,
                             action: () {
                               if (gamePeriod != GamePeriod.Day) {
-                                print('Night was called');
                                 BlocProvider.of<GameBloc>(context).add(
                                   NightAction(
                                     showKilledGamers:
@@ -250,8 +246,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                           context,
                                           newKilledGamers,
                                           () {
-                                            if (mafiaCount ==
-                                                civilianCount - 1) {
+                                            if (mafiaCount == 1 &&
+                                                civilianCount == 2) {
                                               showContinueGameDialog(
                                                 context,
                                                 accepted: () {
@@ -337,8 +333,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                         showKilledGamers: (Gamer killedGamer) {
                                           showKilledGamer(context, killedGamer,
                                               () {
-                                            if (mafiaCount ==
-                                                civilianCount - 1) {
+                                            if (mafiaCount == 1 &&
+                                                civilianCount == 2) {
                                               showContinueGameDialog(
                                                 context,
                                                 accepted: () {
@@ -351,14 +347,21 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                             }
                                           });
                                         },
+                                        gamerHasAlibi: (Gamer gamer) {
+                                          showSuccessSnackBar(
+                                            message:
+                                                gamerHasAlibi(gamer.name ?? ''),
+                                            context: context,
+                                          );
+                                        },
                                         showPickedNumber:
                                             (List<Gamer> topGamers) {
                                           showPickNumber(
                                             context,
                                             topGamers,
                                             () {
-                                              if (mafiaCount ==
-                                                  civilianCount - 1) {
+                                              if (mafiaCount == 1 &&
+                                                  civilianCount == 2) {
                                                 showContinueGameDialog(
                                                   context,
                                                   accepted: () {

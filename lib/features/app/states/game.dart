@@ -27,6 +27,7 @@ class GameState extends Equatable {
   final FirebaseSaveStatus saveStatus;
   final VoteDirection voteDirection;
   final String starterId;
+  final Roles gameRoles;
 
   const GameState({
     this.gameId = '',
@@ -54,6 +55,7 @@ class GameState extends Equatable {
     this.saveStatus = FirebaseSaveStatus.Initial,
     this.voteDirection = VoteDirection.NotSet,
     this.starterId = '',
+    this.gameRoles = const Roles.empty(),
   });
 
   const GameState.empty()
@@ -81,7 +83,8 @@ class GameState extends Equatable {
         werewolfWasDead = false,
         saveStatus = FirebaseSaveStatus.Initial,
         voteDirection = VoteDirection.NotSet,
-        starterId = '';
+        starterId = '',
+        gameRoles = const Roles.empty();
 
   GameState copyWith({
     String? gameName,
@@ -109,6 +112,7 @@ class GameState extends Equatable {
     FirebaseSaveStatus? saveStatus,
     VoteDirection? voteDirection,
     String? starterId,
+    Roles? gameRoles,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -136,6 +140,7 @@ class GameState extends Equatable {
         saveStatus: saveStatus ?? this.saveStatus,
         voteDirection: voteDirection ?? this.voteDirection,
         starterId: starterId ?? this.starterId,
+        gameRoles: gameRoles ?? this.gameRoles,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -169,6 +174,7 @@ class GameState extends Equatable {
         saveStatus,
         voteDirection,
         starterId,
+        gameRoles,
       ];
 
   @override

@@ -34,6 +34,7 @@ class MafiaTheme {
           WoltModalSheetTheme(),
         ],
         snackBarTheme: SnackBarThemeData(
+          width: 500,
           insetPadding: const EdgeInsets.symmetric(horizontal: 56),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),

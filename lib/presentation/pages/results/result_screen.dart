@@ -367,9 +367,7 @@ class _AccordionBodyState extends State<AccordionBody> {
                               points[AppStrings.totalPoints] = totalPoints;
                               print('points: $points');
 
-                              // Optionally, call setState to rebuild the widget
                               setState(() {
-                                // Update controller values
                                 _controllers[gamer.name!]!.forEach((
                                   String key,
                                   TextEditingController controller,

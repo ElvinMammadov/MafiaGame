@@ -44,7 +44,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   void initState() {
     super.initState();
     final List<Role> roles =
-        BlocProvider.of<GameBloc>(context).state.gamersState.roles.roles;
+        BlocProvider.of<GameBloc>(context).state.game.gameRoles.roles;
     selectedRoles = List<Role>.from(roles);
     roleOriginalIndexMap = <Role, int>{
       for (int i = 0; i < roles.length; i++) roles[i]: i,
@@ -72,7 +72,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
-          final Roles roles = state.gamersState.roles;
+          final Roles roles = state.game.gameRoles;
 
           return SizedBox(
             width: 550,
@@ -161,7 +161,9 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                         return InkWell(
                                           onTap: () {
                                             _toggleRole(role);
-                                            setState(() {});
+                                            setState(
+                                              () {},
+                                            );
                                             menuSetState(
                                               () {},
                                             );

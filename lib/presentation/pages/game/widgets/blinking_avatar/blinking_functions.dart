@@ -13,25 +13,38 @@ class BlinkingFunctions {
 
     final Gamer gamer =
         gamers.firstWhere((Gamer gamer) => gamer.role.roleType == roleType);
-    print(
-        'gamers[index].name!: ${gamers[index].name!}, '
-            'gamer.name: ${gamer.name}');
-    print('roleType: $roleType');
     switch (roleType) {
       case RoleType.Doctor:
         healGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Mafia:
       case RoleType.Don:
+        if (gamers[index].role.roleType == RoleType.Mafia ||
+            gamers[index].role.roleType == RoleType.Don) {
+          showCantDoHimself(context, AppStrings.mafiaCantKillThemself);
+          return;
+        }
         killGamerByMafia(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Sheriff:
+        if(gamers[index].role.roleType == RoleType.Sheriff) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         killGamerBySheriff(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Madam:
+        if(gamers[index].role.roleType == RoleType.Madam) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Killer:
+        if(gamers[index].role.roleType == RoleType.Killer) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         killGamerByKiller(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Werewolf:
@@ -42,6 +55,10 @@ class BlinkingFunctions {
           break;
         }
       case RoleType.Virus:
+        if(gamers[index].role.roleType == RoleType.Virus) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
           infectGamer(
             gamers[index].name!,
@@ -59,31 +76,54 @@ class BlinkingFunctions {
         }
         break;
       case RoleType.Advocate:
+        if(gamers[index].role.roleType == RoleType.Advocate) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         giveAlibi(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Security:
+        if(gamers[index].role.roleType == RoleType.Security) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         secureGamer(gamers[index].name!, gamer.id!, context, gamers);
         break;
       case RoleType.Medium:
+        if(gamers[index].role.roleType == RoleType.Medium) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         mediumChecked(gamers[index].name!, gamer.id!, context, gamers);
         break;
       case RoleType.Chameleon:
         chameleonChanges(context, index, gamer, gamers);
         break;
       case RoleType.Boomerang:
+        if(gamers[index].role.roleType == RoleType.Boomerang) {
+          showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
+          return;
+        }
         boomerangGamer(gamers[index].name!, gamer, context, gamers);
         break;
       default:
         break;
     }
 
-    if (roleType != RoleType.Virus) {
+    if (roleType != RoleType.Virus && roleIndex < roles.roles.length - 1) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeRoleIndex(
           roleIndex: roleIndex + 1,
         ),
       );
     }
+  }
+
+  void showCantDoHimself(BuildContext context, String message) {
+    showErrorSnackBar(
+      context: context,
+      message: message,
+    );
   }
 
   void killGamerByMafia(
@@ -253,7 +293,6 @@ class BlinkingFunctions {
     List<Gamer> gamers,
   ) {
     final RoleType roleType = gamer.chameleonRoleType;
-    print('roleType: $roleType, gamerId: ${gamer.id}');
     switch (roleType) {
       case RoleType.Doctor:
         healGamer(gamers[index].name!, gamer, context, gamers);

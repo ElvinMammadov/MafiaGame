@@ -17,6 +17,9 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           gameStartTime: DateTime.now(),
           gameId: event.gameId,
           gamePhase: GamePhase.IsReady,
+          gameRoles: state.game.gameRoles.copyWith(
+            roles: event.roles,
+          ),
         ),
         gamers: state.gamersState.copyWith(
           roles: state.gamersState.roles.copyWith(
@@ -65,7 +68,17 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<EndDiscussion>((EndDiscussion event, Emitter<AppState> emit) {
+      final List<Gamer> changedGamersAnimation = state.gamersState.gamers
+          .map(
+            (Gamer gamer) => gamer.copyWith(
+              isAnimated: false,
+            ),
+          )
+          .toList();
       final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: changedGamersAnimation,
+        ),
         game: state.game.copyWith(
           gamePhase: GamePhase.Voting,
         ),
@@ -141,9 +154,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           roleGamer == RoleType.Medium;
       final bool isTargetedOther =
           !isTargetedMainCharacter && !isGamerCivilian && !isGamerMafia;
-      log('isGamerMafia: $isGamerMafia, isGamerCivilian: $isGamerCivilian, '
-          'isGamerMainCharacter: $isGamerMainCharacter,'
-          ' isTargetedOther: $isTargetedOther');
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(
           gamers: state.gamersState.gamers.map((Gamer gamer) {
@@ -317,12 +327,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           }).toList(),
         ),
       );
-      // log('Voters points: ${appState.gamersState.gamers.map(
-      //   (Gamer gamer) => <String, Object?>{
-      //     'name': gamer.role.name,
-      //     'points': gamer.role.points,
-      //   },
-      // )}');
       emit(appState);
     });
 
@@ -465,7 +469,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                     ? updatedPoints[AppStrings.alivePoints] =
                         (updatedPoints[AppStrings.alivePoints] ?? 0) + 1
                     : updatedPoints[AppStrings.alivePoints] =
-                        (updatedPoints[AppStrings.alivePoints] ?? 0) + 2;
+                        (updatedPoints[AppStrings.alivePoints] ?? 0) + 0;
               } else {
                 updatedPoints[AppStrings.alivePoints] =
                     (updatedPoints[AppStrings.alivePoints] ?? 0) + 3;
@@ -993,10 +997,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           ),
         ),
       );
-      // log('Gamers are in KillGamer ${state.gamersState.gamers.map(
-      //       (Gamer gamer) => 'gamer name ${gamer.name}, '
-      //           'waskilled ${gamer.wasKilled}, ',
-      //     ).toList()}');
     });
 
     on<HealGamer>((HealGamer event, Emitter<AppState> emit) {
@@ -1054,23 +1054,26 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final bool isTargetedMainCharacter = roleTargeted == RoleType.Sheriff ||
           roleTargeted == RoleType.Madam ||
           roleTargeted == RoleType.Medium;
+      final List<Gamer> mafiaGamers = state.gamersState.gamers
+          .where(
+            (Gamer gamer) =>
+                gamer.role.roleType == RoleType.Mafia ||
+                gamer.role.roleType == RoleType.Don,
+          )
+          .toList();
+      final bool canMafiaTarget =
+          mafiaGamers.every((Gamer gamer) => gamer.canTarget);
 
-      log('isTargetedMafia: $isTargetedMafia, '
-          'isTargetedCivilian: $isTargetedCivilian, '
-          'isTargetedMainCharacter: $isTargetedMainCharacter');
-      final bool isTargetingSelf =
-          event.mafiaGamer.id == event.targetedGamer.id;
       final int targetedIndex = state.gamersState.gamers
           .indexWhere((Gamer gamer) => gamer.id == event.targetedGamer.id);
 
-      if (targetedIndex != -1 && (isTargetingSelf || mafiaGamer.canTarget)) {
+      if (targetedIndex != -1 && canMafiaTarget) {
         final List<Gamer> updatedGamers = state.gamersState.gamers.map((
           Gamer gamer,
         ) {
           if (gamer.id == event.targetedGamer.id) {
             //If Mafia wants to kill Werewolf +1 point for Werewolf
             if (gamer.role.roleType == RoleType.Werewolf) {
-              log('Werewolf is killed by Mafia');
               final Map<String, int> updatedPoints =
                   Map<String, int>.from(gamer.role.points ?? <String, int>{});
               updatedPoints[AppStrings.mafiaTriedToKillBeforeChange] =
@@ -1124,9 +1127,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             return gamer;
           }
         }).toList();
-        // log('updatedGamers mafia points: ${updatedGamers.map(
-        //   (Gamer gamer) => gamer.role.points,
-        // )}');
         emit(
           state.copyWith(
             gamers: state.gamersState.copyWith(gamers: updatedGamers),
@@ -1136,7 +1136,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<ChangeWerewolf>((ChangeWerewolf event, Emitter<AppState> emit) {
-      log('ChangeWerewolf');
 
       final List<Gamer> updatedGamers = state.gamersState.gamers.map((
         Gamer gamer,
@@ -1277,7 +1276,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                 updatedPoints[AppStrings.killedCitizens] =
                     (updatedPoints[AppStrings.killedCitizens] ?? 0) - 1;
               }
-              log('updatedPoints killer: $updatedPoints');
               return gamer.copyWith(
                 targetId: event.targetedGamer.id,
                 role: gamer.role.copyWith(points: updatedPoints),
@@ -1307,8 +1305,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         gamers: state.gamersState.copyWith(
           gamers: state.gamersState.gamers.map((Gamer gamer) {
             if (gamer.id == event.targetedGamer.id) {
-              print('gamer.id: ${gamer.name}, gamer.wasCheckedBySheriff:'
-                  ' ${gamer.wasCheckedBySheriff}');
               if (isTargetedMafia) {
                 if (gamer.wasCheckedBySheriff == false) {
                   return gamer.copyWith(wasCheckedBySheriff: true);
@@ -1316,6 +1312,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                   return gamer.copyWith(
                     wasKilledBySheriff: true,
                     wasCheckedBySheriff: false,
+                    targetId: event.targetedGamer.id,
                   );
                 }
               } else {
@@ -1333,7 +1330,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                       (updatedPointsChameleon[AppStrings.playsForSheriff] ??
                               0) +
                           1;
-                  log('updatedPoints sheriff: $updatedPointsChameleon');
                   return gamer.copyWith(
                     role: gamer.role.copyWith(points: updatedPointsChameleon),
                   );
@@ -1348,7 +1344,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                   updatedPoints[AppStrings.entersToMafia] =
                       (updatedPoints[AppStrings.entersToMafia] ?? 0) + 1;
                 }
-                log('updatedPoints sheriff: $updatedPoints');
                 return gamer.copyWith(
                   role: gamer.role.copyWith(points: updatedPoints),
                 );
@@ -1496,26 +1491,35 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(
           gamers: state.gamersState.gamers.map((Gamer gamer) {
-            if (gamer.id == event.targetedGamer.id) {
-              return gamer.copyWith(
-                wasBoomeranged: true,
-              );
-            } else if (gamer.id == event.boomerang.id) {
-              final Map<String, int> updatedPoints = Map<String, int>.from(
-                event.boomerang.role.points ?? <String, int>{},
-              );
-              if (isGamerMafia) {
-                updatedPoints[AppStrings.killedMafias] =
-                    (updatedPoints[AppStrings.killedMafias] ?? 0) + 2;
-              } else {
-                updatedPoints[AppStrings.killedCitizens] =
-                    (updatedPoints[AppStrings.killedCitizens] ?? 0) - 1;
+            print('boomerang name ${event.boomerang.name}, '
+                'gamer name: ${gamer.name},'
+                ' event.boomerang.wasKilledByKiller:'
+                ' ${event.boomerang.wasKilledByKiller}'
+                ' event.boomerang.wasKilledByMafia:'
+                ' ${event.boomerang.wasKilledByMafia}');
+            if (event.boomerang.wasKilledByKiller ||
+                event.boomerang.wasKilledByMafia) {
+              if (gamer.id == event.targetedGamer.id) {
+                return gamer.copyWith(
+                  wasBoomeranged: true,
+                );
+              } else if (gamer.id == event.boomerang.id) {
+                final Map<String, int> updatedPoints = Map<String, int>.from(
+                  event.boomerang.role.points ?? <String, int>{},
+                );
+                if (isGamerMafia) {
+                  updatedPoints[AppStrings.killedMafias] =
+                      (updatedPoints[AppStrings.killedMafias] ?? 0) + 2;
+                } else {
+                  updatedPoints[AppStrings.killedCitizens] =
+                      (updatedPoints[AppStrings.killedCitizens] ?? 0) - 1;
+                }
+                return gamer.copyWith(
+                  role: gamer.role.copyWith(
+                    points: updatedPoints,
+                  ),
+                );
               }
-              return gamer.copyWith(
-                role: gamer.role.copyWith(
-                  points: updatedPoints,
-                ),
-              );
             }
             return gamer;
           }).toList(),
@@ -1558,6 +1562,13 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         final bool isGamerMafia =
             roleGamer == RoleType.Mafia || roleGamer == RoleType.Don;
         final bool isGamerCitizen = roleGamer == RoleType.Civilian;
+        final List<Gamer> mafiaGamers = state.gamersState.gamers
+            .where(
+              (Gamer gamer) =>
+                  gamer.role.roleType == RoleType.Mafia ||
+                  gamer.role.roleType == RoleType.Don,
+            )
+            .toList();
 
         void removeTargetId(int targetId, RoleType role) {
           for (int i = 0; i < appState.gamersState.gamers.length; i++) {
@@ -1606,14 +1617,30 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                     event.targetedGamer.wasCheckedByMadam == false &&
                     event.targetedGamer.role.roleType != RoleType.Virus &&
                     event.targetedGamer.role.roleType != RoleType.Madam) {
-                  if (gamer.targetId != null) {
-                    removeTargetId(gamer.targetId!, gamer.role.roleType);
+                  if (isGamerMafia) {
+                    for (final Gamer mafiaGamer in mafiaGamers) {
+                      if (mafiaGamer.targetId != null) {
+                        removeTargetId(
+                          mafiaGamer.targetId!,
+                          mafiaGamer.role.roleType,
+                        );
+                      }
+                      return mafiaGamer.copyWith(
+                        canTarget: false,
+                        targetId: 0,
+                        wasCheckedByMadam: true,
+                      );
+                    }
+                  } else {
+                    if (gamer.targetId != null) {
+                      removeTargetId(gamer.targetId!, gamer.role.roleType);
+                    }
+                    return gamer.copyWith(
+                      canTarget: false,
+                      targetId: 0,
+                      wasCheckedByMadam: true,
+                    );
                   }
-                  return gamer.copyWith(
-                    canTarget: false,
-                    targetId: 0,
-                    wasCheckedByMadam: true,
-                  );
                 } else if (gamer.id == event.madam.id) {
                   final Map<String, int> updatedPoints = Map<String, int>.from(
                     event.madam.role.points ?? <String, int>{},
@@ -1780,10 +1807,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
         if (topGamers.length == 1) {
           add(
-            KillGamer(gamer: topGamers[0]),
-          );
-
-          add(
             const EndVoting(),
           );
           add(
@@ -1807,9 +1830,14 @@ class GameBloc extends Bloc<GameEvent, AppState> {
             );
           }
           if (!topGamers[0].hasAlibi && !topGamers[0].wasSecured) {
+            add(
+              KillGamer(gamer: topGamers[0]),
+            );
             event.showKilledGamers(
               topGamers[0],
             );
+          } else if (topGamers[0].hasAlibi) {
+            event.gamerHasAlibi!(topGamers[0]);
           }
         } else if (topGamers.length > 1) {
           event.showPickedNumber!(
