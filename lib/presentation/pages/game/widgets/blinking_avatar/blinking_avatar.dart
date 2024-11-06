@@ -36,6 +36,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
   VoteDirection? _voteDirection;
   int? _starterIndex;
   int? newIndex;
+  bool firstGamerVoted = false;
 
   @override
   void initState() {
@@ -76,6 +77,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
         if (gamePeriod == GamePeriod.Night) {
           _animateGamer(widget.gamers[widget.index]);
         }
+        firstGamerVoted = state.game.firstGamerVoted;
         return AnimatedBuilder(
           animation: _animation,
           builder: (BuildContext context, Widget? child) => DecoratedBox(
@@ -151,18 +153,26 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                             ),
                           ),
                         )
-                      : widget.gamers[widget.index].imageUrl!.isEmpty
-                          ? Icon(
-                              Icons.person_add_rounded,
-                              size: widget.iconSize,
-                              color: MafiaTheme.themeData.colorScheme.secondary,
-                            )
-                          : Image.network(
+                      : widget.gamers[widget.index].hasImage
+                          ? Image.network(
                               widget.gamers[widget.index].imageUrl!,
                               fit: BoxFit.fill,
                               width: widget.sizeBoxSize,
                               height: widget.sizeBoxSize,
-                            ),
+                            )
+                          : widget.gamers[widget.index].isNameChanged!
+                              ? Image.asset(
+                                  'assets/logo_m.png',
+                                  fit: BoxFit.fill,
+                                  width: widget.sizeBoxSize,
+                                  height: widget.sizeBoxSize,
+                                )
+                              : Icon(
+                                  Icons.person_add_rounded,
+                                  size: widget.iconSize,
+                                  color: MafiaTheme
+                                      .themeData.colorScheme.secondary,
+                                ),
                 ),
               ),
             ),
@@ -202,7 +212,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
     final bool allVoted = widget.gamers
         .where((Gamer gamer) => !gamer.wasKilled)
         .every((Gamer gamer) => gamer.wasVoted);
-    
+
     if (allVoted) {
       showSuccessSnackBar(
         context: context,
@@ -216,7 +226,8 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               gamer.gamerId ==
               BlocProvider.of<GameBloc>(context).state.game.starterId,
         );
-        if (_voteDirection == VoteDirection.NotSet) {
+        if (_voteDirection == VoteDirection.NotSet &&
+            firstGamerVoted) {
           _showSnackBar(AppStrings.pleaseChooseDirection);
           return;
         }
@@ -238,34 +249,40 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
           (Gamer gamer) => gamer.gamerId == _currentVoter!.gamerId,
         );
 
-        if (_voteDirection == VoteDirection.Right) {
-          newIndex = (currentVoterIndex - 1 + widget.gamers.length) %
-              widget.gamers.length;
-          while (widget.gamers[newIndex!].wasKilled) {
-            newIndex =
-                (newIndex! - 1 + widget.gamers.length) % widget.gamers.length;
+        if (firstGamerVoted) {
+          if (_voteDirection == VoteDirection.Right) {
+            newIndex = (currentVoterIndex - 1 + widget.gamers.length) %
+                widget.gamers.length;
+            while (widget.gamers[newIndex!].wasKilled) {
+              newIndex =
+                  (newIndex! - 1 + widget.gamers.length) % widget.gamers.length;
+            }
+            if (newIndex == _starterIndex) {
+              showSuccessSnackBar(
+                context: context,
+                message: AppStrings.allGamersVoted,
+              );
+              return;
+            }
+            _setVoter(newIndex!);
+          } else if (_voteDirection == VoteDirection.Left) {
+            newIndex = (currentVoterIndex + 1) % widget.gamers.length;
+            while (widget.gamers[newIndex!].wasKilled) {
+              newIndex = (newIndex! + 1) % widget.gamers.length;
+            }
+            if (newIndex == _starterIndex) {
+              showSuccessSnackBar(
+                context: context,
+                message: AppStrings.allGamersVoted,
+              );
+              return;
+            }
+            _setVoter(newIndex!);
           }
-          if (newIndex == _starterIndex) {
-            showSuccessSnackBar(
-              context: context,
-              message: AppStrings.allGamersVoted,
-            );
-            return;
-          }
-          _setVoter(newIndex!);
-        } else if (_voteDirection == VoteDirection.Left) {
-          newIndex = (currentVoterIndex + 1) % widget.gamers.length;
-          while (widget.gamers[newIndex!].wasKilled) {
-            newIndex = (newIndex! + 1) % widget.gamers.length;
-          }
-          if (newIndex == _starterIndex) {
-            showSuccessSnackBar(
-              context: context,
-              message: AppStrings.allGamersVoted,
-            );
-            return;
-          }
-          _setVoter(newIndex!);
+        } else {
+          BlocProvider.of<GameBloc>(context).add(
+            const SetFirstGamerVoted(),
+          );
         }
       } else if (_currentVoter!.name!.isNotEmpty &&
           _currentVoter!.gamerId == widget.gamers[widget.index].gamerId) {

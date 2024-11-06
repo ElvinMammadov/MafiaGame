@@ -35,7 +35,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
       ),
     );
     if (gamerRoles.roles[roleIndex].roleType != RoleType.Mafia &&
-        roleIndex < gamerRoles.roles.length - 2) {
+        roleIndex < gamerRoles.roles.length - 1) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeRoleIndex(
           roleIndex: roleIndex + 1,

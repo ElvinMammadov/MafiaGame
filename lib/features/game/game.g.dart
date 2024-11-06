@@ -54,12 +54,14 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
           ? const GamerCounts()
           : GamerCounts.fromJson(json['gamerCounts'] as Map<String, dynamic>),
       pointsId: json['pointsId'] as String? ?? '',
+      hasImage: json['hasImage'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'name': instance.name,
       'role': instance.role,
       'imageUrl': instance.imageUrl,
+      'hasImage': instance.hasImage,
       'id': instance.id,
       'documentId': instance.documentId,
       'gamerId': instance.gamerId,

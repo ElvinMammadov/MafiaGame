@@ -5,6 +5,7 @@ class Gamer extends Equatable {
   final String? name;
   final Role role;
   final String? imageUrl;
+  final bool hasImage;
   final int? id;
   final String? documentId;
   final String? gamerId;
@@ -82,6 +83,7 @@ class Gamer extends Equatable {
     this.werewolfChanged = false,
     this.gamerCounts = const GamerCounts(),
     this.pointsId = '',
+    this.hasImage = false,
   });
 
   const Gamer.empty()
@@ -123,7 +125,8 @@ class Gamer extends Equatable {
         chameleonRoleType = RoleType.Civilian,
         werewolfChanged = false,
         gamerCounts = const GamerCounts(),
-        pointsId = '';
+        pointsId = '',
+        hasImage = false;
 
   Gamer copyWith({
     String? name,
@@ -166,6 +169,7 @@ class Gamer extends Equatable {
     RoleType? chameleonRoleType,
     bool? werewolfChanged,
     GamerCounts? gamerCounts,
+    bool? hasImage,
   }) =>
       Gamer(
         name: name ?? this.name,
@@ -207,6 +211,7 @@ class Gamer extends Equatable {
         chameleonRoleType: chameleonRoleType ?? this.chameleonRoleType,
         werewolfChanged: werewolfChanged ?? this.werewolfChanged,
         gamerCounts: gamerCounts ?? this.gamerCounts,
+        hasImage: hasImage ?? this.hasImage,
       );
 
   factory Gamer.fromJson(Map<String, dynamic> json) => _$GamerFromJson(json);
@@ -254,6 +259,7 @@ class Gamer extends Equatable {
         chameleonRoleType,
         werewolfChanged,
         gamerCounts,
+        hasImage,
       ];
 
   @override

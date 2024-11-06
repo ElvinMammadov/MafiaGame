@@ -25,11 +25,17 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
             child: CircleAvatar(
               radius: 70.0,
               child: ClipOval(
-                child: Image.network(
-                  widget.killedGamer.imageUrl!,
-                  fit: BoxFit.fill,
-                  height: 200,
-                ),
+                child: widget.killedGamer.hasImage
+                    ? Image.network(
+                        widget.killedGamer.imageUrl!,
+                        fit: BoxFit.fill,
+                        height: 200,
+                      )
+                    : Image.asset(
+                        'assets/logo_m.png',
+                        fit: BoxFit.fill,
+                        height: 200,
+                      ),
               ),
             ),
           ).padding(

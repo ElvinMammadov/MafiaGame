@@ -510,6 +510,13 @@ class AddVoteToGamer extends GameEvent {
   List<Object?> get props => <Object?>[gamer, voter];
 }
 
+class SetFirstGamerVoted extends GameEvent {
+  const SetFirstGamerVoted();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
 class RemoveVote extends GameEvent {
   final Gamer gamer;
 

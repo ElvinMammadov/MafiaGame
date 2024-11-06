@@ -52,7 +52,9 @@ class StatisticsItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     CustomImageView(
-                      imagePath: gamer.imageUrl!,
+                      imagePath: gamer.hasImage
+                          ? gamer.imageUrl ?? ''
+                          : 'assets/logo_m.png',
                       radius: BorderRadius.circular(100),
                       width: customImageWidth,
                       height: customImageWidth,

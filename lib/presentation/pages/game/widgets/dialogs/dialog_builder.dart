@@ -135,7 +135,8 @@ class _SaveButtonState extends State<SaveButton> {
               BlocProvider.of<GameBloc>(context).state.game.saveStatus;
           return BaseButton(
             label: AppStrings.add,
-            enabled: widget.isEnabled,
+            enabled:
+                saveStatus != FirebaseSaveStatus.Saving && widget.isEnabled,
             isLoading: saveStatus == FirebaseSaveStatus.Saving,
             textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
             action: () async {
@@ -189,6 +190,7 @@ class _SaveButtonState extends State<SaveButton> {
                             : widget.position,
                         isNameChanged: true,
                         role: const Mirniy.empty(),
+                        hasImage: widget.chosenGamer!.hasImage,
                       ),
                       showErrorMessage: (String errorMessage) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -228,17 +230,24 @@ class _SaveButtonState extends State<SaveButton> {
                       ? await getImageFileFromAssets('logo_m.png')
                       : widget.imageFile!;
                   final String fileName = gamerId;
+                  UploadResult result = UploadResult(
+                    success: true,
+                    imageUrl: '',
+                  );
 
                   BlocProvider.of<GameBloc>(context).add(
                     const ChangeSaveStatus(
                       saveStatus: FirebaseSaveStatus.Saving,
                     ),
                   );
-                  final UploadResult result =
-                      await firestoreService.uploadImageToFirebaseStorage(
-                    imageFile,
-                    fileName,
-                  );
+
+                  if (widget.imageFile != null) {
+                    result =
+                        await firestoreService.uploadImageToFirebaseStorage(
+                      imageFile,
+                      fileName,
+                    );
+                  }
 
                   if (result.success) {
                     BlocProvider.of<GameBloc>(context).add(
@@ -253,6 +262,7 @@ class _SaveButtonState extends State<SaveButton> {
                               : widget.position,
                           isNameChanged: true,
                           role: const Mirniy.empty(),
+                          hasImage: result.imageUrl != '',
                         ),
                         updated: () {
                           BlocProvider.of<GameBloc>(context).add(

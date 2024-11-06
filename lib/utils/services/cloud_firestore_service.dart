@@ -37,8 +37,7 @@ class FirestoreService {
       // If the download URL is retrieved, return true and the URL
       return UploadResult(success: true, imageUrl: imageUrl);
     } catch (e) {
-      // If any exception occurs, return false and null as the URL
-      print('Upload failed: $e');
+      log('Upload failed: $e');
       return UploadResult(success: false, imageUrl: "");
     }
   }
@@ -198,6 +197,7 @@ class FirestoreService {
           'totalPoints': 0,
           'totalPlayedGames': 0,
           'pointsHistory': <Map<String, Object>>[],
+          'hasImage': gamer.hasImage,
         });
         return true;
       }
@@ -239,6 +239,7 @@ class FirestoreService {
             totalPlayedGames: data['totalPlayedGames'] as int,
             totalPoints: data['totalPoints'] as int,
           ),
+          hasImage: data['hasImage'] as bool? ?? false,
         );
       }).toList();
 
@@ -376,6 +377,7 @@ class FirestoreService {
           'lost': gamerData['lost'],
           'won': gamerData['won'],
           'totalPlayedGames': gamerData['totalPlayedGames'],
+          'hasImage': gamerData['hasImage'] ?? false,
         });
       }
 
@@ -392,6 +394,7 @@ class FirestoreService {
               imageUrl: gamerData['imageUrl'] as String,
               gamerId: gamerData['gamerId'] as String,
               gamerCreated: gamerData['gamerCreatedTime'] as String,
+              hasImage: gamerData['hasImage'] as bool? ?? false,
               gamerCounts: GamerCounts(
                 losingCount: gamerData['lost'] as int,
                 winnerCount: gamerData['won'] as int,

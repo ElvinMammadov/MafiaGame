@@ -70,6 +70,7 @@ GameState _$GameStateFromJson(Map<String, dynamic> json) => GameState(
       gameRoles: json['gameRoles'] == null
           ? const Roles.empty()
           : Roles.fromJson(json['gameRoles'] as Map<String, dynamic>),
+      firstGamerVoted: json['firstGamerVoted'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
@@ -99,6 +100,7 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
       'voteDirection': _$VoteDirectionEnumMap[instance.voteDirection]!,
       'starterId': instance.starterId,
       'gameRoles': instance.gameRoles,
+      'firstGamerVoted': instance.firstGamerVoted,
     };
 
 const _$GamePhaseEnumMap = {

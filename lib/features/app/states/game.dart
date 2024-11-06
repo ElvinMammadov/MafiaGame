@@ -28,6 +28,7 @@ class GameState extends Equatable {
   final VoteDirection voteDirection;
   final String starterId;
   final Roles gameRoles;
+  final bool firstGamerVoted;
 
   const GameState({
     this.gameId = '',
@@ -56,6 +57,7 @@ class GameState extends Equatable {
     this.voteDirection = VoteDirection.NotSet,
     this.starterId = '',
     this.gameRoles = const Roles.empty(),
+    this.firstGamerVoted = false,
   });
 
   const GameState.empty()
@@ -84,7 +86,8 @@ class GameState extends Equatable {
         saveStatus = FirebaseSaveStatus.Initial,
         voteDirection = VoteDirection.NotSet,
         starterId = '',
-        gameRoles = const Roles.empty();
+        gameRoles = const Roles.empty(),
+        firstGamerVoted = false;
 
   GameState copyWith({
     String? gameName,
@@ -113,6 +116,7 @@ class GameState extends Equatable {
     VoteDirection? voteDirection,
     String? starterId,
     Roles? gameRoles,
+    bool? firstGamerVoted,
   }) =>
       GameState(
         gameName: gameName ?? this.gameName,
@@ -141,6 +145,7 @@ class GameState extends Equatable {
         voteDirection: voteDirection ?? this.voteDirection,
         starterId: starterId ?? this.starterId,
         gameRoles: gameRoles ?? this.gameRoles,
+        firstGamerVoted: firstGamerVoted ?? this.firstGamerVoted,
       );
 
   factory GameState.fromJson(Map<String, dynamic> json) =>
@@ -175,6 +180,7 @@ class GameState extends Equatable {
         voteDirection,
         starterId,
         gameRoles,
+        firstGamerVoted,
       ];
 
   @override
@@ -188,7 +194,8 @@ class GameState extends Equatable {
       'isMafiaWin: $isMafiaWin, roleIndex: $roleIndex,'
       ' infectedCount: $infectedCount, '
       'gamePhase: $gamePhase, gamePeriod: $gamePeriod, '
-      'voteDirection: $voteDirection,}';
+      'voteDirection: $voteDirection, starterId: $starterId,'
+      ' gameRoles: $gameRoles, firstGamerVoted: $firstGamerVoted}';
 }
 
 enum VoteDirection {

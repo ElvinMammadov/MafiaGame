@@ -35,8 +35,6 @@ class _ResultScreenState extends State<ResultScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('isMafiaWinner: ${widget.isMafiaWinner}, gamers points:'
-        ' ${widget.gamers.map((Gamer gamer) => gamer.role.points)}');
     if (widget.saveGame) {
       BlocProvider.of<GameBloc>(context).add(
         const EmptyGame(),
@@ -79,78 +77,83 @@ class _ResultScreenState extends State<ResultScreen>
               fit: BoxFit.cover,
             ),
           ),
-          child: Scaffold(
-            appBar: const DefaultAppBar(
-              title: AppStrings.results,
-              showBackButton: true,
-            ),
-            backgroundColor: Colors.transparent,
-            body: SingleChildScrollView(
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                color:
-                    MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.2),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '${AppStrings.nameOfGame}: ${widget.gameName}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+          child: PopScope(
+            canPop: !(Platform.isIOS &&
+                MediaQuery.of(context).size.width >
+                    600),
+            child: Scaffold(
+              appBar: const DefaultAppBar(
+                title: AppStrings.results,
+                showBackButton: true,
+              ),
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color:
+                      MafiaTheme.themeData.colorScheme.secondary.withOpacity(0.2),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            '${AppStrings.nameOfGame}: ${widget.gameName}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '${AppStrings.date}: ${widget.gameStartTime}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            '${AppStrings.date}: ${widget.gameStartTime}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ).padding(
-                      vertical: 4,
-                      horizontal: 16,
-                    ),
-                    const Divider(
-                      thickness: 1,
-                      color: Colors.grey,
-                    ),
-                    ResultsBody(
-                      contentText: widget.isMafiaWinner
-                          ? AppStrings.mafiaWonExplanation
-                          : AppStrings.citizensWonExplanation,
-                      winners: widget.isMafiaWinner
-                          ? AppStrings.mafiaWon
-                          : AppStrings.citizensWon,
-                    ),
-                    const Divider(
-                      color: Colors.grey,
-                    ),
-                    AccordionBody(
-                      title: AppStrings.mafia,
-                      gamers: mafia,
-                      gameId: widget.gameId,
-                    ).padding(
-                      top: 8,
-                    ),
-                    AccordionBody(
-                      title: AppStrings.citizens,
-                      gamers: citizens,
-                      gameId: widget.gameId,
-                    ),
-                  ],
+                        ],
+                      ).padding(
+                        vertical: 4,
+                        horizontal: 16,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: Colors.grey,
+                      ),
+                      ResultsBody(
+                        contentText: widget.isMafiaWinner
+                            ? AppStrings.mafiaWonExplanation
+                            : AppStrings.citizensWonExplanation,
+                        winners: widget.isMafiaWinner
+                            ? AppStrings.mafiaWon
+                            : AppStrings.citizensWon,
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                      ),
+                      AccordionBody(
+                        title: AppStrings.mafia,
+                        gamers: mafia,
+                        gameId: widget.gameId,
+                      ).padding(
+                        top: 8,
+                      ),
+                      AccordionBody(
+                        title: AppStrings.citizens,
+                        gamers: citizens,
+                        gameId: widget.gameId,
+                      ),
+                    ],
+                  ),
+                ).padding(
+                  horizontal: 16,
+                  vertical: 16,
                 ),
-              ).padding(
-                horizontal: 16,
-                vertical: 16,
               ),
             ),
           ),
