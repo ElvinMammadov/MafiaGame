@@ -103,10 +103,10 @@ List<Widget> gamersAvatars({
                       if (gamers[i].votesCount >= 1)
                         Positioned(
                           top: 0,
-                          right: 0,
+                          right: 4,
                           child: Container(
-                            width: 20,
-                            height: 20,
+                            width: 25,
+                            height: 25,
                             decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
@@ -116,7 +116,7 @@ List<Widget> gamersAvatars({
                                 gamers[i].votesCount.toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),

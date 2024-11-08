@@ -207,6 +207,7 @@ enum VoteDirection {
 enum GamePhase {
   Discussion,
   Voting,
+  Sleeping,
   CouldStart,
   IsReady,
   Started,

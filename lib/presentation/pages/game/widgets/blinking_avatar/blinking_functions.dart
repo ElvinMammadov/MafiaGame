@@ -15,6 +15,15 @@ class BlinkingFunctions {
         gamers.firstWhere((Gamer gamer) => gamer.role.roleType == roleType);
     switch (roleType) {
       case RoleType.Doctor:
+        if (gamers[index].role.roleType == RoleType.Doctor) {
+          if (gamers[index].healCount == 0) {
+            showCantDoHimself(
+              context,
+              AppStrings.doctorCantHealAnymore,
+            );
+            return;
+          }
+        }
         healGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Mafia:
@@ -27,21 +36,21 @@ class BlinkingFunctions {
         killGamerByMafia(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Sheriff:
-        if(gamers[index].role.roleType == RoleType.Sheriff) {
+        if (gamers[index].role.roleType == RoleType.Sheriff) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
         killGamerBySheriff(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Madam:
-        if(gamers[index].role.roleType == RoleType.Madam) {
+        if (gamers[index].role.roleType == RoleType.Madam) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Killer:
-        if(gamers[index].role.roleType == RoleType.Killer) {
+        if (gamers[index].role.roleType == RoleType.Killer) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
@@ -49,13 +58,20 @@ class BlinkingFunctions {
         break;
       case RoleType.Werewolf:
         if (!gamer.beforeChange) {
+          if (gamers[index].role.roleType == RoleType.Werewolf) {
+            showCantDoHimself(
+              context,
+              AppStrings.cantDoSomethingAgainstYourself,
+            );
+            return;
+          }
           killGamerByMafia(gamers[index].name!, gamer, context, gamers);
           break;
         } else {
           break;
         }
       case RoleType.Virus:
-        if(gamers[index].role.roleType == RoleType.Virus) {
+        if (gamers[index].role.roleType == RoleType.Virus) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
@@ -76,21 +92,21 @@ class BlinkingFunctions {
         }
         break;
       case RoleType.Advocate:
-        if(gamers[index].role.roleType == RoleType.Advocate) {
+        if (gamers[index].role.roleType == RoleType.Advocate) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
         giveAlibi(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Security:
-        if(gamers[index].role.roleType == RoleType.Security) {
+        if (gamers[index].role.roleType == RoleType.Security) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
         secureGamer(gamers[index].name!, gamer.id!, context, gamers);
         break;
       case RoleType.Medium:
-        if(gamers[index].role.roleType == RoleType.Medium) {
+        if (gamers[index].role.roleType == RoleType.Medium) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
@@ -100,7 +116,7 @@ class BlinkingFunctions {
         chameleonChanges(context, index, gamer, gamers);
         break;
       case RoleType.Boomerang:
-        if(gamers[index].role.roleType == RoleType.Boomerang) {
+        if (gamers[index].role.roleType == RoleType.Boomerang) {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }

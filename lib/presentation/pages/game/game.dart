@@ -55,3 +55,5 @@ part 'widgets/number_picker/number_picker.dart';
 part 'widgets/roles_changer.dart';
 part 'widgets/direction_buttons.dart';
 part 'widgets/number_picker/picked_direction.dart';
+part 'widgets/dialogs/info_dialog.dart';
+part 'widgets/centered_info.dart';

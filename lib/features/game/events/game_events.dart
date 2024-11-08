@@ -173,6 +173,13 @@ class NightAction extends GameEvent {
       ];
 }
 
+class SleepingAction extends GameEvent {
+  const SleepingAction();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
 class VotingAction extends GameEvent {
   final Function(Gamer killedGamer) showKilledGamers;
   final Function(List<Gamer> pickedGamers)? showPickedNumber;

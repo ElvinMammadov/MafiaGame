@@ -106,6 +106,7 @@ Map<String, dynamic> _$GameStateToJson(GameState instance) => <String, dynamic>{
 const _$GamePhaseEnumMap = {
   GamePhase.Discussion: 'Discussion',
   GamePhase.Voting: 'Voting',
+  GamePhase.Sleeping: 'Sleeping',
   GamePhase.CouldStart: 'CouldStart',
   GamePhase.IsReady: 'IsReady',
   GamePhase.Started: 'Started',

@@ -28,6 +28,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
         return AppStrings.endDiscussion;
       case GamePhase.Voting:
         return AppStrings.endVoting;
+      case GamePhase.Sleeping:
+        return AppStrings.startNight;
     }
   }
 
@@ -66,7 +68,6 @@ class _GameTableScreenState extends State<GameTableScreen> {
     BuildContext context,
     GameState game,
   ) {
-    print('Save result mafiaCount $mafiaCount, civilianCount $civilianCount');
     final Gamer? werewolf = gamers
         .where((Gamer gamer) => gamer.role.roleType == RoleType.Werewolf)
         .firstOrNull;
@@ -177,9 +178,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
             final double directionButtonRightPercentage =
                 orientation == Orientation.portrait ? 2.8 : 2.7;
             return PopScope(
-              canPop: !(Platform.isIOS &&
-                  MediaQuery.of(context).size.width >
-                      600),
+              canPop:
+                  !(Platform.isIOS && MediaQuery.of(context).size.width > 600),
               child: Scaffold(
                 appBar: DefaultAppBar(
                   title: AppStrings.title,
@@ -324,6 +324,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                         ),
                                       );
                                       break;
+                                    case GamePhase.Sleeping:
+                                      BlocProvider.of<GameBloc>(context).add(
+                                        const SleepingAction(),
+                                      );
+                                      break;
                                     case GamePhase.Voting:
                                       BlocProvider.of<GameBloc>(context).add(
                                         VotingAction(
@@ -353,10 +358,11 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                             });
                                           },
                                           gamerHasAlibi: (Gamer gamer) {
-                                            showSuccessSnackBar(
-                                              message: gamerHasAlibi(
-                                                  gamer.name ?? ''),
-                                              context: context,
+                                            showInfoDialog(
+                                              context,
+                                              description: gamerHasAlibi(
+                                                gamer.name ?? '',
+                                              ),
                                             );
                                           },
                                           showPickedNumber:
@@ -373,7 +379,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                                       if (gamePhase ==
                                                           GamePhase.Finished) {
                                                         showResultScreen(
-                                                            context);
+                                                          context,
+                                                        );
                                                       }
                                                     },
                                                   );
@@ -426,7 +433,16 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                       );
                                     },
                                   ),
-                                ),
+                                )
+                        else if (gamePhase == GamePhase.Sleeping)
+                          Positioned(
+                            left: screenWidth / directionButtonRightPercentage,
+                            bottom:
+                                screenHeight / directionButtonBottomPercentage,
+                            child: const CenteredInfo(
+                              description: AppStrings.allGamersGoingSleeping,
+                            ),
+                          ),
                         if (gamePhase == GamePhase.CouldStart)
                           Positioned(
                             left: screenWidth / 2.5,

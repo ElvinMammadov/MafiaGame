@@ -41,9 +41,11 @@ void showPickNumber(
               );
               showKilledGamer(context, gamer, closeDialog);
             } else if (gamer.hasAlibi) {
-              showSuccessSnackBar(
-                message: gamerHasAlibi(gamer.name ?? ''),
-                context: context,
+              showInfoDialog(
+                context,
+                description: gamerHasAlibi(
+                  gamer.name ?? '',
+                ),
               );
             }
 

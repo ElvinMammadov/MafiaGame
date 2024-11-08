@@ -54,6 +54,9 @@ class AppStrings {
   static const String profile = 'Профиль';
   static const String endDiscussion = 'Завершить обсуждению';
   static const String endVoting = 'Завершить голосованию';
+  static const String startNight = 'Начать ночь';
+  static const String allGamersGoingSleeping =
+      'Все игроки закрывают глаза и засыпают.';
   static const String day = 'День';
   static const String night = 'Ночь';
   static const String endNight = 'Завершить ночь';
@@ -197,6 +200,8 @@ class AppStrings {
   static const String gamerBoomeranged = 'Геймер был убит Бумерангом.';
   static const String cantDoSomethingAgainstYourself =
       'Игрок не можете сделать что-то против себя';
+  static const String doctorCantHealAnymore =
+      'Доктор не может лечить себя больше';
 }
 
 String gamerHasAlibi(String name) =>
