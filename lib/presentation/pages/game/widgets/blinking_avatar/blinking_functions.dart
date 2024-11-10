@@ -13,6 +13,10 @@ class BlinkingFunctions {
 
     final Gamer gamer =
         gamers.firstWhere((Gamer gamer) => gamer.role.roleType == roleType);
+    final int infectedCount =
+        BlocProvider.of<GameBloc>(context).state.game.infectedCount;
+    final int nightNumber =
+        BlocProvider.of<GameBloc>(context).state.game.nightNumber;
     switch (roleType) {
       case RoleType.Doctor:
         if (gamers[index].role.roleType == RoleType.Doctor) {
@@ -75,7 +79,14 @@ class BlinkingFunctions {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
-        if (BlocProvider.of<GameBloc>(context).state.game.infectedCount > 0) {
+        if(infectedCount == 0 && nightNumber < 3) {
+          showErrorSnackBar(
+            context: context,
+            message: AppStrings.virusCantInfectAnymore,
+          );
+          return;
+        }
+        if (infectedCount > 0) {
           infectGamer(
             gamers[index].name!,
             gamer,
@@ -85,10 +96,36 @@ class BlinkingFunctions {
           BlocProvider.of<GameBloc>(context).add(
             InfectedCount(
               infectedCount:
-                  BlocProvider.of<GameBloc>(context).state.game.infectedCount -
+              infectedCount -
                       1,
             ),
           );
+          if(infectedCount == 1) {
+            final List<Gamer> newlyInfectedGamers = gamers
+                .where(
+                  (Gamer gamer) => gamer.newlyInfected && !gamer.wasKilled,
+            )
+                .toList();
+
+            if (newlyInfectedGamers.isNotEmpty) {
+              for(final Gamer newGamer in newlyInfectedGamers) {
+                BlocProvider.of<GameBloc>(context).add(
+                  InfectGamer(
+                    targetedGamer: newGamer,
+                    infect: false,
+                    changeInfected: true,
+                  ),
+                );
+              }
+            }
+            BlocProvider.of<GameBloc>(context).add(
+              InfectGamer(
+                targetedGamer: gamers[index],
+                infect: false,
+                changeInfected: true,
+              ),
+            );
+          }
         }
         break;
       case RoleType.Advocate:

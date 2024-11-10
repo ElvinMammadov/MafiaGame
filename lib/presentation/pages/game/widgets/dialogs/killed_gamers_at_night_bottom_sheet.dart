@@ -1,10 +1,11 @@
 part of game;
 
-void showKilledGamersAtNight(
+void showKilledGamers(
   BuildContext context,
   List<Gamer> killedGamers,
-  VoidCallback closeDialog,
-) {
+  VoidCallback closeDialog, {
+  bool isNightMode = true,
+}) {
   WoltModalSheet.show<void>(
     context: context,
     barrierDismissible: false,
@@ -16,7 +17,7 @@ void showKilledGamersAtNight(
         enableDrag: false,
         hasTopBarLayer: true,
         topBarTitle: Text(
-          AppStrings.killOfGamer,
+          AppStrings.killOfGamers,
           style: MafiaTheme.themeData.textTheme.headlineSmall,
         ),
         trailingNavBarWidget: Padding(
@@ -32,8 +33,10 @@ void showKilledGamersAtNight(
                 final Gamer gamer = killedGamers[index];
                 return KilledGamerScreen(
                   killedGamer: gamer,
-                  title: AppStrings.duringNightTrial,
-                  isKillerExist: true,
+                  title: isNightMode
+                      ? AppStrings.duringNightTrial
+                      : AppStrings.duringDayTrial,
+                  isKillerExist: isNightMode,
                 );
               },
               childCount: killedGamers.length,

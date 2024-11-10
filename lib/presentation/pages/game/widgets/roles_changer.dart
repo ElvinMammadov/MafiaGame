@@ -20,51 +20,75 @@ class _RolesChangerState extends State<RolesChanger> {
           final int roleIndex =
               BlocProvider.of<GameBloc>(context).state.game.roleIndex;
           final GamePeriod gamePeriod = state.game.gamePeriod;
-          return Center(
+          final RoleType roleType = roles.roles[roleIndex].roleType;
+          final int infectedCount = state.game.infectedCount;
+          return SizedBox(
+            width: 380.0,
+            height: 300.0,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  gamePeriod == GamePeriod.Night
-                      ? AppStrings.wakesUp + roles.roles[roleIndex].name
-                      : AppStrings.chooseRole + roles.roles[roleIndex].name,
-                  style: MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ).padding(bottom: 20.0),
-                Row(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      width: 120.0,
-                      child: BaseButton(
-                        label: AppStrings.back,
-                        textStyle: MafiaTheme.themeData.textTheme.titleMedium,
-                        enabled: roleIndex >= 1,
-                        action: () {
-                          BlocProvider.of<GameBloc>(context).add(
-                            ChangeRoleIndex(
-                              roleIndex: roleIndex - 1,
-                            ),
-                          );
-                        },
+                    Text(
+                      gamePeriod == GamePeriod.Night
+                          ? AppStrings.wakesUp + roles.roles[roleIndex].name
+                          : AppStrings.chooseRole +
+                              roles.roles[roleIndex].name,
+                      style:
+                          MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
+                    ).padding(bottom: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 120.0,
+                          child: BaseButton(
+                            label: AppStrings.back,
+                            textStyle:
+                                MafiaTheme.themeData.textTheme.titleMedium,
+                            enabled: roleIndex >= 1,
+                            action: () {
+                              BlocProvider.of<GameBloc>(context).add(
+                                ChangeRoleIndex(
+                                  roleIndex: roleIndex - 1,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 120.0,
+                          child: BaseButton(
+                            label: AppStrings.next,
+                            textStyle:
+                                MafiaTheme.themeData.textTheme.titleMedium,
+                            enabled: roleIndex < roles.roles.length - 1,
+                            action: () {
+                              BlocProvider.of<GameBloc>(context).add(
+                                ChangeRoleIndex(
+                                  roleIndex: roleIndex + 1,
+                                ),
+                              );
+                            },
+                          ),
+                        ).padding(horizontal: 16.0),
+                      ],
                     ),
-                    SizedBox(
-                      width: 120.0,
-                      child: BaseButton(
-                        label: AppStrings.next,
-                        textStyle: MafiaTheme.themeData.textTheme.titleMedium,
-                        enabled: roleIndex < roles.roles.length - 1,
-                        action: () {
-                          BlocProvider.of<GameBloc>(context).add(
-                            ChangeRoleIndex(
-                              roleIndex: roleIndex + 1,
-                            ),
-                          );
-                        },
-                      ),
-                    ).padding(horizontal: 16.0),
                   ],
                 ),
+                if (roleType == RoleType.Virus &&
+                    gamePeriod == GamePeriod.Night)
+                  Text(
+                    couldInfect(infectedCount),
+                    style: MafiaTheme.themeData.textTheme.titleLarge
+                        ?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ).padding(top: 25.0),
               ],
             ),
           );

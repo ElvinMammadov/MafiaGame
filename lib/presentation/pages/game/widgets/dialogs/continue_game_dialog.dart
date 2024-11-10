@@ -90,6 +90,7 @@ class _FinishButtonState extends State<FinishButton> {
   @override
   Widget build(BuildContext context) => BaseButton(
         isLoading: isLoading,
+        enabled: !isLoading,
         action: () {
           final List<Gamer> gamers = BlocProvider.of<GameBloc>(context)
               .state

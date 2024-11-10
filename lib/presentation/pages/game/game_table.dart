@@ -140,7 +140,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
             isMafiaWin = state.game.isMafiaWin;
 
             if (gamePhase == GamePhase.Discussion ||
-                gamePhase == GamePhase.Voting) {
+                gamePhase == GamePhase.Voting ||
+                gamePhase == GamePhase.Sleeping) {
               saveLastResults(
                 mafiaCount,
                 civilianCount,
@@ -246,7 +247,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                       showKilledGamers:
                                           (List<Gamer> newKilledGamers) {
                                         if (newKilledGamers.isNotEmpty) {
-                                          showKilledGamersAtNight(
+                                          showKilledGamers(
                                             context,
                                             newKilledGamers,
                                             () {
@@ -340,22 +341,53 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                             );
                                           },
                                           showKilledGamers:
-                                              (Gamer killedGamer) {
-                                            showKilledGamer(
-                                                context, killedGamer, () {
-                                              if (mafiaCount == 1 &&
-                                                  civilianCount == 2) {
-                                                showContinueGameDialog(
-                                                  context,
-                                                  accepted: () {
-                                                    if (gamePhase ==
-                                                        GamePhase.Finished) {
-                                                      showResultScreen(context);
-                                                    }
-                                                  },
-                                                );
-                                              }
-                                            });
+                                              (List<Gamer> killedGamers) {
+                                            if (killedGamers.length == 1) {
+                                              showKilledGamer(
+                                                context,
+                                                killedGamers.first,
+                                                () {
+                                                  if (mafiaCount == 1 &&
+                                                      civilianCount == 2) {
+                                                    showContinueGameDialog(
+                                                      context,
+                                                      accepted: () {
+                                                        if (gamePhase ==
+                                                            GamePhase
+                                                                .Finished) {
+                                                          showResultScreen(
+                                                            context,
+                                                          );
+                                                        }
+                                                      },
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            } else {
+                                              showKilledGamers(
+                                                context,
+                                                killedGamers,
+                                                isNightMode: false,
+                                                () {
+                                                  if (mafiaCount == 1 &&
+                                                      civilianCount == 2) {
+                                                    showContinueGameDialog(
+                                                      context,
+                                                      accepted: () {
+                                                        if (gamePhase ==
+                                                            GamePhase
+                                                                .Finished) {
+                                                          showResultScreen(
+                                                            context,
+                                                          );
+                                                        }
+                                                      },
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            }
                                           },
                                           gamerHasAlibi: (Gamer gamer) {
                                             showInfoDialog(
@@ -445,13 +477,13 @@ class _GameTableScreenState extends State<GameTableScreen> {
                           ),
                         if (gamePhase == GamePhase.CouldStart)
                           Positioned(
-                            left: screenWidth / 2.5,
+                            left: screenWidth / 2.8,
                             bottom: screenHeight / 3.3,
                             child: const RolesChanger(),
                           ),
                         if (gamePeriod == GamePeriod.Night)
                           Positioned(
-                            left: screenWidth / 2.5,
+                            left: screenWidth / 2.8,
                             bottom: screenHeight / 3.3,
                             child: const RolesChanger(),
                           ),

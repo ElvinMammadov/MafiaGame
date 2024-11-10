@@ -83,9 +83,11 @@ List<Widget> gamersAvatars({
                           gamePhase: gamePhase,
                         ),
                       ),
-                      if ((gamers[i].gamerId == starterId &&
-                              starterId.isNotEmpty) &&
-                          gamePhase == GamePhase.Voting)
+                      if (((gamers[i].gamerId == starterId &&
+                                  starterId.isNotEmpty) &&
+                              gamePhase == GamePhase.Voting) ||
+                          (gamePeriod == GamePeriod.Night &&
+                              gamers[i].wasInfected == true))
                         const Positioned(
                           top: 0,
                           left: 0,
@@ -95,6 +97,22 @@ List<Widget> gamersAvatars({
                             child: DecoratedBox(
                               decoration: BoxDecoration(
                                 color: Colors.green,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (gamePeriod == GamePeriod.Night &&
+                          gamers[i].newlyInfected == true)
+                        const Positioned(
+                          top: 0,
+                          left: 25,
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: Colors.purple,
                                 shape: BoxShape.circle,
                               ),
                             ),

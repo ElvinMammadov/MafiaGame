@@ -61,6 +61,7 @@ class AppStrings {
   static const String night = 'Ночь';
   static const String endNight = 'Завершить ночь';
   static const String killOfGamer = 'Убийство игрока';
+  static const String killOfGamers = 'Убийство игроков';
   static const String duringDayTrial = 'Во время дневного суда игрок был убит';
   static const String duringNightTrial = 'Во время ночного суда игрок был убит';
   static const String votesHaveNotAdded = 'Вы не добавили голосов.';
@@ -202,7 +203,10 @@ class AppStrings {
       'Игрок не можете сделать что-то против себя';
   static const String doctorCantHealAnymore =
       'Доктор не может лечить себя больше';
+  static const String virusCantInfectAnymore = 'Вирус не может заразить больше';
 }
 
 String gamerHasAlibi(String name) =>
     "У игрока $name есть алиби, во время голосования его не убили.";
+
+String couldInfect(int number) => 'Virus может заразить $number игроков.';

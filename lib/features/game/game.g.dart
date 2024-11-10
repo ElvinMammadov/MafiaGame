@@ -55,6 +55,7 @@ Gamer _$GamerFromJson(Map<String, dynamic> json) => Gamer(
           : GamerCounts.fromJson(json['gamerCounts'] as Map<String, dynamic>),
       pointsId: json['pointsId'] as String? ?? '',
       hasImage: json['hasImage'] as bool? ?? false,
+      newlyInfected: json['newlyInfected'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
@@ -98,6 +99,7 @@ Map<String, dynamic> _$GamerToJson(Gamer instance) => <String, dynamic>{
       'chameleonRoleType': _$RoleTypeEnumMap[instance.chameleonRoleType]!,
       'werewolfChanged': instance.werewolfChanged,
       'gamerCounts': instance.gamerCounts,
+      'newlyInfected': instance.newlyInfected,
     };
 
 const _$RoleTypeEnumMap = {

@@ -181,7 +181,7 @@ class SleepingAction extends GameEvent {
 }
 
 class VotingAction extends GameEvent {
-  final Function(Gamer killedGamer) showKilledGamers;
+  final Function(List<Gamer> killedGamers) showKilledGamers;
   final Function(List<Gamer> pickedGamers)? showPickedNumber;
   final Function(Gamer killedGamer)? gamerHasAlibi;
   final VoidCallback? showFailureInfo;
@@ -409,16 +409,22 @@ class BoomerangGamer extends GameEvent {
 class InfectGamer extends GameEvent {
   final Gamer targetedGamer;
   final bool infect;
+  final bool changeInfected;
+  final VoidCallback? success;
 
   const InfectGamer({
     required this.targetedGamer,
     required this.infect,
+    this.changeInfected = false,
+    this.success,
   });
 
   @override
   List<Object?> get props => <Object?>[
         targetedGamer,
         infect,
+        changeInfected,
+        success,
       ];
 }
 
