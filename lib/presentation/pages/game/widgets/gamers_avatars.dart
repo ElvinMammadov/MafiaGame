@@ -118,6 +118,29 @@ List<Widget> gamersAvatars({
                             ),
                           ),
                         ),
+                      if (gamers[i].foulCount >= 1)
+                        Positioned(
+                          top: 0,
+                          right: 25,
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              color: Colors.yellow,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                gamers[i].foulCount.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       if (gamers[i].votesCount >= 1)
                         Positioned(
                           top: 0,

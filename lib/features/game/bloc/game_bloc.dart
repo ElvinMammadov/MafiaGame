@@ -806,8 +806,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
     on<KillInfectedGamers>((KillInfectedGamers event, Emitter<AppState> emit) {
       // Separate mafia and other killed gamers
-      print(
-          'Infected gamers name : ${event.infectedGamers.map((Gamer gamer) => gamer.name)}');
       final List<Gamer> mafiaGamers = event.infectedGamers
           .where(
             (Gamer gamer) =>
@@ -871,7 +869,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
               if (gamer.id == event.gamer.id) {
                 ///Kill gamer if he was infected
                 if (gamer.wasInfected) {
-                  print('Gamer was infected, name: ${gamer.name}');
                   event.gamer.role.roleType == RoleType.Mafia ||
                           event.gamer.role.roleType == RoleType.Don ||
                           (event.gamer.role.roleType == RoleType.Werewolf &&
@@ -1231,7 +1228,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                   wasBoomeranged: false,
                   wasSecured: false,
                   canTarget: true,
-                  foulCount: 0,
                   wasKilledByWerewolf: false,
                 ),
               )
@@ -1702,7 +1698,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
 
       for (final Gamer gamer in gamers) {
         if (!gamer.wasKilled) {
-          if (!gamer.wasHealed || !gamer.wasSecured) {
+          if (!gamer.wasHealed && !gamer.wasSecured) {
             if (gamer.wasKilledByMafia ||
                 gamer.wasKilledByKiller ||
                 gamer.wasKilledBySheriff ||
@@ -1973,6 +1969,60 @@ class GameBloc extends Bloc<GameEvent, AppState> {
       );
       emit(appState);
     });
+
+    on<RestoreGamer>(
+      (RestoreGamer event, Emitter<AppState> emit) {
+        final List<Role> roles = state.gamersState.roles.roles;
+        final bool isGamerMafia =
+            event.targetedGamer.role.roleType == RoleType.Mafia ||
+                event.targetedGamer.role.roleType == RoleType.Don;
+        final int mafiaCount = state.game.mafiaCount;
+        if (isGamerMafia && mafiaCount == 0) {
+          roles.insert(0, const Mafia.empty());
+        } else {
+          roles.add(event.targetedGamer.role);
+        }
+        final AppState appState = state.copyWith(
+          gamers: state.gamersState.copyWith(
+            roles: state.gamersState.roles.copyWith(
+              roles: roles,
+            ),
+            gamers: state.gamersState.gamers.map((Gamer gamer) {
+              if (gamer.id == event.targetedGamer.id) {
+                return gamer.copyWith(
+                  wasKilled: false,
+                  wasHealed: false,
+                  wasSecured: false,
+                  wasKilledByMafia: false,
+                  wasKilledByKiller: false,
+                  wasKilledBySheriff: false,
+                  wasBoomeranged: false,
+                  wasCheckedByMadam: false,
+                  wasCheckedByMedium: false,
+                  wasKilledByWerewolf: false,
+                  canTarget: true,
+                  hasAlibi: false,
+                  newlyInfected: false,
+                  wasInfected: false,
+                  isAnimated: false,
+                  targetId: 0,
+                  killSecurity: false,
+                  votesCount: 0,
+                );
+              }
+              return gamer;
+            }).toList(),
+          ),
+          game: state.game.copyWith(
+            mafiaCount: isGamerMafia ? mafiaCount + 1 : mafiaCount,
+            civilianCount: !isGamerMafia
+                ? state.game.civilianCount + 1
+                : state.game.civilianCount,
+          ),
+        );
+        emit(appState);
+      },
+    );
 
     on<ChameleonChangeRole>(
         (ChameleonChangeRole event, Emitter<AppState> emit) {

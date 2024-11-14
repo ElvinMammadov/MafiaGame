@@ -1,13 +1,17 @@
 part of game;
 
-void showContinueGameDialog(
+void showTwoChoiceDialog(
   BuildContext context, {
   required VoidCallback accepted,
+  String description = AppStrings.continueGame,
+  String endButtonLabel = AppStrings.endGameLabel,
+  bool isFoulDialog = false,
+  String gamerName = '',
 }) {
   WoltModalSheet.show<void>(
     context: context,
-    maxDialogWidth: 500,
-    minDialogWidth: 500,
+    maxDialogWidth: 540,
+    minDialogWidth: 540,
     pageListBuilder: (BuildContext modalSheetContext) =>
         <SliverWoltModalSheetPage>[
       WoltModalSheetPage(
@@ -29,9 +33,18 @@ void showContinueGameDialog(
         ),
         child: Column(
           children: <Widget>[
+            if(isFoulDialog)
+              Text(
+                '${AppStrings.gamer}: $gamerName',
+                style: MafiaTheme.themeData.textTheme.headlineMedium,
+              ).padding(
+                bottom: 20.0,
+                horizontal: 20.0,
+              ),
             Text(
-              AppStrings.continueGame,
+              description,
               style: MafiaTheme.themeData.textTheme.headlineMedium,
+              textAlign: TextAlign.center,
             ).padding(
               bottom: 20.0,
               horizontal: 20.0,
@@ -40,12 +53,14 @@ void showContinueGameDialog(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 SizedBox(
-                  width: 200.0,
+                  width: 220.0,
                   child: FinishButton(
+                    endButtonLabel: endButtonLabel,
                     accepted: () {
                       Navigator.of(context).pop();
                       accepted();
                     },
+                    isFoulDialog: isFoulDialog,
                   ),
                 ).padding(
                   horizontal: 16.0,
@@ -56,7 +71,7 @@ void showContinueGameDialog(
                     action: () {
                       Navigator.of(context).pop();
                     },
-                    label: AppStrings.continueGameLabel,
+                    label: AppStrings.closeButton,
                     textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
                   ),
                 ).padding(
@@ -77,8 +92,15 @@ void showContinueGameDialog(
 
 class FinishButton extends StatefulWidget {
   final VoidCallback accepted;
+  final String endButtonLabel;
+  final bool isFoulDialog;
 
-  const FinishButton({super.key, required this.accepted});
+  const FinishButton({
+    super.key,
+    required this.accepted,
+    required this.endButtonLabel,
+    this.isFoulDialog = false,
+  });
 
   @override
   _FinishButtonState createState() => _FinishButtonState();
@@ -92,21 +114,24 @@ class _FinishButtonState extends State<FinishButton> {
         isLoading: isLoading,
         enabled: !isLoading,
         action: () {
-          final List<Gamer> gamers = BlocProvider.of<GameBloc>(context)
-              .state
-              .gamersState
-              .gamers;
-          final GameState game = BlocProvider.of<GameBloc>(context)
-              .state
-              .game;
+          if (widget.isFoulDialog) {
+            widget.accepted();
+            setState(() {
+              isLoading = true;
+            });
+            return;
+          }
+          final List<Gamer> gamers =
+              BlocProvider.of<GameBloc>(context).state.gamersState.gamers;
+          final GameState game = BlocProvider.of<GameBloc>(context).state.game;
           BlocProvider.of<GameBloc>(
             context,
           ).add(
             CalculatePoints(
               gameState: game.copyWith(
-                    isMafiaWin: true,
-                    gamers: gamers,
-                  ),
+                isMafiaWin: true,
+                gamers: gamers,
+              ),
               finished: () {
                 setState(() {
                   isLoading = true;
@@ -118,7 +143,7 @@ class _FinishButtonState extends State<FinishButton> {
             ),
           );
         },
-        label: AppStrings.endGameLabel,
+        label: widget.endButtonLabel,
         textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
       );
 }

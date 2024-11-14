@@ -98,6 +98,140 @@ class DialogBuilder {
       modalTypeBuilder: (BuildContext context) => WoltModalType.dialog,
     );
   }
+
+
+
+  void showChosenGamersDialog(
+    BuildContext context,
+    List<Gamer> gamers, {
+    String description = "",
+    String buttonTitle = "",
+    required void Function(Gamer?) onGamerSelected,
+  }) {
+    final GlobalKey<FormFieldState<Gamer>> selectedGamerKey =
+        GlobalKey<FormFieldState<Gamer>>();
+    Gamer? selectedGamer;
+    WoltModalSheet.show<void>(
+      context: context,
+      maxDialogWidth: 540,
+      minDialogWidth: 540,
+      pageListBuilder: (BuildContext modalSheetContext) =>
+          <SliverWoltModalSheetPage>[
+        WoltModalSheetPage(
+          hasSabGradient: false,
+          isTopBarLayerAlwaysVisible: true,
+          hasTopBarLayer: true,
+          trailingNavBarWidget: Padding(
+            padding: const EdgeInsets.only(
+              right: 16,
+            ),
+            child: IconButton(
+              onPressed: Navigator.of(context).pop,
+              icon: const Icon(
+                Icons.close,
+                size: 32,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              Text(
+                description,
+                textAlign: TextAlign.center,
+                style: MafiaTheme.themeData.textTheme.headlineMedium,
+              ).padding(
+                bottom: 20.0,
+                horizontal: 20.0,
+              ),
+              DropdownButtonFormField2<Gamer>(
+                isExpanded: true,
+                key: selectedGamerKey,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  labelStyle: MafiaTheme.themeData.textTheme.titleMedium
+                      ?.copyWith(height: 1),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                  ),
+                ),
+                hint: Text(
+                  AppStrings.gamers,
+                  style: MafiaTheme.themeData.textTheme.titleMedium
+                      ?.copyWith(height: 1),
+                ),
+                items: gamers
+                    .map(
+                      (Gamer gamer) => DropdownMenuItem<Gamer>(
+                        value: gamer,
+                        child: Text(
+                          gamer.name ?? '',
+                          style: MafiaTheme.themeData.textTheme.titleMedium
+                              ?.copyWith(height: 1),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                value: selectedGamer,
+                onChanged: (Gamer? gamer) {
+                  selectedGamer = gamer;
+                },
+                onSaved: (Gamer? gamer) {
+                  selectedGamer = gamer;
+                },
+                iconStyleData: const IconStyleData(
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.grey,
+                  ),
+                ),
+                dropdownStyleData: DropdownStyleData(
+                  width: 480,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                  ),
+                ),
+              ).padding(
+                top: Dimensions.padding16,
+                horizontal: Dimensions.padding16,
+              ),
+              Center(
+                child: SizedBox(
+                  width: 280.0,
+                  child: BaseButton(
+                    action: () {
+                      Navigator.of(context).pop();
+                      onGamerSelected(selectedGamer);
+                    },
+                    label: buttonTitle,
+                    textStyle: MafiaTheme.themeData.textTheme.headlineSmall,
+                  ),
+                ).padding(
+                  horizontal: 16.0,
+                  vertical: Dimensions.padding32,
+                ),
+              ),
+            ],
+          ).padding(
+            horizontal: 16.0,
+            vertical: 16.0,
+          ),
+        ),
+      ],
+      modalTypeBuilder: (BuildContext context) => WoltModalType.dialog,
+    );
+  }
 }
 
 class SaveButton extends StatefulWidget {

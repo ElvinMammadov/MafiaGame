@@ -38,7 +38,7 @@ part 'game_table.dart';
 part 'widgets/blinking_avatar/blinking_avatar.dart';
 part 'widgets/count_down_timer.dart';
 part 'widgets/dialogs/add_functionality_dialog.dart';
-part 'widgets/dialogs/continue_game_dialog.dart';
+part 'widgets/dialogs/two_choice_dialog.dart';
 part 'widgets/dialogs/dialog_builder.dart';
 part 'widgets/dialogs/killed_gamer_dialog.dart';
 part 'widgets/dialogs/killed_gamers_at_night_bottom_sheet.dart';

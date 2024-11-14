@@ -60,7 +60,6 @@ void showAddFunctionality(
                     backgroundColor: MafiaTheme.themeData.colorScheme.secondary
                         .withOpacity(0.5),
                     action: () {
-                      print('roleType: ${role.roleType}');
                       BlocProvider.of<GameBloc>(context).add(
                         ChameleonChangeRole(
                           chameleonRoleType: role.roleType,

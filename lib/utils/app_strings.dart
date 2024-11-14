@@ -150,6 +150,7 @@ class AppStrings {
   static const String experience = 'Стаж';
   static const String leaveGame = 'Покинуть игру';
   static const String addGamer = 'Добавить игрока';
+  static const String restoreGamer = 'Восстановить игрока';
   static const String loginSuccessfully = 'Вход успешьно выполнен';
   static const String loginError = 'Ошибка во время входа, попробуйте еще раз';
   static const String playsForMainCharacters = 'Играя за мирных';
@@ -204,9 +205,22 @@ class AppStrings {
   static const String doctorCantHealAnymore =
       'Доктор не может лечить себя больше';
   static const String virusCantInfectAnymore = 'Вирус не может заразить больше';
+  static const String addFoulToGamer =
+      'Хотите ли вы добавить фол этому игроку?';
+  static const String addFoul = 'Добавить фол';
+  static const String foulAdded = 'Фол добавлен';
+  static const String closeButton = 'Закрыть';
+  static const String removePlayer = 'Удалить';
+  static const String restoreGamerDescription =
+      'Пожалуйста, выберите игрока для восстановления.';
+  static const String gamers = 'Игроки';
+  static const String restore = 'Восстановить';
 }
 
 String gamerHasAlibi(String name) =>
     "У игрока $name есть алиби, во время голосования его не убили.";
 
 String couldInfect(int number) => 'Virus может заразить $number игроков.';
+
+String removeGamer(int foulCount) =>
+    'У этого игрока уже $foulCount фола. Хотите удалить игрока из игры?';

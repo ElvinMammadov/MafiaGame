@@ -107,7 +107,41 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
                 ),
               ),
               color: Colors.transparent,
-              child: InkWell(
+              child: GestureDetector(
+                onLongPress: () {
+                  showTwoChoiceDialog(
+                    context,
+                    isFoulDialog: true,
+                    gamerName: widget.gamers[widget.index].name ?? '',
+                    accepted: () {
+                      BlocProvider.of<GameBloc>(context).add(
+                        AddFaultToGamer(
+                          gamerId: widget.gamers[widget.index].id ?? 0,
+                        ),
+                      );
+                      if (widget.gamers[widget.index].foulCount >= 2) {
+                        showTwoChoiceDialog(
+                          context,
+                          isFoulDialog: true,
+                          gamerName: widget.gamers[widget.index].name ?? '',
+                          endButtonLabel: AppStrings.removePlayer,
+                          accepted: () {
+                            BlocProvider.of<GameBloc>(context).add(
+                              KillGamer(
+                                gamer: widget.gamers[widget.index],
+                              ),
+                            );
+                          },
+                          description: removeGamer(
+                            widget.gamers[widget.index].foulCount + 1,
+                          ),
+                        );
+                      }
+                    },
+                    description: AppStrings.addFoulToGamer,
+                    endButtonLabel: AppStrings.addFoul,
+                  );
+                },
                 onTap: () {
                   if (widget.gamePhase == GamePhase.CouldStart) {
                     _toggleAnimation();
@@ -226,8 +260,7 @@ class _BlinkingAvatarState extends State<BlinkingAvatar>
               gamer.gamerId ==
               BlocProvider.of<GameBloc>(context).state.game.starterId,
         );
-        if (_voteDirection == VoteDirection.NotSet &&
-            firstGamerVoted) {
+        if (_voteDirection == VoteDirection.NotSet && firstGamerVoted) {
           _showSnackBar(AppStrings.pleaseChooseDirection);
           return;
         }

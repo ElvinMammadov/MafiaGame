@@ -57,7 +57,7 @@ void showPickNumber(
                       killedGamers.first,
                       () {
                         if (mafiaCount == 1 && civilianCount == 2) {
-                          showContinueGameDialog(
+                          showTwoChoiceDialog(
                             context,
                             accepted: () {
                               if (gamePhase == GamePhase.Finished) {
@@ -77,7 +77,7 @@ void showPickNumber(
                       isNightMode: false,
                       () {
                         if (mafiaCount == 1 && civilianCount == 2) {
-                          showContinueGameDialog(
+                          showTwoChoiceDialog(
                             context,
                             accepted: () {
                               if (gamePhase == GamePhase.Finished) {
@@ -106,7 +106,7 @@ void showPickNumber(
                     topGamers,
                     () {
                       if (mafiaCount == 1 && civilianCount == 2) {
-                        showContinueGameDialog(
+                        showTwoChoiceDialog(
                           context,
                           accepted: () {
                             if (gamePhase == GamePhase.Finished) {

@@ -329,6 +329,19 @@ class ChameleonChangeRole extends GameEvent {
       ];
 }
 
+class RestoreGamer extends GameEvent {
+  final Gamer targetedGamer;
+
+  const RestoreGamer({
+    required this.targetedGamer,
+  });
+
+  @override
+  List<Object?> get props => <Object?>[
+        targetedGamer,
+      ];
+}
+
 class ChangeRoleIndex extends GameEvent {
   final int roleIndex;
 
@@ -541,8 +554,12 @@ class RemoveVote extends GameEvent {
 
 class AddFaultToGamer extends GameEvent {
   final int gamerId;
+  final VoidCallback? hasEnoughFaults;
 
-  const AddFaultToGamer({required this.gamerId});
+  const AddFaultToGamer({
+    required this.gamerId,
+    this.hasEnoughFaults,
+  });
 
   @override
   List<Object?> get props => <Object?>[gamerId];

@@ -8,6 +8,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? actionCallback;
   final VoidCallback? onAddGamer;
   final VoidCallback? onExit;
+  final VoidCallback? onRestoreGamer;
   final bool showGameMenu;
 
   const DefaultAppBar({
@@ -18,6 +19,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onAddGamer,
     this.showGameMenu = false,
     this.onExit,
+    this.onRestoreGamer,
   });
 
   void _onMenuSelected(String value) {
@@ -27,6 +29,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case 'exit':
         onExit?.call();
+        break;
+      case 'restoreGamer':
+        onRestoreGamer?.call();
         break;
       default:
         break;
@@ -42,7 +47,6 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: MafiaTheme.themeData.textTheme.headlineSmall?.copyWith(
           fontSize: 24,
         ),
-
       ),
       automaticallyImplyLeading: showBackButton,
       centerTitle: true,
@@ -73,6 +77,30 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           Text(
                             AppStrings.addGamer,
+                            style: TextStyle(
+                              color: MafiaTheme.themeData.colorScheme.surface,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const PopupMenuDivider(),
+                  PopupMenuItem<String>(
+                    value: 'restoreGamer',
+                    child: SizedBox(
+                      width: 220,
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.restore_sharp,
+                            color: Colors.white,
+                          ),
+                          Text(
+                            AppStrings.restoreGamer,
                             style: TextStyle(
                               color: MafiaTheme.themeData.colorScheme.surface,
                               fontSize: 16,

@@ -229,7 +229,6 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   },
                   value: selectedPosition,
                   onChanged: (int? value) {
-                    print('value: $value');
                     selectedPosition = value;
                     widget.onPositionChange(selectedPosition);
                   },

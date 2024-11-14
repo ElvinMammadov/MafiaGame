@@ -213,6 +213,26 @@ class _GameTableScreenState extends State<GameTableScreen> {
                       isPositionMode: true,
                     );
                   },
+                  onRestoreGamer: () {
+                    final List<Gamer> killedGamers = newGamers
+                        .where((Gamer gamer) => gamer.wasKilled)
+                        .toList();
+                    DialogBuilder().showChosenGamersDialog(
+                      context,
+                      killedGamers,
+                      onGamerSelected: (Gamer? gamer) {
+                        if (gamer != null) {
+                          BlocProvider.of<GameBloc>(context).add(
+                            RestoreGamer(
+                              targetedGamer: gamer,
+                            ),
+                          );
+                        }
+                      },
+                      description: AppStrings.restoreGamerDescription,
+                      buttonTitle: AppStrings.restore,
+                    );
+                  },
                 ),
                 resizeToAvoidBottomInset: false,
                 body: DecoratedBox(
@@ -253,7 +273,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                             () {
                                               if (mafiaCount == 1 &&
                                                   civilianCount == 2) {
-                                                showContinueGameDialog(
+                                                showTwoChoiceDialog(
                                                   context,
                                                   accepted: () {
                                                     if (gamePhase ==
@@ -349,7 +369,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                                 () {
                                                   if (mafiaCount == 1 &&
                                                       civilianCount == 2) {
-                                                    showContinueGameDialog(
+                                                    showTwoChoiceDialog(
                                                       context,
                                                       accepted: () {
                                                         if (gamePhase ==
@@ -365,6 +385,21 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                                 },
                                               );
                                             } else {
+                                              final Gamer virusGamer =
+                                                  killedGamers.firstWhere(
+                                                (Gamer gamer) =>
+                                                    gamer.role.roleType ==
+                                                    RoleType.Virus,
+                                                orElse: () =>
+                                                    const Gamer.empty(),
+                                              );
+                                              if (virusGamer.name != "") {
+                                                killedGamers.remove(virusGamer);
+                                                killedGamers.insert(
+                                                  0,
+                                                  virusGamer,
+                                                );
+                                              }
                                               showKilledGamers(
                                                 context,
                                                 killedGamers,
@@ -372,7 +407,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                                 () {
                                                   if (mafiaCount == 1 &&
                                                       civilianCount == 2) {
-                                                    showContinueGameDialog(
+                                                    showTwoChoiceDialog(
                                                       context,
                                                       accepted: () {
                                                         if (gamePhase ==
@@ -405,7 +440,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                               () {
                                                 if (mafiaCount == 1 &&
                                                     civilianCount == 2) {
-                                                  showContinueGameDialog(
+                                                  showTwoChoiceDialog(
                                                     context,
                                                     accepted: () {
                                                       if (gamePhase ==
