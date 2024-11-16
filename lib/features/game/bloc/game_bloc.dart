@@ -1276,7 +1276,8 @@ class GameBloc extends Bloc<GameEvent, AppState> {
         ) {
           if (gamer.id == event.targetedGamer.id && canKillerTarget) {
             //If Killer wants to kill Werewolf -1 point for Werewolf
-            if (gamer.role.roleType == RoleType.Werewolf) {
+            if (gamer.role.roleType == RoleType.Werewolf &&
+                !event.targetedGamer.beforeChange) {
               final Map<String, int> updatedPoints =
                   Map<String, int>.from(gamer.role.points ?? <String, int>{});
               updatedPoints[AppStrings.killerTriedToKillBeforeChange] =
@@ -1529,6 +1530,7 @@ class GameBloc extends Bloc<GameEvent, AppState> {
     });
 
     on<InfectGamer>((InfectGamer event, Emitter<AppState> emit) {
+      final int infectedCount = state.game.infectedCount;
       final AppState appState = state.copyWith(
         gamers: state.gamersState.copyWith(
           gamers: state.gamersState.gamers.map((Gamer gamer) {
@@ -1542,6 +1544,36 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           }).toList(),
         ),
       );
+      if (infectedCount == 1) {
+        final List<Gamer> newlyInfectedGamers = appState.gamersState.gamers
+            .where((Gamer gamer) => gamer.newlyInfected && !gamer.wasKilled)
+            .toList();
+        final List<Gamer> infectedGamers = appState.gamersState.gamers
+            .where(
+              (Gamer gamer) => gamer.wasInfected && !gamer.wasKilled,
+            )
+            .toList();
+
+        if (newlyInfectedGamers.isNotEmpty) {
+          for (final Gamer newGamer in infectedGamers) {
+            add(
+              InfectGamer(
+                targetedGamer: newGamer,
+                infect: false,
+              ),
+            );
+          }
+          for (final Gamer newGamer in newlyInfectedGamers) {
+            add(
+              InfectGamer(
+                targetedGamer: newGamer,
+                infect: false,
+                changeInfected: true,
+              ),
+            );
+          }
+        }
+      }
       emit(appState);
     });
 
@@ -1705,9 +1737,12 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                 gamer.wasBoomeranged ||
                 gamer.killSecurity ||
                 gamer.wasKilledByWerewolf) {
-              if (gamer.role.roleType != RoleType.Boomerang &&
-                  gamer.role.roleType != RoleType.Werewolf) {
-                killedGamers.add(gamer);
+              if (gamer.role.roleType != RoleType.Boomerang) {
+                if (gamer.role.roleType == RoleType.Werewolf &&
+                    gamer.beforeChange) {
+                } else {
+                  killedGamers.add(gamer);
+                }
               }
               if (gamer.role.roleType == RoleType.Virus) {
                 final List<Gamer> infectedGamers = state.gamersState.gamers
@@ -1721,7 +1756,6 @@ class GameBloc extends Bloc<GameEvent, AppState> {
           }
         }
       }
-      print('Killed gamers name: ${killedGamers.map((Gamer e) => e.name)}');
       if (killedGamers.isNotEmpty) {
         final List<Gamer> mafiaGamers = killedGamers
             .where(
@@ -1859,11 +1893,16 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                       (Gamer gamer) => gamer.wasInfected && !gamer.wasKilled,
                     )
                     .toList();
+                print('Infected gamers: '
+                    '${infectedGamers.map((Gamer e) => e.name)}');
                 infectedGamers.forEach(killedGamers.add);
+                killedGamers.add(topGamers[0]);
               } else {
                 killedGamers.add(topGamers[0]);
               }
               if (killedGamers.isNotEmpty) {
+                print('Killed gamers name:'
+                    ' ${killedGamers.map((Gamer e) => e.name)}');
                 final List<Gamer> mafiaGamers = killedGamers
                     .where(
                       (Gamer gamer) =>
@@ -1888,29 +1927,10 @@ class GameBloc extends Bloc<GameEvent, AppState> {
                 }
 
                 if (otherGamers.isNotEmpty) {
-                  for (final Gamer otherGamers in otherGamers) {
-                    switch (otherGamers.role.roleType) {
-                      case RoleType.Virus:
-                        final List<Gamer> infectedGamers =
-                            state.gamersState.gamers
-                                .where(
-                                  (Gamer gamer) =>
-                                      gamer.wasInfected ||
-                                      gamer.role.roleType == RoleType.Virus,
-                                )
-                                .toList();
-                        add(
-                          KillInfectedGamers(
-                            infectedGamers: infectedGamers,
-                          ),
-                        );
-                        break;
-                      default:
-                        add(
-                          KillGamer(gamer: otherGamers),
-                        );
-                        break;
-                    }
+                  for (final Gamer otherGamer in otherGamers) {
+                    add(
+                      KillGamer(gamer: otherGamer),
+                    );
                   }
                 }
               }
@@ -1921,27 +1941,41 @@ class GameBloc extends Bloc<GameEvent, AppState> {
               event.gamerHasAlibi!(topGamers[0]);
             }
           }
+          add(
+            const CleanGamersAfterDay(),
+          );
+          add(
+            const ResetVoters(),
+          );
+          add(
+            const ResetVoter(),
+          );
+          add(
+            const SetVotingDirection(votingDirection: VoteDirection.NotSet),
+          );
+          add(
+            const UpdateAnimation(animate: false),
+          );
         } else if (topGamers.length > 1) {
           event.showPickedNumber!(
             topGamers,
           );
         }
-        add(
-          const CleanGamersAfterDay(),
-        );
-        add(
-          const ResetVoters(),
-        );
-        add(
-          const ResetVoter(),
-        );
-        add(
-          const SetVotingDirection(votingDirection: VoteDirection.NotSet),
-        );
-        add(
-          const UpdateAnimation(animate: false),
-        );
       }
+    });
+
+    on<RemoveVote>((RemoveVote event, Emitter<AppState> emit) {
+      final AppState appState = state.copyWith(
+        gamers: state.gamersState.copyWith(
+          gamers: state.gamersState.gamers.map((Gamer gamer) {
+            if (gamer.id == event.gamer.id) {
+              return gamer.copyWith(votesCount: 0);
+            }
+            return gamer;
+          }).toList(),
+        ),
+      );
+      emit(appState);
     });
 
     on<AddRoleToGamer>((AddRoleToGamer event, Emitter<AppState> emit) {

@@ -79,7 +79,7 @@ class BlinkingFunctions {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
-        if(infectedCount == 0 && nightNumber < 3) {
+        if(infectedCount == 0 || nightNumber >= 3) {
           showErrorSnackBar(
             context: context,
             message: AppStrings.virusCantInfectAnymore,
@@ -106,8 +106,22 @@ class BlinkingFunctions {
                   (Gamer gamer) => gamer.newlyInfected && !gamer.wasKilled,
             )
                 .toList();
+            final List<Gamer> infectedGamers = gamers
+                .where(
+                  (Gamer gamer) => gamer.wasInfected && !gamer.wasKilled,
+            )
+                .toList();
 
             if (newlyInfectedGamers.isNotEmpty) {
+              for(final Gamer newGamer in infectedGamers) {
+                BlocProvider.of<GameBloc>(context).add(
+                  InfectGamer(
+                    targetedGamer: newGamer,
+                    infect: false,
+                    changeInfected: true,
+                  ),
+                );
+              }
               for(final Gamer newGamer in newlyInfectedGamers) {
                 BlocProvider.of<GameBloc>(context).add(
                   InfectGamer(

@@ -185,12 +185,14 @@ class VotingAction extends GameEvent {
   final Function(List<Gamer> pickedGamers)? showPickedNumber;
   final Function(Gamer killedGamer)? gamerHasAlibi;
   final VoidCallback? showFailureInfo;
+  final bool? cameFromPicker;
 
   const VotingAction({
     required this.showKilledGamers,
     this.showPickedNumber,
     this.showFailureInfo,
     this.gamerHasAlibi,
+    this.cameFromPicker = false,
   });
 
   @override
@@ -199,6 +201,7 @@ class VotingAction extends GameEvent {
         showPickedNumber,
         showFailureInfo,
         gamerHasAlibi,
+        cameFromPicker,
       ];
 }
 

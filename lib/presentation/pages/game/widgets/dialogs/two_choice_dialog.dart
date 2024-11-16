@@ -33,7 +33,7 @@ void showTwoChoiceDialog(
         ),
         child: Column(
           children: <Widget>[
-            if(isFoulDialog)
+            if (isFoulDialog)
               Text(
                 '${AppStrings.gamer}: $gamerName',
                 style: MafiaTheme.themeData.textTheme.headlineMedium,
@@ -121,8 +121,14 @@ class _FinishButtonState extends State<FinishButton> {
             });
             return;
           }
+
           final List<Gamer> gamers =
               BlocProvider.of<GameBloc>(context).state.gamersState.gamers;
+          final Gamer? werewolf = gamers
+              .where((Gamer gamer) => gamer.role.roleType == RoleType.Werewolf)
+              .firstOrNull;
+          final bool victoryByWerewolf =
+              werewolf != null && !werewolf.beforeChange;
           final GameState game = BlocProvider.of<GameBloc>(context).state.game;
           BlocProvider.of<GameBloc>(
             context,
@@ -131,6 +137,7 @@ class _FinishButtonState extends State<FinishButton> {
               gameState: game.copyWith(
                 isMafiaWin: true,
                 gamers: gamers,
+                victoryByWerewolf: victoryByWerewolf,
               ),
               finished: () {
                 setState(() {

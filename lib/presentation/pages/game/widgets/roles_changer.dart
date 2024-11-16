@@ -22,6 +22,7 @@ class _RolesChangerState extends State<RolesChanger> {
           final GamePeriod gamePeriod = state.game.gamePeriod;
           final RoleType roleType = roles.roles[roleIndex].roleType;
           final int infectedCount = state.game.infectedCount;
+          final int nightNumber = state.game.nightNumber;
           return SizedBox(
             width: 380.0,
             height: 300.0,
@@ -34,8 +35,7 @@ class _RolesChangerState extends State<RolesChanger> {
                     Text(
                       gamePeriod == GamePeriod.Night
                           ? AppStrings.wakesUp + roles.roles[roleIndex].name
-                          : AppStrings.chooseRole +
-                              roles.roles[roleIndex].name,
+                          : AppStrings.chooseRole + roles.roles[roleIndex].name,
                       style:
                           MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
@@ -81,11 +81,11 @@ class _RolesChangerState extends State<RolesChanger> {
                   ],
                 ),
                 if (roleType == RoleType.Virus &&
-                    gamePeriod == GamePeriod.Night)
+                    gamePeriod == GamePeriod.Night &&
+                    nightNumber <= 2)
                   Text(
                     couldInfect(infectedCount),
-                    style: MafiaTheme.themeData.textTheme.titleLarge
-                        ?.copyWith(
+                    style: MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ).padding(top: 25.0),

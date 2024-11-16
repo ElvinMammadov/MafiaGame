@@ -43,84 +43,110 @@ void showPickNumber(
 
             Navigator.of(context).pop();
             BlocProvider.of<GameBloc>(context).add(
-              VotingAction(
-                showFailureInfo: () {
-                  showErrorSnackBar(
-                    context: context,
-                    message: AppStrings.votesHaveNotAdded,
-                  );
-                },
-                showKilledGamers: (List<Gamer> killedGamers) {
-                  if (killedGamers.length == 1) {
-                    showKilledGamer(
-                      context,
-                      killedGamers.first,
-                      () {
-                        if (mafiaCount == 1 && civilianCount == 2) {
-                          showTwoChoiceDialog(
-                            context,
-                            accepted: () {
-                              if (gamePhase == GamePhase.Finished) {
-                                showResultScreen(
-                                  context,
-                                );
-                              }
-                            },
-                          );
-                        }
-                      },
+                VotingAction(
+                  showFailureInfo: () {
+                    showErrorSnackBar(
+                      context: context,
+                      message:
+                      AppStrings.votesHaveNotAdded,
                     );
-                  } else {
-                    showKilledGamers(
-                      context,
-                      killedGamers,
-                      isNightMode: false,
-                      () {
-                        if (mafiaCount == 1 && civilianCount == 2) {
-                          showTwoChoiceDialog(
-                            context,
-                            accepted: () {
-                              if (gamePhase == GamePhase.Finished) {
-                                showResultScreen(
-                                  context,
-                                );
-                              }
-                            },
-                          );
-                        }
-                      },
-                    );
-                  }
-                },
-                gamerHasAlibi: (Gamer gamer) {
-                  showInfoDialog(
-                    context,
-                    description: gamerHasAlibi(
-                      gamer.name ?? '',
-                    ),
-                  );
-                },
-                showPickedNumber: (List<Gamer> topGamers) {
-                  showPickNumber(
-                    context,
-                    topGamers,
-                    () {
-                      if (mafiaCount == 1 && civilianCount == 2) {
-                        showTwoChoiceDialog(
-                          context,
-                          accepted: () {
-                            if (gamePhase == GamePhase.Finished) {
-                              showResultScreen(
-                                context,
-                              );
-                            }
-                          },
+                  },
+                  showKilledGamers:
+                      (List<Gamer> killedGamers) {
+                    if (killedGamers.length == 1) {
+                      showKilledGamer(
+                        context,
+                        killedGamers.first,
+                            () {
+                          if (mafiaCount == 1 &&
+                              civilianCount == 2) {
+                            showTwoChoiceDialog(
+                              context,
+                              accepted: () {
+                                if (gamePhase ==
+                                    GamePhase
+                                        .Finished) {
+                                  showResultScreen(
+                                    context,
+                                  );
+                                }
+                              },
+                            );
+                          }
+                        },
+                      );
+                    } else {
+                      final Gamer virusGamer =
+                      killedGamers.firstWhere(
+                            (Gamer gamer) =>
+                        gamer.role.roleType ==
+                            RoleType.Virus,
+                        orElse: () =>
+                        const Gamer.empty(),
+                      );
+                      if (virusGamer.name != "") {
+                        killedGamers.remove(virusGamer);
+                        killedGamers.insert(
+                          0,
+                          virusGamer,
                         );
                       }
-                    },
-                  );
-                },
-              ),
+                      showKilledGamers(
+                        context,
+                        killedGamers,
+                        isNightMode: false,
+                            () {
+                          if (mafiaCount == 1 &&
+                              civilianCount == 2) {
+                            showTwoChoiceDialog(
+                              context,
+                              accepted: () {
+                                if (gamePhase ==
+                                    GamePhase
+                                        .Finished) {
+                                  showResultScreen(
+                                    context,
+                                  );
+                                }
+                              },
+                            );
+                          }
+                        },
+                      );
+                    }
+                  },
+                  gamerHasAlibi: (Gamer gamer) {
+                    showInfoDialog(
+                      context,
+                      description: gamerHasAlibi(
+                        gamer.name ?? '',
+                      ),
+                    );
+                  },
+                  showPickedNumber:
+                      (List<Gamer> topGamers) {
+                    showPickNumber(
+                      context,
+                      topGamers,
+                          () {
+                        if (mafiaCount == 1 &&
+                            civilianCount == 2) {
+                          showTwoChoiceDialog(
+                            context,
+                            accepted: () {
+                              if (gamePhase ==
+                                  GamePhase.Finished) {
+                                showResultScreen(
+                                  context,
+                                );
+                              }
+                            },
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
             );
           },
         ),
