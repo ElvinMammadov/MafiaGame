@@ -21,8 +21,8 @@ class MafiaTheme {
         hintColor: Colors.white,
         primaryColor: const Color(0xFFA9001B),
         secondaryHeaderColor: const Color(0xFFEAD08A),
-        highlightColor: Color.fromARGB(255, 122, 112, 90),
-        popupMenuTheme:  PopupMenuThemeData(
+        highlightColor: const Color.fromARGB(255, 122, 112, 90),
+        popupMenuTheme: PopupMenuThemeData(
           color: const Color(0xFFEAD08A).withOpacity(0.5),
         ),
         dividerTheme: const DividerThemeData(
@@ -30,8 +30,17 @@ class MafiaTheme {
           space: 1,
           thickness: 1,
         ),
-        extensions: const <ThemeExtension>[
+        extensions: const <ThemeExtension<dynamic>>[
           WoltModalSheetTheme(),
         ],
+        snackBarTheme: SnackBarThemeData(
+          width: 500,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 56),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          behavior: SnackBarBehavior.floating,
+          elevation: 2,
+        ),
       );
 }

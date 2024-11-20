@@ -3,15 +3,19 @@ part of game;
 class ImagePickerSheet extends StatefulWidget {
   final TextEditingController textEditingController;
   final ValueChanged<File?> onImageChanged;
-  final ValueChanged<Role?> onRoleChanged;
   final ValueChanged<Gamer?>? gamerChosenFromFirebase;
+  final ValueChanged<int?> onPositionChange;
+  final int? numberOfGamers;
+  final bool? isPositionMode;
 
   const ImagePickerSheet({
     super.key,
     required this.textEditingController,
     required this.onImageChanged,
-    required this.onRoleChanged,
+    required this.onPositionChange,
     this.gamerChosenFromFirebase,
+    this.numberOfGamers,
+    this.isPositionMode,
   });
 
   @override
@@ -23,6 +27,12 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
   Role? selectedRole;
   final ImagePicker picker = ImagePicker();
   late String imageUrl = '';
+  final GlobalKey<FormFieldState<int>> _positionFieldKey =
+      GlobalKey<FormFieldState<int>>();
+  int? selectedPosition;
+
+  List<int> get numberOfPositions =>
+      List<int>.generate(widget.numberOfGamers!, (int index) => index + 1);
 
   Future<void> getImageFromGallery() async {
     final XFile? pickedFile =
@@ -50,19 +60,17 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
-        builder: (BuildContext context, AppState state) {
-          final Roles roles = state.gamersState.roles;
-          return Column(
+        builder: (BuildContext context, AppState state) => Column(
             children: <Widget>[
               Stack(
                 children: <Widget>[
                   CircleAvatar(
-                    radius: 90,
+                    radius: 70,
                     child: ClipOval(
                       child: image == null
                           ? imageUrl.isEmpty
                               ? const Image(
-                                  image: AssetImage('assets/mafioz.jpg'),
+                                  image: AssetImage('assets/logo_m.png'),
                                   fit: BoxFit.fill,
                                   width: 192,
                                   height: 180,
@@ -83,7 +91,7 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   ),
                   Positioned(
                     bottom: -10,
-                    left: 120,
+                    left: 100,
                     child: IconButton(
                       onPressed: () {
                         showImagePickerSheet(context);
@@ -103,11 +111,16 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
               TypeAheadField<Gamer>(
                 controller: widget.textEditingController,
                 suggestionsCallback: (String search) async {
-                  final List<Gamer> gamers =
-                      await FirestoreService().getGamers(search);
-                  return gamers;
+                  if (search.isNotEmpty) {
+                    final List<Gamer> gamers =
+                        await FirestoreService().getGamers(search);
+                    return gamers;
+                  } else {
+                    return <Gamer>[];
+                  }
                 },
                 hideOnEmpty: true,
+                hideOnLoading: true,
                 builder: (
                   BuildContext context,
                   TextEditingController controller,
@@ -117,11 +130,22 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   controller: widget.textEditingController,
                   focusNode: focusNode,
                   autofocus: true,
+                  style: MafiaTheme.themeData.textTheme.headlineSmall
+                      ?.copyWith(height: 1),
                   decoration: InputDecoration(
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 8,
                     ),
+                    hintStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
                     focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: MafiaTheme.themeData.colorScheme.secondary,
                       ),
@@ -145,7 +169,11 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                     return Container();
                   }
                   return ListTile(
-                    title: Text(gamer?.name ?? '1'),
+                    title: Text(
+                      gamer?.name ?? '1',
+                      style: MafiaTheme.themeData.textTheme.headlineSmall
+                          ?.copyWith(height: 1),
+                    ),
                     textColor: Colors.white,
                   );
                 },
@@ -157,78 +185,83 @@ class _ImagePickerSheetState extends State<ImagePickerSheet> {
                   widget.gamerChosenFromFirebase!(gamer);
                 },
               ),
-              DropdownButtonFormField2<Role>(
-                isExpanded: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.padding8,
-                  ),
-                  labelStyle: MafiaTheme.themeData.textTheme.headlineSmall,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
-                    ),
-                  ),
-                ),
-                hint: Text(
-                  AppStrings.roleOfGamer,
-                  style: MafiaTheme.themeData.textTheme.headlineSmall,
-                ),
-                value: selectedRole,
-                items: roles.roles
-                    .map(
-                      (Role item) => DropdownMenuItem<Role>(
-                        value: item,
-                        child: Text(
-                          item.name,
-                          style: MafiaTheme.themeData.textTheme.headlineSmall,
-                        ),
+              if (widget.isPositionMode == true)
+                DropdownButtonFormField2<int>(
+                  isExpanded: true,
+                  key: _positionFieldKey,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                    labelStyle: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
                       ),
-                    )
-                    .toList(),
-                validator: (Role? value) {
-                  if (value == null) {
-                    return 'Please select gender.';
-                  }
-                  return null;
-                },
-                onChanged: (Role? value) {
-                  selectedRole = value;
-                  widget.onRoleChanged(selectedRole);
-                },
-                onSaved: (Role? value) {
-                  selectedRole = value;
-                },
-                iconStyleData: const IconStyleData(
-                  icon: Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.grey,
-                  ),
-                ),
-                dropdownStyleData: DropdownStyleData(
-                  offset: const Offset(5, 0),
-                  width: 370,
-                  maxHeight: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: MafiaTheme.themeData.colorScheme.secondary,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
                     ),
                   ),
+                  hint: Text(
+                    AppStrings.positionOfGamer,
+                    style: MafiaTheme.themeData.textTheme.headlineSmall
+                        ?.copyWith(height: 1),
+                  ),
+                  items: numberOfPositions
+                      .map<DropdownMenuItem<int>>(
+                        (int item) => DropdownMenuItem<int>(
+                          value: item,
+                          child: Text(
+                            item.toString(),
+                            style: MafiaTheme.themeData.textTheme.headlineSmall
+                                ?.copyWith(height: 1),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  validator: (int? value) {
+                    if (value == null) {
+                      return AppStrings.gamersNumberIsRequired;
+                    }
+                    return null;
+                  },
+                  value: selectedPosition,
+                  onChanged: (int? value) {
+                    selectedPosition = value;
+                    widget.onPositionChange(selectedPosition);
+                  },
+                  onSaved: (int? value) {
+                    _positionFieldKey.currentState!.validate();
+                    selectedPosition = value;
+                  },
+                  iconStyleData: const IconStyleData(
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  dropdownStyleData: DropdownStyleData(
+                    offset: const Offset(300, 0),
+                    width: 70,
+                    maxHeight: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: MafiaTheme.themeData.colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ).padding(
+                  top: Dimensions.padding16,
                 ),
-              ).padding(top: Dimensions.padding16),
             ],
           ).padding(
             bottom: 100,
             horizontal: 16,
-          );
-        },
+          ),
       );
 
   void showImagePickerSheet(BuildContext context) {

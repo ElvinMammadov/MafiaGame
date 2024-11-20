@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                 backgroundColor: Colors.red,
                 content: Text(
                   AppStrings.loginError,
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
                 ),
               ),
             );
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                 backgroundColor: Colors.green,
                 content: Text(
                   AppStrings.loginSuccessfully,
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
                 ),
               ),
             );

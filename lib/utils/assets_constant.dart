@@ -1,9 +1,3 @@
 class AssetsConstant {
-/*   static String svgPath = 'assets/svg';
-  static String imagePath = 'assets/image';
- */
-
-  static String imageMafioz = 'assets/mafioz.jpg';
-
-
+   String imageMafioz = 'assets/logo_m.png';
 }

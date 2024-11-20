@@ -1,77 +1,68 @@
-import 'package:flutter/material.dart';
-import 'package:mafia_game/utils/theme/theme.dart';
+part of statistics;
 
 class IndicatorItem extends StatelessWidget {
+  final Color foregroundColor;
+  final int value;
+  final int? totalPoints;
+  final int totalPlayedGames;
+
   const IndicatorItem({
     super.key,
     required this.foregroundColor,
-    required this.title,
     required this.value,
+    this.totalPoints,
+    required this.totalPlayedGames,
   });
 
-  final Color foregroundColor;
-  final String title;
-  final double value;
+  double getIndicatorValue(int value, int totalPoints) {
+    final double percentage = value / totalPoints;
+    return percentage;
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
+  Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          if (totalPoints != null)
+            Expanded(
+              child: SizedBox(
+                height: 12,
+                child: LinearProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    foregroundColor,
+                  ),
+                  backgroundColor: MafiaTheme.themeData.highlightColor,
+                  value: totalPlayedGames != 0
+                      ? getIndicatorValue(
+                          value,
+                          totalPoints ?? 0,
+                        )
+                      : 0,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            )
+          else
+            const SizedBox(),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
             ),
-          ),
-        ),
-        Expanded(
-          child: buildLinearIndicator(
-            foregroundColor: foregroundColor,
-            value: value,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-          ),
-          margin: const EdgeInsets.only(left: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: MafiaTheme.themeData.highlightColor,
-          ),
-          child: const Align(
-            child: Text(
-              "5",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+            margin: const EdgeInsets.only(left: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: MafiaTheme.themeData.highlightColor,
+            ),
+            child: Align(
+              child: Text(
+                value.toString(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-Widget buildLinearIndicator({
-  required double value,
-  required Color foregroundColor,
-}) {
-  return SizedBox(
-    height: 30,
-    child: LinearProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(
-        foregroundColor,
-      ),
-      backgroundColor: MafiaTheme.themeData.highlightColor,
-      value: value,
-      borderRadius: BorderRadius.circular(16),
-    ),
-  );
+        ],
+      );
 }

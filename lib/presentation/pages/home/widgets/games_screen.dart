@@ -23,7 +23,7 @@ class _GamesScreenState extends State<GamesScreen> {
       builder: (BuildContext context, Widget? child) => Theme(
         data: MafiaTheme.themeData.copyWith(
           colorScheme: MafiaTheme.themeData.colorScheme.copyWith(
-            primary: MafiaTheme.themeData.colorScheme.surface,
+            primary: MafiaTheme.themeData.colorScheme.secondary,
             // header background color
             onPrimary: MafiaTheme.themeData.colorScheme.primary,
             // header text color
@@ -34,6 +34,15 @@ class _GamesScreenState extends State<GamesScreen> {
             style: TextButton.styleFrom(
               foregroundColor: MafiaTheme
                   .themeData.colorScheme.primary, // ok , cancel    buttons
+            ),
+          ),
+          textTheme: MafiaTheme.themeData.textTheme.copyWith(
+            headlineSmall:
+                MafiaTheme.themeData.textTheme.headlineSmall?.copyWith(
+              color: MafiaTheme.themeData.colorScheme.primary,
+            ),
+            bodySmall: MafiaTheme.themeData.textTheme.bodySmall?.copyWith(
+              color: MafiaTheme.themeData.colorScheme.secondary,
             ),
           ),
           dialogBackgroundColor: MafiaTheme.themeData.colorScheme.secondary,
@@ -52,6 +61,14 @@ class _GamesScreenState extends State<GamesScreen> {
   }
 
   @override
+  void initState() {
+    BlocProvider.of<GameBloc>(context).add(
+      GetGames(dateTime: selectedDate),
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -61,11 +78,7 @@ class _GamesScreenState extends State<GamesScreen> {
 
     return BlocBuilder<GameBloc, AppState>(
       builder: (BuildContext context, AppState state) {
-        // BlocProvider.of<GameBloc>(context).add(
-        //   GetGames(dateTime: DateTime.now()),
-        // );
         final List<GameState> games = state.games;
-        // logger.log('games from state: ${state.games}, ');
         return Stack(
           children: <Widget>[
             Positioned(
@@ -85,22 +98,37 @@ class _GamesScreenState extends State<GamesScreen> {
             if (games.isNotEmpty)
               Positioned(
                 right: screenWidth * 0.05,
-                top: screenHeight * 0.12,
+                top: screenHeight * 0.10,
                 child: SizedBox(
                   height: screenHeight * 0.8,
                   width: screenWidth * 0.9,
-                  child: ListView.builder(
+                  child: GridView.builder(
                     itemCount: games.length,
-                    itemBuilder: (BuildContext context, int index) => Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      color: MafiaTheme.themeData.colorScheme.secondary
-                          .withOpacity(0.5),
-                      child: SizedBox(
-                        height: 600,
-                        width: 900,
+                    itemBuilder: (BuildContext context, int index) =>
+                        GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => ResultScreen(
+                              gamers: games[index].gamers,
+                              isMafiaWinner: games[index].isMafiaWin,
+                              gameName: games[index].gameName,
+                              victoryByWerewolf: games[index].victoryByWerewolf,
+                              gameStartTime: DateFormat('yyyy-MM-dd')
+                                  .format(games[index].gameStartTime!),
+                              gameId: games[index].gameId,
+                              werewolfWasDead: games[index].werewolfWasDead,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        color: MafiaTheme.themeData.colorScheme.secondary
+                            .withOpacity(0.4),
                         child: GamesResults(
                           gamers: games[index].gamers,
                           isMafia: games[index].isMafiaWin,
@@ -109,8 +137,16 @@ class _GamesScreenState extends State<GamesScreen> {
                               .format(games[index].gameStartTime!),
                         ),
                       ),
-                    ).padding(
-                      bottom: 16,
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      // Number of columns
+                      crossAxisSpacing: 10.0,
+                      // Horizontal spacing between items
+                      mainAxisSpacing: 5.0,
+                      // Vertical spacing between items
+                      childAspectRatio: 4, // Aspect ratio of each item
                     ),
                   ),
                 ),

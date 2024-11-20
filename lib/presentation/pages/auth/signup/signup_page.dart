@@ -19,7 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
-  bool _isLoading = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -77,7 +77,7 @@ class _SignupPageState extends State<SignupPage> {
     if (_formKey.currentState?.validate() ?? false) {
       try {
         setState(() {
-          _isLoading = true;
+          isLoading = true;
         });
 
         await _auth.createUserWithEmailAndPassword(
@@ -133,7 +133,7 @@ class _SignupPageState extends State<SignupPage> {
       } finally {
         // Set the loading state to false after signup
         setState(() {
-          _isLoading = false;
+          isLoading = false;
         });
       }
     } else {

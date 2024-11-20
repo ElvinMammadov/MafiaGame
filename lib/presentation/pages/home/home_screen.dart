@@ -43,47 +43,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             child: Scaffold(
-              appBar: const DefaultAppBar(
+              appBar:  const DefaultAppBar(
                 title: AppStrings.title,
               ),
               backgroundColor: Colors.transparent,
-              bottomNavigationBar: SizedBox(
-                height: 75,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              bottomNavigationBar: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                color: MafiaTheme.themeData.colorScheme.secondary
+                    .withOpacity(0.8),
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: MafiaTheme.themeData.colorScheme.surface,
+                  labelColor: MafiaTheme.themeData.colorScheme.secondary,
+                  unselectedLabelStyle:
+                      MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
-                  color: MafiaTheme.themeData.colorScheme.secondary
-                      .withOpacity(0.8),
-                  child: TabBar(
-                    controller: _tabController,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: MafiaTheme.themeData.colorScheme.surface,
-                    labelColor: MafiaTheme.themeData.colorScheme.secondary,
-                    unselectedLabelStyle:
-                        MafiaTheme.themeData.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                    // unselectedLabelColor:
-                    //     Colors.white,
-                    tabs: List<Widget>.from(
-                      HomeViewModel.create().tabs.map(
-                            (HomeTab tab) => SizedBox(
-                              height: 64,
-                              child: MafiaGameTabs(
-                                label: tab.title,
-                                icon: tab.icon,
-                                imageIcon: tab.imageIcon,
-                              ),
+                  // unselectedLabelColor:
+                  //     Colors.white,
+                  tabs: List<Widget>.from(
+                    HomeViewModel.create().tabs.map(
+                          (HomeTab tab) => SizedBox(
+                            height: 50,
+                            child: MafiaGameTabs(
+                              label: tab.title,
+                              icon: tab.icon,
                             ),
                           ),
-                    ),
+                        ),
                   ),
-                ).padding(
-                  horizontal: 84,
                 ),
-              ).padding(
-                bottom: 16,
               ),
               body: HomeContainer(
                 tabController: _tabController,

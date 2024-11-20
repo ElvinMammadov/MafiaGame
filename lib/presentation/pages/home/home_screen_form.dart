@@ -2,7 +2,7 @@ part of home;
 
 class HomeScreenForm extends StatefulWidget {
   final void Function({
-    String typeOfGame,
+    String typeOfGamer,
     String typeOfController,
     int numberOfGamers,
     String gameName,
@@ -29,18 +29,14 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   late Map<Role, int> roleOriginalIndexMap;
 
   final FocusNode _gameNameFocusNode = FocusNode();
-  final List<String> typeOfGames = <String>[
-    AppStrings.open,
-    AppStrings.close,
-  ];
-  final List<String> typeOfController = <String>[
-    AppStrings.controller,
-    AppStrings.application,
+  final List<String> typeOfGamers = <String>[
+    AppStrings.savedGamers,
+    AppStrings.newGamers,
   ];
   final List<int> numberOfGamers =
       List<int>.generate(23, (int index) => index + 1);
 
-  String? selectedTypeofGames;
+  String? selectedTypeofGamers;
   String? selectedTypeOfController;
   int? selectedNumberOfGamers;
 
@@ -48,7 +44,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   void initState() {
     super.initState();
     final List<Role> roles =
-        BlocProvider.of<GameBloc>(context).state.gamersState.roles.roles;
+        BlocProvider.of<GameBloc>(context).state.game.gameRoles.roles;
     selectedRoles = List<Role>.from(roles);
     roleOriginalIndexMap = <Role, int>{
       for (int i = 0; i < roles.length; i++) roles[i]: i,
@@ -76,7 +72,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
   @override
   Widget build(BuildContext context) => BlocBuilder<GameBloc, AppState>(
         builder: (BuildContext context, AppState state) {
-          final Roles roles = state.gamersState.roles;
+          final Roles roles = state.game.gameRoles;
 
           return SizedBox(
             width: 550,
@@ -93,7 +89,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                   children: <Widget>[
                     TextFormField(
                       controller: _gameNameController,
-                      style: MafiaTheme.themeData.textTheme.headlineSmall,
+                      style: MafiaTheme.themeData.textTheme.titleMedium,
                       keyboardType: TextInputType.emailAddress,
                       autofocus: true,
                       key: _gameNameFieldKey,
@@ -102,8 +98,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
                         labelText: AppStrings.nameOfGame,
-                        labelStyle:
-                            MafiaTheme.themeData.textTheme.headlineSmall,
+                        labelStyle: MafiaTheme.themeData.textTheme.titleMedium,
                         icon: Icon(
                           Icons.border_color,
                           color: MafiaTheme.themeData.colorScheme.secondary,
@@ -149,8 +144,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                             isExpanded: true,
                             hint: Text(
                               AppStrings.chooseRoles,
-                              style:
-                                  MafiaTheme.themeData.textTheme.headlineSmall,
+                              style: MafiaTheme.themeData.textTheme.titleMedium,
                             ),
                             items: roles.roles
                                 .map(
@@ -167,8 +161,12 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                         return InkWell(
                                           onTap: () {
                                             _toggleRole(role);
-                                            setState(() {});
-                                            menuSetState(() {});
+                                            setState(
+                                              () {},
+                                            );
+                                            menuSetState(
+                                              () {},
+                                            );
                                           },
                                           child: SizedBox(
                                             height: 50,
@@ -188,12 +186,14 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                                   const Icon(
                                                     Icons.check_box_outlined,
                                                     color: Colors.white,
+                                                    size: 32,
                                                   )
                                                 else
                                                   const Icon(
                                                     Icons
                                                         .check_box_outline_blank,
                                                     color: Colors.white,
+                                                    size: 32,
                                                   ),
                                               ],
                                             ),
@@ -235,8 +235,7 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                               ),
                             ),
                             dropdownStyleData: DropdownStyleData(
-                              offset: const Offset(0, 0),
-                              width: 480,
+                              width: 470,
                               maxHeight: 250,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -245,6 +244,12 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                                   color: MafiaTheme
                                       .themeData.colorScheme.secondary,
                                 ),
+                              ),
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.grey,
                               ),
                             ),
                             menuItemStyleData: const MenuItemStyleData(
@@ -262,8 +267,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                         // labelText: 'Choose',
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
-                        labelStyle:
-                            MafiaTheme.themeData.textTheme.headlineSmall,
+                        labelStyle: MafiaTheme.themeData.textTheme.titleMedium
+                            ?.copyWith(height: 1),
                         icon: Icon(
                           Icons.pin,
                           color: MafiaTheme.themeData.colorScheme.secondary,
@@ -281,7 +286,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                       ),
                       hint: Text(
                         AppStrings.numberOfGamers,
-                        style: MafiaTheme.themeData.textTheme.headlineSmall,
+                        style: MafiaTheme.themeData.textTheme.titleMedium
+                            ?.copyWith(height: 1),
                       ),
                       items: numberOfGamers
                           .map<DropdownMenuItem<int>>(
@@ -290,7 +296,8 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                               child: Text(
                                 item.toString(),
                                 style: MafiaTheme
-                                    .themeData.textTheme.headlineSmall,
+                                    .themeData.textTheme.titleMedium
+                                    ?.copyWith(height: 1),
                               ),
                             ),
                           )
@@ -334,156 +341,81 @@ class _HomeScreenFormState extends State<HomeScreenForm> {
                     ).padding(
                       top: Dimensions.padding16,
                     ),
-                    // DropdownButtonFormField2<String>(
-                    //   isExpanded: true,
-                    //   decoration: InputDecoration(
-                    //     contentPadding: const EdgeInsets.symmetric(
-                    //       horizontal: Dimensions.padding8,
-                    //     ),
-                    //     labelStyle:
-                    //         MafiaTheme.themeData.textTheme.headlineSmall,
-                    //     icon: Icon(
-                    //       Icons.videogame_asset,
-                    //       color: MafiaTheme.themeData.colorScheme.secondary,
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(
-                    //         color: MafiaTheme.themeData.colorScheme.secondary,
-                    //       ),
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(
-                    //         color: MafiaTheme.themeData.colorScheme.secondary,
-                    //       ),
-                    //     ),
-                    //   ),
-                    //   hint: Text(
-                    //     AppStrings.typeOfGame,
-                    //     style: MafiaTheme.themeData.textTheme.headlineSmall,
-                    //   ),
-                    //   value: selectedTypeofGames,
-                    //   items: typeOfGames
-                    //       .map(
-                    //         (String item) => DropdownMenuItem<String>(
-                    //           value: item,
-                    //           child: Text(
-                    //             item,
-                    //             style: MafiaTheme
-                    //                 .themeData.textTheme.headlineSmall,
-                    //           ),
-                    //         ),
-                    //       )
-                    //       .toList(),
-                    //   validator: (String? value) {
-                    //     if (value == null) {
-                    //       return 'Please select gender.';
-                    //     }
-                    //     return null;
-                    //   },
-                    //   onChanged: (String? value) {
-                    //     widget.onChange!(
-                    //       typeOfGame: value!,
-                    //     );
-                    //     selectedTypeofGames = value;
-                    //   },
-                    //   onSaved: (String? value) {
-                    //     selectedTypeofGames = value.toString();
-                    //   },
-                    //   iconStyleData: const IconStyleData(
-                    //     icon: Icon(
-                    //       Icons.arrow_drop_down,
-                    //       color: Colors.grey,
-                    //     ),
-                    //   ),
-                    //   dropdownStyleData: DropdownStyleData(
-                    //     offset: const Offset(35, 0),
-                    //     width: 480,
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(15),
-                    //       color: MafiaTheme.themeData.colorScheme.secondary
-                    //           .withOpacity(0.8),
-                    //       border: Border.all(
-                    //         color: MafiaTheme.themeData.colorScheme.secondary,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ).padding(top: Dimensions.padding16),
-                    // DropdownButtonFormField2<String>(
-                    //   isExpanded: true,
-                    //   decoration: InputDecoration(
-                    //     contentPadding:
-                    //         const EdgeInsets.symmetric(horizontal: 8),
-                    //     labelStyle:
-                    //         MafiaTheme.themeData.textTheme.headlineSmall,
-                    //     icon: Icon(
-                    //       Icons.interpreter_mode_rounded,
-                    //       color: MafiaTheme.themeData.colorScheme.secondary,
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(
-                    //         color: MafiaTheme.themeData.colorScheme.secondary,
-                    //       ),
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide(
-                    //         color: MafiaTheme.themeData.colorScheme.secondary,
-                    //       ),
-                    //     ),
-                    //   ),
-                    //   hint: Text(
-                    //     AppStrings.typeOfController,
-                    //     style: MafiaTheme.themeData.textTheme.headlineSmall,
-                    //   ),
-                    //   value: selectedTypeOfController,
-                    //   items: typeOfController
-                    //       .map(
-                    //         (String item) => DropdownMenuItem<String>(
-                    //           value: item,
-                    //           child: Text(
-                    //             item,
-                    //             style: MafiaTheme
-                    //                 .themeData.textTheme.headlineSmall,
-                    //           ),
-                    //         ),
-                    //       )
-                    //       .toList(),
-                    //   validator: (String? value) {
-                    //     if (value == null) {
-                    //       return 'Please select gender.';
-                    //     }
-                    //     return null;
-                    //   },
-                    //   onChanged: (String? value) {
-                    //     widget.onChange!(
-                    //       typeOfController: value!,
-                    //     );
-                    //     selectedTypeOfController = value;
-                    //   },
-                    //   onSaved: (String? value) {
-                    //     selectedTypeOfController = value.toString();
-                    //   },
-                    //   iconStyleData: const IconStyleData(
-                    //     icon: Icon(
-                    //       Icons.arrow_drop_down,
-                    //       color: Colors.grey,
-                    //     ),
-                    //   ),
-                    //   dropdownStyleData: DropdownStyleData(
-                    //     offset: const Offset(35, 0),
-                    //     width: 480,
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(15),
-                    //       color: MafiaTheme.themeData.colorScheme.secondary
-                    //           .withOpacity(0.8),
-                    //       border: Border.all(
-                    //         color: MafiaTheme.themeData.colorScheme.secondary,
-                    //       ),
-                    //     ),
-                    //   ),
-                    //   // menuItemStyleData: const MenuItemStyleData(
-                    //   //   padding: EdgeInsets.symmetric(horizontal: 16),
-                    //   // ),
-                    // ).padding(top: Dimensions.padding16),
+                    DropdownButtonFormField2<String>(
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.padding8,
+                        ),
+                        labelStyle: MafiaTheme.themeData.textTheme.titleMedium
+                            ?.copyWith(height: 1),
+                        icon: Icon(
+                          Icons.save,
+                          color: MafiaTheme.themeData.colorScheme.secondary,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: MafiaTheme.themeData.colorScheme.secondary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: MafiaTheme.themeData.colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                      hint: Text(
+                        AppStrings.usageOfGamers,
+                        style: MafiaTheme.themeData.textTheme.titleMedium
+                            ?.copyWith(height: 1),
+                      ),
+                      value: selectedTypeofGamers,
+                      items: typeOfGamers
+                          .map(
+                            (String item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: MafiaTheme
+                                    .themeData.textTheme.titleMedium
+                                    ?.copyWith(height: 1),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      validator: (String? value) {
+                        if (value == null) {
+                          return 'Please select gender.';
+                        }
+                        return null;
+                      },
+                      onChanged: (String? value) {
+                        widget.onChange!(
+                          typeOfGamer: value!,
+                        );
+                        selectedTypeofGamers = value;
+                      },
+                      onSaved: (String? value) {
+                        selectedTypeofGamers = value.toString();
+                      },
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        offset: const Offset(35, 0),
+                        width: 480,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: MafiaTheme.themeData.colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                    ).padding(top: Dimensions.padding16),
                   ],
                 ),
               ).padding(

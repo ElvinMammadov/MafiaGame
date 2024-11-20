@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.mafiaGame</string>
+	<string>com.example.mafia.game</string>
 	<key>PROJECT_ID</key>
 	<string>acoustic-rider-349511</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,7 +25,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:825669646140:ios:da4cbab91c44f8641f9039</string>
+	<string>1:825669646140:ios:4034f749cde9441b1f9039</string>
 	<key>DATABASE_URL</key>
 	<string>https://acoustic-rider-349511-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>

@@ -6,7 +6,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBackButton;
   final VoidCallback? actionCallback;
+  final VoidCallback? onAddGamer;
   final VoidCallback? onExit;
+  final VoidCallback? onRestoreGamer;
   final bool showGameMenu;
 
   const DefaultAppBar({
@@ -14,22 +16,25 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.showBackButton = false,
     this.actionCallback,
+    this.onAddGamer,
     this.showGameMenu = false,
     this.onExit,
+    this.onRestoreGamer,
   });
 
   void _onMenuSelected(String value) {
     switch (value) {
       case 'addGamer':
-        // ignore: avoid_print
-        print('addGamer');
+        onAddGamer?.call();
         break;
       case 'exit':
         onExit?.call();
         break;
+      case 'restoreGamer':
+        onRestoreGamer?.call();
+        break;
       default:
-        // ignore: avoid_print
-        print('default');
+        break;
     }
   }
 
@@ -39,7 +44,9 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: MafiaTheme.themeData.textTheme.headlineSmall,
+        style: MafiaTheme.themeData.textTheme.headlineSmall?.copyWith(
+          fontSize: 24,
+        ),
       ),
       automaticallyImplyLeading: showBackButton,
       centerTitle: true,
@@ -70,6 +77,30 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           Text(
                             AppStrings.addGamer,
+                            style: TextStyle(
+                              color: MafiaTheme.themeData.colorScheme.surface,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const PopupMenuDivider(),
+                  PopupMenuItem<String>(
+                    value: 'restoreGamer',
+                    child: SizedBox(
+                      width: 220,
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.restore_sharp,
+                            color: Colors.white,
+                          ),
+                          Text(
+                            AppStrings.restoreGamer,
                             style: TextStyle(
                               color: MafiaTheme.themeData.colorScheme.surface,
                               fontSize: 16,

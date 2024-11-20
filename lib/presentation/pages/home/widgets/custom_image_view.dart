@@ -22,19 +22,20 @@ extension ImageTypeExtension on String {
 enum ImageType { svg, png, network, file, unknown }
 
 class CustomImageView extends StatelessWidget {
-  const CustomImageView(
-      {required this.imagePath,
-      this.height,
-      this.width,
-      this.color,
-      this.fit,
-      this.alignment,
-      this.onTap,
-      this.radius,
-      this.margin,
-      this.border,
-      this.placeHolder = 'assets/images/image_not_found.png',
-      this.gap = 8,});
+  const CustomImageView({
+    required this.imagePath,
+    this.height,
+    this.width,
+    this.color,
+    this.fit,
+    this.alignment,
+    this.onTap,
+    this.radius,
+    this.margin,
+    this.border,
+    this.placeHolder = 'assets/images/image_not_found.png',
+    this.gap = 8,
+  });
 
   final String imagePath;
   final double? height;
@@ -78,7 +79,7 @@ class CustomImageView extends StatelessWidget {
 
   Widget _buildImageWithBorder() {
     if (border != null) {
-      return Container(
+      return DecoratedBox(
         decoration: BoxDecoration(
           border: border,
           borderRadius: radius,
@@ -100,7 +101,7 @@ class CustomImageView extends StatelessWidget {
   Widget _buildImageView() {
     switch (imagePath.imageType) {
       case ImageType.svg:
-        return Container(
+        return SizedBox(
           height: height,
           width: width,
           child: SvgPicture.asset(
@@ -131,7 +132,7 @@ class CustomImageView extends StatelessWidget {
           width: width,
           fit: fit,
           color: color,
-          placeholder: (BuildContext context, String url) => Container(
+          placeholder: (BuildContext context, String url) => SizedBox(
             height: 30,
             width: 30,
             child: LinearProgressIndicator(

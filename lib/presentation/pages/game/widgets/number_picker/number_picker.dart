@@ -22,12 +22,15 @@ class _NumberPickerState extends State<NumberPicker> {
   Map<int, int?> gamerSelectedNumbers = <int, int?>{};
   int quantityOfButtons = 8;
   bool isMainButtonPressed = false;
+  VoteDirection? pickedDirection = VoteDirection.NotSet;
 
   @override
   void initState() {
     super.initState();
-    animateStates = List<bool>.generate(widget.gamers.length, (int index) =>
-    false,);
+    animateStates = List<bool>.generate(
+      widget.gamers.length,
+      (int index) => false,
+    );
     if (widget.gamers.length == 3) {
       quantityOfButtons = 9;
     } else if (widget.gamers.length > 3) {
@@ -53,7 +56,7 @@ class _NumberPickerState extends State<NumberPicker> {
         return entry.key;
       }
     }
-    return null; // Main number not found
+    return null;
   }
 
   Gamer getGamerAtIndex(int index, List<Gamer> gamers) => gamers[index];
@@ -83,21 +86,28 @@ class _NumberPickerState extends State<NumberPicker> {
                   child: Column(
                     children: <Widget>[
                       AvatarGlow(
-                        glowColor: Colors.red,
+                        glowColor: Colors.orange,
                         glowCount: 1,
-                        animate:
-                            isMainButtonPressed ? animateStates[index] : false,
+                        // glowRadiusFactor: 0.4,
+                        curve: Curves.easeInOut,
+                        animate: isMainButtonPressed && animateStates[index],
                         child: Material(
                           elevation: 8.0,
                           shape: const CircleBorder(),
                           child: CircleAvatar(
                             radius: 50.0,
                             child: ClipOval(
-                              child: Image.network(
-                                widget.gamers[index].imageUrl!,
-                                fit: BoxFit.fill,
-                                height: 100,
-                              ),
+                              child: widget.gamers[index].hasImage
+                                  ? Image.network(
+                                      widget.gamers[index].imageUrl!,
+                                      fit: BoxFit.fill,
+                                      height: 100,
+                                    )
+                                  : Image.asset(
+                                      'assets/logo_m.png',
+                                      fit: BoxFit.fill,
+                                      height: 100,
+                                    ),
                             ),
                           ),
                         ),
@@ -152,14 +162,22 @@ class _NumberPickerState extends State<NumberPicker> {
                   assignNumberToGamer(selectedGamer!, buttonNumber);
                 }
                 if (buttonNumber == mainButton && mainButton != null) {
+                  final Gamer deletedGamer = getGamerAtIndex(
+                    findGamerWithMainNumber(
+                      buttonNumber,
+                      gamerSelectedNumbers,
+                    )!,
+                    widget.gamers,
+                  );
+                  for (final Gamer gamer in widget.gamers) {
+                    if (gamer.id != deletedGamer.id) {
+                      BlocProvider.of<GameBloc>(context).add(
+                        RemoveVote(gamer: gamer),
+                      );
+                    }
+                  }
                   widget.deletedGamer!(
-                    getGamerAtIndex(
-                      findGamerWithMainNumber(
-                        buttonNumber,
-                        gamerSelectedNumbers,
-                      )!,
-                      widget.gamers,
-                    ),
+                    deletedGamer,
                   );
                 }
                 if (selectedButton == null && mainButton == null) {
@@ -168,25 +186,48 @@ class _NumberPickerState extends State<NumberPicker> {
                     isMainButtonPressed = true;
                   });
                 } else if (selectedButton == null && mainButton != null) {
-                  setState(() {
-                    selectedButton = buttonNumber;
-                    selectedButtons.add(buttonNumber);
-                  });
+                  _assignSelectedGamer(buttonNumber);
                 } else if (selectedButton != null) {
-                  setState(() {
-                    selectedButton = buttonNumber;
-                    selectedButtons.add(buttonNumber);
-                  });
+                  _assignSelectedGamer(buttonNumber);
                 }
               },
               mainButton: mainButton,
               selectedButton: selectedButton,
               selectedButtons: selectedButtons,
             ),
+            const Divider(
+              thickness: 1,
+              color: Colors.black,
+            ),
+            if (pickedDirection == VoteDirection.NotSet && mainButton != null)
+              PickedDirection(
+                isMainButtonPressed: selectedGamer != null,
+                pickedDirection: (VoteDirection direction) {
+                  setState(() {
+                    pickedDirection = direction;
+                  });
+                },
+              ),
           ],
         ).padding(
           vertical: 46,
           horizontal: 32,
         ),
       );
+
+  void _assignSelectedGamer(int buttonNumber) {
+    setState(() {
+      selectedButton = buttonNumber;
+      selectedButtons.add(buttonNumber);
+    });
+    if (pickedDirection == VoteDirection.Left) {
+      selectedGamer =
+          (selectedGamer! - 1 + widget.gamers.length) % widget.gamers.length;
+    } else if (pickedDirection == VoteDirection.Right) {
+      selectedGamer = (selectedGamer! + 1) % widget.gamers.length;
+    }
+    for (int i = 0; i < widget.gamers.length; i++) {
+      animateStates[i] = (i == selectedGamer);
+    }
+  }
 }

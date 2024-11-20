@@ -15,14 +15,14 @@ class Roles extends Equatable {
             Madam.empty(),
             Sheriff.empty(),
             Doctor.empty(),
-            Advokat.empty(),
+            Advocate.empty(),
             Killer.empty(),
             Boomerang.empty(),
             Werewolf.empty(),
             Medium.empty(),
             Security.empty(),
             Virus.empty(),
-            Mirniy.empty(),
+            // Mirniy.empty(),
           ],
         );
 
@@ -40,6 +40,9 @@ class Roles extends Equatable {
   bool hasRole(String roleName) => roles.any(
         (Role role) => role.name == roleName,
       );
+
+  @override
+  String toString() => 'Roles { roles: $roles }';
 
   @override
   List<Object?> get props => <Object?>[roles];

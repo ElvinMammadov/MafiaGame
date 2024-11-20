@@ -4,19 +4,20 @@ part of game;
 class Medium extends Role with EquatableMixin {
   const Medium({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
   const Medium.empty()
       : this(
           name: 'Medium',
-          roleId: 12,
+          roleType: RoleType.Medium,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.pointsIfCheckerDead: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );
@@ -24,13 +25,13 @@ class Medium extends Role with EquatableMixin {
   @override
   Medium copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
       Medium(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
   factory Medium.fromJson(Map<String, dynamic> json) => _$MediumFromJson(json);
@@ -41,8 +42,8 @@ class Medium extends Role with EquatableMixin {
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override

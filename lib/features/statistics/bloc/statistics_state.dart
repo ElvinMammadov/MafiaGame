@@ -5,7 +5,7 @@ class StatisticsState {
   final PageStatus pageStatus;
 
   StatisticsState({
-    this.pageList = const [],
+    this.pageList = const <Gamer>[],
     this.pageStatus = const Initial(),
   });
 

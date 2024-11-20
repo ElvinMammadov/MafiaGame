@@ -4,20 +4,21 @@ part of game;
 class Security extends Role with EquatableMixin {
   const Security({
     required super.name,
-    required super.roleId,
     required super.points,
+    required super.roleType,
   });
 
   const Security.empty()
       : this(
           name: 'Security',
-          roleId: 10,
+          roleType: RoleType.Security,
           points: const <String, int>{
             AppStrings.votedAgainstMafia: 0,
-            AppStrings.votedAgainstMainCharacters: 0,
+            AppStrings.votedAgainstMainRoles: 0,
             AppStrings.securedCitizen: 0,
             AppStrings.securedMafia: 0,
             AppStrings.alivePoints: 0,
+            AppStrings.pointsFromPresenter: 0,
             AppStrings.totalPoints: 0,
           },
         );
@@ -25,13 +26,13 @@ class Security extends Role with EquatableMixin {
   @override
   Security copyWith({
     String? name,
-    int? roleId,
     Map<String, int>? points,
+    RoleType? roleType,
   }) =>
       Security(
         name: name ?? this.name,
-        roleId: roleId ?? this.roleId,
         points: points ?? this.points,
+        roleType: roleType ?? this.roleType,
       );
 
   factory Security.fromJson(Map<String, dynamic> json) =>
@@ -43,8 +44,8 @@ class Security extends Role with EquatableMixin {
   @override
   List<Object?> get props => <Object?>[
         name,
-        roleId,
         points,
+        roleType,
       ];
 
   @override
