@@ -170,6 +170,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
             bool isMafiaExist = false;
             isMafiaWin = state.game.isMafiaWin;
             final VoteDirection voteDirection = state.game.voteDirection;
+            final bool starterIdExist = state.game.starterId.isNotEmpty;
 
             const double buttonLeftPercentage = 0.07;
             const double buttonBottomPercentage = 0.02;
@@ -178,6 +179,8 @@ class _GameTableScreenState extends State<GameTableScreen> {
                 orientation == Orientation.portrait ? 3 : 3;
             final double directionButtonRightPercentage =
                 orientation == Orientation.portrait ? 2.8 : 2.7;
+            int? newIndex;
+            int? starterIndex;
             return PopScope(
               canPop:
                   !(Platform.isIOS && MediaQuery.of(context).size.width > 600),
@@ -508,6 +511,111 @@ class _GameTableScreenState extends State<GameTableScreen> {
                                 screenHeight / directionButtonBottomPercentage,
                             child: const CenteredInfo(
                               description: AppStrings.allGamersGoingSleeping,
+                            ),
+                          ),
+                        if (dayNumber == 1 && gamePhase == GamePhase.Voting &&
+                        voteDirection != VoteDirection.NotSet)
+                          Positioned(
+                            left: screenWidth /
+                                directionButtonRightPercentage *
+                                1.15,
+                            bottom: screenHeight /
+                                directionButtonBottomPercentage *
+                                0.7,
+                            child: SizedBox(
+                              width: 200,
+                              child: BaseButton(
+                                label: AppStrings.pass,
+                                textStyle:
+                                    MafiaTheme.themeData.textTheme.titleMedium,
+                                action: () {
+                                  final Gamer currentVoter =
+                                      BlocProvider.of<GameBloc>(context)
+                                          .state
+                                          .game
+                                          .currentVoter;
+                                  final int currentVoterIndex =
+                                      newGamers.indexWhere(
+                                    (Gamer gamer) =>
+                                        gamer.gamerId == currentVoter.gamerId,
+                                  );
+                                  starterIndex = newGamers.indexWhere(
+                                    (Gamer gamer) =>
+                                        gamer.gamerId ==
+                                        BlocProvider.of<GameBloc>(context)
+                                            .state
+                                            .game
+                                            .starterId,
+                                  );
+
+                                  void changeAnimation(
+                                    String gamerId, {
+                                    required bool animate,
+                                  }) {
+                                    BlocProvider.of<GameBloc>(context).add(
+                                      ChangeAnimation(
+                                        gamerId: gamerId,
+                                        animate: animate,
+                                      ),
+                                    );
+                                  }
+
+                                  void setVoter(int newIndex) {
+                                    BlocProvider.of<GameBloc>(context).add(
+                                      SetVoter(
+                                        voter: newGamers[newIndex],
+                                      ),
+                                    );
+                                    changeAnimation(
+                                      animate: true,
+                                      newGamers[newIndex].gamerId ?? '',
+                                    );
+                                  }
+
+                                  changeAnimation(
+                                    animate: false,
+                                    currentVoter.gamerId ?? '',
+                                  );
+                                  BlocProvider.of<GameBloc>(context).add(
+                                    Voted(voter: currentVoter),
+                                  );
+                                  if (voteDirection == VoteDirection.Right) {
+                                    newIndex = (currentVoterIndex -
+                                            1 +
+                                            newGamers.length) %
+                                        newGamers.length;
+                                    while (newGamers[newIndex!].wasKilled) {
+                                      newIndex =
+                                          (newIndex! - 1 + newGamers.length) %
+                                              newGamers.length;
+                                    }
+                                    if (newIndex == starterIndex) {
+                                      showSuccessSnackBar(
+                                        context: context,
+                                        message: AppStrings.allGamersVoted,
+                                      );
+                                      return;
+                                    }
+                                    setVoter(newIndex!);
+                                  } else if (voteDirection ==
+                                      VoteDirection.Left) {
+                                    newIndex = (currentVoterIndex + 1) %
+                                        newGamers.length;
+                                    while (newGamers[newIndex!].wasKilled) {
+                                      newIndex =
+                                          (newIndex! + 1) % newGamers.length;
+                                    }
+                                    if (newIndex == starterIndex) {
+                                      showSuccessSnackBar(
+                                        context: context,
+                                        message: AppStrings.allGamersVoted,
+                                      );
+                                      return;
+                                    }
+                                    setVoter(newIndex!);
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         if (gamePhase == GamePhase.CouldStart)
