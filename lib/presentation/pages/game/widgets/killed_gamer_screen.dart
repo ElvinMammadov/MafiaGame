@@ -132,11 +132,13 @@ class _KilledGamerScreenState extends State<KilledGamerScreen> {
     } else if (!widget.killedGamer.wasKilledByKiller &&
         !widget.killedGamer.wasKilledByMafia &&
         !widget.killedGamer.wasBoomeranged &&
+        !widget.killedGamer.wasInfected &&
+        !widget.killedGamer.wasKilledByWerewolf &&
         widget.killedGamer.role.roleType == RoleType.Security) {
       return rolesOfKiller + AppStrings.securitySacrificedHimself;
-    } else if(widget.killedGamer.wasInfected){
+    } else if (widget.killedGamer.wasInfected) {
       return rolesOfKiller + const Virus.empty().name;
-    }else if (widget.killedGamer.wasKilledByWerewolf) {
+    } else if (widget.killedGamer.wasKilledByWerewolf) {
       return rolesOfKiller + const Werewolf.empty().name;
     } else if (widget.killedGamer.wasBoomeranged) {
       return rolesOfKiller + AppStrings.gamerBoomeranged;

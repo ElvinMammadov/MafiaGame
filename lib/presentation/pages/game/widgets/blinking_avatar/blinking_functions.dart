@@ -51,6 +51,13 @@ class BlinkingFunctions {
           showCantDoHimself(context, AppStrings.cantDoSomethingAgainstYourself);
           return;
         }
+        if(gamers[index].madamPointed) {
+          showErrorSnackBar(
+            context: context,
+            message: AppStrings.gamerAlreadyCheckedByMadam,
+          );
+          return;
+        }
         takeAbilityFromGamer(gamers[index].name!, gamer, context, gamers);
         break;
       case RoleType.Killer:

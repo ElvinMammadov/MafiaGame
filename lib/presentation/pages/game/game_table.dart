@@ -16,6 +16,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
   bool victoryByWerewolf = false;
   bool werewolfWasDead = false;
   bool isMafiaWin = false;
+  int wereWolfCount = 0;
 
   String buttonTitle(GamePhase gamePhase) {
     switch (gamePhase) {
@@ -76,11 +77,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
     final bool werewolfWasDead =
         werewolf != null && werewolf.wasKilled && werewolf.beforeChange;
 
-    if (mafiaCount == 0 && werewolf != null && !werewolf.wasKilled) {
+    if (mafiaCount == 0 &&
+        werewolf != null &&
+        !werewolf.wasKilled &&
+        wereWolfCount == 0) {
       BlocProvider.of<GameBloc>(context).add(
         ChangeWerewolf(),
       );
+      wereWolfCount++;
     }
+    print('mafiaCount: $mafiaCount, civilianCount: $civilianCount,'
+        ' werewolf: ${werewolf?.wasKilled}');
     if (mafiaCount == civilianCount && count == 0) {
       BlocProvider.of<GameBloc>(context).add(
         CalculatePoints(
@@ -513,8 +520,9 @@ class _GameTableScreenState extends State<GameTableScreen> {
                               description: AppStrings.allGamersGoingSleeping,
                             ),
                           ),
-                        if (dayNumber == 1 && gamePhase == GamePhase.Voting &&
-                        voteDirection != VoteDirection.NotSet)
+                        if (dayNumber == 1 &&
+                            gamePhase == GamePhase.Voting &&
+                            voteDirection != VoteDirection.NotSet)
                           Positioned(
                             left: screenWidth /
                                 directionButtonRightPercentage *

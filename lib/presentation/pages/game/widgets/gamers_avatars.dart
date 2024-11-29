@@ -93,6 +93,24 @@ List<Widget> gamersAvatars({
       return isInfected;
     }
 
+    bool isGamerCheckedByMadam() {
+      bool wasChecked = false;
+      if (gamePeriod == GamePeriod.Night) {
+        final int roleIndex =
+            BlocProvider
+                .of<GameBloc>(context)
+                .state
+                .game
+                .roleIndex;
+        final RoleType roleType = roles.roles[roleIndex].roleType;
+        wasChecked =
+            gamers[i].madamPointed == true &&
+                roleType == RoleType.Madam;
+      }
+
+      return wasChecked;
+    }
+
     bool wasCheckedBySheriff() {
       bool wasChecked = false;
       if (gamePeriod == GamePeriod.Night) {
@@ -140,7 +158,7 @@ List<Widget> gamersAvatars({
                 if (((gamers[i].gamerId == starterId &&
                     starterId.isNotEmpty) &&
                     gamePhase == GamePhase.Voting) ||
-                    (isGamerInfected()))
+                    (isGamerInfected()) || isGamerCheckedByMadam())
                   const Positioned(
                     top: 0,
                     left: 0,

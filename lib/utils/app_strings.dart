@@ -216,6 +216,8 @@ class AppStrings {
   static const String gamers = 'Игроки';
   static const String restore = 'Восстановить';
   static const String pass = 'Пропустить';
+  static const String gamerAlreadyCheckedByMadam =
+      'Игрок уже проверен мадамoм';
 }
 
 String gamerHasAlibi(String name) =>
